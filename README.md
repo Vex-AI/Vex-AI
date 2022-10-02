@@ -16,7 +16,7 @@ Database|Not for now
 Api | Not for now
 Synonyms | Yes
 Check if a word in a sentence exists | Yes
-Machine learning | Not for no
+Machine learning | Not for now
 ## Documentation
 
 ### Create database
@@ -45,3 +45,5 @@ vex.putData("john","is cool")
  ```js
  vex.removeData(value)
  ```
+### Get answer from key
+- 
