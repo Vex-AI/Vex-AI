@@ -21,7 +21,7 @@ Machine learning | Not for no
 
 ### Create database
 
-##### const vex = new Database(array)
+##### const vex = new Database(Object)
 
 -This code instances a new database where you pass an object with keys and values as your database 
 
@@ -40,3 +40,8 @@ const vex = new Database(obj)
 ```js
 vex.putData("john","is cool")
 ```
+### Remove value
+- Remove a value from your database if that value exists (keys only) 
+- ```js
+- vex.removeData(value)
+- ```
