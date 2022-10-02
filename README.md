@@ -42,7 +42,7 @@ const vex = new Database(obj)
 vex.putData("john","is cool",false)
 ```
 ### Remove message
-- Remove a message from your database if that value exists 
+- Remove a message from your database if that value exists. If the message is removed, it returns true and returns false whenever the message does not exist (delete something that does not exist) 
  ```js
  vex.removeData(value)
  ```
