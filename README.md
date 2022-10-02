@@ -8,3 +8,17 @@ The project is open source and licensed with [GPL-3.0 LICENSE](LICENSE) to recei
 <br>
 <br>
 The goal of this project is to one day have an AI capable of talking normally to a person, without errors or with minimal errors and who knows... be a conscious AI
+<br>
+<br>
+Feature  | Support
+-|-
+Database|Not for now 
+Api | Not for now
+Synonyms | Yes
+Check if a word in a sentence exists | Yes
+Machine learning | Not for now
+<br>
+<br>
+#Documentation
+<br>
+Nothing for now... 
