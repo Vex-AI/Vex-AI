@@ -35,13 +35,14 @@ const obj = {
 const vex = new Database(obj)
 ```
 ### Put value
-##### vex.putData(message, answer)
+##### vex.putData(message, answer, boolean)
 - Add a message with an answer to your database 
+- If the third parameter is true and the recorded value exists, it writes the passed value asswer, otherwise it returns false 
 ```js
-vex.putData("john","is cool")
+vex.putData("john","is cool",false)
 ```
 ### Remove message
-- Remove a message from your database if that value exists (keys only) 
+- Remove a message from your database if that value exists 
  ```js
  vex.removeData(value)
  ```
