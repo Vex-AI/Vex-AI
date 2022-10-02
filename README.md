@@ -42,13 +42,23 @@ const vex = new Database(obj)
 vex.putData("john","is cool",false)
 ```
 ### Remove message
+##### vex.removeData(message)
 - Remove a message from your database if that value exists. If the message is removed, it returns true and returns false whenever the message does not exist (delete something that does not exist) 
  ```js
  vex.removeData(value)
  ```
 ### Get answer to a message
-
+##### vex.getAnswer(message)
 - Checks if there is an answer for the value(message) passed and if not, returns false (if there is, true ) 
 ```js
 vex.getAnswer(message)
+```
+### Synonyms 
+##### getSynons(message)
+- Checks if the message passed has variants and returns an array with all of them, if not, returns null 
+
+```js
+
+const synons = getSynons(word)
+
 ```
