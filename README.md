@@ -16,9 +16,27 @@ Database|Not for now
 Api | Not for now
 Synonyms | Yes
 Check if a word in a sentence exists | Yes
-Machine learning | Not for now
-<br>
-<br>
-#Documentation
-<br>
-Nothing for now... 
+Machine learning | Not for no
+## Documentation
+
+### Create database
+
+##### const vex = new Database(array)
+
+-This code instances a new database where you pass an object with keys and values as your database 
+
+```js
+//Sample data
+const obj = {
+"hi":"hello
+}
+
+//Create database
+const vex = new Database(obj)
+```
+### Put value
+##### vex.putData(key, value)
+-Add a value to your database 
+```js
+vex.putData("john","is cool")
+```
