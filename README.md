@@ -35,15 +35,19 @@ const obj = {
 const vex = new Database(obj)
 ```
 ### Put value
-##### vex.putData(key, value)
-- Add a value to your database 
+##### vex.putData(message, answer)
+- Add a message with an answer to your database 
 ```js
 vex.putData("john","is cool")
 ```
-### Remove value
-- Remove a value from your database if that value exists (keys only) 
+### Remove message
+- Remove a message from your database if that value exists (keys only) 
  ```js
  vex.removeData(value)
  ```
-### Get answer from key
-- 
+### Get answer to a message
+
+- Checks if there is an answer for the value(message) passed and if not, returns false (if there is, true ) 
+```js
+vex.getAnswer(message)
+```
