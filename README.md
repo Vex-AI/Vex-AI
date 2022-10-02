@@ -28,7 +28,7 @@ Machine learning | Not for now
 ```js
 //Sample data
 const obj = {
-"hi":"hello
+"hi":"hello"
 }
 
 //Create database
