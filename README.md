@@ -19,7 +19,7 @@ Check if a word in a sentence exists | Yes
 Machine learning | Not for now
 ## Documentation
 
-### Create database
+### Instantiate database
 
 ##### const vex = new Database(Object)
 
@@ -35,31 +35,38 @@ const obj = {
 const vex = new Database(obj)
 ```
 ### Put value
-##### vex.putData(message, answer, boolean)
+##### Database.putData(message, answer, boolean)
 - Add a message with an answer to your database, if the message does not exist then it will be written and will return true 
 - If the third parameter is true and the recorded value exists, it writes the passed value asswer, otherwise it returns false 
 ```js
-vex.putData("john","is cool",false)
+const message, answer;
+
+message = "john"
+answer = "is cool"
+
+Database.putData(message, answer, false)
 ```
 ### Remove message
-##### vex.removeData(message)
+##### Database.removeData(message)
 - Remove a message from your database if that value exists. If the message is removed, it returns true and returns false whenever the message does not exist (delete something that does not exist) 
  ```js
- vex.removeData(value)
+ const message = "hi"
+
+ vex.removeData(message)
  ```
 ### Get answer to a message
-##### vex.getAnswer(message)
+##### Database.getAnswer(message)
 - Checks if there is an answer for the value(message) passed and if not, returns false (if there is, true ) 
 ```js
+const message = "hi"
+
 vex.getAnswer(message)
 ```
-### Create a synonym
-
+### Instantiate a synonym
 ##### const Synon = new Synonizer(array)
-
+- This code instances a synonyms class 
 ```js
-
-//Sample data
+//Sample synonyms data
 const synons_list = [
 
 ["hi","hello","hola","oi"],
@@ -69,7 +76,6 @@ const synons_list = [
 ]
 
 //Create synonizer
-
 const Synon = new Synonizer(synons_list)
 
 ```
@@ -82,4 +88,39 @@ const word = "hi"
 const synons = Synonizer.getSynons(word)
 //["hi","hello","hola","oi"]
 
+```
+### Instantiate  a classe answer
+##### const noAnswer = new Answer(Array)
+- This code instantiates a new "Answer" class so we can easily write and retrieve sentences 
+```js
+//Sample data
+const no_answer_list = [
+"...",
+"bruh",
+"lol",
+"i didnt  understand"
+]
+const noAnswer = new Answer(no_answer_list)
+```
+
+### Add a phrase to Answer
+##### Answer.AddPhrase(String)
+- Add a phrase to our catalog of phrases that Vex will say when it doesn't know an answer 
+```js
+const ph = "I didn't understand"
+
+noAnswer.addPhrase(ph)
+```
+### Get random answer
+##### Answer.notFound()
+- Get a random phrase for our array
+```js
+const anything = noAnswer.notFound()
+```
+### Remove by an index
+##### Answer.removePhrase(int)
+- Remove a phrase by an index 0
+```js
+const index = 0
+noAnswer.removePhrase(index)
 ```
