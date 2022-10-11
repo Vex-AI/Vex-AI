@@ -53,12 +53,33 @@ vex.putData("john","is cool",false)
 ```js
 vex.getAnswer(message)
 ```
-### Synonyms 
-##### getSynons(message)
-- Checks if the message passed has variants and returns an array with all of them, if not, returns null 
+### Create a synonym
+
+##### const Synon = new Synonizer(array)
 
 ```js
 
-const synons = getSynons(word)
+//Sample data
+const synons_list = [
+
+["hi","hello","hola","oi"],
+
+["good","alright","right"]
+
+]
+
+//Create synonizer
+
+const Synon = new Synonizer(synons_list)
+
+```
+### Get Synonyms 
+##### Synonizer.getSynons(message)
+- Checks if the message passed has variants and returns an array with all of them, if not, returns null 
+
+```js
+const word = "hi"
+const synons = Synonizer.getSynons(word)
+//["hi","hello","hola","oi"]
 
 ```
