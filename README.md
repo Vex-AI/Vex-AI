@@ -39,10 +39,8 @@ const vex = new Database(obj)
 - Add a message with an answer to your database, if the message does not exist then it will be written and will return true 
 - If the third parameter is true and the recorded value exists, it writes the passed value asswer, otherwise it returns false 
 ```js
-const message, answer;
-
-message = "john"
-answer = "is cool"
+const message = "john"
+const answer = "is cool"
 
 Database.putData(message, answer, false)
 ```
