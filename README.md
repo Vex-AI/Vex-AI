@@ -1,4 +1,4 @@
-# VexIA-web
+# VexIA
 Vex is an AI to talk to anyone, including lonely people.
 <br>
 <br>
