@@ -2,7 +2,7 @@
 Vex is an AI to talk to anyone, including lonely people.
 <br>
 <br>
-This project is an improved version of other existing versions that are not available for countries outside of Brazil.   This system is simple **for now**, does not have neural networks and is just a logical system. <br>
+This system is simple **for now**, does not have neural networks and is just a logical system. <br>
 <br>
 The project is open source and licensed with [GPL-3.0 LICENSE](LICENSE) to receive future contributions and improvements from the community, the icons under [CC-BY-NC 2.0](https://creativecommons.org/licenses/by-nc/2.0/legalcode) license, check out [Vex Reactions](https://github.com/cookieukw/Vex-Reactions).
 <br>
@@ -15,6 +15,7 @@ Feature  | Support
 Database|Not for now 
 Api | Not for now
 Synonyms | Yes
+React | Not for now
 Check if a word in a sentence exists | Yes
 Machine learning | Not for now
 ## Documentation
