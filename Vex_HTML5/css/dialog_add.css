@@ -1,0 +1,75 @@
+dialog* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+dialog {
+  border: 1px solid white;
+  width: auto;
+  height: min-content;
+
+  padding: 1rem;
+  border-radius: 1rem;
+  margin: auto;
+  background: #303034;
+
+}
+
+dialog .dialog_border {
+  color: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid white;
+}
+
+dialog #dialog_content {
+  margin-top: 1rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+
+}
+
+dialog .dialog_button {
+  border-style: none;
+  padding: 1rem;
+  width: 10rem;
+  height: min-content;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #009F66;
+  color: white;
+  font-size: 1rem;
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1)s !important;
+  cursor: pointer;
+}
+
+dialog>.dialog_button:hover {
+  background: #005738;
+}
+
+dialog input.entry {
+  color: black;
+}
+
+dialog input.entry:hover,
+dialog input.entry,
+dialog input.entry:focus {
+  outline: none;
+  border-style: none;
+}
+
+dialog #dialog_cancel {
+  background: #DB0000;
+}
+
+dialog>#dialog_cancel:hover {
+  background: #8D0303;
+}
