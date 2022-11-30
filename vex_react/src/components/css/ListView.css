@@ -1,0 +1,12 @@
+ul#msg_content {
+  display: flex;
+  flex: 3;
+  width: 96%;
+  height: auto;
+  inset: 1px;
+  flex-direction: column;
+  margin-top: 1rem;
+  margin-bottom: 1vh;
+  inset: 0;
+  transition: all 0.5s;
+}

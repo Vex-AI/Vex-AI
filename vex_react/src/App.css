@@ -1,0 +1,45 @@
+#content {
+  background: var(--bg-color);
+  width: 100vw;
+  height: min-content;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+img.icon {
+  background: white;
+  height: 9vw;
+  width: 9vw;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+@media (min-width:500px) {
+  #toolbar {
+    width: 40%;
+    padding: 2%;
+  }
+
+  p#name {
+    font-size: 23px;
+  }
+
+  img.image {
+    width: 5vw;
+    height: 5vw;
+    border-radius: 30px;
+    padding: 1vw;
+  }
+
+  span.status {
+    width: 3vw;
+    height: 3vw;
+  }
+
+  div#buttons {
+    display: none;
+  }
+}

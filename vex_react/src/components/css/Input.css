@@ -1,0 +1,43 @@
+div.input {
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  flex: 2;
+  padding: 3px;
+  border-radius: 10px;
+  z-index: 1;
+}
+input[type="text"]#text {
+  flex: 4;
+  width: 90%;
+  outline-style: none;
+  border-style: none;
+  inset: 1px;
+  color: black;
+  text-align: center;
+  font-size: 5vw;
+  padding: 0;
+}
+
+input[type="text"]#text::placeholder {
+  color: black;
+}
+
+div#buttons {
+  background: var(--bg-buttons-color);
+  height: min-content;
+  width: 92%;
+  border-radius: 10px;
+  bottom: 0px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-grow: 0;
+  padding: 2vw;
+  column-gap: 4vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
+  position: fixed;
+  bottom: 1vh;
+}
