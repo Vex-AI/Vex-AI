@@ -31,13 +31,18 @@ div#buttons {
   border-radius: 10px;
   bottom: 0px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   flex-grow: 0;
   padding: 2vw;
   column-gap: 4vw;
   margin-left: 2vw;
   margin-right: 2vw;
+  overflow: hidden;
   position: fixed;
   bottom: 1vh;
+}
+
+.enableClick {
+  pointer-events: auto;
 }
