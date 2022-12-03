@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/VexIA/build/static/css/main.9396f6f8.css",
+    "main.js": "/VexIA/build/static/js/main.113c78a3.js",
+    "index.html": "/VexIA/build/index.html",
+    "main.9396f6f8.css.map": "/VexIA/build/static/css/main.9396f6f8.css.map",
+    "main.113c78a3.js.map": "/VexIA/build/static/js/main.113c78a3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9396f6f8.css",
+    "static/js/main.113c78a3.js"
+  ]
+}
