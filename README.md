@@ -15,7 +15,7 @@ Feature  | Support
 Database|Not for now 
 Api | Not for now
 Synonyms | Yes
-React | Not for now
+React | Yes
 Check if a word in a sentence exists | Yes
 Machine learning | Not for now
 ## Documentation
