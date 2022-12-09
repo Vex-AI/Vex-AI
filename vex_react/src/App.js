@@ -5,52 +5,23 @@ import Input from "./components/Input";
 import React, { useState, useEffect, useRef } from "react";
 import Content from "./components/Content";
 import Dummy from "./components/Dummy";
-
+import Utils from "./classes/Utils";
 const App = () => {
   let end = useRef(null);
+  const util = new Utils();
 
-  const [messages, setMessages] = useState([
-    {
-      msg: "test",
-      user: "vex",
-      hour: getHours(),
-    },
-    {
-      msg: "test",
-      user: "vex",
-      hour: getHours(),
-    },
-    {
-      msg: "test",
-      user: "vex",
-      hour: getHours(),
-    },
-    {
-      msg: "test",
-      user: "vex",
-      hour: getHours(),
-    },
-    {
-      msg: "test",
-      user: "vex",
-      hour: getHours(),
-    },
-    {
-      msg: "test",
-      user: "vex",
-      hour: getHours(),
-    },
-  ]);
+  const [messages, setMessages] = useState(util.getSample("message"));
 
   const send = (message, user) => {
+    // alert({ messages, user });
     if (message.trim().length === 0) return;
 
     const data = {
       msg: message,
       user,
-      hour: getHours(),
+      hour: "16:16", //util.getHours(),
     };
-    setMessages([...messages, data]);
+    setMessages((prev) => [...prev, data]);
   };
 
   useEffect(() => {
@@ -72,11 +43,6 @@ const App = () => {
       <Input send={send} />
     </Content>
   );
-};
-
-const getHours = () => {
-  let date = new Date();
-  return `${date.getHours()}:${date.getMinutes()}`;
 };
 
 export default App;
