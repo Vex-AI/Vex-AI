@@ -137,8 +137,10 @@ noAnswer.setData(newData)
 <br>
 
 ## Libraries and icons
-Library| link
--|-
-Eva icons | ...
-Octicons | ...
-Load react animations | ...
+Library|
+-|
+[Eva icons](https://akveo.github.io/eva-icons/#/?type=fill&searchKey=add) | 
+[Octicons](https://primer.github.io/octicons/paper-airplane-16) |
+[Load react animations](https://loader-demo.netlify.app/)|
+
+
