@@ -20,7 +20,7 @@ p#name {
 }
 
 #toolbar {
-
+  flex: 1;
   width: 90%;
   height: min-content;
   background: #ffffff;
@@ -34,5 +34,6 @@ p#name {
   top: 10px;
   margin-left: 2vw;
   margin-right: 2vw;
-  position: sticky;
+  top: 1vh;
+  position: fixed ;
 }

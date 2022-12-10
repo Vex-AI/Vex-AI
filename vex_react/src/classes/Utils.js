@@ -53,7 +53,8 @@ class Utils {
   }
   getHours() {
     let date = new Date();
-    return `${date.getHours()}:${date.getMinutes()}`;
+    let hours = date.getHours()
+    return `${("0" + hours).slice(-2)}:${date.getMinutes()}`;
   }
   saveData(db) {
     localStorage.setItem("db", JSON.stringify(db));

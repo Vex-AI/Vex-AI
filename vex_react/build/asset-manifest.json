@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/VexIA/vex_react/build/static/css/main.9396f6f8.css",
-    "main.js": "/VexIA/vex_react/build/static/js/main.ed432b18.js",
+    "main.css": "/VexIA/vex_react/build/static/css/main.16e32992.css",
+    "main.js": "/VexIA/vex_react/build/static/js/main.5b34937f.js",
     "index.html": "/VexIA/vex_react/build/index.html",
-    "main.9396f6f8.css.map": "/VexIA/vex_react/build/static/css/main.9396f6f8.css.map",
-    "main.ed432b18.js.map": "/VexIA/vex_react/build/static/js/main.ed432b18.js.map"
+    "main.16e32992.css.map": "/VexIA/vex_react/build/static/css/main.16e32992.css.map",
+    "main.5b34937f.js.map": "/VexIA/vex_react/build/static/js/main.5b34937f.js.map"
   },
   "entrypoints": [
-    "static/css/main.9396f6f8.css",
-    "static/js/main.ed432b18.js"
+    "static/css/main.16e32992.css",
+    "static/js/main.5b34937f.js"
   ]
 }

@@ -1,6 +1,6 @@
 class Database {
   constructor(db) {
-    this.db = db;
+    this.db = JSON.parse(localStorage.getItem("db")) || db;
   }
 
   setDB(data) {
@@ -24,7 +24,9 @@ class Database {
         let item = this.db[index];
         if (item.message.includes(msg_index)) {
           let answer = item.answer;
-          return /*`${answer}`; */answer[Math.floor(Math.random()*answer.length-1)];
+          return /*`${answer}`; */ answer[
+            Math.floor(Math.random() * answer.length - 1)
+          ];
         }
       }
     }
@@ -54,6 +56,12 @@ class Database {
       return true;
     }
     return false;
+  }
+  saveDatabase() {
+    localStorage.setItem("db", JSON.stringify(this.db));
+  }
+  loadDatabase() {
+    this.db = JSON.parse(localStorage.getItem("db"));
   }
 }
 

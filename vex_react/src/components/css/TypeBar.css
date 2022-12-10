@@ -1,0 +1,45 @@
+#type {
+  background: var(--bg-input-color);
+  width: 91.9%;
+  height: auto;
+  margin-left: 2vw;
+  margin-right: 2vw;
+  top: 0;
+  border-radius: 10px 10px 0 0;
+  padding: 1.5vw;
+  color: white;
+  font-size: 4vw;
+  padding-bottom: 2vh;
+  z-index: -1;
+  position: absolute;
+  bottom: 25%;
+}
+.show {
+  animation: typeOn 0.4s forwards;
+}
+
+.hide {
+  animation: typeOff 0.4s forwards;
+}
+
+@keyframes typeOff {
+  from {
+    opacity: 1;
+    transform: translateY(-70%);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typeOn {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-70%);
+  }
+}

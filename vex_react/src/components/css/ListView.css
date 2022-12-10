@@ -1,14 +1,12 @@
 ul#msg_content {
   display: flex;
-  flex: 3;
   width: 100%;
-  min-height: min-content;
-  padding-top: 3vh;
+  height: 100%;
   inset: 1px;
   flex-direction: column;
-  margin-top: 1rem;
-  margin-bottom: 1vh;
-  inset: 0;
+  margin-top: 1vh;
+  margin-bottom: 4vh;
+  top: 1vh;
   transition: all 0.5s;
- 
+  overflow: hidden;
 }
