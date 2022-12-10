@@ -18,25 +18,37 @@ Synonyms | Yes
 React | Yes
 Check if a word in a sentence exists | Yes
 Machine learning | Not for now
-## Documentation
+# Documentation
 
-### Instantiate database
+## Database class
 
+### Instantiate class
 ##### const vex = new Database(Object)
 
-- This code instances a new database where you pass an object with keys and values as your database 
+- This code instances a new database class where you pass an object with keys and values as your database 
 
 ```js
 //Sample data
-const obj = {
-"hi":"hello"
-}
+const sample_data =  [{
+message: [
+"hi",
+"hello",
+"hola",
+"oi",
+"hola"],
+answer: [
+"hiii ╰(*´︶`*)╯♡",
+"alright?",
+"こんばんは",
+"oi",
+"hola"
+]}]
 
 //Create database
-const vex = new Database(obj)
+const vex = new Database(sample_data)
 ```
 ### Put value
-##### Database.putData(message, answer, boolean)
+##### Database.putSynon(message, answer, isRecorded)
 - Add a message with an answer to your database, if the message does not exist then it will be written and will return true 
 - If the third parameter is true and the recorded value exists, it writes the passed value asswer, otherwise it returns false 
 ```js
@@ -55,37 +67,27 @@ Database.putData(message, answer, false)
  ```
 ### Get answer to a message
 ##### Database.getAnswer(message)
-- Checks if there is an answer for the value(message) passed and if not, returns false (if there is, true ) 
+- Checks whether each index exists in the database and returns an answer. otherwise returns null. The system also automatically checks for synonyms (that's why the messages are in an array) 
 ```js
-const message = "hi"
+const message_array = ["hello","world","!!!"]
 
-vex.getAnswer(message)
-```
-### Instantiate a synonym
-##### const Synon = new Synonizer(array)
-- This code instances a synonyms class 
-```js
-//Sample synonyms data
-const synons_list = [
+vex.getAnswer(message_array)
+//["hello", world", "!!!"]
+// check hello, world and !!!
 
-["hi","hello","hola","oi"],
-
-["good","alright","right"]
-
-]
-
-//Create synonizer
-const Synon = new Synonizer(synons_list)
+vex.getAnswer([message_array.join(" ")])
+// ["hello world !!!"]
+// put the sentence together and check it only 
 
 ```
 ### Get Synonyms 
-##### Synonizer.getSynons(message)
-- Checks if the message passed has variants and returns an array with all of them, if not, returns null 
+##### Database.getSynons(message)
+- Checks if the message passed has variants and returns an array with all of them, if not, returns null. works similarly to the previous method but returns all synonyms instead of an answer 
 
 ```js
 const word = "hi"
-const synons = Synonizer.getSynons(word)
-//["hi","hello","hola","oi"]
+const synons = Database.getSynons(word)
+//["hi","hello","hola","oi","hola"]
 
 ```
 ### Instantiate  a classe answer
@@ -93,11 +95,11 @@ const synons = Synonizer.getSynons(word)
 - This code instantiates a new "Answer" class so we can easily write and retrieve sentences 
 ```js
 //Sample data
-const no_answer_list = [
-"...",
-"bruh",
-"lol",
-"i didnt  understand"
+const no_answer_list =[
+"Não entendi",
+"i didnt  understand",
+"うるさい",
+"Silencio"
 ]
 const noAnswer = new Answer(no_answer_list)
 ```
