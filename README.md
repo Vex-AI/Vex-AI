@@ -136,6 +136,25 @@ noAnswer.setData(newData)
 <br>
 <br>
 
+## Basic functions that existed in the Java version (discontinued) and that need to be added here
+
+- Save the database, messages etc
+- Load and show all database, messages etc 
+- Add synonyms and answers
+- Remove synonyms, answer, messages etc
+- Change name and profile  
+- Delete all answers, synonyms etc
+- Export data(messages, database, etc)
+- Customize the chat 
+- Customize the background 
+## Feature ideas to be added in the future(or not )
+Feature|Use
+-|-
+Custom animations|Customize animations in chat itens, database etc
+Machine learning | Make Vex learn on its own 
+API | Make some resources available through an api
+"Global user"| A chat where people talk to vex (no interactions or global messages) but this serves as global training and not local (in the client) 
+RPG story | Able to tell stories or run an rpg 
 ## Libraries and icons
 Library|
 -|
