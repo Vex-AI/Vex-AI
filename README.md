@@ -21,7 +21,6 @@ Machine learning | Not for now
 # Documentation
 
 ## Database class
-
 ### Instantiate class
 ##### const vex = new Database(Object)
 
@@ -90,12 +89,13 @@ const synons = Database.getSynons(word)
 //["hi","hello","hola","oi","hola"]
 
 ```
+## Answer class
 ### Instantiate  a classe answer
 ##### const noAnswer = new Answer(Array)
 - This code instantiates a new "Answer" class so we can easily write and retrieve sentences 
 ```js
 //Sample data
-const no_answer_list =[
+const no_answer_list = [
 "Não entendi",
 "i didnt  understand",
 "うるさい",
@@ -105,23 +105,40 @@ const noAnswer = new Answer(no_answer_list)
 ```
 
 ### Add a phrase to Answer
-##### Answer.AddPhrase(String)
+##### Answer.AddAnswer(String)
 - Add a phrase to our catalog of phrases that Vex will say when it doesn't know an answer 
 ```js
 const ph = "I didn't understand"
 
-noAnswer.addPhrase(ph)
+noAnswer.addAnswer(ph)
 ```
 ### Get random answer
-##### Answer.notFound()
+##### Answer.getAnswer()
 - Get a random phrase for our array
 ```js
-const anything = noAnswer.notFound()
+const anything = noAnswer.getAnswer()
+//random value
 ```
 ### Remove by an index
-##### Answer.removePhrase(int)
-- Remove a phrase by an index 0
+##### Answer.removeAnswer(int)
+- Remove a phrase by an index
 ```js
 const index = 0
-noAnswer.removePhrase(index)
+noAnswer.removeAnswer(index)
 ```
+### Set data
+##### Answer.setData(array)
+- Change all the contents of the class 
+```js
+const newData = ["no","..."]
+noAnswer.setData(newData)
+```
+<br>
+<br>
+
+## Libraries and icons
+Library| link
+-|-
+Eva icons | ...
+Octicons | ...
+Load react animations | ...
