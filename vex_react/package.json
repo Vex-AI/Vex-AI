@@ -1,7 +1,6 @@
 {
   "name": "vex",
   "version": "0.1.0",
-  "homepage": "https://cookieukw.github.io/VexIA/vex_react/build/",
   "private": true,
   "dependencies": {
     "@primer/octicons-react": "^17.9.0",
