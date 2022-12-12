@@ -155,11 +155,12 @@ Machine learning | Make Vex learn on its own
 API | Make some resources available through an api
 "Global user"| A chat where people talk to vex (no interactions or global messages) but this serves as global training and not local (in the client) 
 RPG story | Able to tell stories or run an rpg 
-## Libraries and icons
+## Libraries
 Library|
 -|
 [Eva icons](https://akveo.github.io/eva-icons/#/?type=fill&searchKey=add) | 
 [Octicons](https://primer.github.io/octicons/paper-airplane-16) |
 [Load react animations](https://loader-demo.netlify.app/)|
+[React-toastify](https://fkhadra.github.io/react-toastify/installation/)
 
 

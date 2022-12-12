@@ -1,10 +1,10 @@
 class Database {
-  constructor(db) {
-    this.db = JSON.parse(localStorage.getItem("db")) || db;
+  constructor() {
+    this.db = localStorage.getItem("db") ? JSON.parse(localStorage.getItem("db")) : []
   }
 
   setDB(data) {
-    this.db = data;
+    this.db = data
   }
 
   getSynons(word) {
@@ -57,11 +57,17 @@ class Database {
     }
     return false;
   }
+  
   saveDatabase() {
     localStorage.setItem("db", JSON.stringify(this.db));
   }
+  
   loadDatabase() {
     this.db = JSON.parse(localStorage.getItem("db"));
+  }
+  
+  getDB(){
+    return this.db
   }
 }
 

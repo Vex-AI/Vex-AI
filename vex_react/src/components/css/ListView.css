@@ -8,5 +8,6 @@ ul#msg_content {
   margin-bottom: 4vh;
   top: 1vh;
   transition: all 0.5s;
+  margin-top: 10vh;
   overflow: hidden;
 }

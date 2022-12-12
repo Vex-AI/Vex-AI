@@ -1,9 +1,10 @@
 import React from "react";
 import "./css/Content.css";
 
-const Content = ({ children }) => {
+const Content = ({ children, styles }) => {
+  
   return (
-    <div id="content">
+    <div id="content" styles={styles}>
       {children}
       <div id="bg">
         <div id="stars"></div>

@@ -17,6 +17,7 @@ const Home = () => {
   let end = useRef(null);
 
   const goBottom = () => {
+    if (messages.length <= 6) return;
     end.current?.scrollIntoView({
       behavior: "smooth",
     });
@@ -36,8 +37,10 @@ const Home = () => {
       time = message.length <= 150 ? message.length * 100 : 1100;
 
     setTimeout(() => {
-      setMessages((prev) => [...prev, data]);
-      goBottom();
+      setMessages((prev) => {
+        goBottom();
+        return [...prev, data];
+      });
     }, time);
   };
 
@@ -57,12 +60,12 @@ const Home = () => {
   return (
     <Content
       styles={{
-        justifyContent: "flex-start",
+        justifyContent: "center",
       }}
     >
       <ProfileBar>Vex</ProfileBar>
       <ListView messages={messages} />
-      {messages.length >= 7 && <Dummy ref={end} />}
+      <Dummy ref={end} />
       <Input send={send} />
     </Content>
   );

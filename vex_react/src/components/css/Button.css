@@ -1,0 +1,22 @@
+.button {
+  cursor: pointer;
+  transition: background 1s ease;
+  border-style: none;
+  padding: 1rem 3rem 1rem 3rem;
+  border-radius: 15px;
+  margin: 0.7rem;
+  color: white;
+}
+
+.button.red {
+  background: #840031;
+}
+
+.button.lime {
+  background: #008466;
+}
+
+.button:hover {
+  background: #ffffff;
+  color: #000000;
+}

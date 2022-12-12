@@ -1,7 +1,5 @@
 import "./css/ListView.css";
-import { useEffect, useRef } from "react";
 import Message from "./Message";
-import Dummy from "./Dummy";
 
 const ListView = ({ messages, children }) => {
   return (

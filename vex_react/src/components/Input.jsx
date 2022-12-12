@@ -1,6 +1,7 @@
 /* Imports */
 import React, { useState, useRef } from "react";
 import "./css/Input.css";
+import "react-toastify/dist/ReactToastify.css";
 
 /* Classes */
 import Database from "../classes/Database.js";
@@ -9,10 +10,11 @@ import Database from "../classes/Database.js";
 import Answer from "../classes/Answer";
 import Utils from "../classes/Utils.js";
 import TypeBar from "./TypeBar";
+import { ToastContainer, toast } from "react-toastify";
 
-const Input = ({ send, scroll }) => {
+const Input = ({ send }) => {
   const util = new Utils();
-  const dataBase = new Database(util.getSample("database"));
+  const dataBase = new Database();
   const [isOpen, setOpen] = useState(false);
   const noAnswer = new Answer(util.getSample("answer"));
   const editText = useRef(null);
@@ -27,11 +29,12 @@ const Input = ({ send, scroll }) => {
 
     if (res != null) return send(res, "vex");
     send(noAnswer.getAnswer(), "vex");
-    editText.focus();
+     editText.focus();
   };
 
   return (
     <div id="typebar">
+      <ToastContainer />
       <TypeBar open={isOpen} />
       <div id="buttons">
         <img
@@ -50,17 +53,24 @@ const Input = ({ send, scroll }) => {
             ref={editText}
           />
           <img
-            src={process.env.PUBLIC_URL + "/images/send.png"}
+            src={process.env.PUBLIC_URL + "/icons/send.svg"}
             className="icon"
             id="send"
             alt="a send message icon, resembling a spaceship "
             onClick={() => {
-              if (input.trim().length === 0) return;
-              setOpen(true);
+              if (input.trim().length === 0)
+                return toast("Fill in the text field! ", {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "dark",
+                });
               send(input, "user");
               Analyzer(input);
-              setOpen(false);
-              scroll();
             }}
           />
         </div>
