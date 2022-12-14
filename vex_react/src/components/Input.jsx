@@ -15,7 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 const Input = ({ send }) => {
   const util = new Utils();
   const dataBase = new Database();
-  const [isOpen, setOpen] = useState(false);
+  
   const noAnswer = new Answer(util.getSample("answer"));
   const editText = useRef(null);
   const [input, setInput] = useState("");
@@ -29,13 +29,13 @@ const Input = ({ send }) => {
 
     if (res != null) return send(res, "vex");
     send(noAnswer.getAnswer(), "vex");
-     editText.focus();
+    editText.focus();
   };
 
   return (
     <div id="typebar">
       <ToastContainer />
-      <TypeBar open={isOpen} />
+      <TypeBar open={true} />
       <div id="buttons">
         <img
           src="https://akveo.github.io/eva-icons/fill/png/128/plus-circle.png"

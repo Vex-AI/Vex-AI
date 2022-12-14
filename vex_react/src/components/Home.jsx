@@ -25,7 +25,6 @@ const Home = () => {
 
   useEffect(goBottom, [messages]);
   const send = async (message, user) => {
-    // alert({ messages, user });
     if (message.trim().length === 0) return;
     const data = {
       msg: message,
@@ -34,7 +33,7 @@ const Home = () => {
     };
     let time = 0;
     if (user === "vex")
-      time = message.length <= 150 ? message.length * 100 : 1100;
+      time = message.length <= 150 ? message.length * 10 : 1100;
 
     setTimeout(() => {
       setMessages((prev) => {
@@ -43,19 +42,6 @@ const Home = () => {
       });
     }, time);
   };
-
-  useEffect(() => {
-    /*window.scroll({
-      behavior: "smooth",
-      bottom: 0,
-      left: 0,
-    });*/
-    /*window.scroll({
-      behavior: "smooth",
-      bottom: document.body.scrollHeight,
-      left: 0,
-    });*/
-  });
 
   return (
     <Content
