@@ -13,7 +13,9 @@ The Vex is currently hosted on netlify. Try it right now (under construction). S
 
 <br>
 <br>
-<h2 align="center">About project</h2>
+<div align="center">
+
+<h2>About project</h2>
 This system is simple *for now*, does not have neural networks and is just a logical system. <br>
 <br>
 
@@ -21,7 +23,7 @@ The project is open source and licensed with [GPL-3.0 LICENSE](LICENSE) to recei
 
 <br>
 <br>
-<h2 align="center">Features</h2>
+<h2>Features</h2>
 
 Feature | Support
 -|-
@@ -34,7 +36,7 @@ Machine learning | Not for now
 
 <br>
 
-<h2 align="center">
+<h2>
 Functions that existed in the discontinued version to implement 
 </h2>
 
@@ -52,7 +54,7 @@ Customize the background |
 
 <br>
 
-<h2 align="center">
+<h2>
 Ideas to be added in the future(or not) 
 </h2>
 
@@ -68,10 +70,9 @@ RPG story | Able to tell stories or run an rpg
 
 <br>
 
-<h2 align="center">
+<h2>
 Libraries
 </h2>
-<div align="center">
 
 Library |
 -|
