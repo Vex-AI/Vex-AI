@@ -1,6 +1,7 @@
 /* Imports */
 import React, { useState, useEffect, useRef } from "react";
 import "./css/Home.css";
+import { message_style } from "../classes/styles";
 
 /* Components */
 import Content from "./Content";
@@ -9,6 +10,7 @@ import Utils from "../classes/Utils";
 import ProfileBar from "./ProfileBar";
 import ListView from "./ListView";
 import Input from "./Input";
+import Message from "./Message";
 
 const Home = () => {
   const util = new Utils();
@@ -44,13 +46,13 @@ const Home = () => {
   };
 
   return (
-    <Content
-      styles={{
-        justifyContent: "center",
-      }}
-    >
+    <Content>
       <ProfileBar>Vex</ProfileBar>
-      <ListView messages={messages} />
+      <ListView style={message_style}>
+        {messages.map((item) => (
+          <Message msg={item} />
+        ))}
+      </ListView>
       <Dummy ref={end} />
       <Input send={send} />
     </Content>

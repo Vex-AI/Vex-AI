@@ -10,7 +10,7 @@ div.input {
 }
 input[type="text"]#text {
   flex: 4;
-  width: 90%;
+  min-width: 90%;
   outline-style: none;
   border-style: none;
   inset: 1px;

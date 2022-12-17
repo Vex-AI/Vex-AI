@@ -1,17 +1,7 @@
-import "./css/ListView.css";
-import Message from "./Message";
+import React from "react";
 
-const ListView = ({ messages, children }) => {
-  return (
-    <ul
-      id="msg_content"
-   
-    >
-      {messages.map((item) => {
-        return <Message msg={item} />;
-      })}
-      {children}
-    </ul>
-  );
+const ListView = ({ children, style }) => {
+  return <ul style={style}>{children}</ul>;
 };
+
 export default ListView;

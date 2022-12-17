@@ -14,15 +14,14 @@ class Database {
     if (search) return search.message;
     return null;
   }
+
   getAnswer(words) {
     if (!Array.isArray(words)) words = [words];
     for (let pos in words) {
       let word = words[pos];
       let search = this.db.find((item) => item.message.includes(word));
       if (search)
-        return search.answer[
-          Math.floor(Math.random() * (search.answer.length - 1))
-        ];
+        return search.answer[Math.floor(Math.random() * search.answer.length)];
       return null;
     }
   }

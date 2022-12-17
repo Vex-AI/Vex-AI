@@ -5,13 +5,7 @@
   margin-right: 1rem;
   column-gap: 0.4rem;
 }
-img.icon {
-  height: 2rem;
-  width: 2rem;
-  background: white;
-  border-radius: 9px;
-  padding: 0.7vh;
-}
+
 .item-title,
 .item-all {
   color: white;
