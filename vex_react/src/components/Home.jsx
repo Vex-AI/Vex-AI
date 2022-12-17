@@ -14,8 +14,7 @@ import Message from "./Message";
 
 const Home = () => {
   const util = new Utils();
-
-  const [messages, setMessages] = useState(util.getSample("message"));
+  const [messages, setMessages] = useState([]);
   let end = useRef(null);
 
   const goBottom = () => {
@@ -26,7 +25,8 @@ const Home = () => {
   };
 
   useEffect(goBottom, [messages]);
-  const send = async (message, user) => {
+  
+  const send = (message, user, cb) => {
     if (message.trim().length === 0) return;
     const data = {
       msg: message,
@@ -35,11 +35,12 @@ const Home = () => {
     };
     let time = 0;
     if (user === "vex")
-      time = message.length <= 150 ? message.length * 10 : 1100;
+      time = message.length <= 120 ? message.length * 50 : 1100;
 
     setTimeout(() => {
       setMessages((prev) => {
         goBottom();
+        if (cb) cb();
         return [...prev, data];
       });
     }, time);
@@ -54,7 +55,7 @@ const Home = () => {
         ))}
       </ListView>
       <Dummy ref={end} />
-      <Input send={send} />
+       <Input send={send} />
     </Content>
   );
 };

@@ -1,9 +1,10 @@
 /* Imports */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Database from "../classes/Database";
 import "react-toastify/dist/ReactToastify.css";
 import "./css/AddSynonModal.css";
 import { dialog_addanswer_style, synons_style } from "../classes/styles";
+import { useNavigate } from "react-router-dom";
 
 /* Components */
 import Content from "./Content";
@@ -28,16 +29,22 @@ const Synons = () => {
       theme: "dark",
     });
 
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [id, setID] = useState(0);
   const [answer, setAnswer] = useState("");
 
   const db = new Database();
   const [isOpen, setOpen] = useState(false);
-  const [isSynonOpen, setSynonOpen] = useState(true);
+  const [isSynonOpen, setSynonOpen] = useState(false);
   const [items, setItems] = useState(
     localStorage.getItem("db") ? JSON.parse(localStorage.getItem("db")) : []
   );
+
+  useEffect(() => {
+    db.setDB(items);
+    db.saveDatabase();
+  }, [items]);
 
   const addItem = (synon) => {
     if (synon.trim().length === 0) return;
@@ -52,8 +59,6 @@ const Synons = () => {
           answer: [],
         },
       ];
-      db.saveDatabase();
-      db.setDB(newData);
       return newData;
     });
   };
@@ -61,8 +66,6 @@ const Synons = () => {
   const removeItem = (index) => {
     setItems((prev) => {
       const newData = prev.filter((item, i) => index !== i);
-      db.setDB(newData);
-      db.saveDatabase();
       return newData;
     });
   };
@@ -78,30 +81,24 @@ const Synons = () => {
           };
         return item;
       });
-      db.saveDatabase();
-      db.setDB(newData);
-      setAnswer("")
       return newData;
     });
   };
 
   const removeAnswer = (index) => {
-    if (answer.length === 0) return mkToast("Fill the text field!");
-
+    let obj = items[id];
+    if (obj.message.length <= 1) return;
     setItems((prev) => {
-      let obj = prev[id];
+      obj = prev[id];
       const newData = {
         ...obj,
         answer: obj.answer.filter((item, ind) => index !== ind),
       };
-      db.saveDatabase();
-      db.setDB(newData);
-      setAnswer("")
       return prev.splice(id, 1, newData);
     });
   };
-  
-  const addSynon = (synon)=>{
+
+  const addSynon = (synon) => {
     if (synon.length === 0) return mkToast("Fill the text field!");
     setItems((prev) => {
       const newData = prev.map((item, index) => {
@@ -112,31 +109,39 @@ const Synons = () => {
           };
         return item;
       });
-      db.saveDatabase();
-      db.setDB(newData);
-      setAnswer("")
       return newData;
     });
-  }
-  
-  const removeSynon = (index)=>{
-    if (answer.length === 0) return mkToast("Fill the text field!");
+  };
 
+  const removeSynon = (index) => {
+    let obj = items[id];
+    if (obj.message.length <= 1) return;
     setItems((prev) => {
-      let obj = prev[id];
+      obj = prev[id];
       const newData = {
         ...obj,
         message: obj.message.filter((item, ind) => index !== ind),
       };
-      db.saveDatabase();
-      db.setDB(newData);
-      setAnswer("")
       return prev.splice(id, 1, newData);
     });
-  }
-  
+  };
+
   return (
-    <Content>
+    <Content
+      style={{
+        justifyContent: "flex-start",
+      }}
+    >
+      <Icon
+        fileName={"back.svg"}
+        style={{
+          position: "fixed",
+          bottom: "2rem",
+          right: "2rem",
+        }}
+        alt={"an left arrow icon"}
+        onClick={() => navigate("/home")}
+      />
       <ToastContainer />
       <InputSynon change={setInput} text={"Type here..."} value={input} />
 
@@ -151,8 +156,11 @@ const Synons = () => {
 
       <Button
         color="red"
-        text={"Press and hold to erase everything"}
-        onClick={() => mkToast("🦄 Wow so easy!")}
+        text={"Press here to erase everything"}
+        onClick={() => {
+          setItems([]);
+          mkToast("Successfully cleaned!");
+        }}
       />
 
       <ListView style={synons_style}>
@@ -197,7 +205,6 @@ const Synons = () => {
         isOpen={isOpen}
         ariaHideApp={false}
       >
-        Add a reply
         <div>
           <p>Vex will reply for {items[id]?.message.join(", ")}: </p>
           <InputSynon change={setAnswer} text={"Type here..."} value={answer} />
@@ -205,7 +212,10 @@ const Synons = () => {
           <Button
             color="lime"
             text={"Save"}
-            onClick={() => addAnswer(answer)}
+            onClick={() => {
+              addAnswer(answer);
+              setAnswer("");
+            }}
           />
           <Button color="red" text={"Cancel"} onClick={() => setOpen(false)} />
         </div>
@@ -232,8 +242,19 @@ const Synons = () => {
           <p>Add synonyms for the same word </p>
           <InputSynon change={setAnswer} text={"Type here..."} value={answer} />
 
-          <Button color="lime" text={"Save"} onClick={() => addSynon(answer)} />
-          <Button color="red" text={"Cancel"} onClick={() => setSynonOpen(false)} />
+          <Button
+            color="lime"
+            text={"Save"}
+            onClick={() => {
+              addSynon(answer);
+              setAnswer("");
+            }}
+          />
+          <Button
+            color="red"
+            text={"Cancel"}
+            onClick={() => setSynonOpen(false)}
+          />
         </div>
         <ListView style={synons_style}>
           {items[id]?.message?.map((item, index) => {

@@ -9,7 +9,7 @@
   padding: 1.5vw;
   color: white;
   font-size: 4vw;
-  padding-bottom: 2vh;
+  padding-bottom: 1rem;
   z-index: -1;
   position: absolute;
   bottom: 25%;
@@ -25,7 +25,7 @@
 @keyframes typeOff {
   from {
     opacity: 1;
-    transform: translateY(-70%);
+    transform: translateY(-75%);
   }
   to {
     opacity: 0;
@@ -40,6 +40,6 @@
   }
   to {
     opacity: 1;
-    transform: translateY(-70%);
+    transform: translateY(-75%);
   }
 }
