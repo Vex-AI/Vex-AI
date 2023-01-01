@@ -34,7 +34,7 @@ const Synons = () => {
   const [id, setID] = useState(0);
   const [answer, setAnswer] = useState("");
 
-  const db = new Database();
+  
   const [isOpen, setOpen] = useState(false);
   const [isSynonOpen, setSynonOpen] = useState(false);
   const [items, setItems] = useState(
@@ -43,6 +43,7 @@ const Synons = () => {
       
 
   useCallback(() => {
+    const db = new Database();
     db.setDB(items);
     db.saveDatabase();
   }, [items]);
