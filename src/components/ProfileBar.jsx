@@ -10,7 +10,7 @@ const ProfileBar = ({ children }) => {
     src="https://github.com/cookieukw/Vex-Reactions/blob/main/reactions/vex_angry.png?raw=true"
     />
     
-    <p id="name">{children}</p>
+    <p id="vex_name">{children}</p>
     <span className="status"></span>
     </div>
     );

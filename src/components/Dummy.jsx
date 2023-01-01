@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 import "./css/Dummy.css";
-const Dummy = ({}, ref) => {
+const Dummy = ({refer}) => {
   return (
     <div
-      ref={ref}
+      ref={refer}
       className="dummy"
       style={{
         marginTop: "0",

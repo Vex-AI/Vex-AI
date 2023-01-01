@@ -11,12 +11,18 @@ import ProfileBar from "./ProfileBar";
 import ListView from "./ListView";
 import Input from "./Input";
 import Message from "./Message";
+import ItemDrawer from "./ItemDrawer";
+import { SwipeableDrawer, Divider, List } from "@mui/material";
 
 const Home = () => {
   const util = new Utils();
   const [messages, setMessages] = useState([]);
   let end = useRef(null);
+  const [drawer, setDrawer] = useState(false);
 
+  const toggleDrawer = () => {
+    setDrawer((prev) => !prev);
+  };
   const goBottom = () => {
     if (messages.length <= 6) return;
     end.current?.scrollIntoView({
@@ -25,7 +31,7 @@ const Home = () => {
   };
 
   useEffect(goBottom, [messages]);
-  
+
   const send = (message, user, cb) => {
     if (message.trim().length === 0) return;
     const data = {
@@ -48,14 +54,27 @@ const Home = () => {
 
   return (
     <Content>
+      <SwipeableDrawer
+        variant={"temporary"}
+        anchor={"right"}
+        open={drawer}
+        onClose={() => toggleDrawer()}
+        onOpen={() => toggleDrawer()}
+      >
+        <List sx={{ width: "100%", bgcolor: "black" }}>
+          <ItemDrawer>Test</ItemDrawer>
+         <Divider/>
+          <ItemDrawer>Test</ItemDrawer>
+        </List>
+      </SwipeableDrawer>
       <ProfileBar>Vex</ProfileBar>
       <ListView style={message_style}>
         {messages.map((item) => (
           <Message msg={item} />
         ))}
       </ListView>
-      <Dummy ref={end} />
-       <Input send={send} />
+      <Dummy refer={end} />
+      <Input send={send} />
     </Content>
   );
 };

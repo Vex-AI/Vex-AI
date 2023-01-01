@@ -1,5 +1,5 @@
 /* Imports */
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import Database from "../classes/Database";
 import "react-toastify/dist/ReactToastify.css";
 import "./css/AddSynonModal.css";
@@ -40,8 +40,9 @@ const Synons = () => {
   const [items, setItems] = useState(
     localStorage.getItem("db") ? JSON.parse(localStorage.getItem("db")) : []
   );
+      
 
-  useEffect(() => {
+  useCallback(() => {
     db.setDB(items);
     db.saveDatabase();
   }, [items]);
