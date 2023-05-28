@@ -40,7 +40,7 @@
   <h2>About Project</h2>
   <p align="justify">
    
-  This system is currently simple and does not utilize neural networks. It is based on a logical system. **THIS** project is open source and licensed under the [GPL-3.0 LICENSE](LICENSE) to encourage future contributions and improvements from the community. The icons are licensed under [CC-BY-NC2.0](https://creativecommons.org/licenses/by-nc/2.0/legalcode)
+  This system is currently simple and does not utilize neural networks. It is based on a logical system. **THIS** project is open source and licensed under the [MIT LICENSE](LICENSE) to encourage future contributions and improvements from the community. The icons are licensed under [CC-BY-NC2.0](https://creativecommons.org/licenses/by-nc/2.0/legalcode)
  
 <br>
     
