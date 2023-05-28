@@ -11,7 +11,7 @@ const Splash: React.FC = () => {
   useEffect(() => {
     setTimeout(() => {
       navigate("/home");
-    }, 50000);
+    }, 1200);
   }, [navigate]);
 
   return (
@@ -25,7 +25,7 @@ const Splash: React.FC = () => {
       }}
     >
       <Avatar
-        src={"/Vex.png"}
+        src={"/Vex_320.png"}
         variant="square"
         sx={{
           width: 120,
@@ -33,7 +33,9 @@ const Splash: React.FC = () => {
           borderRadius: 4,
         }}
       />
+      <div>
       <Loader color={color} />
+      </div>
     </Container>
   );
 };
