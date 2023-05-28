@@ -1,159 +1,112 @@
-<div>
-<h2 align="center">About Vex IA</h2>
-<img src="./images/vex.png" width="150" height="150" align="right">
-<li>This is an AI I've been building since 2019. It was an Android app made in Java. I had a lot of problems implementing features, mainly machine learning and problems with the play store (it took time to grow, politics and such). So one day I decided to create a version with React and NodeJS(so it's still under construction ), with the aim of creating an AI capable of having a normal conversation with a person and talking about games and various subjects... and who knows... becoming a conscious AI(⊙_⊙) </li>
-</div>
-<br>
-<br>
-The Vex is currently hosted on netlify. Try it right now (under construction). Say "hi" to her ╰(*´︶`*)╯♡
-<br>
-<br>
-
-[VEX DEMO](https://vexai.netlify.app)
-
-<br>
-<br>
 <div align="center">
-
-<h2>About project</h2>
-This system is simple *for now*, does not have neural networks and is just a logical system. <br>
-<br>
-
-The project is open source and licensed with [GPL-3.0 LICENSE](LICENSE) to receive future contributions and improvements from the community, the icons under [CC-BY-NC 2.0](https://creativecommons.org/licenses/by-nc/2.0/legalcode) license, check out [Vex Reactions](https://github.com/cookieukw/Vex-Reactions).
-
-<br>
-<br>
-<h2>Features</h2>
-
-Feature | Support
--|-
-Local database | Yes
-Api | Not for now
-Synonyms | Yes
-React | Yes
-Tokenizer | Yes
-Machine learning | Not for now
+  <h2>About Vex AI</h2>
+  <img src="/public/Vex.png" width="160" height="160" >
+ <br><br>
+  <p align="justify">
+    Welcome to the VexAI project! An ever-evolving artificial intelligence project since 2019. Initially developed as an Android app in Java, I faced challenges implementing advanced machine learning features. 
+  <br><br>
+    So I decided to create a new version using React and NodeJS and do all the AI part on the back end (excuse my intelligence). 
+ <br><br>
+    The purpose of VexAI is to create an artificial intelligence capable of holding normal conversations and discussing games and various interesting subjects and who knows, maybe even becoming a conscious AI (⊙_⊙). 
+ <br><br>
+    I'm excited to explore the limits of AI and share my progress on this journey. Join me on this exciting journey into the future of artificial intelligence! 
+   
+  </p>
+</div>
 
 <br>
-
-<h2>
-Functions that existed in the discontinued version to implement 
-</h2>
-
-Features |
--|
-Save the database, messages etc |
-Load and show all database, messages etc |
-Add synonyms and answers|
-Remove synonyms, answer, messages etc | 
-Change name and profile |
-Delete all answers, synonyms etc |
-Export data(messages, database, etc) |
-Customize the chat |
-Customize the background |
-
 <br>
 
-<h2>
-Ideas to be added in the future(or not) 
-</h2>
+<p align="justify">
+  Note: Vex is under active development. Stay tuned for future updates!
+  
+  The Vex AI is currently hosted on Netlify. You can try it out (under construction) by saying "hi" to her ╰(*´︶`*)╯♡
+</p>
 
 <br>
-
-Feature | Use
--|-
-Custom animations | Customize animations in chat itens, database etc
-Machine learning | Make Vex learn on its own 
-API | Make some resources available through an api
-"Global user" | A chat where people talk to vex (no interactions or global messages) but this serves as global training and not local (in the client) 
-RPG story | Able to tell stories or run an rpg 
-
 <br>
 
-<h2>
-Libraries
-</h2>
+<p align="center">
+  
+[**VEX DEMO**](https://vexai.netlify.app)
 
-Library |
+[**CHECK VEX APP REPO**](https://github.com/Vex-AI/VexAI_Java)
+  </p>
+
+<br>
+<br>
+
+<div align="center">
+  <h2>About Project</h2>
+  <p align="justify">
+   
+  This system is currently simple and does not utilize neural networks. It is based on a logical system. **THIS** project is open source and licensed under the [GPL-3.0 LICENSE](LICENSE) to encourage future contributions and improvements from the community. The icons are licensed under [CC-BY-NC2.0](https://creativecommons.org/licenses/by-nc/2.0/legalcode)
+ 
+<br>
+    
+Check out [Vex Reactions](https://github.com/cookieukw/Vex-Reactions) for more details.
+    
+  </p>
+  <br>
+  <br>
+
+<h3 align="left">Languages and Tools:</h3>
+<p align="left"> <a href="https://reactjs.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="40" height="40"/> </a> <a href="https://redux.js.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/redux/redux-original.svg" alt="redux" width="40" height="40"/> </a> <a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/> </a> </p>
+
+  <h2>Features</h2>
+
+  Feature|
+  -|
+   Save locally|     
+  API In testing phase|
+  Synonyms|
+  Machine learning in testing phase|
+  
+  <br>
+
+  <h2>Discontinued Version Functions to Implement</h2>
+
+  Features|
+  -| 
+  Change name and profile|
+  Delete all answers, synonyms, etc.|
+  Export data (messages, database, etc.)|
+  Customize the chat|
+  Customize the background|
+
+  <br>
+
+  <h2>Ideas for Future Development</h2>
+
+  | Feature| Use|
+  | - | - |
+  | Custom animations| Customize animations in chat items, database, etc.|
+|Context|Vex knows the context of the chat|
+  |"Global user"| A chat where people talk to Vex for global training|
+  |RPG story|Ability to tell stories or run an RPG|
+|Mobile app| Application adapted for mobile phones|
+|Big data|Vex accepts various types of data, queries and everything else at scale|
+|Feelings and mood|Vex's mood and feelings can change depending on the conversation|
+  
+  <br>
+
+  <h2>Libraries</h2>
+
+ Library |
 -|
 [Eva icons](https://akveo.github.io/eva-icons/#/?type=fill&searchKey=add) | 
 [Octicons](https://primer.github.io/octicons/paper-airplane-16) |
 [Load React Animations](https://loader-demo.netlify.app) |
+[React Spinners Kit](https://github.com/dmitrymorozoff/react-spinners-kit)|
+[React Spinners](https://www.davidhu.io/react-spinners/)|
 [React Toastify](https://fkhadra.github.io/react-toastify/installation) |
 [React Modal](http://reactcommunity.org/react-modal) |
 [React Helmet](https://github.com/nfl/react-helmet) |
 [Material UI](https://mui.com/material-ui/getting-started/installation/)|
 [React Colorful](https://github.com/omgovich/react-colorful)|
-</div>
-
-
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[Redux toolkit](https://redux-toolkit.js.org/introduction/getting-started)
+[Redux](https://redux.js.org/)
+[Dexie](https://dexie.org/)
+[Vite](https://vitejs.dev/)
+[Diacritics](https://www.npmjs.com/package/diacritics)
+[Styled Components](https://styled-components.com/)

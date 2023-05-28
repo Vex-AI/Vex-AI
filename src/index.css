@@ -1,37 +1,138 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body,
-html {
-  width: 100%;
-  height: 100%;
-  scroll-behavior: smooth;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-
 :root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
   --bg-color: #131313;
   --status-color: #08a32d;
   --bg-buttons-color: #5b5869;
   --bg-vex: rgba(220, 17, 47, 0.9);
-  --bg-vex-ripple: rgba(220,17, 47, 0.4);
+  --bg-vex-ripple: rgba(220, 17, 47, 0.4);
   --bg-user: rgba(66, 43, 177, 0.9);
   --bg-user-ripple: rgba(66, 43, 177, 0.4);
   --bg-input-color: #ff5b5869;
+}
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 100%;
+  min-height: 100vh;
+  background-color: #1d1e26;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
+
+@keyframes vexScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+    transform: translateX(-100px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes userScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+    transform: translateX(100px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes typingOff {
+  to {
+    opacity: 1;
+    transform: translateY(6vh);
+  }
+}
+@keyframes typingOn {
+  to {
+    opacity: 1;
+  }
+}
+.show {
+  animation: typeOn 0.4s forwards;
+}
+
+.hide {
+  animation: typeOff 0.4s forwards;
+}
+
+@keyframes typeOff {
+  from {
+    opacity: 1;
+    transform: translateY(-75%);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typeOn {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-75%);
+  }
+}
+.Toastify__toast-container {
+  z-index: 4;
 }

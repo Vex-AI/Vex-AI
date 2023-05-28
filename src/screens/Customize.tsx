@@ -1,0 +1,319 @@
+import { useState, useEffect, useMemo } from "react";
+import StarsBG from "../components/StarsBG";
+import {
+  Slider as SliderComponent,
+  Checkbox,
+  FormControlLabel,
+  Button,
+  Stack,
+  Typography,
+  ButtonBase,
+  
+
+} from "@mui/material";
+import utils from "../classes/utils";
+import { ChromePicker } from "react-color";
+import MessageItem from "../components/MessageItem";
+import Preview from "../components/Preview";
+import Container from "../components/Container";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { createTheme, Theme, ThemeProvider } from "@mui/material/styles";
+import { red, green } from "@mui/material/colors";
+import { styled } from "@mui/system";
+
+const Text = styled(Typography)({
+  fontWeight: "bold",
+  flexGrow: 1,
+  color: "white",
+  margin: "1rem 0 1rem 0",
+});
+const Slider = styled(SliderComponent)({
+  width: "200px",
+  boxSizing: "border-box",
+  color: "red",
+  margin: "1rem",
+  padding: "1rem",
+});
+
+interface Style {
+  borderTopRightRadius: number;
+  borderTopLeftRadius: number;
+  borderBottomRightRadius: number;
+  borderBottomLeftRadius: number;
+  borderColor: string;
+  borderWidth: number;
+  backgroundColor: string;
+  textColor: string;
+  rippleColor: string;
+}
+
+const Customize: React.FC = () => {
+  const [key, setKey] = useState<string>("vexStyle");
+
+  const style: Style = useMemo(() => {
+    return localStorage.getItem(key)
+      ? JSON.parse(localStorage.getItem(key) as string)
+      : {
+          borderTopRightRadius: 10,
+          borderTopLeftRadius: 10,
+          borderBottomRightRadius: 10,
+          borderBottomLeftRadius: 10,
+          borderColor: "#fff",
+          borderWidth: 2,
+          backgroundColor: "rgba(220, 17, 47, 0.9)",
+          textColor: "#fff",
+          rippleColor: "#000",
+        };
+  }, [key]);
+
+  const [borderTopRightRadius, setBorderTopRightRadius] = useState<number>(
+    () => style.borderTopRightRadius
+  );
+  const [borderTopLeftRadius, setBorderTopLeftRadius] = useState<number>(
+    () => style.borderTopLeftRadius
+  );
+  const [borderBottomRightRadius, setBorderBottomRightRadius] =
+    useState<number>(() => style.borderBottomRightRadius);
+  const [borderBottomLeftRadius, setBorderBottomLeftRadius] = useState<number>(
+    () => style.borderBottomLeftRadius
+  );
+  const [borderColor, setBorderColor] = useState<string>(
+    () => style.borderColor
+  );
+  const [borderWidth, setBorderWidth] = useState<number>(
+    () => style.borderWidth
+  );
+  const [backgroundColor, setBackgroundColor] = useState<string>(
+    () => style.backgroundColor
+  );
+  const [textColor, setTextColor] = useState<string>(() => style.textColor);
+  const [rippleColor, setRippleColor] = useState<string>(
+    () => style.rippleColor
+  );
+
+  const darkTheme: Theme = createTheme({
+    palette: {
+      primary: red,
+      mode: "dark",
+    },
+  });
+
+  const updateStyles = (): void => {
+    setKey((prevKey) => (prevKey !== "vexStyle" ? "vexStyle" : "userStyle"));
+  };
+
+  const saveStyles = (): void => {
+    const updatedStyle: Style = {
+      ...style,
+      borderTopRightRadius,
+      borderTopLeftRadius,
+      borderBottomRightRadius,
+      borderBottomLeftRadius,
+      borderColor,
+      borderWidth,
+      backgroundColor,
+      textColor,
+      rippleColor,
+    };
+
+    localStorage.setItem(key, JSON.stringify(updatedStyle));
+
+    utils.mkToast(`Saved ${key} with success!`);
+  };
+
+  useEffect(() => {
+    setBorderTopRightRadius(style.borderTopRightRadius);
+    setBorderTopLeftRadius(style.borderTopLeftRadius);
+    setBorderBottomRightRadius(style.borderBottomRightRadius);
+    setBorderBottomLeftRadius(style.borderBottomLeftRadius);
+    setBorderColor(style.borderColor);
+    setBorderWidth(style.borderWidth);
+    setBackgroundColor(style.backgroundColor);
+    setTextColor(style.textColor);
+    setRippleColor(style.rippleColor);
+  }, [key]);
+
+  return (
+    <Container
+      style={{
+        paddingBottom: "3rem",
+      }}
+    >
+      <StarsBG />
+      <Preview
+        style={{
+          borderTopLeftRadius: borderTopLeftRadius + "px",
+          borderTopRightRadius: borderTopRightRadius + "px",
+          borderBottomRightRadius: borderBottomRightRadius + "px",
+          borderBottomLeftRadius: borderBottomLeftRadius + "px",
+          borderWidth: borderWidth + "px",
+          backgroundColor,
+          color: textColor,
+          borderColor,
+          padding: "1rem",
+          minWidth: "230px",
+          textAlign: "center",
+          borderStyle: "solid",
+          transition: "all .3s ease-in-out ",
+          rippleColor,
+        }}
+        text={key === "vexStyle" ? "Hello, I'm Vex!" : "Hi, I'm the user! :)"}
+      />
+      <ToastContainer />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={key === "vexStyle"}
+            onChange={updateStyles}
+            sx={{
+              margin: "3rem 0 3rem 0",
+              color: "white",
+              "&.Mui-checked": {
+                color: "white",
+              },
+            }}
+          />
+        }
+        label={key === "vexStyle" ? "Is Vex message" : "Is your message"}
+        sx={{
+          color: "white",
+          "&.Mui-checked": {
+            color: "white",
+          },
+        }}
+      />
+      <Text>Top Left Radius</Text>
+      <Slider
+        theme={darkTheme}
+        value={borderTopLeftRadius}
+        onChange={(_: Event, value: number | number[]) =>
+          setBorderTopLeftRadius(value as number)
+        }
+        min={0}
+        max={30}
+        valueLabelDisplay="on"
+        aria-label="Top-Left"
+      />
+      <Text>Top Right Radius</Text>
+      <Slider
+        theme={darkTheme}
+        value={borderTopRightRadius}
+        onChange={(_: Event, value: number | number[]) =>
+          setBorderTopRightRadius(value as number)
+        }
+        min={0}
+        max={30}
+        valueLabelDisplay="on"
+        aria-label="Top-Right"
+      />
+      <Text>Bottom Left Radius</Text>
+      <Slider
+        theme={darkTheme}
+        value={borderBottomLeftRadius}
+        onChange={(_: Event, value: number | number[]) =>
+          setBorderBottomLeftRadius(value as number)
+        }
+        min={0}
+        max={30}
+        valueLabelDisplay="on"
+        aria-label="Bottom-Left"
+      />
+      <Text>Bottom Right Radius</Text>
+      <Slider
+        theme={darkTheme}
+        value={borderBottomRightRadius}
+        onChange={(_: Event, value: number | number[]) =>
+          setBorderBottomRightRadius(value as number)
+        }
+        min={0}
+        max={30}
+        valueLabelDisplay="on"
+        aria-label="Bottom-Right"
+      />
+      <Text>Border Width</Text>
+      <Slider
+        theme={darkTheme}
+        value={borderWidth}
+        onChange={(_: Event, value: number | number[]) =>
+          setBorderWidth(value as number)
+        }
+        min={0}
+        max={10}
+        valueLabelDisplay="on"
+        aria-label="Border-Width"
+      />
+      <Text>Background Color</Text>
+      <ButtonBase
+        onClick={() => toast("Select a color")}
+        style={{
+          background: backgroundColor,
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          cursor: "pointer",
+          boxShadow: "0 0 0 2px #fff",
+        }}
+      />
+      <ChromePicker
+        color={backgroundColor}
+        onChange={(color: any) => setBackgroundColor(color.hex)}
+        disableAlpha
+      />
+      <Text>Text Color</Text>
+      <ButtonBase
+        onClick={() => toast("Select a color")}
+        style={{
+          background: textColor,
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          cursor: "pointer",
+          boxShadow: "0 0 0 2px #fff",
+        }}
+      />
+      <ChromePicker
+        color={textColor}
+        onChange={(color: any) => setTextColor(color.hex)}
+      />
+      <Text>Ripple Color</Text>
+      <ButtonBase
+        onClick={() => toast("Select a color")}
+        style={{
+          background: rippleColor,
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          cursor: "pointer",
+          boxShadow: "0 0 0 2px #fff",
+        }}
+      />
+      <ChromePicker
+        color={rippleColor}
+        onChange={(color: any) => setRippleColor(color.hex)}
+      />
+      <ThemeProvider
+        theme={createTheme({
+          palette: {
+            primary: {
+              main: green[200],
+            },
+            secondary: {
+              main: "#64748B",
+            },
+          },
+        })}
+      >
+        <Button
+          variant="outlined"
+          sx={{ mt: "1rem", margin: "2rem 0 1rem 0" }}
+          onClick={saveStyles}
+        >
+          Save Styles
+        </Button>
+      </ThemeProvider>
+    </Container>
+  );
+};
+
+export default Customize;
