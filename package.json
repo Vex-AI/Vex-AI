@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "postinstall": "patch-package",
-    "dev": "clear && vite",
-    "build": "clear && tsc && vite build",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
