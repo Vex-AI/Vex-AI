@@ -55,7 +55,7 @@ const AddButton = styled(IconButton)({
   borderRadius: "10px",
   margin: "1rem 1rem 0 1rem",
   padding: "4rem 83rem 1rem 3rem",
-  transition:"all 1s ease-in-out",
+  transition: "all 1s ease-in-out",
   "&:hover": {
     backgroundColor: "#3f3f3f",
   },
@@ -112,6 +112,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
           minHeight: "0px",
           height: "50px",
           backgroundColor: "transparent",
+          margin: "1rem 0 1rem 0",
         }}
       >
         <IconButton
@@ -121,7 +122,12 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
           aria-label="Adicionar"
         >
           <ClearIcon
-            style={{ padding: "5px 10px 5px 10px" }}
+            style={{
+              fill: "white",
+              padding: "5px",
+              width: "50px",
+              height: "50px",
+            }}
             aria-label="back button"
           />
         </IconButton>
@@ -163,7 +169,11 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
           if (!word) return utils.mkToast("Write a word");
           if (!reply) return utils.mkToast("Write a reply");
 
-          if (synons.some((synon) => synon.word.includes( utils.clear(word).join(" "))))
+          if (
+            synons.some((synon) =>
+              synon.word.includes(utils.clear(word).join(" "))
+            )
+          )
             return utils.mkToast("This word is already registered");
 
           dispatch(
