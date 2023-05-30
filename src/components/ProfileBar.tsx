@@ -18,6 +18,8 @@ const StatusIndicator = styled("span")(({ theme }) => ({
 
 const VexName = styled(Typography)(({ theme }) => ({
   fontSize: "2.5rem",
+  color: "black",
+  fontWeight:"bold",
   fontFamily: "Source Sans Pro, sans-serif",
   "@media screen and (max-width: 768px)": {
     fontSize: "1.5rem",
@@ -46,7 +48,7 @@ const ProfileBar: React.FC<ProfileBarProps> = ({ vexName }) => {
       }}
     >
       <Avatar
-        src={"/Vex.png"}
+        src={"/Vex_320.png"}
         variant="square"
         sx={{ width: 50, height: 50, borderRadius: 4 }}
       />
