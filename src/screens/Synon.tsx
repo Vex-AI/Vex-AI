@@ -1,52 +1,55 @@
-import Container from "../components/Container";
-import Input from "../components/Input";
-import StarsBG from "../components/StarsBG";
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  lazy,
+  Suspense,
+} from "react";
 import { MdAdd } from "react-icons/md";
-import Cancel from "@mui/icons-material/Cancel";
-import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
-import List from "../components/List";
-import TextItem from "../components/TextItem";
-import Modal from "react-modal";
 import { Dispatch } from "redux";
 import { v4 } from "uuid";
+import { connect } from "react-redux";
+import { RootState } from "../store/";
+import utils from "../classes/utils";
+import { wordsModalStyle } from "../themes/themes";
 import {
   addReplyToSynon,
   addWordToSynon,
   deleteSynon,
   getAllSynons,
-  getAllMessages,
+  setSynons,
   addSynon,
   deleteWordFromSynon,
   deleteReplyFromSynon,
-  setSynons,
 } from "../store/reducers/vexReducer";
-import { RootState } from "../store/";
-import utils from "../classes/utils";
-import { wordsModalStyle } from "../themes/themes";
-import { connect } from "react-redux";
-const { log } = console;
-import SynonItem from "../components/SynonItem";
-import Drawer from "../components/Drawer";
 import { styled } from "@mui/system";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import ClearIcon from "@mui/icons-material/Clear";
 
+import Container from "../components/Container";
+import Input from "../components/Input";
+import StarsBG from "../components/StarsBG";
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import List from "../components/List";
+import TextItem from "../components/TextItem";
+import Loader from "../components/Loader";
+import Modal from "react-modal";
+
+const SynonItem = lazy(() => import("../components/SynonItem"));
+
 interface ISynon {
   word: string[];
   reply: string[];
   id: string;
 }
-interface IMessage {
-  content: string;
-  isVex: boolean;
-  hour: string;
-  date: string;
-  id: string;
-  createdAt?: number;
+
+interface ISynonProps {
+  dispatch: Dispatch;
+  synons: ISynon[];
 }
 
 const AddButton = styled(IconButton)({
@@ -71,33 +74,55 @@ const CancelButton = styled(IconButton)({
     backgroundColor: "#3f3f3f",
   },
 });
+
 Modal.setAppElement("#root");
 
-interface ISynonProps {
-  dispatch: Dispatch;
-  synons: ISynon[];
-}
 const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
   const navigate: NavigateFunction = useNavigate();
 
   const [word, setWord] = useState<string>("");
   const [reply, setReply] = useState<string>("");
   const [synonID, setSynonID] = useState<string>("");
-  const words: string[] =
-    synons.find((item) => item.id === synonID)?.word || [];
-  const replies: string[] =
-    synons.find((item) => item.id === synonID)?.reply || [];
+  const words: string[] = useMemo(
+    () => synons.find((item) => item.id === synonID)?.word || [],
+    [synons, synonID]
+  );
+  const replies: string[] = useMemo(
+    () => synons.find((item) => item.id === synonID)?.reply || [],
+    [synons, synonID]
+  );
   const [wordModal, setWordModal] = useState<boolean>(false);
   const [newWord, setNewWord] = useState<string>("");
   const [replyModal, setReplyModal] = useState<boolean>(false);
   const [newReply, setNewReply] = useState<string>("");
+
+  const handleAddSynon = useCallback(() => {
+    if (!word) return utils.mkToast("Write a word");
+    if (!reply) return utils.mkToast("Write a reply");
+
+    if (
+      synons.some((synon) => synon.word.includes(utils.clear(word).join(" ")))
+    ) {
+      return utils.mkToast("This word is already registered");
+    }
+
+    dispatch(
+      addSynon({
+        word: [utils.clear(word).join(" ")],
+        reply: [reply],
+        id: v4(),
+      })
+    );
+    setWord("");
+    setReply("");
+  }, [dispatch, synons, word, reply]);
 
   useEffect(() => {
     (async () => {
       const syns: ISynon[] = await getAllSynons();
       dispatch(setSynons(syns));
     })();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container
@@ -133,13 +158,8 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
         </IconButton>
       </Container>
       <ToastContainer />
-      <Drawer />
       <StarsBG />
-      <Input
-        sx={{
-          margin: "0 2rem 1rem 2rem",
-        }}
-      >
+      <Input sx={{ margin: "0 2rem 1rem 2rem" }}>
         <TextField
           label="Write a word"
           variant="outlined"
@@ -165,47 +185,28 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
         color="primary"
         style={{ padding: "5px 10px 5px 10px" }}
         aria-label="add button"
-        onClick={() => {
-          if (!word) return utils.mkToast("Write a word");
-          if (!reply) return utils.mkToast("Write a reply");
-
-          if (
-            synons.some((synon) =>
-              synon.word.includes(utils.clear(word).join(" "))
-            )
-          )
-            return utils.mkToast("This word is already registered");
-
-          dispatch(
-            addSynon({
-              word: [utils.clear(word).join(" ")],
-              reply: [reply],
-              id: v4(),
-            })
-          );
-          setWord("");
-          setReply("");
-        }}
+        onClick={handleAddSynon}
       >
         <MdAdd size={28} />
       </AddButton>
       <List style={{ justifyContent: "flex-start" }}>
         {synons.map((syn) => (
-          <SynonItem
-            syn={syn}
-            key={syn.id}
-            onDeleteSynon={() => {
-              dispatch(deleteSynon(syn.id));
-            }}
-            onAddWord={() => {
-              setSynonID(syn.id);
-              setWordModal(true);
-            }}
-            onAddReply={() => {
-              setSynonID(syn.id);
-              setReplyModal(true);
-            }}
-          />
+          <Suspense key={syn.id} fallback={<Loader />}>
+            <SynonItem
+              syn={syn}
+              onDeleteSynon={() => {
+                dispatch(deleteSynon(syn.id));
+              }}
+              onAddWord={() => {
+                setSynonID(syn.id);
+                setWordModal(true);
+              }}
+              onAddReply={() => {
+                setSynonID(syn.id);
+                setReplyModal(true);
+              }}
+            />
+          </Suspense>
         ))}
       </List>
       <Modal isOpen={wordModal} style={wordsModalStyle}>
@@ -256,7 +257,6 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
           >
             Cancel
           </p>
-          <Cancel height={28} width={28} />
         </CancelButton>
         {synonID &&
           words.map((w, index) => (
@@ -264,7 +264,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
               title={w}
               key={index}
               onDeleteWord={() => {
-                if (words.length == 1)
+                if (words.length === 1)
                   return utils.mkToast("You must have at least 1 word");
                 dispatch(
                   deleteWordFromSynon({
@@ -324,7 +324,6 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
           >
             Cancel
           </p>
-          <Cancel height={28} width={28} />
         </CancelButton>
         {synonID &&
           replies.map((r, index) => (
@@ -332,7 +331,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
               title={r}
               key={index}
               onDeleteWord={() => {
-                if (replies.length == 1)
+                if (replies.length === 1)
                   return utils.mkToast("You must have at least 1 reply");
                 dispatch(
                   deleteReplyFromSynon({

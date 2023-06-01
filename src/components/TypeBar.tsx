@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-
+import { memo} from "react"
 interface RootState {
   vex: {
     isTyping: boolean;
@@ -35,7 +35,7 @@ const TypeBar: React.FC<TypeBarProps> = ({ isTyping, vexName }) => {
   );
 };
 
-export default connect((state: RootState) => ({
+export default memo(connect((state: RootState) => ({
   isTyping: state.vex.isTyping,
   vexName: state.vex.vexName,
-}))(TypeBar);
+}))(TypeBar))

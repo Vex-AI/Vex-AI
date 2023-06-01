@@ -1,4 +1,4 @@
-import React from "react";
+
 import styled from "styled-components";
 import { Box } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";

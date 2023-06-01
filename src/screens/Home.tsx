@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import {
@@ -69,7 +69,7 @@ const Home: React.FC<HomeProps> = ({
   isTyping,
   vexName,
 }) => {
-  console.log(0)
+  console.log(0);
   const navigate: NavigateFunction = useNavigate();
   const endRef = useRef<HTMLDivElement>(null);
   const [text, setText] = useState<string>("");
@@ -97,7 +97,7 @@ const Home: React.FC<HomeProps> = ({
         isVex ? (num < 6 ? 1200 : num < 10 ? 1500 : num < 20 ? 2000 : 1800) : 0
       );
     },
-    [dispatch, toggleType]
+    [ toggleType]
   );
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const Home: React.FC<HomeProps> = ({
 
     fetchMessages();
   }, [dispatch]);
-
+  endRef.current?.scrollIntoView({ behavior: "smooth" });
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);
