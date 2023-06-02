@@ -45,6 +45,7 @@ const ProfileBar: React.FC<ProfileBarProps> = ({ vexName }) => {
         backgroundColor: "#ffffff",
         borderRadius: "1rem",
         overflow: "hidden",
+        zIndex:"2"
       }}
     >
       <Avatar
