@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
   addMessage,
   setIsTyping,
@@ -71,6 +72,8 @@ const Home: React.FC<HomeProps> = ({
 }) => {
   console.log(0);
   const navigate: NavigateFunction = useNavigate();
+  const { t } = useTranslation();
+
   const endRef = useRef<HTMLDivElement>(null);
   const [text, setText] = useState<string>("");
 
@@ -97,7 +100,7 @@ const Home: React.FC<HomeProps> = ({
         isVex ? (num < 6 ? 1200 : num < 10 ? 1500 : num < 20 ? 2000 : 1800) : 0
       );
     },
-    [ toggleType]
+    [toggleType]
   );
 
   useEffect(() => {
@@ -160,7 +163,7 @@ const Home: React.FC<HomeProps> = ({
           <MdAdd size={28} />
         </IconButton>
         <TextField
-          label="Write a message"
+          label={t("write_message")}
           variant="outlined"
           value={text}
           onChange={handleInputChange}

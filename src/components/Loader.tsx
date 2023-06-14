@@ -37,9 +37,8 @@ import {
   SyncLoader,
 } from "react-spinners";
 
-
 interface LoaderProps {
-  color: string;
+  color?: string;
 }
 
 const loaders = [

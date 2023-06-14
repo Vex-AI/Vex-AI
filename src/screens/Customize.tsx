@@ -1,11 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  lazy,
-  Suspense,
-} from "react";
+import { useState, useEffect, useCallback, useMemo, Suspense } from "react";
 import StarsBG from "../components/StarsBG";
 import {
   Slider as SliderComponent,
@@ -27,7 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { createTheme, Theme, ThemeProvider } from "@mui/material/styles";
 import { red, green } from "@mui/material/colors";
 import { styled } from "@mui/system";
-
+import { useTranslation } from "react-i18next";
 const Text = styled(Typography)({
   fontWeight: "bold",
   flexGrow: 1,
@@ -41,8 +34,6 @@ const Slider = styled(SliderComponent)({
   margin: "1rem",
   padding: "1rem",
 });
-
-const LazyChromePicker = lazy(() => import("react-color"));
 
 interface Style {
   borderTopRightRadius: number;
@@ -59,6 +50,7 @@ interface Style {
 const Customize: React.FC = () => {
   const [key, setKey] = useState<string>("vexStyle");
   console.log(0);
+  const { t } = useTranslation();
   const style: Style = useMemo(() => {
     return localStorage.getItem(key)
       ? JSON.parse(localStorage.getItem(key) as string)
@@ -179,7 +171,7 @@ const Customize: React.FC = () => {
             transition: "all .3s ease-in-out ",
             rippleColor,
           }}
-          text={key === "vexStyle" ? "Hello, I'm Vex!" : "Hi, I'm the user! :)"}
+          text={key === "vexStyle" ? t("vex_message") : t("user_message")}
         />
         <ToastContainer />
         <FormControlLabel
@@ -196,7 +188,7 @@ const Customize: React.FC = () => {
               }}
             />
           }
-          label={key === "vexStyle" ? "Is Vex message" : "Is your message"}
+          label={key === "vexStyle" ? t("isVex") : t("isUser")}
           sx={{
             color: "white",
             "&.Mui-checked": {
@@ -204,7 +196,7 @@ const Customize: React.FC = () => {
             },
           }}
         />
-        <Text>Top Left Radius</Text>
+        <Text>{t("topLeftRadius")}</Text>
         <Slider
           theme={darkTheme}
           value={borderTopLeftRadius}
@@ -214,9 +206,9 @@ const Customize: React.FC = () => {
           min={0}
           max={30}
           valueLabelDisplay="on"
-          aria-label="Top-Left"
+          aria-label={t("topLeftRadius") as string}
         />
-        <Text>Top Right Radius</Text>
+        <Text>{t("topRightRadius")}</Text>
         <Slider
           theme={darkTheme}
           value={borderTopRightRadius}
@@ -226,9 +218,9 @@ const Customize: React.FC = () => {
           min={0}
           max={30}
           valueLabelDisplay="on"
-          aria-label="Top-Right"
+          aria-label={t("topRightRadius") as string}
         />
-        <Text>Bottom Left Radius</Text>
+        <Text>{t("bottomLeftRadius")}</Text>
         <Slider
           theme={darkTheme}
           value={borderBottomLeftRadius}
@@ -238,9 +230,9 @@ const Customize: React.FC = () => {
           min={0}
           max={30}
           valueLabelDisplay="on"
-          aria-label="Bottom-Left"
+          aria-label={t("bottomLeftRadius") as string}
         />
-        <Text>Bottom Right Radius</Text>
+        <Text>{t("bottomRightRadius")}</Text>
         <Slider
           theme={darkTheme}
           value={borderBottomRightRadius}
@@ -250,9 +242,9 @@ const Customize: React.FC = () => {
           min={0}
           max={30}
           valueLabelDisplay="on"
-          aria-label="Bottom-Right"
+          aria-label={t("bottomRightRadius") as string}
         />
-        <Text>Border Width</Text>
+        <Text>{t("borderWidth")}</Text>
         <Slider
           theme={darkTheme}
           value={borderWidth}
@@ -262,11 +254,11 @@ const Customize: React.FC = () => {
           min={0}
           max={10}
           valueLabelDisplay="on"
-          aria-label="Border-Width"
+          aria-label={t("borderWidth") as string}
         />
-        <Text>Background Color</Text>
+        <Text>{t("backgroundColor")}</Text>
         <ButtonBase
-          onClick={() => toast("Select a color")}
+          onClick={() => toast(t("select_color"))}
           style={{
             background: backgroundColor,
             width: "40px",
@@ -281,9 +273,9 @@ const Customize: React.FC = () => {
           onChange={(color: any) => setBackgroundColor(color.hex)}
           disableAlpha
         />
-        <Text>Text Color</Text>
+        <Text>{t("text_color")}</Text>
         <ButtonBase
-          onClick={() => toast("Select a color")}
+          onClick={() => toast(t("select_color"))}
           style={{
             background: textColor,
             width: "40px",
@@ -297,9 +289,9 @@ const Customize: React.FC = () => {
           color={textColor}
           onChange={(color: any) => setTextColor(color.hex)}
         />
-        <Text>Ripple Color</Text>
+        <Text>{t("ripple_color")}</Text>
         <ButtonBase
-          onClick={() => toast("Select a color")}
+          onClick={() => toast(t("select_color"))}
           style={{
             background: rippleColor,
             width: "40px",
@@ -330,7 +322,7 @@ const Customize: React.FC = () => {
             sx={{ mt: "1rem", margin: "2rem 0 1rem 0" }}
             onClick={saveStyles}
           >
-            Save Styles
+            {t("save_styles")}
           </Button>
         </ThemeProvider>
       </Container>

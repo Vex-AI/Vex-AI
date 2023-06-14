@@ -7,11 +7,11 @@ interface SwipeableListItemProps {
   style?: React.CSSProperties;
 }
 
-function SwipeableListItem({
+const Swipe:React.FC<SwipeableListItemProps> = ({
   onItemDelete,
   children,
   style,
-}: SwipeableListItemProps) {
+})=> {
   const listElementRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
@@ -120,4 +120,4 @@ function SwipeableListItem({
   );
 }
 
-export default SwipeableListItem;
+export default Swipe;

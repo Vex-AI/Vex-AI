@@ -23,6 +23,7 @@ import {
   deleteWordFromSynon,
   deleteReplyFromSynon,
 } from "../store/reducers/vexReducer";
+import { useTranslation } from "react-i18next";
 import { styled } from "@mui/system";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -79,10 +80,11 @@ Modal.setAppElement("#root");
 
 const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
   const navigate: NavigateFunction = useNavigate();
-
+  const { t } = useTranslation();
   const [word, setWord] = useState<string>("");
   const [reply, setReply] = useState<string>("");
   const [synonID, setSynonID] = useState<string>("");
+
   const words: string[] = useMemo(
     () => synons.find((item) => item.id === synonID)?.word || [],
     [synons, synonID]
@@ -97,13 +99,13 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
   const [newReply, setNewReply] = useState<string>("");
 
   const handleAddSynon = useCallback(() => {
-    if (!word) return utils.mkToast("Write a word");
-    if (!reply) return utils.mkToast("Write a reply");
+    if (!word) return utils.mkToast(t("write_word"));
+    if (!reply) return utils.mkToast(t("write_reply"));
 
     if (
       synons.some((synon) => synon.word.includes(utils.clear(word).join(" ")))
     ) {
-      return utils.mkToast("This word is already registered");
+      return utils.mkToast(t("allready_registered_word"));
     }
 
     dispatch(
@@ -144,7 +146,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
           onClick={() => navigate("/home")}
           color="primary"
           style={{ padding: "1rem" }}
-          aria-label="Adicionar"
+          aria-label={t("add") as string}
         >
           <ClearIcon
             style={{
@@ -153,7 +155,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
               width: "50px",
               height: "50px",
             }}
-            aria-label="back button"
+            aria-label={t("back_button") as string}
           />
         </IconButton>
       </Container>
@@ -161,7 +163,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       <StarsBG />
       <Input sx={{ margin: "0 2rem 1rem 2rem" }}>
         <TextField
-          label="Write a word"
+          label={t("write_word")}
           variant="outlined"
           value={word}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,7 +174,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       </Input>
       <Input sx={{ margin: "0 2rem 0 2rem" }}>
         <TextField
-          label="Write a reply"
+          label={t("write_reply")}
           variant="outlined"
           value={reply}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -184,7 +186,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       <AddButton
         color="primary"
         style={{ padding: "5px 10px 5px 10px" }}
-        aria-label="add button"
+        aria-label={t("add_button") as string}
         onClick={handleAddSynon}
       >
         <MdAdd size={28} />
@@ -212,7 +214,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       <Modal isOpen={wordModal} style={wordsModalStyle}>
         <Input>
           <TextField
-            label="Write a new word"
+            label={t("write_new_word")}
             variant="outlined"
             value={newWord}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -224,10 +226,10 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
         <AddButton
           color="primary"
           style={{ padding: "5px 10px 5px 10px" }}
-          aria-label="add button"
+          aria-label={t("add_button") as string}
           onClick={() => {
             if (newWord.trim().length === 0)
-              return utils.mkToast("Write a new word");
+              return utils.mkToast(t("write_new_word"));
 
             dispatch(
               addWordToSynon({
@@ -243,7 +245,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
         <CancelButton
           color="primary"
           style={{ padding: "5px 10px 5px 10px" }}
-          aria-label="cancel button"
+          aria-label={t("cancel_button") as string}
           onClick={() => {
             setSynonID("");
             setWordModal(false);
@@ -255,7 +257,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
               margin: " 0 1rem 0 1rem",
             }}
           >
-            Cancel
+            {t("cancel")}
           </p>
         </CancelButton>
         {synonID &&
@@ -264,8 +266,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
               title={w}
               key={index}
               onDeleteWord={() => {
-                if (words.length === 1)
-                  return utils.mkToast("You must have at least 1 word");
+                if (words.length === 1) return utils.mkToast(t("min_word"));
                 dispatch(
                   deleteWordFromSynon({
                     id: synonID,
@@ -279,7 +280,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       <Modal isOpen={replyModal} style={wordsModalStyle}>
         <Input>
           <TextField
-            label="Write a new reply"
+            label={t("write_new_reply")}
             variant="outlined"
             value={newReply}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -291,11 +292,10 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
         <AddButton
           color="primary"
           style={{ padding: "5px 10px 5px 10px" }}
-          aria-label="add button"
+          aria-label={t("add_button") as string}
           onClick={() => {
             if (newReply.trim().length === 0)
-              return utils.mkToast("Write a new reply");
-
+              return utils.mkToast(t("write_new_reply"));
             dispatch(
               addReplyToSynon({
                 id: synonID,
@@ -310,7 +310,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
         <CancelButton
           color="primary"
           style={{ padding: "5px 10px 5px 10px" }}
-          aria-label="cancel button"
+          aria-label={t("cancel_button") as string}
           onClick={() => {
             setSynonID("");
             setReplyModal(false);
@@ -322,7 +322,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
               margin: " 0 1rem 0 1rem",
             }}
           >
-            Cancel
+            {t("cancel")}
           </p>
         </CancelButton>
         {synonID &&
@@ -331,8 +331,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
               title={r}
               key={index}
               onDeleteWord={() => {
-                if (replies.length === 1)
-                  return utils.mkToast("You must have at least 1 reply");
+                if (replies.length === 1) return utils.mkToast(t("min_reply"));
                 dispatch(
                   deleteReplyFromSynon({
                     id: synonID,
