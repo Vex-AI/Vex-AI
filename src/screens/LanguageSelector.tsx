@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import StarsBG from "../components/StarsBG";
 import Container from "../components/Container";
 import {
   Box,
@@ -49,6 +50,7 @@ const LanguageSelector: React.FC = () => {
       p={2}
       color="white"
     >
+            <StarsBG />
       <Box
         style={{
           alignItems: "flex-start",

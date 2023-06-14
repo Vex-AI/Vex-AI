@@ -129,7 +129,8 @@ The Vex AI is currently hosted on [Netlify](https://www.netlify.com/). You can t
   <div align="center">
     <h3>Libraries</h3>
 
-  | Library |----|
+  | Library |
+  |----|
   | [Eva icons](https://akveo.github.io/eva-icons/#/?type=fill&searchKey=add)| 
   | [Octicons](https://primer.github.io/octicons/paper-airplane-16)|
   | [Load React Animations](https://loader-demo.netlify.app)|
