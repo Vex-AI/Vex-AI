@@ -12,11 +12,13 @@ i18n.use(initReactI18next).init({
       translation: translationsPTBR,
     },
   },
-  lng: "ptBR",
-  fallbackLng: "enUS",
+  lng: "enUS",
   interpolation: {
     escapeValue: false,
   },
 });
+
+if (localStorage.getItem("language"))
+  i18n.changeLanguage(localStorage.getItem("language")??"enUS");
 
 export default i18n;

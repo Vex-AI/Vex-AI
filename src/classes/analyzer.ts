@@ -1,7 +1,9 @@
 import { getAllSynons } from "../store/reducers/vexReducer";
-import { responseENUS as response } from "./response";
 import util from "./utils";
-const { log } = console;
+import i18n from "./translation";
+
+const response = import(`../response/response_${i18n.language}.json`);
+
 interface ISynon {
   word: string[];
   reply: string[];
@@ -36,5 +38,5 @@ export async function Analyzer(message: string): Promise<string> {
     return matchedMessage.reply[randomIndex];
   }
 
-  return response[Math.floor(Math.random() * response.length - 1)];
+  return response[Math.floor(Math.random() * response.length)];
 }

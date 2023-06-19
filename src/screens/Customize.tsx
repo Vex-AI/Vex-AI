@@ -21,6 +21,7 @@ import { createTheme, Theme, ThemeProvider } from "@mui/material/styles";
 import { red, green } from "@mui/material/colors";
 import { styled } from "@mui/system";
 import { useTranslation } from "react-i18next";
+
 const Text = styled(Typography)({
   fontWeight: "bold",
   flexGrow: 1,

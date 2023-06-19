@@ -18,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Routes>
           <Route path="*" element={<Splash />} />
           <Route path="home" element={<Home />} />
+          <Route path="home/:locale" element={<Home />} />
           <Route path="synon" element={<Synon />} />
           <Route path="custom" element={<Customize />} />
           <Route path="language" element={<LanguageSelector />} />

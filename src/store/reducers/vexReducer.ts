@@ -62,12 +62,35 @@ class VexDB extends Dexie {
 const db = new VexDB();
 
 db.on("populate", (tx: Transaction) => {
+  // Português data
   tx.table("synons").add({
-    word: ["oi", "aa"],
-    reply: ["Olá, tudo bem?", "eae"],
+    word: ["oi", "olá", "e aí", "alô", "bom dia"],
+    reply: ["Olá, tudo bem?", "Oi, como posso ajudar?", "E aí, tudo tranquilo?", "Alô, tem alguém aí?", "Bom dia, como você está?"],
     id: "1",
   });
+
+  // Spanish data
+  tx.table("synons").add({
+    word: ["hola", "buenos días", "qué tal", "adiós", "hasta luego"],
+    reply: ["¡Hola!", "Buenos días, ¿cómo estás?", "¿Qué tal?", "¡Adiós!", "Hasta luego, nos vemos más tarde."],
+    id: "2",
+  });
+
+  // Japanese data
+  tx.table("synons").add({
+    word: ["こんにちは", "おはよう", "さようなら", "おやすみ", "ありがとう"],
+    reply: ["こんにちは！", "おはようございます！", "さようなら！", "おやすみなさい。", "ありがとうございます！"],
+    id: "3",
+  });
+
+  // English data
+  tx.table("synons").add({
+    word: ["hello", "hi", "hey", "good morning", "goodbye"],
+    reply: ["Hello!", "Hi, how can I assist you?", "Hey there!", "Good morning, how are you?", "Goodbye, take care!"],
+    id: "4",
+  });
 });
+
 
 async function saveMessageToDB(message: IMessage): Promise<void> {
   await db.messageList.add({
