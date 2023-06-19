@@ -1,16 +1,20 @@
+import React, { useEffect } from "react";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Container from "../components/Container";
 import Loader from "../components/Loader";
 
-import { useEffect } from "react";
-import { useNavigate, NavigateFunction } from "react-router-dom";
-
 const Splash: React.FC = () => {
   const navigate: NavigateFunction = useNavigate();
-  const color: string = "#fff";
+
+
   useEffect(() => {
+    const selectedLanguage: string | null =
+      localStorage.getItem("language");
+
     setTimeout(() => {
-      navigate("/home");
+      if (selectedLanguage) return navigate("/home");
+      navigate("/language");
     }, 1200);
   }, [navigate]);
 
@@ -33,10 +37,9 @@ const Splash: React.FC = () => {
           borderRadius: 4,
         }}
       />
-      <div>
-      <Loader color={color} />
-      </div>
+      <Loader color="#fff" />
     </Container>
   );
 };
+
 export default Splash;

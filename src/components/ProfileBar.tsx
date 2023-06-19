@@ -26,6 +26,9 @@ const VexName = styled(Typography)(({ theme }) => ({
   },
 }));
 
+interface ProfileBarProps{
+  vexName:string 
+}
 const ProfileBar: React.FC<ProfileBarProps> = ({ vexName }) => {
   return (
     <Box

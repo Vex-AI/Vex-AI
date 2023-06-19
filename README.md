@@ -112,15 +112,15 @@ The Vex AI is currently hosted on [Netlify](https://www.netlify.com/). You can t
   <div align="center">
     <h3>Ideas for Future Development</h3>
 
-  | Feature           | Use                                                                     |
-  | ----------------- | ----------------------------------------------------------------------- |
-  | Custom animations | Customize animations in chat items, database, etc.                      |
-  | Context           | Vex knows the context of the chat                                       |
-  | "Global user"     | A chat where people talk to Vex for global training                     |
-  | RPG story         | Ability to tell stories or run an RPG                                   |
-  | Mobile app        | Application adapted for mobile phones                                   |
-  | Big data          | Vex accepts various types of data, queries and everything else at scale |
-  | Feelings and mood | Vex's mood and feelings can change depending on the conversation        |
+  | Feature | Use |
+  |---------|---------|
+  | Custom animations | Customize animations in chat items, database, etc.|
+  | Context| Vex knows the context of the chat|
+  | "Global user" | A chat where people talk to Vex for global training|
+  | RPG story| Ability to tell stories or run an RPG|
+  | Mobile app| Application adapted for mobile phones|
+  | Big data| Vex accepts various types of data, queries and everything else at scale |
+  | Feelings and mood | Vex's mood and feelings can change depending on the conversation|
   
   </div>
 
@@ -129,25 +129,25 @@ The Vex AI is currently hosted on [Netlify](https://www.netlify.com/). You can t
   <div align="center">
     <h3>Libraries</h3>
 
-  | Library                                                                    |
-  | -------------------------------------------------------------------------- |
-  | [Eva icons](https://akveo.github.io/eva-icons/#/?type=fill&searchKey=add)  | 
-  | [Octicons](https://primer.github.io/octicons/paper-airplane-16)            |
-  | [Load React Animations](https://loader-demo.netlify.app)                   |
-  | [React Spinners Kit](https://github.com/dmitrymorozoff/react-spinners-kit) |
-  | [React Spinners](https://www.davidhu.io/react-spinners/)                   |
-  | [React Toastify](https://fkhadra.github.io/react-toastify/installation)    |
-  | [React Modal](http://reactcommunity.org/react-modal)                       |
-  | [React Helmet](https://github.com/nfl/react-helmet)                        |
-  | [Material UI](https://mui.com/material-ui/getting-started/installation/)   |
-  | [React Colorful](https://github.com/omgovich/react-colorful)               |
+  | Library |
+  |----|
+  | [Eva icons](https://akveo.github.io/eva-icons/#/?type=fill&searchKey=add)| 
+  | [Octicons](https://primer.github.io/octicons/paper-airplane-16)|
+  | [Load React Animations](https://loader-demo.netlify.app)|
+  | [React Spinners Kit](https://github.com/dmitrymorozoff/react-spinners-kit)|
+  | [React Spinners](https://www.davidhu.io/react-spinners/)|
+  | [React Toastify](https://fkhadra.github.io/react-toastify/installation)|
+  | [React Modal](http://reactcommunity.org/react-modal)|
+  | [React Helmet](https://github.com/nfl/react-helmet)|
+  | [Material UI](https://mui.com/material-ui/getting-started/installation/)|
+  | [React Colorful](https://github.com/omgovich/react-colorful)|
   | [Redux toolkit](https://redux-toolkit.js.org/introduction/getting-started) |
-  | [Redux](https://redux.js.org/)                                             |
-  | [Dexie](https://dexie.org/)                                                |
-  | [Vite](https://vitejs.dev/)                                                |
-  | [Diacritics](https://www.npmjs.com/package/diacritics)                     |
-  | [Styled Components](https://styled-components.com/)                        |
-
+  | [Redux](https://redux.js.org/)|
+  | [Dexie](https://dexie.org/)|
+  | [Vite](https://vitejs.dev/)|
+  | [Diacritics](https://www.npmjs.com/package/diacritics)|
+  | [Styled Components](https://styled-components.com/)|
+  | [I18n](https://www.i18next.com/overview/getting-started)|
   </div>
 
 <div align="center">
