@@ -9,10 +9,10 @@
 
 <ul>
   <li>
-    <a href="https://vex-ai.netlify.app/">Website</a>
+    <a href="https://vex-ai.netlify.app/enUS">Website</a>
   </li>
   <li>
-    <a href="https://vexai.netlify.app">Vex online demo</a>
+    <a href="https://vexai.netlify.app/">Vex online demo</a>
   </li>
   <li>
     <a href="https://github.com/Vex-AI/VexAI_Java">Vex app repository</a>
