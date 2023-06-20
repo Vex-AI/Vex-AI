@@ -2,8 +2,6 @@ import { getAllSynons } from "../store/reducers/vexReducer";
 import util from "./utils";
 import i18n from "./translation";
 
-const response = import(`../response/response_${i18n.language}.json`);
-
 interface ISynon {
   word: string[];
   reply: string[];
@@ -37,6 +35,10 @@ export async function Analyzer(message: string): Promise<string> {
     );
     return matchedMessage.reply[randomIndex];
   }
-
-  return response[Math.floor(Math.random() * response.length)];
+  const responsePromise = await import(
+    `../response/response_${i18n.language}.json`
+  );
+  const response = await responsePromise.default;
+  const randomIndex: number = Math.floor(Math.random() * response.length);
+  return response[randomIndex];
 }
