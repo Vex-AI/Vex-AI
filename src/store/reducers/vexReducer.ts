@@ -52,45 +52,70 @@ class VexDB extends Dexie {
       synons: "++id, word, reply, createdAt",
       model: "model",
     });
-
     this.messageList = this.table("messageList");
     this.synons = this.table("synons");
     this.model = this.table("model");
+  }
+  dropAllMessageFromDB() {
+    this.messageList.clear();
   }
 }
 
 const db = new VexDB();
 
 db.on("populate", (tx: Transaction) => {
-  // Português data
+  // Portuguese data
   tx.table("synons").add({
     word: ["oi", "olá", "e aí", "alô", "bom dia"],
-    reply: ["Olá, tudo bem?", "Oi, como posso ajudar?", "E aí, tudo tranquilo?", "Alô, tem alguém aí?", "Bom dia, como você está?"],
+    reply: [
+      "Olá, tudo bem?",
+      "Oi, como posso ajudar?",
+      "E aí, tudo tranquilo?",
+      "Alô, tem alguém aí?",
+      "Bom dia, como você está?",
+    ],
     id: "1",
   });
 
   // Spanish data
   tx.table("synons").add({
     word: ["hola", "buenos días", "qué tal", "adiós", "hasta luego"],
-    reply: ["¡Hola!", "Buenos días, ¿cómo estás?", "¿Qué tal?", "¡Adiós!", "Hasta luego, nos vemos más tarde."],
+    reply: [
+      "¡Hola!",
+      "Buenos días, ¿cómo estás?",
+      "¿Qué tal?",
+      "¡Adiós!",
+      "Hasta luego, nos vemos más tarde.",
+    ],
     id: "2",
   });
 
   // Japanese data
   tx.table("synons").add({
     word: ["こんにちは", "おはよう", "さようなら", "おやすみ", "ありがとう"],
-    reply: ["こんにちは！", "おはようございます！", "さようなら！", "おやすみなさい。", "ありがとうございます！"],
+    reply: [
+      "こんにちは！",
+      "おはようございます！",
+      "さようなら！",
+      "おやすみなさい。",
+      "ありがとうございます！",
+    ],
     id: "3",
   });
 
   // English data
   tx.table("synons").add({
     word: ["hello", "hi", "hey", "good morning", "goodbye"],
-    reply: ["Hello!", "Hi, how can I assist you?", "Hey there!", "Good morning, how are you?", "Goodbye, take care!"],
+    reply: [
+      "Hello!",
+      "Hi, how can I assist you?",
+      "Hey there!",
+      "Good morning, how are you?",
+      "Goodbye, take care!",
+    ],
     id: "4",
   });
 });
-
 
 async function saveMessageToDB(message: IMessage): Promise<void> {
   await db.messageList.add({
@@ -170,7 +195,11 @@ const vexSlice = createSlice({
     setSynons(state, action: PayloadAction<ISynon[]>) {
       state.synons = action.payload;
     },
-
+    dropAllMessage(state, action: PayloadAction) {
+      log("chat cleaned! :D")
+      state.messageList = [];
+      db.dropAllMessageFromDB();
+    },
     setVexName(state, action: PayloadAction<{ vexName: string }>) {
       state.vexName = action.payload.vexName;
     },
@@ -283,6 +312,7 @@ export const {
   deleteWordFromSynon,
   deleteReplyFromSynon,
   setIsTyping,
+  dropAllMessage,
 } = vexSlice.actions;
 
 export default vexSlice.reducer;

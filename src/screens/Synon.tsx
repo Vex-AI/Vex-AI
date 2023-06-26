@@ -38,6 +38,7 @@ import IconButton from "@mui/material/IconButton";
 import List from "../components/List";
 import TextItem from "../components/TextItem";
 import Loader from "../components/Loader";
+import AlertComponent from "../components/AlertComponent";
 import Modal from "react-modal";
 
 const SynonItem = lazy(() => import("../components/SynonItem"));
@@ -191,6 +192,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       >
         <MdAdd size={28} />
       </AddButton>
+      <AlertComponent message={t("warningDB")} keyName={"warningDB"} />
       <List style={{ justifyContent: "flex-start" }}>
         {synons.map((syn) => (
           <Suspense key={syn.id} fallback={<Loader />}>

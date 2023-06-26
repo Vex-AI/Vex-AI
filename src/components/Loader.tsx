@@ -37,8 +37,11 @@ const Loader: React.FC<LoaderProps> = ({ color = "#fff" }) => {
   return (
     <div
       style={{
-        width: "120px",
+        width: "100%",
         height: "120px",
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center"
       }}
     >
       <LoaderComponent color={color} />

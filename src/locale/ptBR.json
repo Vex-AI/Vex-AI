@@ -29,5 +29,10 @@
   "select_color": "Selecione uma cor",
   "text_color": "Cor do texto",
   "ripple_color": "Cor ao pressionar",
-  "save_styles": "Salvar estilos"
+  "save_styles": "Salvar estilos",
+  "warningDB": "Aviso: Os dados registrados aqui não são treinados na IA, então  faça treinamento usando a tela de treinamento. Entenda também que depois do treino não tem como apagar o que já foi ensinado.",
+  "customization": "Customização",
+  "vexProfile": "Perfil da Vex",
+  "clearChat": "Limpar chat",
+  "trainning": "Treinamento"
 }

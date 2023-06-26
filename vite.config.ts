@@ -4,6 +4,7 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
+  base:"./",
   resolve: {
     alias: {
       util: path.resolve(__dirname, "src/classes/utils"),
