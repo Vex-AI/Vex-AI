@@ -20,7 +20,7 @@ const AlertComponent: React.FC<AlertComponentProps> = ({
 
   const handleClose = () => {
     setOpenAlerts(false);
-    localStorage.setItem(keyName, false);
+    localStorage.setItem(keyName, "false");
   };
   if (!openAlerts) return null;
 

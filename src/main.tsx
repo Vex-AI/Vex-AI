@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
 import "./index.css";
 import { BrowserRouter as Browser, Route, Routes } from "react-router-dom";
 import Home from "./screens/Home";
@@ -8,6 +7,7 @@ import Customize from "./screens/Customize";
 import Drawer from "./components/Drawer";
 import LanguageSelector from "./screens/LanguageSelector";
 import Synon from "./screens/Synon";
+import VexProfile from "./screens/VexProfile";
 import Splash from "./screens/Splash";
 import "./classes/translation";
 import { Provider } from "react-redux";
@@ -24,6 +24,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Route path="synon" element={<Synon />} />
           <Route path="custom" element={<Customize />} />
           <Route path="language" element={<LanguageSelector />} />
+          <Route path="profile" element={<VexProfile />} />
         </Routes>
       </Provider>
     </Browser>

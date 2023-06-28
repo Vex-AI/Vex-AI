@@ -27,40 +27,20 @@
   --bg-user-ripple: rgba(66, 43, 177, 0.4);
   --bg-input-color: #ff5b5869;
 }
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+
 #root {
   width: 100%;
   min-height: 100vh;
 }
 body {
-  margin: 0;
+  
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   place-items: center;
   min-width: 100%;
   min-height: 100vh;
   background-color: #1d1e26;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
 }
 
 @keyframes vexScale {

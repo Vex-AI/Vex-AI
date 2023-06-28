@@ -19,6 +19,7 @@ interface SynonProps {
   onAddWord?: () => void;
   onDeleteSynon?: () => void;
   onAddReply?: () => void;
+  index: number;
 }
 
 const StyledDivider = styled(Divider)({
@@ -53,8 +54,12 @@ const SynonItem: React.FC<SynonProps> = ({
   onDeleteSynon,
   onAddWord,
   onAddReply,
+  index,
 }) => {
-  const vexStyle: CustomStyle = localStorage.getItem("vexStyle");
+  const vexStyleString: string | null = localStorage.getItem("vexStyle");
+  const vexStyle: CustomStyle = vexStyleString
+    ? (JSON.parse(vexStyleString) as CustomStyle)
+    : {};
 
   const reply: string = syn.reply.join(", ");
   const word: string = syn.word.join(", ");
@@ -67,7 +72,7 @@ const SynonItem: React.FC<SynonProps> = ({
       }}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 * syn.index }}
+      transition={{ duration: 0.5, delay: 0.2 * index }}
     >
       <Ripple
         opacity={"0.5"}
@@ -75,7 +80,7 @@ const SynonItem: React.FC<SynonProps> = ({
         style={vexStyle}
         className={`${cssStyles.message} ${cssStyles.vex}`}
       >
-        <Box
+          <Box
           sx={{
             display: "flex",
             alignItems: "center",

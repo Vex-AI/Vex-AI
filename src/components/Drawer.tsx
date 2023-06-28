@@ -8,10 +8,11 @@ import {
   createTheme,
   ThemeProvider,
 } from "@mui/material";
+import { RootState } from "../store/";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { useState } from "react";
-import { Brush, Delete, School, Person } from "@mui/icons-material";
+import { Brush, Delete, School, Person, Home } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import { Dispatch } from "redux";
 import { dropAllMessage } from "../store/reducers/vexReducer";
@@ -57,13 +58,12 @@ const Drawer: React.FC<IDrawerProps> = ({ dispatch }) => {
         onOpen={toggleDrawer}
       >
         <List>
-          <DItem button onClick={()=>navigate("custom")}>
+          <DItem onClick={() => navigate("custom")}>
             <Brush />
             {t("customization")}
           </DItem>
           <Divider />
           <DItem
-            button
             onClick={() => {
               dispatch(dropAllMessage());
             }}
@@ -72,14 +72,19 @@ const Drawer: React.FC<IDrawerProps> = ({ dispatch }) => {
             {t("clearChat")}
           </DItem>
           <Divider />
-          <DItem button>
+          <DItem>
             <School />
             {t("trainning")}
           </DItem>
           <Divider />
-          <DItem button>
+          <DItem onClick={() => navigate("profile")}>
             <Person />
             {t("vexProfile")}
+          </DItem>
+          <Divider />
+          <DItem onClick={() => navigate("/home")}>
+            <Home />
+            {t("home")}
           </DItem>
           <Divider />
         </List>

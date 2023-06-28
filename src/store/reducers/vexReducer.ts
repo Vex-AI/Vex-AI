@@ -9,6 +9,7 @@ interface IAddMessageProps {
   isVex: boolean;
   id: string;
 }
+
 interface IMessage {
   content: string;
   isVex: boolean;
@@ -38,6 +39,7 @@ interface IVexState {
   synons: ISynon[];
   isTyping: boolean;
   vexName: string;
+  profileImage: string ;
 }
 
 class VexDB extends Dexie {
@@ -184,7 +186,8 @@ async function deleteSynonFromDB(id: string): Promise<void> {
 const initialState: IVexState = {
   messageList: [],
   synons: [],
-  vexName: "Vex",
+  vexName: localStorage.getItem("vexName") ?? "Vex",
+  profileImage: localStorage.getItem("profileImage") ?? "/Vex_320.png",
   isTyping: false,
 };
 
@@ -196,12 +199,23 @@ const vexSlice = createSlice({
       state.synons = action.payload;
     },
     dropAllMessage(state, action: PayloadAction) {
-      log("chat cleaned! :D")
+      log("chat cleaned! :D");
       state.messageList = [];
       db.dropAllMessageFromDB();
     },
     setVexName(state, action: PayloadAction<{ vexName: string }>) {
-      state.vexName = action.payload.vexName;
+      console.log(action.payload);
+      let { vexName } = action.payload;
+      vexName = vexName.slice(0, 12);
+      state.vexName = vexName;
+      localStorage.setItem("vexName", vexName);
+    },
+    setProfileImage(
+      state,
+      action: PayloadAction<{ imageContent: string  }>
+    ) {
+      localStorage.setItem("profileImage", action.payload.imageContent);
+      state.profileImage = action.payload.imageContent;
     },
     setIsTyping(state) {
       state.isTyping = !state.isTyping;
@@ -313,6 +327,8 @@ export const {
   deleteReplyFromSynon,
   setIsTyping,
   dropAllMessage,
+  setVexName,
+  setProfileImage,
 } = vexSlice.actions;
 
 export default vexSlice.reducer;

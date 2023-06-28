@@ -119,8 +119,6 @@ const Customize: React.FC = () => {
     color: "white",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
   });
 
   const saveStyles = useCallback((): void => {

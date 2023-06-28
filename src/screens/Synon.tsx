@@ -194,10 +194,11 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       </AddButton>
       <AlertComponent message={t("warningDB")} keyName={"warningDB"} />
       <List style={{ justifyContent: "flex-start" }}>
-        {synons.map((syn) => (
+        {synons.map((syn:ISynon,index:number) => (
           <Suspense key={syn.id} fallback={<Loader />}>
             <SynonItem
               syn={syn}
+              index={index}
               onDeleteSynon={() => {
                 dispatch(deleteSynon(syn.id));
               }}
