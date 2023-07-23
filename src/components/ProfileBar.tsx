@@ -1,9 +1,9 @@
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
+import { RootState } from "../store/";
 import { styled } from "@mui/system";
-
+import { connect } from "react-redux";
 const StatusIndicator = styled("span")(({ theme }) => ({
   borderRadius: "50%",
   width: "5vw",
@@ -19,17 +19,18 @@ const StatusIndicator = styled("span")(({ theme }) => ({
 const VexName = styled(Typography)(({ theme }) => ({
   fontSize: "2.5rem",
   color: "black",
-  fontWeight:"bold",
+  fontWeight: "bold",
   fontFamily: "Source Sans Pro, sans-serif",
   "@media screen and (max-width: 768px)": {
     fontSize: "1.5rem",
   },
 }));
 
-interface ProfileBarProps{
-  vexName:string 
+interface ProfileBarProps {
+  vexName: string;
+  profileImage: string;
 }
-const ProfileBar: React.FC<ProfileBarProps> = ({ vexName }) => {
+const ProfileBar: React.FC<ProfileBarProps> = ({ vexName, profileImage }) => {
   return (
     <Box
       sx={{
@@ -48,11 +49,11 @@ const ProfileBar: React.FC<ProfileBarProps> = ({ vexName }) => {
         backgroundColor: "#ffffff",
         borderRadius: "1rem",
         overflow: "hidden",
-        zIndex:"2"
+        zIndex: "2",
       }}
     >
       <Avatar
-        src={"/Vex_320.png"}
+        src={profileImage}
         variant="square"
         sx={{ width: 50, height: 50, borderRadius: 4 }}
       />
@@ -61,5 +62,6 @@ const ProfileBar: React.FC<ProfileBarProps> = ({ vexName }) => {
     </Box>
   );
 };
-
-export default ProfileBar;
+export default connect((state: RootState) => ({
+  profileImage: state.vex.profileImage,
+}))(ProfileBar);

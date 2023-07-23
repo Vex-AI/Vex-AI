@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, Suspense } from "react";
 import StarsBG from "../components/StarsBG";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import {
   Slider as SliderComponent,
   Checkbox,
@@ -8,6 +9,7 @@ import {
   Stack,
   Typography,
   ButtonBase,
+  IconButton,
 } from "@mui/material";
 import utils from "../classes/utils";
 import { ChromePicker } from "react-color";
@@ -21,6 +23,7 @@ import { createTheme, Theme, ThemeProvider } from "@mui/material/styles";
 import { red, green } from "@mui/material/colors";
 import { styled } from "@mui/system";
 import { useTranslation } from "react-i18next";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const Text = styled(Typography)({
   fontWeight: "bold",
@@ -28,6 +31,7 @@ const Text = styled(Typography)({
   color: "white",
   margin: "1rem 0 1rem 0",
 });
+
 const Slider = styled(SliderComponent)({
   width: "200px",
   boxSizing: "border-box",
@@ -103,6 +107,19 @@ const Customize: React.FC = () => {
   const updateStyles = useCallback((): void => {
     setKey((prevKey) => (prevKey !== "vexStyle" ? "vexStyle" : "userStyle"));
   }, []);
+  const navigate: NavigateFunction = useNavigate();
+
+  const GoBack = styled(IconButton)({
+    alignItems: "flex-start",
+    justifyContent: "center",
+    minHeight: "0px",
+    height: "50px",
+    backgroundColor: "transparent",
+    margin: "1rem 0 1rem 0",
+    color: "white",
+    display: "flex",
+    flexDirection: "row",
+  });
 
   const saveStyles = useCallback((): void => {
     const updatedStyle: Style = {
@@ -175,6 +192,19 @@ const Customize: React.FC = () => {
           text={key === "vexStyle" ? t("vex_message") : t("user_message")}
         />
         <ToastContainer />
+
+        <GoBack onClick={() => navigate("home")}>
+          <ClearIcon
+            style={{
+              fill: "white",
+              padding: "5px",
+              width: "50px",
+              height: "50px",
+            }}
+            aria-label={t("back_button") as string}
+          />
+        </GoBack>
+
         <FormControlLabel
           control={
             <Checkbox

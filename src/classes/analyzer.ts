@@ -1,4 +1,4 @@
-import { getAllSynons } from "../store/reducers/vexReducer";
+import { db } from "../classes/vexDB";
 import util from "./utils";
 import i18n from "./translation";
 
@@ -8,8 +8,9 @@ interface ISynon {
   id: string;
 }
 
-export async function Analyzer(message: string): Promise<string> {
-  const search: ISynon[] = await getAllSynons();
+export async function analyzer(message: string): Promise<string> {
+  const search: ISynon[] = await db.synons.toArray();
+  
   const cleaned: string[] = util.clear(message);
 
   for (const word of cleaned) {

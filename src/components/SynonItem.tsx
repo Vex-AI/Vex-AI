@@ -4,6 +4,9 @@ import { styled } from "@mui/system";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import ControlPointDuplicateIcon from "@mui/icons-material/ControlPointDuplicate";
+import cssStyles from "./css/MessageItem.module.css";
+import Ripple from "react-ripplejs";
+import { motion } from "framer-motion";
 
 interface ISynon {
   word: string[];
@@ -11,28 +14,13 @@ interface ISynon {
   id: string;
 }
 
-type SynonProps = {
+interface SynonProps {
   syn: ISynon;
-  onAddWord?: () => void;
+  onAddWordSynon?: () => void;
   onDeleteSynon?: () => void;
-  onAddReply?: () => void;
-};
-
-const StyledBox = styled(Box)({
-  backgroundColor: "#0E8BAAB8",
-  color: "#cfd8dc",
-  borderRadius: "10px",
-  padding: "2rem",
-  borderBottom: "8px",
-  borderColor: "#fff",
-  margin: "1rem",
-  boxSizing: "border-box",
-  animation: "vexScale 0.4s forwards",
-  "&:hover": {
-    backgroundColor: "#068a1c",
-    transition: "background .7s ease-in-out",
-  },
-});
+  onAddReplySynon?: () => void;
+  index: number;
+}
 
 const StyledDivider = styled(Divider)({
   backgroundColor: "#cfd8dc",
@@ -57,35 +45,61 @@ const StyledIcon = styled(Box)({
   },
 });
 
+interface CustomStyle extends React.CSSProperties {
+  rippleColor?: string;
+}
+
 const SynonItem: React.FC<SynonProps> = ({
   syn,
   onDeleteSynon,
-  onAddWord,
-  onAddReply,
+  onAddWordSynon,
+  onAddReplySynon,
+  index,
 }) => {
+  const vexStyleString: string | null = localStorage.getItem("vexStyle");
+  const vexStyle: CustomStyle = vexStyleString
+    ? (JSON.parse(vexStyleString) as CustomStyle)
+    : {};
+
   const reply: string = syn.reply.join(", ");
   const word: string = syn.word.join(", ");
   return (
-    <StyledBox>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", flexGrow: 1 }}>
-          {word.length > 20 ? `${word.slice(0, 20)}...` : word}
+    <motion.div
+      style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+      }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 * index }}
+    >
+      <Ripple
+        opacity={"0.5"}
+        background={cssStyles.rippleColor}
+        style={vexStyle}
+        className={`${cssStyles.message} ${cssStyles.vex}`}
+      >
+        <Box sx={{ zIndex: "10", display: "flex", alignItems: "center" }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", flexGrow: 1 }}>
+            {word.length > 20 ? `${word.slice(0, 20)}...` : word}
+          </Typography>
+          <StyledIcon onClick={onAddWordSynon}>
+            <ControlPointDuplicateIcon />
+          </StyledIcon>
+          <StyledIcon onClick={onAddReplySynon}>
+            <ReplyAllIcon />
+          </StyledIcon>
+          <StyledIcon onClick={onDeleteSynon}>
+            <DeleteOutlineIcon />
+          </StyledIcon>
+        </Box>
+        <StyledDivider />
+        <Typography sx={{ width: "100%" }}>
+          {reply.length > 20 ? `${reply.slice(0, 20)}...` : reply}
         </Typography>
-        <StyledIcon onClick={onAddWord}>
-          <ControlPointDuplicateIcon />
-        </StyledIcon>
-        <StyledIcon onClick={onAddReply}>
-          <ReplyAllIcon />
-        </StyledIcon>
-        <StyledIcon onClick={onDeleteSynon}>
-          <DeleteOutlineIcon />
-        </StyledIcon>
-      </Box>
-      <StyledDivider />
-      <Typography sx={{ width: "100%" }}>
-        {reply.length > 20 ? `${reply.slice(0, 20)}...` : reply}
-      </Typography>
-    </StyledBox>
+      </Ripple>
+    </motion.div>
   );
 };
 

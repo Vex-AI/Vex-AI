@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
+import util from "../classes/utils";
 import { useTranslation } from "react-i18next";
 import {
   addMessage,
   setIsTyping,
   setMessages,
-  getAllMessages,
   deleteMessage,
 } from "../store/reducers/vexReducer";
+import { db } from "../classes/vexDB";
 import { RootState } from "../store/";
-import { Analyzer } from "../classes/analyzer";
+import { analyzer } from "../classes/analyzer";
 import StarsBG from "../components/StarsBG";
 import Swipe from "../components/Swipe";
 import List from "../components/List";
@@ -55,7 +56,7 @@ interface Style {
 }
 
 let copy: string = "";
-
+const l = console.log;
 const vexStyle: Style = localStorage.getItem("vexStyle")
   ? JSON.parse(localStorage.getItem("vexStyle") as string)
   : {};
@@ -70,7 +71,7 @@ const Home: React.FC<HomeProps> = ({
   isTyping,
   vexName,
 }) => {
-  console.log(0);
+  l(0);
   const navigate: NavigateFunction = useNavigate();
   const { t } = useTranslation();
 
@@ -78,7 +79,7 @@ const Home: React.FC<HomeProps> = ({
   const [text, setText] = useState<string>("");
 
   const toggleType = useCallback(() => {
-    dispatch(setIsTyping());
+    dispatch(setIsTyping);
   }, [dispatch]);
 
   const sendMessage = useCallback(
@@ -105,16 +106,16 @@ const Home: React.FC<HomeProps> = ({
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const mess: IMessage[] = await getAllMessages();
+      const mess: IMessage[] = await db.getAllMessages();
       dispatch(setMessages(mess));
     };
 
     fetchMessages();
   }, [dispatch]);
-  endRef.current?.scrollIntoView({ behavior: "smooth" });
+
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messageList]);
+  });
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,14 +128,12 @@ const Home: React.FC<HomeProps> = ({
     if (!text) return;
     sendMessage(text, false);
     setText("");
+    (async () => {
+      const answer = await analyzer(text);
 
-    const analyzeAndSendMessage = async () => {
-      const answer: string = await Analyzer(copy);
-      sendMessage(answer, true);
-    };
-
-    analyzeAndSendMessage();
-  }, [text, copy, sendMessage]);
+      sendMessage(answer ?? (await util.getResponse()), true);
+    })();
+  }, [text, sendMessage]);
 
   return (
     <Container>

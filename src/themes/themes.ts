@@ -49,15 +49,14 @@ interface IModalStyles {
   content: React.CSSProperties;
 }
 
-
-export const wordsModalStyle:IModalStyles = {
+export const wordsModalStyle: IModalStyles = {
   overlay: {
     zIndex: 3,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     boxSizing: "border-box",
   },
   content: {
-    overflow:"hidden",
+    overflow: "hidden",
     boxSizing: "border-box",
     padding: "1.4rem",
     display: "flex",
@@ -70,5 +69,23 @@ export const wordsModalStyle:IModalStyles = {
     borderRadius: "8px",
     maxWidth: "500px",
     margin: "0 auto",
+  },
+};
+
+export const profileModalStyle:IModalStyles = {
+  content: {
+    backgroundColor: "black",
+    color: "white",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection:"column",
+    alignItems: "center",
+    textAlign: "center",
+    height: "fit-content",
+    margin: "auto",
+  },
+
+  overlay: {
+    background: "rgba(66, 68, 90, 0.8)",
   },
 };

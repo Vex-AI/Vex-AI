@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Container from "../components/Container";

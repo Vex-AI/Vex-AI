@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, ReactNode } from "react";
+import React, { useRef, useEffect, ReactNode, useState } from "react";
 import "./css/Swipe.css";
 
 interface SwipeableListItemProps {
@@ -7,18 +7,21 @@ interface SwipeableListItemProps {
   style?: React.CSSProperties;
 }
 
-const Swipe:React.FC<SwipeableListItemProps> = ({
+const Swipe: React.FC<SwipeableListItemProps> = ({
   onItemDelete,
   children,
   style,
-})=> {
+}) => {
   const listElementRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const backgroundRef = useRef<HTMLDivElement>(null);
 
-  const dragStartXRef = useRef(0);
-  const leftRef = useRef(0);
-  const draggedRef = useRef(false);
+  const dragStartXRef = useRef<number>(0);
+  const leftRef = useRef<number>(0);
+  const draggedRef = useRef<boolean>(false);
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [isSwiped, setIsSwiped] = useState(false);
 
   useEffect(() => {
     window.addEventListener("mouseup", onDragEndMouse);
@@ -29,19 +32,21 @@ const Swipe:React.FC<SwipeableListItemProps> = ({
     };
   }, []);
 
-  function onDragStartMouse(evt: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  const onDragStartMouse = (evt: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     onDragStart(evt.clientX);
     window.addEventListener("mousemove", onMouseMove);
-  }
+  };
 
-  function onDragStartTouch(evt: React.TouchEvent<HTMLDivElement>) {
+  const onDragStartTouch = (evt: React.TouchEvent<HTMLDivElement>) => {
     const touch = evt.targetTouches[0];
     onDragStart(touch.clientX);
     window.addEventListener("touchmove", onTouchMove);
-  }
+  };
 
-  function onDragStart(clientX: number) {
+  const onDragStart = (clientX: number) => {
     draggedRef.current = true;
+    setIsDragging(true);
+    setIsSwiped(false);
     dragStartXRef.current = clientX;
 
     if (listElementRef.current) {
@@ -49,9 +54,9 @@ const Swipe:React.FC<SwipeableListItemProps> = ({
     }
 
     requestAnimationFrame(updatePosition);
-  }
+  };
 
-  function updatePosition() {
+  const updatePosition = () => {
     if (draggedRef.current) {
       requestAnimationFrame(updatePosition);
     }
@@ -59,45 +64,46 @@ const Swipe:React.FC<SwipeableListItemProps> = ({
     if (listElementRef.current) {
       listElementRef.current.style.transform = `translateX(${leftRef.current}px)`;
     }
-  }
+  };
 
-  function onMouseMove(evt: MouseEvent) {
+  const onMouseMove = (evt: MouseEvent) => {
     const left = evt.clientX - dragStartXRef.current;
     if (left < 0) {
       leftRef.current = left;
     }
-  }
+  };
 
-  function onTouchMove(evt: TouchEvent) {
+  const onTouchMove = (evt: TouchEvent) => {
     const touch = evt.targetTouches[0];
     const left = touch.clientX - dragStartXRef.current;
     if (left < 0) {
       leftRef.current = left;
     }
-  }
+  };
 
-  function onDragEndMouse() {
+  const onDragEndMouse = () => {
     window.removeEventListener("mousemove", onMouseMove);
     onDragEnd();
-  }
+  };
 
-  function onDragEndTouch() {
+  const onDragEndTouch = () => {
     window.removeEventListener("touchmove", onTouchMove);
     onDragEnd();
-  }
+  };
 
-  function onDragEnd() {
+  const onDragEnd = () => {
     if (draggedRef.current && listElementRef.current) {
       draggedRef.current = false;
+      setIsDragging(false);
       const threshold = 0.5;
 
       if (
         leftRef.current <
         listElementRef.current.offsetWidth * threshold * -1
       ) {
+        setIsSwiped(true);
         leftRef.current = -listElementRef.current.offsetWidth * 2;
         onItemDelete();
-        leftRef.current = 0;
       } else {
         leftRef.current = 0;
       }
@@ -105,7 +111,18 @@ const Swipe:React.FC<SwipeableListItemProps> = ({
       listElementRef.current.className = "BouncingListItem";
       listElementRef.current.style.transform = `translateX(${leftRef.current}px)`;
     }
-  }
+  };
+
+  const onDragReset = () => {
+    if (!isDragging && isSwiped) {
+      setIsSwiped(false);
+      leftRef.current = 0;
+      if (listElementRef.current) {
+        listElementRef.current.className = "BouncingListItem";
+        listElementRef.current.style.transform = `translateX(${leftRef.current}px)`;
+      }
+    }
+  };
 
   return (
     <div
@@ -114,10 +131,12 @@ const Swipe:React.FC<SwipeableListItemProps> = ({
       ref={listElementRef}
       onMouseDown={onDragStartMouse}
       onTouchStart={onDragStartTouch}
+      onMouseUp={onDragReset}
+      onTouchEnd={onDragReset}
     >
       {children}
     </div>
   );
-}
+};
 
 export default Swipe;
