@@ -65,16 +65,11 @@ const Drawer: React.FC<IDrawerProps> = ({ dispatch }) => {
           <Divider />
           <DItem
             onClick={() => {
-              dispatch(dropAllMessage());
+              dispatch(dropAllMessage);
             }}
           >
             <Delete />
             {t("clearChat")}
-          </DItem>
-          <Divider />
-          <DItem>
-            <School />
-            {t("trainning")}
           </DItem>
           <Divider />
           <DItem onClick={() => navigate("profile")}>

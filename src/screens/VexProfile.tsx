@@ -85,8 +85,6 @@ const ProfileComponent = () => {
     color: "white",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
   });
 
   const navigate: NavigateFunction = useNavigate();
@@ -121,9 +119,10 @@ const ProfileComponent = () => {
   }, [newName]);
 
   const handleSelectImage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>): void => {
-      const file: File | undefined = event.target.files?.[0];
+  (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const file: File | undefined = event.target.files?.[0];
 
+    if (file) {
       const reader: FileReader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         const imageContent: string = e.target?.result?.toString() ?? "";
@@ -131,11 +130,13 @@ const ProfileComponent = () => {
         dispatch(setProfileImage({ imageContent }));
       };
       reader.readAsDataURL(file);
+    }
 
-      setIsEditImageModalOpen(false);
-    },
-    [dispatch]
-  );
+    setIsEditImageModalOpen(false);
+  },
+  [dispatch]
+);
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -156,7 +157,6 @@ const ProfileComponent = () => {
             }}
             aria-label={t("back_button") as string}
           />
-          {t("goBack")}
         </GoBack>
         <Box width="fit-content" position="relative">
           <Avatar

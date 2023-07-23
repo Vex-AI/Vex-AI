@@ -38,5 +38,17 @@
   "goBack": "Ir\npara\no\ninicio",
   "home": "Início",
   "developedBy": "Desenvolvido\npor\n",
-  "allRights": "Todos\nos\ndireitos\nreservados."
+  "allRights": "Todos\nos\ndireitos\nreservados.",
+  "predict": "Predição",
+  "train": "Treinar IA",
+  "importData": "Importar Dados do Arquivo",
+  "exportData": "Exportar Dados para Arquivo",
+  "fillField": "Preencha o campo!",
+  "noSynonsData": "Não há dados de sinônimos para salvar.",
+  "synonsAdded": "Sinônimos adicionados com sucesso!",
+  "trainingStarted": "Treinando...",
+  "trainingCompleted": "Treinamento concluído!",
+  "fileProcessingError": "Erro ao processar o arquivo:",
+  "invalidSynonsArray": "O arquivo não contém um array válido de sinônimos.",
+  "placeholderText": "Digite\nalgo"
 }

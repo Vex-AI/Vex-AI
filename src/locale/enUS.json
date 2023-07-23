@@ -38,5 +38,17 @@
   "goBack": "Go\nto\nhome",
   "home": "Home",
   "developedBy": "Developed by ",
-  "allRights": "All rights reserved."
+  "allRights": "All rights reserved.",
+  "predict": "Predict",
+  "train": "Train AI",
+  "importData": "Import Data from File",
+  "exportData": "Export Data to File",
+  "fillField": "Fill in the field!",
+  "noSynonsData": "There are no synons data to save.",
+  "synonsAdded": "Synons added successfully!",
+  "trainingStarted": "Training...",
+  "trainingCompleted": "Training completed!",
+  "fileProcessingError": "Error processing file:",
+  "invalidSynonsArray": "The file does not contain a valid array of synons.",
+  "placeholderText": "Write\nsomething"
 }

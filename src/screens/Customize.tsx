@@ -203,7 +203,6 @@ const Customize: React.FC = () => {
             }}
             aria-label={t("back_button") as string}
           />
-          {t("goBack")}
         </GoBack>
 
         <FormControlLabel

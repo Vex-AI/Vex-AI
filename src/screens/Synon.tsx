@@ -17,12 +17,12 @@ import {
   addReplyToSynon,
   addWordToSynon,
   deleteSynon,
-  getAllSynons,
   setSynons,
   addSynon,
   deleteWordFromSynon,
   deleteReplyFromSynon,
 } from "../store/reducers/vexReducer";
+import { db } from "../classes/vexDB";
 import { useTranslation } from "react-i18next";
 import { styled } from "@mui/system";
 import { ToastContainer, toast } from "react-toastify";
@@ -122,7 +122,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
 
   useEffect(() => {
     (async () => {
-      const syns: ISynon[] = await getAllSynons();
+      const syns: ISynon[] = await db.getAllSynons();
       dispatch(setSynons(syns));
     })();
   }, [dispatch]);
@@ -194,7 +194,7 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       </AddButton>
       <AlertComponent message={t("warningDB")} keyName={"warningDB"} />
       <List style={{ justifyContent: "flex-start" }}>
-        {synons.map((syn:ISynon,index:number) => (
+        {synons.map((syn: ISynon, index: number) => (
           <Suspense key={syn.id} fallback={<Loader />}>
             <SynonItem
               syn={syn}
@@ -202,11 +202,11 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
               onDeleteSynon={() => {
                 dispatch(deleteSynon(syn.id));
               }}
-              onAddWord={() => {
+              onAddWordSynon={() => {
                 setSynonID(syn.id);
                 setWordModal(true);
               }}
-              onAddReply={() => {
+              onAddReplySynon={() => {
                 setSynonID(syn.id);
                 setReplyModal(true);
               }}

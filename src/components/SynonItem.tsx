@@ -16,9 +16,9 @@ interface ISynon {
 
 interface SynonProps {
   syn: ISynon;
-  onAddWord?: () => void;
+  onAddWordSynon?: () => void;
   onDeleteSynon?: () => void;
-  onAddReply?: () => void;
+  onAddReplySynon?: () => void;
   index: number;
 }
 
@@ -52,8 +52,8 @@ interface CustomStyle extends React.CSSProperties {
 const SynonItem: React.FC<SynonProps> = ({
   syn,
   onDeleteSynon,
-  onAddWord,
-  onAddReply,
+  onAddWordSynon,
+  onAddReplySynon,
   index,
 }) => {
   const vexStyleString: string | null = localStorage.getItem("vexStyle");
@@ -80,19 +80,14 @@ const SynonItem: React.FC<SynonProps> = ({
         style={vexStyle}
         className={`${cssStyles.message} ${cssStyles.vex}`}
       >
-          <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+        <Box sx={{ zIndex: "10", display: "flex", alignItems: "center" }}>
           <Typography variant="h5" sx={{ fontWeight: "bold", flexGrow: 1 }}>
             {word.length > 20 ? `${word.slice(0, 20)}...` : word}
           </Typography>
-          <StyledIcon onClick={onAddWord}>
+          <StyledIcon onClick={onAddWordSynon}>
             <ControlPointDuplicateIcon />
           </StyledIcon>
-          <StyledIcon onClick={onAddReply}>
+          <StyledIcon onClick={onAddReplySynon}>
             <ReplyAllIcon />
           </StyledIcon>
           <StyledIcon onClick={onDeleteSynon}>
