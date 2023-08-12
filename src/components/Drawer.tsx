@@ -21,6 +21,34 @@ import { useNavigate, NavigateFunction } from "react-router-dom";
 interface IDrawerProps {
   dispatch: Dispatch;
 }
+
+const DItem = styled(ListItem)({
+  display: "flex",
+  gap: "1rem",
+  padding: "1.5rem 2rem",
+});
+
+const theme = createTheme({
+  components: {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          background: "#1e222b",
+        },
+      },
+    },
+  },
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#131721",
+    },
+    text: {
+      primary: "#ffffff",
+    },
+  },
+});
+
 const Drawer: React.FC<IDrawerProps> = ({ dispatch }) => {
   const [drawer, setDrawer] = useState<boolean>(false);
   const { t } = useTranslation();
@@ -29,24 +57,7 @@ const Drawer: React.FC<IDrawerProps> = ({ dispatch }) => {
     setDrawer(!drawer);
   };
 
-  const theme = createTheme({
-    palette: {
-      mode: "dark",
-      primary: {
-        main: "#424242",
-      },
-      text: {
-        primary: "#ffffff",
-      },
-    },
-  });
   const navigate: NavigateFunction = useNavigate();
-
-  const DItem = styled(ListItem)({
-    display: "flex",
-    gap: "1rem",
-    padding: "1.5rem 2rem",
-  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -77,11 +88,15 @@ const Drawer: React.FC<IDrawerProps> = ({ dispatch }) => {
             {t("vexProfile")}
           </DItem>
           <Divider />
+          <DItem onClick={() => navigate("/train")}>
+            <School />
+            {t("functions")}
+          </DItem>
+          <Divider />
           <DItem onClick={() => navigate("/home")}>
             <Home />
             {t("home")}
           </DItem>
-          <Divider />
         </List>
       </SwipeableDrawer>
     </ThemeProvider>

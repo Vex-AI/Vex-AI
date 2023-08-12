@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1;
+  background: url("https://images.pexels.com/photos/1699204/pexels-photo-1699204.jpeg?cs=srgb&dl=pexels-luiisrtz-1699204.jpg&fm=jpg");
 }
 
 #bg {
@@ -15,6 +16,7 @@
   overflow: hidden;
   position: fixed;
   inset: 0;
+  
 }
 
 #stars {

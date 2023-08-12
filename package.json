@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": ".",
+  "start_url": ".",
   "scripts": {
     "postinstall": "patch-package",
     "dev": "vite",

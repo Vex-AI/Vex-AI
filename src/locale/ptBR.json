@@ -51,4 +51,6 @@
   "fileProcessingError": "Erro ao processar o arquivo:",
   "invalidSynonsArray": "O arquivo não contém um array válido de sinônimos.",
   "placeholderText": "Digite\nalgo"
+,"functions":"Funções"
+  
 }

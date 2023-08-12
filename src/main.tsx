@@ -26,21 +26,19 @@ import store from "./store/index";
 })();
 */
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-
-    <Browser>
-      <Provider store={store}>
-        <Drawer />
-        <Routes>
-          <Route path="*" element={<Splash />} />
-          <Route path="home" element={<Home />} />
-          <Route path="home/:locale" element={<Home />} />
-          <Route path="synon" element={<Synon />} />
-          <Route path="train" element={<Train />} />
-          <Route path="custom" element={<Customize />} />
-          <Route path="language" element={<LanguageSelector />} />
-          <Route path="profile" element={<VexProfile />} />
-        </Routes>
-      </Provider>
-    </Browser>
-
+  <Browser >
+    <Provider store={store}>
+      <Drawer />
+      <Routes>
+        <Route path="*" element={<Splash />} />
+        <Route path="home" element={<Home />} />
+        <Route path="home/:locale" element={<Home />} />
+        <Route path="synon" element={<Synon />} />
+        <Route path="train" element={<Train />} />
+        <Route path="custom" element={<Customize />} />
+        <Route path="language" element={<LanguageSelector />} />
+        <Route path="profile" element={<VexProfile />} />
+      </Routes>
+    </Provider>
+  </Browser>
 );

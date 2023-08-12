@@ -29,6 +29,9 @@ const Footer = () => {
       <Box
         sx={{
           backgroundColor: "#212121",
+          borderTopStyle:"solid",
+          borderTopColor: "white",
+          borderTopWidth: "1px",
           py: 4,
           px: 2,
         }}
