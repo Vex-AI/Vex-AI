@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, KeyboardEvent } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import util from "../classes/utils";
@@ -28,6 +28,7 @@ import { IoSend } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
 import { v4 } from "uuid";
 import { useNavigate, NavigateFunction } from "react-router-dom";
+const { log } = console;
 
 interface IMessage {
   content: string;
@@ -141,7 +142,11 @@ const Home: React.FC<HomeProps> = ({
   return (
     <Container>
       <ProfileBar vexName={vexName} />
-      <List style={{ margin: "90px 0 20px" }}>
+      <List
+        style={{
+          margin: "90px 0 20px",
+        }}
+      >
         {messageList.map((message: IMessage) => (
           <MessageItem
             styles={message.isVex ? vexStyle : userStyle}
@@ -168,6 +173,11 @@ const Home: React.FC<HomeProps> = ({
           label={t("write_message")}
           variant="outlined"
           value={text}
+          onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+            if (event.key === "Enter") {
+              handleSendClick();
+            }
+          }}
           onChange={handleInputChange}
           fullWidth
         />

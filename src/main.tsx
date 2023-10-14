@@ -14,17 +14,7 @@ import "./classes/translation";
 import { Provider } from "react-redux";
 
 import store from "./store/index";
-/*
-(() => {
-  if (!import.meta.env.VITE_ERUDA) return;
-  const script = document.createElement("script");
-  script.src = "//cdn.jsdelivr.net/npm/eruda";
-  script.onload = function () {
-    eruda.init();
-  };
-  document.body.appendChild(script);
-})();
-*/
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Browser >
     <Provider store={store}>

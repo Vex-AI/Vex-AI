@@ -5,11 +5,15 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-width: 100%;
+  max-width: 400px;
   min-height: 100vh;
+  margin: auto;
   z-index: 1;
   background: var(--bg-color);
 
+  @media (max-width: 400px) {
+    width: 100%;
+  }
 `;
 
 export default Container;
