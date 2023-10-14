@@ -50,5 +50,6 @@
   "trainingCompleted": "Training completed!",
   "fileProcessingError": "Error processing file:",
   "invalidSynonsArray": "The file does not contain a valid array of synons.",
-  "placeholderText": "Write\nsomething"
+  "placeholderText": "Write\nsomething",
+    "functions": "Functions"
 }

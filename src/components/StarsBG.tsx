@@ -8,9 +8,12 @@ interface StarsBGProps {
 const StarsBG: React.FC<StarsBGProps> = ({ style }) => {
   return (
     <div id={styles.bg}>
-      <div id={styles.stars}></div>
-      <div id={styles.stars2}></div>
-      <div id={styles.stars3}></div>
+      <img id={styles.wallpaper} />
+      <div style={{ zIndex: "4" }}>
+        <div id={styles.stars}></div>
+        <div id={styles.stars2}></div>
+        <div id={styles.stars3}></div>
+      </div>
     </div>
   );
 };

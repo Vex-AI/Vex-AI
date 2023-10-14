@@ -38,7 +38,6 @@ import IconButton from "@mui/material/IconButton";
 import List from "../components/List";
 import TextItem from "../components/TextItem";
 import Loader from "../components/Loader";
-import AlertComponent from "../components/AlertComponent";
 import Modal from "react-modal";
 
 const SynonItem = lazy(() => import("../components/SynonItem"));
@@ -192,12 +191,13 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       >
         <MdAdd size={28} />
       </AddButton>
-      <AlertComponent message={t("warningDB")} keyName={"warningDB"} />
-      <List style={{ justifyContent: "flex-start" }}>
-        {synons.map((syn: ISynon, index: number) => (
-          <Suspense key={syn.id} fallback={<Loader />}>
+      {/* <AlertComponent message={t("warningDB")} keyName={"warningDB"} />*/}
+      <Suspense fallback={<Loader />}>
+        <List style={{ justifyContent: "flex-start" }}>
+          {synons.map((syn: ISynon, index: number) => (
             <SynonItem
               syn={syn}
+              key={syn.id}
               index={index}
               onDeleteSynon={() => {
                 dispatch(deleteSynon(syn.id));
@@ -211,9 +211,9 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
                 setReplyModal(true);
               }}
             />
-          </Suspense>
-        ))}
-      </List>
+          ))}
+        </List>
+      </Suspense>
       <Modal isOpen={wordModal} style={wordsModalStyle}>
         <Input>
           <TextField

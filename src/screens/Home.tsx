@@ -56,7 +56,9 @@ interface Style {
 }
 
 let copy: string = "";
+
 const l = console.log;
+
 const vexStyle: Style = localStorage.getItem("vexStyle")
   ? JSON.parse(localStorage.getItem("vexStyle") as string)
   : {};
@@ -73,9 +75,11 @@ const Home: React.FC<HomeProps> = ({
 }) => {
   l(0);
   const navigate: NavigateFunction = useNavigate();
+
   const { t } = useTranslation();
 
   const endRef = useRef<HTMLDivElement>(null);
+
   const [text, setText] = useState<string>("");
 
   const toggleType = useCallback(() => {
@@ -111,7 +115,7 @@ const Home: React.FC<HomeProps> = ({
     };
 
     fetchMessages();
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -130,7 +134,6 @@ const Home: React.FC<HomeProps> = ({
     setText("");
     (async () => {
       const answer = await analyzer(text);
-
       sendMessage(answer ?? (await util.getResponse()), true);
     })();
   }, [text, sendMessage]);
