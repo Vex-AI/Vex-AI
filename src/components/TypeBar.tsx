@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
-import { memo} from "react"
+import { memo } from "react";
+import styles from "./css/TypeBar.module.css";
 interface RootState {
   vex: {
     isTyping: boolean;
@@ -15,10 +16,10 @@ interface TypeBarProps {
 const TypeBar: React.FC<TypeBarProps> = ({ isTyping, vexName }) => {
   return (
     <div
+      className={styles.typebar}
       style={{
         animation: isTyping ? "typeOn 1s forwards" : "typeOff 1s forwards",
         background: "var(--bg-input-color)",
-        width: "90%",
         marginLeft: "2rem",
         marginRight: "2rem",
         zIndex: 2,
@@ -27,7 +28,7 @@ const TypeBar: React.FC<TypeBarProps> = ({ isTyping, vexName }) => {
         color: "white",
         fontSize: "1rem",
         position: "fixed",
-        bottom: "36px",
+        bottom: "40px",
       }}
     >
       {vexName} is typing
@@ -35,7 +36,9 @@ const TypeBar: React.FC<TypeBarProps> = ({ isTyping, vexName }) => {
   );
 };
 
-export default memo(connect((state: RootState) => ({
-  isTyping: state.vex.isTyping,
-  vexName: state.vex.vexName,
-}))(TypeBar))
+export default memo(
+  connect((state: RootState) => ({
+    isTyping: state.vex.isTyping,
+    vexName: state.vex.vexName,
+  }))(TypeBar)
+);
