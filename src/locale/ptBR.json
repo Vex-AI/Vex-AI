@@ -30,6 +30,7 @@
   "text_color": "Cor do texto",
   "ripple_color": "Cor ao pressionar",
   "save_styles": "Salvar estilos",
+  "delete_styles": "Apagar estilos",
   "warningDB": "Aviso: Os dados registrados aqui não são treinados na IA, então  faça treinamento usando a tela de treinamento. Entenda também que depois do treino não tem como apagar o que já foi ensinado.",
   "customization": "Customização",
   "vexProfile": "Perfil da Vex",
@@ -50,5 +51,6 @@
   "trainingCompleted": "Treinamento concluído!",
   "fileProcessingError": "Erro ao processar o arquivo:",
   "invalidSynonsArray": "O arquivo não contém um array válido de sinônimos.",
-  "placeholderText": "Digite\nalgo"
+  "placeholderText": "Digite\nalgo",
+  "functions": "Funções"
 }

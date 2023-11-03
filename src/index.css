@@ -7,6 +7,14 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+html,
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -33,7 +41,6 @@
   min-height: 100vh;
 }
 body {
-  
   display: flex;
   flex-direction: column;
   justify-content: center;

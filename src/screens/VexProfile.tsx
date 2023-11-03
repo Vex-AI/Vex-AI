@@ -2,6 +2,9 @@ import { useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { RootState } from "../store/";
+import StarsBG from "../components/StarsBG";
+import Container from "../components/Container";
+import Delete from "@mui/icons-material/Delete";
 import Modal from "react-modal";
 import {
   Box,
@@ -29,7 +32,6 @@ const CancelButton = styled(IconButton)({
   },
 });
 import { useNavigate, NavigateFunction } from "react-router-dom";
-import ClearIcon from "@mui/icons-material/Clear";
 import { profileModalStyle } from "../themes/themes";
 const theme = createTheme({
   palette: {
@@ -76,17 +78,6 @@ const ProfileComponent = () => {
 
   const vexName = useSelector((state: RootState) => state.vex.vexName);
 
-  const GoBack = styled(IconButton)({
-    alignItems: "flex-start",
-    justifyContent: "center",
-    height: "50px",
-    backgroundColor: "transparent",
-    margin: "1rem 0 1rem 0",
-    color: "white",
-    display: "flex",
-    flexDirection: "row",
-  });
-
   const navigate: NavigateFunction = useNavigate();
 
   const profileImage = useSelector(
@@ -97,7 +88,7 @@ const ProfileComponent = () => {
 
   const [isEditImageModalOpen, setIsEditImageModalOpen] = useState(false);
 
-  const [newName, setNewName] = useState("");
+  const [newName, setNewName] = useState(vexName);
 
   const handleEditName = useCallback(() => {
     setIsEditNameModalOpen(true);
@@ -109,6 +100,7 @@ const ProfileComponent = () => {
   }, []);
 
   const handleSaveName = useCallback(() => {
+    if (newName.trim() == "") return;
     dispatch(
       setVexName({
         vexName: newName,
@@ -119,45 +111,28 @@ const ProfileComponent = () => {
   }, [newName]);
 
   const handleSelectImage = useCallback(
-  (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const file: File | undefined = event.target.files?.[0];
+    (event: React.ChangeEvent<HTMLInputElement>): void => {
+      const file: File | undefined = event.target.files?.[0];
 
-    if (file) {
-      const reader: FileReader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        const imageContent: string = e.target?.result?.toString() ?? "";
+      if (file) {
+        const reader: FileReader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          const imageContent: string = e.target?.result?.toString() ?? "";
 
-        dispatch(setProfileImage({ imageContent }));
-      };
-      reader.readAsDataURL(file);
-    }
+          dispatch(setProfileImage({ imageContent }));
+        };
+        reader.readAsDataURL(file);
+      }
 
-    setIsEditImageModalOpen(false);
-  },
-  [dispatch]
-);
-
+      setIsEditImageModalOpen(false);
+    },
+    [dispatch]
+  );
 
   return (
     <ThemeProvider theme={theme}>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        height="100vh"
-      >
-        <GoBack onClick={() => navigate("/home")}>
-          <ClearIcon
-            style={{
-              fill: "white",
-              padding: "5px",
-              width: "50px",
-              height: "50px",
-            }}
-            aria-label={t("back_button") as string}
-          />
-        </GoBack>
+      <Container>
+        <StarsBG />
         <Box width="fit-content" position="relative">
           <Avatar
             alt="Profile Image"
@@ -166,6 +141,7 @@ const ProfileComponent = () => {
               width: 150,
               height: 150,
               borderRadius: "15px",
+              border: "1px solid white",
               margin: "auto",
             }}
           />
@@ -196,6 +172,25 @@ const ProfileComponent = () => {
             sx={{ color: "white", marginLeft: 1 }}
           >
             <Edit />
+          </IconButton>
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          marginTop={"2rem"}
+        >
+          <Typography variant="h6">Delete all</Typography>
+          <IconButton
+            onClick={() => {
+              dispatch(setProfileImage({ imageContent: "/Vex_320.png" }));
+              setNewName("Vex");
+              handleSaveName();
+            }}
+            aria-label="Delete all"
+            sx={{ color: "white", marginLeft: 1 }}
+          >
+            <Delete />
           </IconButton>
         </Box>
 
@@ -235,6 +230,11 @@ const ProfileComponent = () => {
             variant="outlined"
             color="primary"
             onClick={handleSaveName}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSaveName();
+              }
+            }}
             sx={{ margin: "1rem 0" }}
           >
             Save
@@ -255,7 +255,7 @@ const ProfileComponent = () => {
             <p style={{ fontSize: "1rem" }}>{t("cancel")}</p>
           </CancelButton>
         </Modal>
-      </Box>
+      </Container>
     </ThemeProvider>
   );
 };

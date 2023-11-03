@@ -27,12 +27,16 @@
   <body>
     <div id="root"></div>
     <script>
-      
       let script = document.createElement("script");
       script.src = "//cdn.jsdelivr.net/npm/eruda";
       document.body.appendChild(script);
       script.onload = function () {
-        eruda.init();
+        if (
+          navigator.userAgentData.mobile &&
+          window.location.hostname === "localhost"
+        ) {
+          eruda.init();
+        }
       };
     </script>
 

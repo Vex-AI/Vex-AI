@@ -1,5 +1,7 @@
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
+import StarsBG from "../components/StarsBG";
+import Container from "../components/Container";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import util from "../classes/utils";
 import ModelTrainingIcon from "@mui/icons-material/ModelTraining";
@@ -9,7 +11,7 @@ import YoutubeSearchedForIcon from "@mui/icons-material/YoutubeSearchedFor";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Button, Container, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import BayesClassifier from "bayes";
 import { db } from "../classes/vexDB";
 import { RootState } from "../store/";
@@ -132,33 +134,22 @@ const Train: React.FC<ITrainProps> = ({ dispatch }) => {
     link.href = url;
     link.download = fileName;
     link.click();
-
     URL.revokeObjectURL(url);
   }, [t]);
 
   return (
     <ThemeProvider theme={theme}>
-      <Container
-        maxWidth="sm"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "2rem",
-          rowGap: "1.2rem",
-        }}
-      >
+      <Container style={{ rowGap: "2rem" }}>
+        <StarsBG />
         <ToastContainer />
 
-        <TextField
+        {/* <TextField
           value={content}
           type="text"
           onChange={(e) => setContent(e.target.value.toLowerCase())}
           placeholder={t("placeholderText") as string}
-        />
-
-        <Button
+        />*/
+        /*  <Button
           variant="contained"
           onClick={async () => {
             if (!content) {
@@ -173,14 +164,14 @@ const Train: React.FC<ITrainProps> = ({ dispatch }) => {
         >
           {t("predict")}
         </Button>
-
-        <Button
+*/
+        /* <Button
           variant="contained"
           onClick={() => trainModel()}
           startIcon={<ModelTrainingIcon />}
         >
           {t("train")}
-        </Button>
+        </Button>*/}
 
         <Button
           variant="contained"

@@ -350,10 +350,20 @@ const Customize: React.FC = () => {
         >
           <Button
             variant="outlined"
-            sx={{ mt: "1rem", margin: "2rem 0 1rem 0" }}
+            sx={{ mt: "1rem", margin: "2rem 0 8px 0", borderColor: "#009037" }}
             onClick={saveStyles}
           >
             {t("save_styles")}
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ borderColor: "#90002E" }}
+            onClick={()=>{
+              localStorage.removeItem(key);
+              utils.mkToast(`Deleted ${key} with success!`);
+            }}
+          >
+            {t("delete_styles")}
           </Button>
         </ThemeProvider>
       </Container>

@@ -33,38 +33,30 @@
   width: fit-content;
   word-wrap: break-word;
   min-width: 80px;
-  max-width: 70%;
+
   display: flex;
   flex-direction: column;
-  border-radius: 5vw;
+
   height: fit-content;
-  padding: 16px;
+  padding: 20px;
   margin: 8px;
   color: white;
   justify-content: center;
-  font-size: 2rem;
+
   row-gap: 16px;
   padding-bottom: 24px;
   border: 3px solid #ffffff;
   transition: all 0.2s;
   background-position: center;
   transition: background 0.6s;
+  max-width: 200px;
+  border-radius: 30px;
+  font-size: 17px;
+  row-gap: 0px;
 }
 
 span.date {
-  font-size: 3px;
-}
-
-@media only screen and (max-width: 768px) {
-  .message {
-    border-radius: 20px;
-    padding: 16px;
-    margin: 8px;
-    font-size: 16px;
-    row-gap: 8px;
-    padding-bottom: 12px;
-    border: 2px solid #ffffff;
-  }
+  font-size: 14px;
 }
 
 .vex {
@@ -78,23 +70,4 @@ span.date {
   align-self: flex-end;
   margin-left: auto;
   animation: userScale 0.5s ease-in-out;
-}
-
-/*
-.user:hover {
-  background: var(--bg-user-ripple);
-}
-
-.vex:hover {
-  background: var(--bg-vex-ripple);
-}*/
-
-span.date {
-  font-size: 24px;
-}
-
-@media only screen and (max-width: 768px) {
-  span.date {
-    font-size: 16px;
-  }
 }

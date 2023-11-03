@@ -1,0 +1,11 @@
+.typebar {
+  width: 360px;
+  height: auto;
+}
+
+@media screen and (max-width: 400px) {
+  .typebar {
+    font-size: 6vw;
+    width: 90%;
+  }
+}

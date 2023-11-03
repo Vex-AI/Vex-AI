@@ -6,23 +6,23 @@ import { styled } from "@mui/system";
 import { connect } from "react-redux";
 const StatusIndicator = styled("span")(({ theme }) => ({
   borderRadius: "50%",
-  width: "5vw",
-  height: "5vw",
+  width: "30px",
+  height: "30px",
   marginRight: "1rem",
   backgroundColor: "green",
-  "@media screen and (max-width: 768px)": {
-    width: "1.4rem",
-    height: "1.4rem",
+  "@media screen and (max-width: 416px)": {
+    width: "30px",
+    height: "30px",
   },
 }));
 
 const VexName = styled(Typography)(({ theme }) => ({
-  fontSize: "2.5rem",
+  fontSize: "22px",
   color: "black",
   fontWeight: "bold",
   fontFamily: "Source Sans Pro, sans-serif",
-  "@media screen and (max-width: 768px)": {
-    fontSize: "1.5rem",
+  "@media screen and (max-width: 400px)": {
+    fontSize: "6vw",
   },
 }));
 
@@ -38,7 +38,7 @@ const ProfileBar: React.FC<ProfileBarProps> = ({ vexName, profileImage }) => {
         display: "flex",
         justifyContent: "space-between",
         flexGrow: 0,
-        padding: "2vw",
+        padding: "10px",
         marginLeft: "2vw",
         marginRight: "2vw",
         top: "1vh",
@@ -50,6 +50,9 @@ const ProfileBar: React.FC<ProfileBarProps> = ({ vexName, profileImage }) => {
         borderRadius: "1rem",
         overflow: "hidden",
         zIndex: "2",
+        "@media (min-width: 400px)": {
+          width: "300px",
+        },
       }}
     >
       <Avatar

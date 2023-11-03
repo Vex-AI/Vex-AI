@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, KeyboardEvent } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import util from "../classes/utils";
@@ -21,13 +21,16 @@ import ProfileBar from "../components/ProfileBar";
 import "react-toastify/dist/ReactToastify.css";
 import Input from "../components/Input";
 import TypeBar from "../components/TypeBar";
-import styles from "../index.css?inline";
+
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
+import Hidden from "@mui/material/Hidden";
 import { IoSend } from "react-icons/io5";
 import { MdAdd } from "react-icons/md";
+import MenuIcon from "@mui/icons-material/Menu";
 import { v4 } from "uuid";
 import { useNavigate, NavigateFunction } from "react-router-dom";
+const { log } = console;
 
 interface IMessage {
   content: string;
@@ -56,7 +59,9 @@ interface Style {
 }
 
 let copy: string = "";
+
 const l = console.log;
+
 const vexStyle: Style = localStorage.getItem("vexStyle")
   ? JSON.parse(localStorage.getItem("vexStyle") as string)
   : {};
@@ -73,35 +78,19 @@ const Home: React.FC<HomeProps> = ({
 }) => {
   l(0);
   const navigate: NavigateFunction = useNavigate();
+
   const { t } = useTranslation();
 
   const endRef = useRef<HTMLDivElement>(null);
+
   const [text, setText] = useState<string>("");
 
-  const toggleType = useCallback(() => {
-    dispatch(setIsTyping);
-  }, [dispatch]);
-
-  const sendMessage = useCallback(
-    (content: string, isVex: boolean) => {
-      copy = content;
-      const num: number = copy.length;
-      if (isVex) toggleType();
-      setTimeout(
-        () => {
-          dispatch(
-            addMessage({
-              content,
-              isVex,
-              id: v4(),
-            })
-          );
-          if (isVex) toggleType();
-        },
-        isVex ? (num < 6 ? 1200 : num < 10 ? 1500 : num < 20 ? 2000 : 1800) : 0
-      );
+  const toggleType = useCallback(
+    (toggle?: boolean) => {
+      log(5);
+      dispatch(setIsTyping({ payload: null }));
     },
-    [toggleType]
+    [dispatch, isTyping]
   );
 
   useEffect(() => {
@@ -111,7 +100,7 @@ const Home: React.FC<HomeProps> = ({
     };
 
     fetchMessages();
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -123,22 +112,60 @@ const Home: React.FC<HomeProps> = ({
     },
     []
   );
+  const sendUserMessage = useCallback(
+    (content: string) => {
+      dispatch(
+        addMessage({
+          content,
+          isVex: false,
+          id: v4(),
+        })
+      );
+    },
+    [dispatch]
+  );
+
+  const sendVexMessage = useCallback(
+    (content: string) => {
+      copy = content;
+      const num: number = copy.length;
+      toggleType();
+
+      setTimeout(
+        () => {
+          dispatch(
+            addMessage({
+              content,
+              isVex: true,
+              id: v4(),
+            })
+          );
+          toggleType();
+        },
+        num < 6 ? 1200 : num < 10 ? 1500 : num < 20 ? 2000 : 1800
+      );
+    },
+    [dispatch]
+  );
 
   const handleSendClick = useCallback(() => {
     if (!text) return;
-    sendMessage(text, false);
+    sendUserMessage(text);
     setText("");
     (async () => {
       const answer = await analyzer(text);
-
-      sendMessage(answer ?? (await util.getResponse()), true);
+      sendVexMessage(answer ?? (await util.getResponse()));
     })();
-  }, [text, sendMessage]);
+  }, [text, sendVexMessage, sendUserMessage]);
 
   return (
     <Container>
       <ProfileBar vexName={vexName} />
-      <List style={{ margin: "90px 0 20px" }}>
+      <List
+        style={{
+          margin: "90px 0 20px",
+        }}
+      >
         {messageList.map((message: IMessage) => (
           <MessageItem
             styles={message.isVex ? vexStyle : userStyle}
@@ -165,6 +192,11 @@ const Home: React.FC<HomeProps> = ({
           label={t("write_message")}
           variant="outlined"
           value={text}
+          onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+            if (event.key === "Enter") {
+              handleSendClick();
+            }
+          }}
           onChange={handleInputChange}
           fullWidth
         />
