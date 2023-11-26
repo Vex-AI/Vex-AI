@@ -12,7 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "^5.0.4",
+    "@capacitor/android": "^5.5.1",
+    "@capacitor/core": "^5.5.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@material/ripple": "^14.0.0",
@@ -52,6 +53,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
+    "@capacitor/cli": "^5.5.1",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@rollup/plugin-commonjs": "^24.1.0",

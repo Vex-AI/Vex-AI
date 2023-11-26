@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Vex</string>
+    <string name="title_activity_main">Vex</string>
+    <string name="package_name">com.cookie.vex</string>
+    <string name="custom_url_scheme">com.cookie.vex</string>
+</resources>

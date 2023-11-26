@@ -1,0 +1,87 @@
+name: BuildVexMobile
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  setup-capacitor-environment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Code
+        uses: actions/checkout@v2
+
+      - name: Set Up Node.js Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: |
+            npm install
+            npx cap init
+ 
+      - name: Set up Java 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Print Java version
+        run: java -version
+      
+      - name: Create Debug Keystore
+        run: |
+          keytool -genkeypair -v -keystore ${{ github.workspace }}/debug.keystore -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -alias androiddebugkey
+
+      #- name: Find Debug Keystore
+       # run: |
+        #  debug_keystore_path="${{ github.workspace }}/debug.keystore"
+         # if [ -f "$debug_keystore_path" ]; then
+          #  echo "Debug Keystore: $debug_keystore_path"
+          #else
+           # echo "Debug Keystore not found."
+          #fi
+
+      - name: Build the React Application
+        run: npm run build
+
+      - name: Sync files
+        run: npx cap sync
+
+      - name: Verify Capacitor Platform
+        run: npx cap ls
+
+      - name: Build Android
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/debug.keystore
+          ANDROID_KEYSTORE_PASSWORD: android
+          ANDROID_KEY_ALIAS: androiddebugkey
+          ANDROID_KEY_PASSWORD: android
+        run: |
+          npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
+          npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
+
+      - name: Upload Release Build to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-artifacts
+          path: |
+            ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
+            ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
+
+      #- name: Get Latest Release ID
+        #id: get-latest-release
+       # run: echo ::set-output name=release_id::$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r .id)
+
+      - name: Release with Notes
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
+            ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
+
+        env:
+         GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }}

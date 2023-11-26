@@ -1,0 +1,10 @@
+{
+  "appId": "com.cookie.vex",
+  "appName": "Vex",
+  "bundledWebRuntime": false,
+  "webDir": "www",
+  "android": {
+    "useAndroidX": true,
+    "package": "com.cookie.vex"
+  }
+}
