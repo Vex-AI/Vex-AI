@@ -10,8 +10,11 @@ import Train from "./screens/Train";
 import Synon from "./screens/Synon";
 import VexProfile from "./screens/VexProfile";
 import Splash from "./screens/Splash";
+import Nada from "./screens/teste";
 import "./classes/translation";
 import { Provider } from "react-redux";
+import { SplashScreen } from "@capacitor/splash-screen";
+SplashScreen.hide();
 
 import store from "./store/index";
 
@@ -28,6 +31,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="custom" element={<Customize />} />
         <Route path="language" element={<LanguageSelector />} />
         <Route path="profile" element={<VexProfile />} />
+        <Route path="teste" element={<Nada />} />
       </Routes>
     </Provider>
   </Browser>

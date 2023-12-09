@@ -51,6 +51,10 @@
   "trainingCompleted": "Training completed!",
   "fileProcessingError": "Error processing file:",
   "invalidSynonsArray": "The file does not contain a valid array of synons.",
-  "placeholderText": "Write\nsomething",
-  "functions": "Functions"
+  "placeholderText": "Write something",
+  "functions": "Functions",
+  "savedToFile": "File saved at: ",
+  "warningTestAI": "Notice: AI testing is only available in this section. Training is done using the data already saved.c",
+  "trainModelBefore": "Train your AI (artificial intelligence) first!",
+  "useBayes":"Use Bayes algorithm"
 }

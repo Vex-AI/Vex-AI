@@ -5,7 +5,7 @@ import { Close as CloseIcon } from "@mui/icons-material";
 
 interface AlertComponentProps {
   message: string;
-  keyName: string;
+  keyName?: string;
   backgroundColor?:string
 }
 

@@ -3,6 +3,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import util from "../classes/utils";
 import { useTranslation } from "react-i18next";
+import BayesClassifier from "bayes";
 import {
   addMessage,
   setIsTyping,
@@ -45,6 +46,7 @@ interface HomeProps {
   dispatch: Dispatch;
   isTyping: boolean;
   vexName: string;
+  useBayes: boolean;
 }
 
 interface Style {
@@ -75,6 +77,7 @@ const Home: React.FC<HomeProps> = ({
   dispatch,
   isTyping,
   vexName,
+  useBayes,
 }) => {
   l(0);
   const navigate: NavigateFunction = useNavigate();
@@ -84,6 +87,8 @@ const Home: React.FC<HomeProps> = ({
   const endRef = useRef<HTMLDivElement>(null);
 
   const [text, setText] = useState<string>("");
+
+  const [classifier, setClassifier] = useState<any>(null);
 
   const toggleType = useCallback(
     (toggle?: boolean) => {
@@ -153,11 +158,33 @@ const Home: React.FC<HomeProps> = ({
     sendUserMessage(text);
     setText("");
     (async () => {
-      const answer = await analyzer(text);
+      let answer = "";
+      if (useBayes) {
+        console.log("with bayes");
+        answer = await classifier.categorize(text);
+        if (!answer) return sendVexMessage(t("trainModelBefore"));
+      } else {
+        console.log("no bayes");
+        answer = await analyzer(text);
+      }
       sendVexMessage(answer ?? (await util.getResponse()));
     })();
   }, [text, sendVexMessage, sendUserMessage]);
 
+  useEffect(() => {
+    const fetchData = () => {
+      db.loadModelFromDB()
+        .then((data: any) => {
+          setClassifier(data);
+        })
+        .catch((error: any) => {
+          util.mkToast("Error on load classifier:" + error);
+          setClassifier(BayesClassifier());
+        });
+    };
+
+    fetchData();
+  }, []);
   return (
     <Container>
       <ProfileBar vexName={vexName} />
@@ -216,4 +243,6 @@ export default connect((state: RootState) => ({
   messageList: state.vex.messageList,
   isTyping: state.vex.isTyping,
   vexName: state.vex.vexName,
+  synons: state.vex.synons,
+  useBayes: state.vex.useBayes,
 }))(Home);

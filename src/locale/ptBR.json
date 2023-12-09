@@ -51,6 +51,10 @@
   "trainingCompleted": "Treinamento concluído!",
   "fileProcessingError": "Erro ao processar o arquivo:",
   "invalidSynonsArray": "O arquivo não contém um array válido de sinônimos.",
-  "placeholderText": "Digite\nalgo",
-  "functions": "Funções"
+  "placeholderText": "Digite algo",
+  "functions": "Funções",
+  "savedToFile": "Aqui salvo em: ",
+  "warningTestAI": "Aviso: o teste de IA está disponível apenas nesta seção. o treinamento é feito usando os dados já salvos.",
+  "trainModelBefore": "Treine sua IA(Inteligência artificial) antes!",
+  "useBayes": "Usar algoritimo de Bayes"
 }

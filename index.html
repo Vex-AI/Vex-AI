@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
 
-    <link rel="icon" type="image/svg+xml" href="/Vex_320.png" />
+    <link rel="icon" href="/web/icon-192-maskable.png" sizes="any" />
+    <link rel="apple-touch-icon" href="/web/icon-192.png" />
 
     <meta
       name="viewport"
@@ -19,7 +20,7 @@
       property="og:description"
       content="The purpose of VexAI is to create an artificial intelligence capable of holding normal conversations and discussing games and various interesting subjects and who knows, maybe even becoming a conscious AI (⊙_⊙)."
     />
-    <meta property="og:image" content="/Vex_320.png" />
+    <meta property="og:image" content="/web/icon-192.png" />
     <meta property="og:url" content="https://vex-ai.netlify.app/enUS" />
     <meta property="og:type" content="website" />
     <title>VexAI, your virtual friend</title>
@@ -33,7 +34,7 @@
       script.onload = function () {
         if (
           navigator.userAgentData.mobile &&
-          window.location.hostname === "localhost"
+          window.location.href === "http://localhost:5173/"
         ) {
           eruda.init();
         }

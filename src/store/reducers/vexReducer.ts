@@ -37,6 +37,7 @@ interface IVexState {
   isTyping: boolean;
   vexName: string;
   profileImage: string;
+  useBayes: boolean;
 }
 
 const initialState: IVexState = {
@@ -45,6 +46,7 @@ const initialState: IVexState = {
   vexName: localStorage.getItem("vexName") ?? "Vex",
   profileImage: localStorage.getItem("profileImage") ?? "/Vex_320.png",
   isTyping: false,
+  useBayes: localStorage.getItem("bayes") ? true : false,
 };
 
 const vexSlice: Slice<IVexState> = createSlice({
@@ -53,6 +55,10 @@ const vexSlice: Slice<IVexState> = createSlice({
   reducers: {
     setSynons(state, action: PayloadAction<ISynon[]>) {
       state.synons = action.payload;
+    },
+    switchBayes(state, action: PayloadAction<{ useBayes: boolean }>) {
+      state.useBayes = action.payload.useBayes;
+      console.log({ cheated: state.useBayes });
     },
     dropAllMessage(state, action: PayloadAction) {
       log("chat cleaned! :D");
@@ -179,6 +185,7 @@ export const {
   dropAllMessage,
   setVexName,
   setProfileImage,
+  switchBayes,
 } = vexSlice.actions;
 
 export default vexSlice.reducer;

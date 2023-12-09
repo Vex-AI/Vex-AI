@@ -1,7 +1,8 @@
 {
   "name": "vex",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "versionCode": 1,
   "type": "module",
   "homepage": ".",
   "start_url": ".",
@@ -9,11 +10,15 @@
     "postinstall": "patch-package",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build-all": "npm run build && npx cap sync && npx cap ls && npm run build-release",
+    "build-release": "npx cap build android --keystorepath=C:\\Users\\rcnma\\OneDrive\\Documentos\\debug.keystore --keystorepass=android --keystorealias=androiddebugkey --keystorealiaspass=android --androidreleasetype=APK && npx cap build android --keystorepath=C:\\Users\\rcnma\\OneDrive\\Documentos\\debug.keystore --keystorepass=android --keystorealias=androiddebugkey --keystorealiaspass=android --androidreleasetype=AAB"
   },
   "dependencies": {
     "@capacitor/android": "^5.5.1",
     "@capacitor/core": "^5.5.1",
+    "@capacitor/filesystem": "^5.1.4",
+    "@capacitor/splash-screen": "^5.0.6",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@material/ripple": "^14.0.0",

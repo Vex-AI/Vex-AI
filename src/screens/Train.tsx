@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import StarsBG from "../components/StarsBG";
+import Alert from "../components/AlertComponent";
 import Container from "../components/Container";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import util from "../classes/utils";
@@ -16,6 +17,11 @@ import BayesClassifier from "bayes";
 import { db } from "../classes/vexDB";
 import { RootState } from "../store/";
 import { useTranslation } from "react-i18next";
+import { Capacitor } from "@capacitor/core";
+import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
+import AlertComponent from "../components/AlertComponent";
+
+const platform = Capacitor.getPlatform();
 
 interface ISynon {
   word: string[];
@@ -28,9 +34,33 @@ interface ITrainProps {
 }
 
 const theme = createTheme({
-  palette: {
-    text: {
-      primary: "#ffffff",
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          ":focus": {
+            outline: "none",
+            border: "1px solid white",
+          },
+          "& .MuiOutlinedInput-root": {
+            color: "white",
+            borderColor: "white",
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "white",
+        },
+      },
     },
   },
 });
@@ -126,15 +156,24 @@ const Train: React.FC<ITrainProps> = ({ dispatch }) => {
     const id: number = Math.floor(Math.random() * 10000);
     const fileName: string = `vex_db_${id}.vex`;
     const fileContents: string = JSON.stringify(synons);
-
-    const blob: Blob = new Blob([fileContents], { type: "application/json" });
-    const url: string = URL.createObjectURL(blob);
-    const link: HTMLAnchorElement = document.createElement("a");
-
-    link.href = url;
-    link.download = fileName;
-    link.click();
-    URL.revokeObjectURL(url);
+    console.log({ platform });
+    if (platform === "android") {
+      await Filesystem.writeFile({
+        path: fileName,
+        data: fileContents,
+        directory: Directory.Documents,
+        encoding: Encoding.UTF8,
+      });
+      util.mkToast(t("savedToFile") + "Document/Vex/" + fileName);
+    } else {
+      const blob: Blob = new Blob([fileContents], { type: "application/json" });
+      const url: string = URL.createObjectURL(blob);
+      const link: HTMLAnchorElement = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
   }, [t]);
 
   return (
@@ -143,13 +182,16 @@ const Train: React.FC<ITrainProps> = ({ dispatch }) => {
         <StarsBG />
         <ToastContainer />
 
-        {/* <TextField
+        <TextField
           value={content}
           type="text"
+          variant="outlined"
+          color="primary"
+          sx={{ borderColor: "white" }}
           onChange={(e) => setContent(e.target.value.toLowerCase())}
           placeholder={t("placeholderText") as string}
-        />*/
-        /*  <Button
+        />
+        <Button
           variant="contained"
           onClick={async () => {
             if (!content) {
@@ -157,21 +199,23 @@ const Train: React.FC<ITrainProps> = ({ dispatch }) => {
               return;
             }
             const result = await classifier.categorize(content);
+            if (!result) util.mkToast(t("trainModelBefore"));
             console.log({ content, result });
+
             util.mkToast(result);
           }}
           startIcon={<YoutubeSearchedForIcon />}
         >
           {t("predict")}
         </Button>
-*/
-        /* <Button
+
+        <Button
           variant="contained"
           onClick={() => trainModel()}
           startIcon={<ModelTrainingIcon />}
         >
           {t("train")}
-        </Button>*/}
+        </Button>
 
         <Button
           variant="contained"

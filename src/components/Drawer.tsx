@@ -19,6 +19,9 @@ import { Dispatch } from "redux";
 import { dropAllMessage } from "../store/reducers/vexReducer";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import styles from "./css/Drawer.module.css";
+import Language from "@mui/icons-material/Language";
+import BayesSwitch from "./BayesSwitch";
+import PsychologyIcon from "@mui/icons-material/Psychology";
 
 interface IDrawerProps {
   dispatch: Dispatch;
@@ -144,6 +147,18 @@ const Drawer: React.FC<IDrawerProps> = ({ dispatch }) => {
             <Home />
             {t("home")}
           </DItem>
+          <Divider />
+          <DItem onClick={() => navigate("/language")}>
+            <Language />
+            {t("select")}
+          </DItem>
+          <Divider />
+          <DItem>
+            <PsychologyIcon />
+            {t("useBayes")}
+            <BayesSwitch />
+          </DItem>
+          <Divider />
         </List>
       </SwipeableDrawer>
     </ThemeProvider>
@@ -151,3 +166,4 @@ const Drawer: React.FC<IDrawerProps> = ({ dispatch }) => {
 };
 
 export default connect((state) => state)(Drawer);
+
