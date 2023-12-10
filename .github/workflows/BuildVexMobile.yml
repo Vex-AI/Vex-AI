@@ -1,9 +1,13 @@
 name: BuildVexMobile
 
+#on:
+ # release:
+   # types:
+    #  - created
 on:
-  release:
-    types:
-      - created
+  push:
+    branches:
+      - main
 
 jobs:
   setup-capacitor-environment:
@@ -38,6 +42,9 @@ jobs:
 
       - name: Decode Keystore from Base64
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
+
+      - name: Exibir conteúdo da keystore convertida
+        run: keytool -list -keystore ${{ github.workspace }}/cookie.keystore -storepass android
 
      # - name: Create Debug Keystore
         #run: |
