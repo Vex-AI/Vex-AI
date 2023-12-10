@@ -39,9 +39,9 @@ jobs:
       - name: Decode Keystore from Base64
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
 
-      - name: Create Debug Keystore
-        run: |
-          keytool -genkeypair -v -keystore ${{ github.workspace }}/cookiekeystore -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -alias androiddebugkey
+     # - name: Create Debug Keystore
+        #run: |
+        #  keytool -genkeypair -v -keystore ${{ github.workspace }}/cookiekeystore -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -alias androiddebugkey
 
       #- name: Find Debug Keystore
       # run: |
@@ -63,7 +63,7 @@ jobs:
 
       - name: Build Android
         env:
-          ANDROID_KEYSTORE_PATH: ${{ secrets.MY_RELEASE_KEY }} # ${{ github.workspace }}/debug.keystore
+          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
           ANDROID_KEYSTORE_PASSWORD: android
           ANDROID_KEY_ALIAS: androiddebugkey
           ANDROID_KEY_PASSWORD: android
