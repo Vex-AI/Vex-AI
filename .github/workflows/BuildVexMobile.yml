@@ -36,9 +36,12 @@ jobs:
         run: |
           chmod +x ./android/gradlew
 
+      - name: Decode Keystore from Base64
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
+
       - name: Create Debug Keystore
         run: |
-          keytool -genkeypair -v -keystore ${{ github.workspace }}/debug.keystore -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -alias androiddebugkey
+          keytool -genkeypair -v -keystore ${{ github.workspace }}/cookiekeystore -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -alias androiddebugkey
 
       #- name: Find Debug Keystore
       # run: |
