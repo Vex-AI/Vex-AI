@@ -60,7 +60,7 @@ jobs:
 
       - name: Build Android
         env:
-          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/debug.keystore
+          ANDROID_KEYSTORE_PATH: ${{ secrets.MY_RELEASE_KEY }} # ${{ github.workspace }}/debug.keystore
           ANDROID_KEYSTORE_PASSWORD: android
           ANDROID_KEY_ALIAS: androiddebugkey
           ANDROID_KEY_PASSWORD: android
