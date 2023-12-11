@@ -45,6 +45,8 @@ jobs:
 
       - name: Exibir conteúdo da keystore convertida
         run: keytool -list -keystore ${{ github.workspace }}/cookie.keystore -storepass android
+      - name: Exibir conteúdo decodificado da keystore
+        run: cat ${{ github.workspace }}/cookie.keystore
 
      # - name: Create Debug Keystore
         #run: |
