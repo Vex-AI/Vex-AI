@@ -68,9 +68,9 @@ jobs:
       - name: Build Android
         env:
           ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
-          ANDROID_KEYSTORE_PASSWORD: android
-          ANDROID_KEY_ALIAS: androiddebugkey
-          ANDROID_KEY_PASSWORD: android
+          ANDROID_KEYSTORE_PASSWORD: cookieukw
+          ANDROID_KEY_ALIAS: cookieukw
+          ANDROID_KEY_PASSWORD: cookieukw
         run: |
           npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
           npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
