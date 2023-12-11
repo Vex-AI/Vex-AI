@@ -41,12 +41,7 @@ jobs:
           chmod +x ./android/gradlew
 
       - name: Decode Keystore from Base64
-        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
-
-      - name: Exibir conteúdo da keystore convertida
-        run: keytool -list -keystore ${{ github.workspace }}/cookie.keystore -storepass android
-      - name: Exibir conteúdo decodificado da keystore
-        run: cat ${{ github.workspace }}/cookie.keystore
+        run: echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
 
      # - name: Create Debug Keystore
         #run: |
