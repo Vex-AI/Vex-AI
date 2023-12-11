@@ -1,13 +1,9 @@
 name: BuildVexMobile
 
-#on:
- # release:
-   # types:
-    #  - created
 on:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - created
 
 jobs:
   setup-capacitor-environment:
