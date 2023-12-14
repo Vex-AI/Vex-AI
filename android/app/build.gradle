@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
 
 android {
-    namespace "com.cookie.vex"
+    namespace "com.cookieukw.vex"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.cookie.vex"
+        applicationId "com.cookieukw.vex"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode packageJson.versionCode.toInteger()
