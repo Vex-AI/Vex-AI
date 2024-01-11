@@ -50,13 +50,13 @@ const LanguageSelector: React.FC = () => {
       p={2}
       color="white"
     >
-            <StarsBG />
+      <StarsBG />
       <Box
         style={{
           alignItems: "flex-start",
           justifyContent: "center",
           minHeight: "0px",
-          width:"100%",
+          width: "100%",
           height: "50px",
           backgroundColor: "transparent",
           position: "fixed",

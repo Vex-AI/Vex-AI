@@ -14,6 +14,7 @@ import Nada from "./screens/teste";
 import "./classes/translation";
 import { Provider } from "react-redux";
 import { SplashScreen } from "@capacitor/splash-screen";
+
 SplashScreen.hide();
 
 import store from "./store/index";

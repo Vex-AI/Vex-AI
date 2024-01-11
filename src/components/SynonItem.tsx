@@ -1,4 +1,5 @@
-import { Box, Typography, Divider } from "@mui/material";
+import React from "react";
+import { Box, Typography, IconButton, Divider } from "@mui/material";
 import { styled } from "@mui/system";
 
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -22,18 +23,9 @@ interface SynonProps {
   index: number;
 }
 
-const StyledDivider = styled(Divider)({
-  backgroundColor: "#cfd8dc",
-  margin: "8px 0",
-});
-
-const StyledIcon = styled(Box)({
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
+const StyledIconButton = styled(IconButton)({
   backgroundColor: "#fff",
   color: "#000",
-  padding: "1rem",
   borderRadius: "10%",
   width: "32px",
   height: "32px",
@@ -45,10 +37,6 @@ const StyledIcon = styled(Box)({
   },
 });
 
-interface CustomStyle extends React.CSSProperties {
-  rippleColor?: string;
-}
-
 const SynonItem: React.FC<SynonProps> = ({
   syn,
   onDeleteSynon,
@@ -57,47 +45,64 @@ const SynonItem: React.FC<SynonProps> = ({
   index,
 }) => {
   const vexStyleString: string | null = localStorage.getItem("vexStyle");
-  const vexStyle: CustomStyle = vexStyleString
-    ? (JSON.parse(vexStyleString) as CustomStyle)
+  const vexStyle: React.CSSProperties = vexStyleString
+    ? (JSON.parse(vexStyleString) as React.CSSProperties)
     : {};
 
   const reply: string = syn.reply.join(", ");
   const word: string = syn.word.join(", ");
+
   return (
     <motion.div
       style={{
         width: "100%",
         display: "flex",
         justifyContent: "center",
+        overflow: "hidden",
       }}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 * index }}
+      transition={{ duration: 0.5, delay: 0.2 }}
     >
       <Ripple
         opacity={"0.5"}
         background={cssStyles.rippleColor}
-        style={vexStyle}
+        style={{ ...vexStyle, overflow: "hidden", width: "100%" }}
         className={`${cssStyles.message} ${cssStyles.vex}`}
       >
-        <Box sx={{ zIndex: "10", display: "flex", alignItems: "center" }}>
-          <Typography variant="h5" sx={{ fontWeight: "bold", flexGrow: 1 }}>
+        <Box
+          sx={{
+            zIndex: "10",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
             {word.length > 20 ? `${word.slice(0, 20)}...` : word}
+          </Typography>{" "}
+          <Typography sx={{ width: "100%", padding: "8px" }}>
+            {reply.length > 20 ? `${reply.slice(0, 20)}...` : reply}
           </Typography>
-          <StyledIcon onClick={onAddWordSynon}>
-            <ControlPointDuplicateIcon />
-          </StyledIcon>
-          <StyledIcon onClick={onAddReplySynon}>
-            <ReplyAllIcon />
-          </StyledIcon>
-          <StyledIcon onClick={onDeleteSynon}>
-            <DeleteOutlineIcon />
-          </StyledIcon>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              width: "100%",
+            }}
+          >
+            <StyledIconButton onClick={onAddWordSynon}>
+              <ControlPointDuplicateIcon />
+            </StyledIconButton>
+            <StyledIconButton onClick={onAddReplySynon}>
+              <ReplyAllIcon />
+            </StyledIconButton>
+            <StyledIconButton onClick={onDeleteSynon}>
+              <DeleteOutlineIcon />
+            </StyledIconButton>
+          </Box>
         </Box>
-        <StyledDivider />
-        <Typography sx={{ width: "100%" }}>
-          {reply.length > 20 ? `${reply.slice(0, 20)}...` : reply}
-        </Typography>
+        <Divider sx={{ width: "100%" }} />
       </Ripple>
     </motion.div>
   );

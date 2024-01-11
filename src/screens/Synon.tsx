@@ -1,11 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  lazy,
-  Suspense,
-} from "react";
+import { useState, useEffect, useCallback, useMemo, Suspense } from "react";
 import { MdAdd } from "react-icons/md";
 import { Dispatch } from "redux";
 import { v4 } from "uuid";
@@ -39,8 +32,8 @@ import List from "../components/List";
 import TextItem from "../components/TextItem";
 import Loader from "../components/Loader";
 import Modal from "react-modal";
-
-const SynonItem = lazy(() => import("../components/SynonItem"));
+import InfiniteScroll from "react-infinite-scroll-component";
+import SynonItem from "../components/SynonItem";
 
 interface ISynon {
   word: string[];
@@ -97,6 +90,13 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
   const [newWord, setNewWord] = useState<string>("");
   const [replyModal, setReplyModal] = useState<boolean>(false);
   const [newReply, setNewReply] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const itemsPerPage = 10;
+  const visibleSynons = useMemo(
+    () => synons.slice(0, page * itemsPerPage),
+    [synons, page, itemsPerPage]
+  );
 
   const handleAddSynon = useCallback(() => {
     if (!word) return utils.mkToast(t("write_word"));
@@ -125,6 +125,16 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
       dispatch(setSynons(syns));
     })();
   }, [dispatch]);
+
+  const loadMore = () => {
+    if (isLoading) return;
+    console.log("loaded more items");
+    setIsLoading(true);
+    setPage(() => {
+      setIsLoading(false);
+      return page + 1;
+    });
+  };
 
   return (
     <Container
@@ -192,9 +202,15 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
         <MdAdd size={28} />
       </AddButton>
       {/* <AlertComponent message={t("warningDB")} keyName={"warningDB"} />*/}
-      <Suspense fallback={<Loader />}>
-        <List style={{ justifyContent: "flex-start" }}>
-          {synons.map((syn: ISynon, index: number) => (
+
+      <InfiniteScroll
+        dataLength={visibleSynons.length}
+        next={loadMore}
+        hasMore={visibleSynons.length < synons.length}
+        loader={<Loader />}
+      >
+        <List style={{ justifyContent: "flex-start", overflow: "hidden" }}>
+          {visibleSynons.map((syn: ISynon, index: number) => (
             <SynonItem
               syn={syn}
               key={syn.id}
@@ -213,7 +229,8 @@ const Synon: React.FC<ISynonProps> = ({ dispatch, synons }) => {
             />
           ))}
         </List>
-      </Suspense>
+      </InfiniteScroll>
+
       <Modal isOpen={wordModal} style={wordsModalStyle}>
         <Input>
           <TextField

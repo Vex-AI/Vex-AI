@@ -51,7 +51,7 @@ interface IModalStyles {
 
 export const wordsModalStyle: IModalStyles = {
   overlay: {
-    zIndex: 3,
+    zIndex: 2000,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     boxSizing: "border-box",
   },
@@ -72,13 +72,13 @@ export const wordsModalStyle: IModalStyles = {
   },
 };
 
-export const profileModalStyle:IModalStyles = {
+export const profileModalStyle: IModalStyles = {
   content: {
     backgroundColor: "black",
     color: "white",
     display: "flex",
     justifyContent: "center",
-    flexDirection:"column",
+    flexDirection: "column",
     alignItems: "center",
     textAlign: "center",
     height: "fit-content",
