@@ -75,8 +75,9 @@ jobs:
           npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD  --androidreleasetype=APK
           cd ${{ github.workspace }}/android/app/build/outputs/apk/release/
           for apk in *.apk; do
-            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --ks-key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
+           apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
           done
+
           
       - name: Upload Release Build to Artifacts
         uses: actions/upload-artifact@v3
