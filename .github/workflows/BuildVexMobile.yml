@@ -61,6 +61,9 @@ jobs:
       - name: Verify Capacitor Platform
         run: npx cap ls
 
+      - name: Install apksigner
+        run: sudo apt-get update && sudo apt-get install -y apksigner
+
       - name: Build Android
         env:
           ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
