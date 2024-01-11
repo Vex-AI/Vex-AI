@@ -71,8 +71,8 @@ jobs:
           ANDROID_KEY_ALIAS: cookieukw
           ANDROID_KEY_PASSWORD: cookieukw
         run: |
-          npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --signing-type apksigner --androidreleasetype=AAB
-          npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --signing-type apksigner --androidreleasetype=APK
+          npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --min-sdk-version 23 --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --signing-type apksigner --androidreleasetype=AAB
+          npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --min-sdk-version 23 --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --signing-type apksigner --androidreleasetype=APK
         # cd ${{ github.workspace }}/android/app/build/outputs/bundle/release/
         # apksigner sign --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --key-pass pass:$ANDROID_KEY_PASSWORD --out app-release-signed.aab app-release.aab
         # cd ${{ github.workspace }}/android/app/build/outputs/apk/release/
