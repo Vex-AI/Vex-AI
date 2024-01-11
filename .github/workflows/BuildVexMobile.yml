@@ -95,7 +95,7 @@ jobs:
         with:
           files: |
             ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
-            ${{ github.workspace }}/android/app/build/outputs/apk/release/*-signed.apk
+            ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
 
         env:
           GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }}
