@@ -23,15 +23,20 @@ jobs:
           npm install
           npx cap init
 
-      - name: Set up Java 17
-        uses: actions/setup-java@v2
+  
+      - name: Install Java
+        uses: actions/setup-java@v1.4.3
         with:
-          distribution: "adopt"
-          java-version: "17"
-
+          java-version: 17
+          
       - name: Print Java version
         run: java -version
 
+      - name: Install Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 7.6
+        
       - name: Give execute permission to gradlew
         run: |
           chmod +x ./android/gradlew
@@ -60,9 +65,9 @@ jobs:
 
       - name: Verify Capacitor Platform
         run: npx cap ls
-
+        
       - name: Install apksigner
-        run: sudo apt-get update && sudo apt-get install -y apksigner
+        run: sudo apt update && sudo apt install -y apksigner
 
       - name: Build Android
         env:
@@ -73,10 +78,10 @@ jobs:
         run: |
           npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD  --androidreleasetype=AAB
           npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD  --androidreleasetype=APK
-          cd ${{ github.workspace }}/android/app/build/outputs/apk/release/
-          for apk in *.apk; do
-           apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
-          done
+        #  cd ${{ github.workspace }}/android/app/build/outputs/apk/release/
+        #  for apk in *.apk; do
+        #   apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
+        #  done
 
           
       - name: Upload Release Build to Artifacts
