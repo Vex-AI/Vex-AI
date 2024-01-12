@@ -47,15 +47,15 @@ jobs:
      # - name: Create Debug Keystore
         #run: |
         #  keytool -genkeypair -v -keystore ${{ github.workspace }}/cookiekeystore -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -alias androiddebugkey
-
-      #- name: Find Debug Keystore
-      # run: |
-      #  debug_keystore_path="${{ github.workspace }}/debug.keystore"
-      # if [ -f "$debug_keystore_path" ]; then
-      #  echo "Debug Keystore: $debug_keystore_path"
-      #else
-      # echo "Debug Keystore not found."
-      #fi
+ 
+      - name: Find Debug Keystore
+        run: |
+         debug_keystore_path="${{ github.workspace }}/debug.keystore"
+         if [ -f "$debug_keystore_path" ]; then
+         echo "Debug Keystore: $debug_keystore_path"
+         else
+         echo "Debug Keystore not found."
+         fi
 
       - name: Build the React Application
         run: npm run build
@@ -84,24 +84,33 @@ jobs:
         #  done
 
           
-      - name: Upload Release Build to Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-artifacts
-          path: |
-            ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
-            ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
 
-      #- name: Get Latest Release ID
-      #id: get-latest-release
-      # run: echo ::set-output name=release_id::$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r .id)
+      #- name: Upload Release Build to Artifacts
+       
+        #uses: actions/upload-artifact@v3
+        #with:
+         # name: release-artifacts
+          #path: |
+           # ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
+            #${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
 
-      - name: Release with Notes
+  #    - name: Release with Notes
+   #     uses: softprops/action-gh-release@v1
+    #    with:
+     #     files: |
+      #      ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
+       #     ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
+
+        #env:
+         # GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }}
+
+      - name: Create draft release
         uses: softprops/action-gh-release@v1
         with:
+          draft: true
           files: |
-            ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
-            ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
+                ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
+                ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
 
         env:
-          GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }} 
