@@ -7,8 +7,8 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.cookieukw.vex"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 23 // rootProject.ext.minSdkVersion
+        targetSdkVersion 32// rootProject.ext.targetSdkVersion
         versionCode packageJson.versionCode.toInteger()
         versionName packageJson.version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
