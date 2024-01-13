@@ -7,11 +7,11 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https'
   },
-  android:{
-     buildOptions:{
-         signingType: "apksigner"
-     }
-  }
+ // android:{
+   //  buildOptions:{
+     //    signingType: "apksigner"
+    // }//
+  //}
 };
 
 export default config;
