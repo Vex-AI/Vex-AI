@@ -76,7 +76,8 @@ jobs:
           ANDROID_KEY_ALIAS: cookieukw
           ANDROID_KEY_PASSWORD: cookieukw
         run: |
-         ./gradlew bundleRelease --stacktrace
+          cd android
+          ./gradlew bundleRelease --stacktrace
           cd app/build/outputs/bundle/release
           for apk in $(find . -name "*.apk"); do
             apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
