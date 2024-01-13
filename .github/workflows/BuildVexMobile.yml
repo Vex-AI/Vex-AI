@@ -79,7 +79,6 @@ jobs:
           cd android
           ./gradlew bundleRelease --stacktrace
           ./gradlew assembleRelease --stacktrace
-          cd
           cd app/build/outputs/bundle/release
            for apk in $(find . -name "*.apk"); do
              apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
