@@ -87,8 +87,8 @@ jobs:
           RELEASE_SIGNING_ALIAS: cookieukw
         run: |
           cd android
-          ./gradlew app:bundleRelease
-          ./gradlew app:assembleRelease -PRELEASE_STORE_FILE=ANDROID_KEYSTORE_PATH -PRELEASE_STORE_PASS=SIGNING_KEY_PASSWORD -PRELEASE_ALIAS=SIGNING_KEY_ALIAS -PRELEASE_KEY_PASS=SIGNING_STORE_PASSWORD
+          ./gradlew bundleRelease
+          ./gradlew assembleRelease -PRELEASE_STORE_FILE=ANDROID_KEYSTORE_PATH -PRELEASE_STORE_PASS=SIGNING_KEY_PASSWORD -PRELEASE_ALIAS=SIGNING_KEY_ALIAS -PRELEASE_KEY_PASS=SIGNING_STORE_PASSWORD
 
           cd app/build/outputs/bundle/release
 
