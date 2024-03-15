@@ -78,24 +78,19 @@ jobs:
       - name: Build Android
         env:
           ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
-          ANDROID_KEYSTORE_PASSWORD: cookieukw
-          ANDROID_KEY_ALIAS: cookieukw
-          ANDROID_KEY_PASSWORD: cookieukw
+          SIGNING_STORE_PASSWORD: cookieukw
+          SIGNING_KEY_ALIAS: cookieukw
+          SIGNING_KEY_PASSWORD: cookieukw
         run: |
           cd android
-          ./gradlew bundleRelease --stacktrace
-          ./gradlew assembleRelease --stacktrace
+          ./gradlew app:bundleRelease
+          
           cd app/build/outputs/bundle/release
-     
-          for apk in $(find . -name "*.apk"); do
-            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
-            apksigner verify --print-certs "${apk%.apk}-signed.apk"
-            echo "apk analisado, confira acima"
-          done
 
-           #     for apk in $(find . -name "*.apk"); do
-      #       apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
-      #     done
+       #   for apk in $(find . -name "*.apk"); do
+       #      apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
+       #   done
+          
         # Comente ou remova as linhas npx cap buil
         # npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
         # npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
