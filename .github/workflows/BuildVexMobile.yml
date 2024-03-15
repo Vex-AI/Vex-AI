@@ -84,7 +84,7 @@ jobs:
         run: |
           cd android
           ./gradlew app:bundleRelease
-          
+          ./gradlew app:assembleRelease
           cd app/build/outputs/bundle/release
 
        #   for apk in $(find . -name "*.apk"); do
