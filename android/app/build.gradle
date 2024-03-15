@@ -17,7 +17,16 @@ android {
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
+        
+signingConfigs {
+        release {
+            storeFile file(System.getenv("RELEASE_STORE_FILE"))
+            storePassword System.getenv("RELEASE_STORE_PASS")
+            keyAlias System.getenv("RELEASE_ALIAS")
+            keyPassword System.getenv("RELEASE_KEY_PASS")
+        }
     }
+}
     buildTypes {
         release {
             minifyEnabled false
