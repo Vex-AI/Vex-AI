@@ -86,6 +86,13 @@ jobs:
             signed_apk="${apk/unsigned/signed}"
             apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "$signed_apk" "$apk"
           done
+          
+      - name: Verify assignature
+        run: |
+         for apk in *.apk; do
+          echo "Verificando assinatura do arquivo: $apk"
+          apksigner verify --verbose "$apk"
+         done
 
           
         # Comente ou remova as linhas npx cap buil
