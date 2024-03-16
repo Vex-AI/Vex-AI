@@ -62,8 +62,8 @@ jobs:
           ANDROID_KEY_ALIAS: cookieukw
           ANDROID_KEY_PASSWORD: cookieukw
         run: |
-          npx cap build android --release --keystore=$ANDROID_KEYSTORE_PATH --storePassword=$ANDROID_KEYSTORE_PASSWORD --alias=$ANDROID_KEY_ALIAS --password=$ANDROID_KEY_PASSWORD
-
+           npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
+     
       - name: Create draft release
         uses: softprops/action-gh-release@v1
         with:
