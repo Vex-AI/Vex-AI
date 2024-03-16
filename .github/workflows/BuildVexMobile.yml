@@ -1,4 +1,4 @@
-name: BuildVexMobile
+name: Build
 
 on:
   release:
@@ -6,82 +6,67 @@ on:
       - created
 
 jobs:
-  setup-capacitor-environment:
+  build:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 10
     steps:
-      - name: Check Code
-        uses: actions/checkout@v2
-
-      - name: Set Up Node.js Environment
-        uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      
+        # Install Node 
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
-
-      - name: Install Dependencies
-        run: |
-          npm install
-          npx cap init android
-  
+          node-version: lts/hydrogen
+          cache: npm
+      
+        # Install Java
       - name: Install Java
         uses: actions/setup-java@v1.4.3
         with:
           java-version: 17
-
-      - name: Print Java version
-        run: java -version
-        
-      - name : Install gradle
-        uses: actions/gradle/gradle-build-action@v2     
+      
+        # Install Gradle
+      - name: Install Gradle
+        uses: gradle/gradle-build-action@v2
         with:
-           gradle-version: 7.6
-           
-
-      - name: Decode Keystore from Base64
-        run: |
-         mkdir -p ./android/keystore/
-         echo "${{ secrets.COOKIE_KEY }}" | base64 --d > ././android/keystore/release.keystore
-
-      - name: Find Debug Keystore
-        run: |
-          debug_keystore_path="${{ github.workspace }}/release.keystore"
-          if [ -f "$debug_keystore_path" ]; then
-            echo "Debug Keystore: $debug_keystore_path"
-          else
-            echo "Debug Keystore not found."
-          fi
-
-      - name: Give execute permission to gradlew
-        run: |
-          chmod +x ./android/gradlew
-
-      - name: Build the React Application
-        run: npm run build
-
-      - name: Sync files
-        run: npx cap sync
-
-      - name: Verify Capacitor Platform
-        run: npx cap ls
+          gradle-version: 7.6
         
+        # Setup build tools
       - name: Install apksigner
         run: sudo apt update && sudo apt install -y apksigner
 
-      - name: Build Android APK
-        env:
-          ANDROID_KEYSTORE_PATH: .android/keystore/release.keystore ##${{ github.workspace }}/cookie.jks
-          ANDROID_KEYSTORE_PASSWORD: cookieukw
-          ANDROID_KEY_ALIAS: cookieukw
-          ANDROID_KEY_PASSWORD: cookieukw
+        # Install NPM dependencies
+      - name: Install NPM Dependencies
+        run: npm ci
+        
+        # Decode keystore
+      - name: Decode keystore
         run: |
-           repath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
+          mkdir -p ./android/keystore/
+          echo "${{ secrets.COOKIE_KEY }}" | base64 -d > ./android/keystore/release.keystore
+        
+        # Build APK
+      - name: Build APK
+        run: |
+         npx cap build android --keystorepath "keystore/release.keystore" --keystorepass $KEYSTOREPASS --keystorealiaspass $KEYSTOREALIASPASS --keystorealias $KEYSTOREALIAS --androidreleasetype APK
+          rm -rf ./android/keystore/release.keystore
+          
+          mv ./android/app/build/outputs/apk/release/app-release-signed.apk ./android/app/build/outputs/apk/release/SEGES+.apk
+          rm -rf ./android/app/build/outputs/apk/release/app-release-unsigned.apk
 
+        env:
+          KEYSTOREPASS: cookieukw
+          KEYSTOREALIASPASS: cookieukw
+          KEYSTOREALIAS: cookieukw
+          WORKFLOW: true
+        
+        # Create draft release
       - name: Create draft release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
           files: |
-            ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
-            ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
+            ./android/app/build/outputs/apk/release/*.apk
         env:
-          GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
