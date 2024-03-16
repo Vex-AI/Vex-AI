@@ -22,6 +22,7 @@ jobs:
         run: |
           npm install
           npx cap init
+
   
       - name: Install Java
         uses: actions/setup-java@v1.4.3
@@ -39,6 +40,7 @@ jobs:
       - name: Give execute permission to gradlew
         run: |
           chmod +x ./android/gradlew
+
       - name: Decode Keystore from Base64
         run: echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
 
@@ -54,14 +56,6 @@ jobs:
          else
          echo "Debug Keystore not found."
          fi
-         
-      - name: Check Keystore
-        env:
-          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
-          ANDROID_KEYSTORE_PASSWORD: cookieukw
-          ANDROID_KEY_ALIAS: cookieukw
-        run: |
-          keytool -list -v -keystore $ANDROID_KEYSTORE_PATH -storepass $ANDROID_KEYSTORE_PASSWORD -alias $ANDROID_KEY_ALIAS
 
       - name: Build the React Application
         run: npm run build
@@ -78,17 +72,25 @@ jobs:
       - name: Build Android
         env:
           ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
-          SIGNING_STORE_PASSWORD: cookieukw
-          SIGNING_KEY_ALIAS: cookieukw
-          SIGNING_KEY_PASSWORD: cookieukw
-         
+          ANDROID_KEYSTORE_PASSWORD: cookieukw
+          ANDROID_KEY_ALIAS: cookieukw
+          ANDROID_KEY_PASSWORD: cookieukw
         run: |
-         cd android
-         npx cap add android
-         npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
-         npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
-    #     ./gradlew bundleRelease
-    #     ./gradlew assembleRelease 
+         cd ${{ github.workspace }}/android
+          ./gradlew bundleRelease --stacktrace 
+          apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "app-release-signed.aab" app-release.aab
+          ./gradlew assembleRelease --stacktrace
+          echo "Conteúdo do diretório de APKs:"
+          ls -al app/build/outputs/apk/release
+          cd app/build/outputs/apk/release
+          for apk in *.apk; do
+            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
+          done
+          
+        # Comente ou remova as linhas npx cap buil
+        # npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
+        # npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
+
 
       #- name: Upload Release Build to Artifacts
        
@@ -116,5 +118,6 @@ jobs:
           files: |
                 ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
                 ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
+
         env:
           GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }} 
