@@ -37,10 +37,9 @@ jobs:
         with:
           gradle-version: 7.3
 
-      - name: Decode keystore from Base64
-        run: |
-          echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > $HOME/release.keystore
-
+      - name: Decode Keystore from Base64
+        run: echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
+     
       - name: Find debug keystore
         run: |
           debug_keystore_path="$HOME/release.keystore"
@@ -67,11 +66,14 @@ jobs:
         run: sudo apt update && sudo apt install -y apksigner
 
       - name: Build Android APK
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
+          ANDROID_KEYSTORE_PASSWORD: cookieukw
+          ANDROID_KEY_ALIAS: cookieukw
+          ANDROID_KEY_PASSWORD: cookieukw
         run: |
-          npx cap build android --release
-          jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/release.keystore -storepass ${{ secrets.KEYSTORE_PASSWORD }} ${{ github.workspace }}/android/app/build/outputs/apk/release/app-release.apk ${{ secrets.KEYSTORE_ALIAS }}
-          ${{ github.workspace }}/android/app/build/outputs/apk/release/app-release.apk
-
+           npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
+     
       - name: Create draft release
         uses: softprops/action-gh-release@v1
         with:
