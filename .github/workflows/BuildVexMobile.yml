@@ -84,23 +84,10 @@ jobs:
          
         run: |
          cd android
-         ./gradlew bundleRelease
-         ./gradlew assembleRelease 
-         cd app/build/outputs/
-          for apk in $(find . -name "*.apk"); do
-           signed_apk="${apk%.apk}-signed.apk"
-           apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "$signed_apk" "$apk"
-         done
-
- 
-# -PRELEASE_STORE_FILE=$ANDROID_KEYSTORE_PATH -PRELEASE_STORE_PASS=$SIGNING_KEY_PASSWORD -PRELEASE_ALIAS=$SIGNING_KEY_ALIAS -PRELEASE_KEY_PASS=$SIGNING_STORE_PASSWORD
-
-         
-          
-        # Comente ou remova as linhas npx cap buil
-        # npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
-        # npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
-
+         npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
+         npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
+    #     ./gradlew bundleRelease
+    #     ./gradlew assembleRelease 
 
       #- name: Upload Release Build to Artifacts
        
