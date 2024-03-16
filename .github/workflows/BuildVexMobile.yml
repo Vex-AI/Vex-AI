@@ -21,7 +21,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-          npx cap init
+          npx cap init android
   
       - name: Install Java
         uses: actions/setup-java@v1
@@ -30,15 +30,6 @@ jobs:
           
       - name: Print Java version
         run: java -version
-
-      - name: Install Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: 7.6
-        
-      - name: Give execute permission to gradlew
-        run: |
-          chmod +x ./android/gradlew
 
       - name: Decode Keystore from Base64
         run: echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > ${{ github.workspace }}/cookie.jks
@@ -64,23 +55,14 @@ jobs:
       - name: Install apksigner
         run: sudo apt update && sudo apt install -y apksigner
 
-      - name: Build Android
+      - name: Build Android APK
         env:
           ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.jks
           ANDROID_KEYSTORE_PASSWORD: cookieukw
           ANDROID_KEY_ALIAS: cookieukw
           ANDROID_KEY_PASSWORD: cookieukw
         run: |
-          cd ${{ github.workspace }}/android
-          ./gradlew bundleRelease 
-          ./gradlew assembleRelease
-          echo "Conteúdo do diretório de APKs:"
-          ls -al app/build/outputs/apk/release
-          cd app/build/outputs/apk/release
-          for apk in *.apk; do
-            signed_apk="${apk/unsigned/signed}"
-            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "$signed_apk" "$apk"
-          done
+          npx cap build android --release --keystore=$ANDROID_KEYSTORE_PATH --storePassword=$ANDROID_KEYSTORE_PASSWORD --alias=$ANDROID_KEY_ALIAS --password=$ANDROID_KEY_PASSWORD
 
       - name: Create draft release
         uses: softprops/action-gh-release@v1
