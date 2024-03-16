@@ -88,8 +88,8 @@ jobs:
           ./gradlew assembleRelease 
            cd app/build/outputs/
            for apk in $(find . -name "*.apk"); do
-             apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
-          done
+             apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" "$apk"
+           done
           
  
 # -PRELEASE_STORE_FILE=$ANDROID_KEYSTORE_PATH -PRELEASE_STORE_PASS=$SIGNING_KEY_PASSWORD -PRELEASE_ALIAS=$SIGNING_KEY_ALIAS -PRELEASE_KEY_PASS=$SIGNING_STORE_PASSWORD
