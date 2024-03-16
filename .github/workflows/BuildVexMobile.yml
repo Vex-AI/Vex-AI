@@ -83,8 +83,10 @@ jobs:
           ls -al app/build/outputs/apk/release
           cd app/build/outputs/apk/release
           for apk in *.apk; do
-            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-vexed.apk" $apk
+            signed_apk="${apk/unsigned/signed}"
+            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "$signed_apk" "$apk"
           done
+
           
         # Comente ou remova as linhas npx cap buil
         # npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
