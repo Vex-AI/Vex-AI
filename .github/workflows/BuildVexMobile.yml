@@ -8,54 +8,53 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15 # Aumentei o timeout para 15 minutos para dar tempo suficiente para a instalação das dependências
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
-      
-        # Install Node 
+
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: lts/hydrogen
+          node-version: '14' # Versão do Node que deseja instalar
           cache: npm
-      
-        # Install Java
+
       - name: Install Java
-        uses: actions/setup-java@v1.4.3
+        uses: actions/setup-java@v1
         with:
-          java-version: 17
-      
-        # Install Gradle
+          java-version: '17' # Versão do Java que deseja instalar
+
       - name: Install Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: 7.6
+          gradle-version: '7.6' # Versão do Gradle que deseja instalar
+
+      - name: Install Capacitor and Add Android Platform
+        run: |
+          npm install -g @capacitor/cli
+          npm install
+          npx cap update
+          npx cap add android
 
       - name: Give execute permission to gradlew
-        run: |
-          chmod +x ./android/gradlew
+        run: chmod +x ./android/gradlew
         
-        # Setup build tools
       - name: Install apksigner
         run: sudo apt update && sudo apt install -y apksigner
 
-        # Install NPM dependencies
       - name: Install NPM Dependencies
         run: npm ci
-        
-        # Decode keystore
+
       - name: Decode keystore
         run: |
           mkdir -p ./android/keystore/
           echo "${{ secrets.COOKIE_KEY }}" | base64 -d > ./android/keystore/release.keystore
         
-        # Build APK
       - name: Build APK
         run: |
-         npx cap build android --keystorepath "keystore/release.keystore" --keystorepass $KEYSTOREPASS --keystorealiaspass $KEYSTOREALIASPASS --keystorealias $KEYSTOREALIAS --androidreleasetype APK
+          npx cap build android --keystorepath "keystore/release.keystore" --keystorepass $KEYSTOREPASS --keystorealiaspass $KEYSTOREALIASPASS --keystorealias $KEYSTOREALIAS --androidreleasetype APK
           rm -rf ./android/keystore/release.keystore
-          
           mv ./android/app/build/outputs/apk/release/app-release-signed.apk ./android/app/build/outputs/apk/release/SEGES+.apk
           rm -rf ./android/app/build/outputs/apk/release/app-release-unsigned.apk
 
@@ -63,9 +62,7 @@ jobs:
           KEYSTOREPASS: cookieukw
           KEYSTOREALIASPASS: cookieukw
           KEYSTOREALIAS: cookieukw
-          WORKFLOW: true
-        
-        # Create draft release
+
       - name: Create draft release
         uses: softprops/action-gh-release@v1
         with:
