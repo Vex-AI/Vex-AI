@@ -77,14 +77,13 @@ jobs:
           ANDROID_KEY_PASSWORD: cookieukw
         run: |
          cd ${{ github.workspace }}/android
-          ./gradlew bundleRelease --stacktrace 
-          apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "app-release-signed.aab" app-release.aab
-          ./gradlew assembleRelease --stacktrace
+          ./gradlew bundleRelease 
+          ./gradlew assembleRelease
           echo "Conteúdo do diretório de APKs:"
           ls -al app/build/outputs/apk/release
           cd app/build/outputs/apk/release
           for apk in *.apk; do
-            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-signed.apk" $apk
+            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "${apk%.apk}-vexed.apk" $apk
           done
           
         # Comente ou remova as linhas npx cap buil
