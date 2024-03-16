@@ -84,6 +84,7 @@ jobs:
          
         run: |
          cd android
+         npx cap add android
          npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=AAB
          npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
     #     ./gradlew bundleRelease
