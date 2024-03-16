@@ -83,27 +83,15 @@ jobs:
           SIGNING_KEY_PASSWORD: cookieukw
          
         run: |
-          cd android
-          ./gradlew bundleRelease
-          ./gradlew assembleRelease 
-           cd app/build/outputs/
-           - name: Build Android
-  env:
-    ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
-    SIGNING_STORE_PASSWORD: cookieukw
-    SIGNING_KEY_ALIAS: cookieukw
-    SIGNING_KEY_PASSWORD: cookieukw
-         
-  run: |
-    cd android
-    ./gradlew bundleRelease
-    ./gradlew assembleRelease 
-    cd app/build/outputs/
-    for apk in $(find . -name "*.apk"); do
-      signed_apk="${apk%.apk}-signed.apk"
-      apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "$signed_apk" "$apk"
-    done
-          
+         cd android
+         ./gradlew bundleRelease
+         ./gradlew assembleRelease 
+         cd app/build/outputs/
+          for apk in $(find . -name "*.apk"); do
+           signed_apk="${apk%.apk}-signed.apk"
+           apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "$signed_apk" "$apk"
+         done
+
  
 # -PRELEASE_STORE_FILE=$ANDROID_KEYSTORE_PATH -PRELEASE_STORE_PASS=$SIGNING_KEY_PASSWORD -PRELEASE_ALIAS=$SIGNING_KEY_ALIAS -PRELEASE_KEY_PASS=$SIGNING_STORE_PASSWORD
 
