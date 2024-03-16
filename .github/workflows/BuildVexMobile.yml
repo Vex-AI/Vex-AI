@@ -19,9 +19,11 @@ jobs:
           node-version: 16
 
       - name: Install Dependencies
-        run: npm install
-          
-      - name: set up JDK 1.8
+        run: |
+          npm install
+          npx cap init
+  
+      - name: Install Java
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
@@ -29,14 +31,26 @@ jobs:
       - name: Print Java version
         run: java -version
 
+      - name: Install Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 7.6
+        
       - name: Give execute permission to gradlew
-        run: chmod +x android/gradlew
-
-      - name: Decode Keystore
-        env:
-          ENCODED_STRING: ${{ secrets.COOKIE_KEY }}
         run: |
-          echo $ENCODED_STRING | base64 -di > $RUNNER_TEMP/cookie.jks
+          chmod +x ./android/gradlew
+
+      - name: Decode Keystore from Base64
+        run: echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > ${{ github.workspace }}/cookie.jks
+
+      - name: Find Debug Keystore
+        run: |
+          debug_keystore_path="${{ github.workspace }}/cookie.jks"
+          if [ -f "$debug_keystore_path" ]; then
+            echo "Debug Keystore: $debug_keystore_path"
+          else
+            echo "Debug Keystore not found."
+          fi
 
       - name: Build the React Application
         run: npm run build
@@ -50,18 +64,22 @@ jobs:
       - name: Install apksigner
         run: sudo apt update && sudo apt install -y apksigner
 
-      - name: Build prod
-        run: ./android/gradlew app:bundleRelease
+      - name: Build Android
         env:
-          SIGNING_KEY_ALIAS: cookieukw
-          SIGNING_KEY_PASSWORD: cookieukw
-          SIGNING_STORE_PASSWORD: cookieukw
-
-      - name: Verify signature
+          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.jks
+          ANDROID_KEYSTORE_PASSWORD: cookieukw
+          ANDROID_KEY_ALIAS: cookieukw
+          ANDROID_KEY_PASSWORD: cookieukw
         run: |
-          for apk in android/app/build/outputs/bundle/release/*.aab android/app/build/outputs/apk/release/*.apk; do
-            echo "Verifying signature of file: $apk"
-            apksigner verify --verbose "$apk"
+          cd ${{ github.workspace }}/android
+          ./gradlew bundleRelease 
+          ./gradlew assembleRelease
+          echo "Conteúdo do diretório de APKs:"
+          ls -al app/build/outputs/apk/release
+          cd app/build/outputs/apk/release
+          for apk in *.apk; do
+            signed_apk="${apk/unsigned/signed}"
+            apksigner sign --v2-signing-enabled true --ks $ANDROID_KEYSTORE_PATH --ks-pass pass:$ANDROID_KEYSTORE_PASSWORD --ks-key-alias $ANDROID_KEY_ALIAS --key-pass pass:$ANDROID_KEY_PASSWORD --out "$signed_apk" "$apk"
           done
 
       - name: Create draft release
@@ -69,7 +87,7 @@ jobs:
         with:
           draft: true
           files: |
-            android/app/build/outputs/bundle/release/*.aab
-            android/app/build/outputs/apk/release/*.apk
+            ${{ github.workspace }}/android/app/build/outputs/bundle/release/*.aab
+            ${{ github.workspace }}/android/app/build/outputs/apk/release/*.apk
         env:
-          GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.VEX_TOKEN }} 
