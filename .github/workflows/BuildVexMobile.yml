@@ -42,7 +42,7 @@ jobs:
           chmod +x ./android/gradlew
 
       - name: Decode Keystore from Base64
-        run: echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
+        run: echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > ${{ github.workspace }}/cookie.jks
 
      # - name: Create Debug Keystore
         #run: |
@@ -50,7 +50,7 @@ jobs:
  
       - name: Find Debug Keystore
         run: |
-         debug_keystore_path="${{ github.workspace }}/cookie.keystore"
+         debug_keystore_path="${{ github.workspace }}/cookie.jks"
          if [ -f "$debug_keystore_path" ]; then
          echo "Debug Keystore: $debug_keystore_path"
          else
@@ -71,7 +71,7 @@ jobs:
 
       - name: Build Android
         env:
-          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
+          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.jks
           ANDROID_KEYSTORE_PASSWORD: cookieukw
           ANDROID_KEY_ALIAS: cookieukw
           ANDROID_KEY_PASSWORD: cookieukw
