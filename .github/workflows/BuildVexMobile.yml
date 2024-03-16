@@ -31,6 +31,10 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: 7.6
+
+      - name: Give execute permission to gradlew
+        run: |
+          chmod +x ./android/gradlew
         
         # Setup build tools
       - name: Install apksigner
