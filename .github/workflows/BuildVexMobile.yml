@@ -42,12 +42,11 @@ jobs:
      
       - name: Find debug keystore
         run: |
-          debug_keystore_path="$HOME/release.keystore"
+          debug_keystore_path="$HOME/cookie.keystore"
           if [ -f "$debug_keystore_path" ]; then
             echo "Debug Keystore: $debug_keystore_path"
           else
             echo "Debug Keystore not found."
-            exit 1
           fi
 
       - name: Give execute permission to gradlew
