@@ -43,6 +43,10 @@ jobs:
             echo "Debug Keystore not found."
           fi
 
+      - name: Give execute permission to gradlew
+        run: |
+          chmod +x ./android/gradlew
+
       - name: Build the React Application
         run: npm run build
 
