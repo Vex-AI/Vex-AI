@@ -1,7 +1,8 @@
-import groovy.json.JsonSlurper
-//def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
-def version = "1.1.1"
 apply plugin: 'com.android.application'
+def packageJsonFile = new File("../../package.json")
+def packageJsonContent = packageJsonFile.text
+def packageJson = new JsonSlurper().parseText(packageJsonContent)
+def appVersion = packageJson.version.toString()
 
 android {
     namespace "com.cookie.vera"
@@ -11,7 +12,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode calculateVersionCode()
-        versionName packageJson.version
+        versionName appVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -59,6 +60,6 @@ try {
 
 // Função para calcular o versionCode
 def calculateVersionCode() {
-    def versionParts = packageJson.version.tokenize('.')
+    def versionParts = appVersion.tokenize('.')
     return versionParts[0].toInteger() * 10000 + versionParts[1].toInteger() * 100 + versionParts[2].toInteger()
 }
