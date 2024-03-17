@@ -1,8 +1,5 @@
 import groovy.json.JsonSlurper
-def packageJsonFile = file("../../package.json")
-def packageJsonContent = packageJsonFile.text
-def packageJson = new JsonSlurper().parseText(packageJsonContent)
-def appVersion = packageJson.version.toString()
+def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
 
 apply plugin: 'com.android.application'
 
@@ -14,7 +11,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode calculateVersionCode()
-        versionName appVersion
+        versionName packageJson.version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -62,6 +59,6 @@ try {
 
 // Função para calcular o versionCode
 def calculateVersionCode() {
-    def versionParts = appVersion.tokenize('.')
+    def versionParts = packageJson.version.tokenize('.')
     return versionParts[0].toInteger() * 10000 + versionParts[1].toInteger() * 100 + versionParts[2].toInteger()
 }
