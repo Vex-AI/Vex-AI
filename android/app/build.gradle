@@ -1,6 +1,6 @@
 import groovy.json.JsonSlurper
-def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
-
+//def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
+def version = "1.1.1"
 apply plugin: 'com.android.application'
 
 android {
