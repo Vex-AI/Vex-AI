@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
-import groovy.json.JsonSlurper
-def packageSlurper = new JsonSlurper()
-def packageJson = packageSlurper.parse file('../../package.json')
-def appVersion = packageJson.version
+
+def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
+def appVersion = packageJson.version.toString 
 
 android {
     namespace "com.cookie.vera"
