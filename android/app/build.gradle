@@ -1,5 +1,5 @@
 import groovy.json.JsonSlurper
-def packageJsonFile = new File("../../../package.json")
+def packageJsonFile = new File("/package.json")
 def packageJsonContent = packageJsonFile.text
 def packageJson = new JsonSlurper().parseText(packageJsonContent)
 def appVersion = packageJson.version.toString()
