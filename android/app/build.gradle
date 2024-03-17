@@ -11,7 +11,7 @@ android {
         applicationId "com.cookie.vera"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode calculateVersionCode()
+        versionCode calculateVersionCode(appVersion)
         versionName appVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -59,7 +59,7 @@ try {
 
 
 // Função para calcular o versionCode
-def calculateVersionCode() {
+def calculateVersionCode(String appVersion) {
     def versionParts = appVersion.tokenize('.')
     return versionParts[0].toInteger() * 10000 + versionParts[1].toInteger() * 100 + versionParts[2].toInteger()
 }
