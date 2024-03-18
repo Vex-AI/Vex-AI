@@ -4,7 +4,7 @@ on:
   release:
     types:
       - created
-      
+
 jobs:
   setup-capacitor-environment:
     runs-on: ubuntu-latest
@@ -26,8 +26,8 @@ jobs:
       - name: Install Java JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: '17'
+          distribution: "adopt"
+          java-version: "17"
 
       - name: Print Java version
         run: java -version
@@ -39,7 +39,7 @@ jobs:
 
       - name: Decode Keystore from Base64
         run: echo "${{ secrets.COOKIE_KEY }}" | base64 --decode > ${{ github.workspace }}/cookie.keystore
-     
+
       - name: Find debug keystore
         run: |
           debug_keystore_path="${{ github.workspace }}/cookie.keystore"
@@ -71,11 +71,10 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-           cd android
-           ./gradlew bundleRelease
-           ./gradlew assembleRelease
-             
-          
+          cd android
+          ./gradlew bundleRelease
+          ./gradlew assembleRelease
+
       - name: Create draft release
         uses: softprops/action-gh-release@v1
         with:

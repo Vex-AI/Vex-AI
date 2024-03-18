@@ -4,10 +4,10 @@ def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.js
 def appVersion = packageJson.version
 
 android {
-    namespace "com.cookie.vex"
+    namespace "com.cookie.vera"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.cookie.vex"
+        applicationId "com.cookie.vera"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode calculateVersionCode(appVersion)

@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.cookie.vex',
+  appId: 'com.cookie.vera',
   appName: 'Vex',
   webDir: 'dist',
   server: {
