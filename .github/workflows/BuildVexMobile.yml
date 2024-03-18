@@ -71,11 +71,9 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-         npx cap build android --keystorepath=$ANDROID_KEYSTORE_PATH --keystorepass=$ANDROID_KEYSTORE_PASSWORD --keystorealias=$ANDROID_KEY_ALIAS --keystorealiaspass=$ANDROID_KEY_PASSWORD --androidreleasetype=APK
-       
-      #   cd android
-      #   ./gradlew bundleRelease
-      #   ./gradlew assembleRelease
+           cd android
+           ./gradlew bundleRelease
+           ./gradlew assembleRelease
              
           
       - name: Create draft release
