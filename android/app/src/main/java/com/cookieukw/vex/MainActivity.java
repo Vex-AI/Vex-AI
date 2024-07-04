@@ -1,4 +1,4 @@
-package com.cookie.vera;
+package com.cookieukw.vex;
 
 import com.getcapacitor.BridgeActivity;
 

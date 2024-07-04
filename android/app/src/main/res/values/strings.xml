@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Vex</string>
     <string name="title_activity_main">Vex</string>
-    <string name="package_name">com.cookie.vera</string>
-    <string name="custom_url_scheme">com.cookie.vera</string>
+    <string name="package_name">com.cookieukw.vex</string>
+    <string name="custom_url_scheme">com.cookieukw.vex</string>
 </resources>
