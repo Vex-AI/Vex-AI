@@ -1,46 +1,28 @@
-import React from "react";
-import { Box, Button } from "@mui/material";
-import { styled } from "@mui/system";
-import Ripple from "react-ripplejs";
+import { IonCard, IonCardContent, IonText } from "@ionic/react";
 
-interface CustomStyle extends React.CSSProperties {
-  rippleColor: string;
-}
 interface PreviewProps {
-  style: CustomStyle;
+  style: React.CSSProperties;
   text: string;
 }
 
 const Preview: React.FC<PreviewProps> = ({ style, text }) => {
-  /*  const LI: React.FC = styled(Box)({
-    ...style,
-    "&:hover": {
-      background: style.rippleColor,
-    },
-  });*/
   return (
-    <Box
-      sx={{
-        background: "#131313D1",
-        zIndex: "4",
-        width: "100%",
-        height: "100px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+    <IonCard
+      style={{
+        ...style,
+        padding: "1rem",
         position: "sticky",
-        top: "0",
+        top: 0,
+        textAlign: "center",
+        zIndex: 10,
       }}
     >
-      <Ripple
-        
-        opacity={"0.5"}
-        background={`${style.rippleColor}!important`}
-        style={style}>
-        <span>{text}</span>
-      </Ripple>
-    </Box>
+      <IonCardContent>
+        <IonText color="light" style={{color:style.color}}>
+          <h2>{text}</h2>
+        </IonText>
+      </IonCardContent>
+    </IonCard>
   );
 };
 

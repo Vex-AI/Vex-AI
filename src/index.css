@@ -1,125 +1,18 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 
-html,
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  --bg-color: #131313;
-  --status-color: #08a32d;
-  --bg-buttons-color: #5b5869;
-  --bg-vex: rgba(220, 17, 47, 0.9);
-  --bg-vex-ripple: rgba(220, 17, 47, 0.4);
-  --bg-user: rgba(66, 43, 177, 0.9);
-  --bg-user-ripple: rgba(66, 43, 177, 0.4);
-  --bg-input-color: #ff5b5869;
-}
+    --ion-background-color: #1e1e1e;
+    --ion-text-color: #e0e0e0;
+  }
 
-#root {
-  width: 100%;
-  min-height: 100vh;
-}
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  place-items: center;
-  min-width: 100%;
-  min-height: 100vh;
-  background-color: #1d1e26;
-}
-
-@keyframes vexScale {
-  0% {
-    opacity: 0;
-    transform: scale(0.1);
-    transform: translateX(-100px);
+  ion-input {
+    --color: #fff;
+    --placeholder-color: #0589f5;
+    --placeholder-opacity: 0.8;
+    --border-radius: 56px;
+    --border: 1px solid white;
   }
-  70% {
-    opacity: 1;
-    transform: translateX(0);
+ 
+  ion-input.label-floating {
+    --highlight-color: rgb(255, 255, 255);
   }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes userScale {
-  0% {
-    opacity: 0;
-    transform: scale(0.1);
-    transform: translateX(100px);
-  }
-  70% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes typingOff {
-  to {
-    opacity: 1;
-    transform: translateY(6vh);
-  }
-}
-@keyframes typingOn {
-  to {
-    opacity: 1;
-  }
-}
-.show {
-  animation: typeOn 0.4s forwards;
-}
-
-.hide {
-  animation: typeOff 0.4s forwards;
-}
-
-@keyframes typeOff {
-  from {
-    opacity: 1;
-    transform: translateY(-75%);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(0);
-  }
-}
-
-@keyframes typeOn {
-  from {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(-75%);
-  }
-}
-.Toastify__toast-container {
-  z-index: 4;
-}
+  

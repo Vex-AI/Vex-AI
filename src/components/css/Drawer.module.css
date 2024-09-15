@@ -1,9 +1,0 @@
-.drawerButton {
-  display: none !important;
-}
-
-@media (min-width: 900px) {
-  .drawerButton {
-    display: block !important;
-  }
-}

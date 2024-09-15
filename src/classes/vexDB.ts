@@ -1,139 +1,43 @@
-//import { BayesClassifier } from "natural/lib/natural/classifiers";
-//let classifier = new BayesClassifier();
-import BayesClassifier from "bayes";
+import Dexie, { Table, Transaction } from "dexie";
 
-const l = console.log;
-import Dexie, { Transaction } from "dexie";
-
-interface ISynon {
-  word: string[];
-  reply: string[];
-  id: string;
-  createdAt?: number;
-}
-
-interface IModel {
-  model: any;
-  id: number;
-}
-
-interface IMessage {
+export interface IMessage {
   content: string;
   isVex: boolean;
   hour: string;
-  date: string;
+  date: number;
+}
+export interface IVexInfo {
+  name: string;
+  profileImage: string;
+}
+export interface ISynon {
+  word: string[];
+  reply: string[];
   id: string;
-  createdAt?: number;
+}
+interface IClassifier {
+  id: number;
+  classifierData: string;
 }
 
-class VexDB extends Dexie {
-  messageList!: Dexie.Table<IMessage>;
-  synons!: Dexie.Table<ISynon>;
-  model!: Dexie.Table<IModel>;
+export class vexDB extends Dexie {
+  messages!: Table<IMessage>;
+  vexInfo!: Table<IVexInfo>;
+  synons!: Table<ISynon>;
+  classifier!: Table<IClassifier>;
   constructor() {
-    super("vex");
+    super("chatDatabase");
     this.version(1).stores({
-      messageList: "id, hour, content, isVex, date, createdAt",
-      synons: "++id, word, reply, createdAt",
-      model: "id, model",
+      messages: "++id, content, isVex, hour, date",
+      synons: "++id, word, reply",
+      vexInfo: "id,name, profileImage",
+      classifier: "id, classifierData", 
     });
-    this.messageList = this.table("messageList");
-    this.synons = this.table("synons");
-    this.model = this.table("model");
-  }
-  dropAllMessageFromDB() {
-    this.messageList.clear();
-  }
-  async saveMessageToDB(message: IMessage): Promise<void> {
-    await this.messageList.add({
-      ...message,
-      createdAt: Date.now(),
-    });
-  }
-
-  async updateMessageInDB(message: IMessage): Promise<void> {
-    await this.messageList.update(message.id, message);
-  }
-
-  async deleteMessageFromDB(id: string): Promise<void> {
-    await this.messageList.delete(id);
-  }
-
-  async addWordToSynonInDB(id: string, value: string): Promise<void> {
-    const synon: ISynon | undefined = await this.synons.get(id);
-    if (synon) {
-      synon.word.push(value);
-      await this.synons.update(id, synon);
-    }
-  }
-
-  async addReplyToSynonInDB(id: string, value: string): Promise<void> {
-    const synon: ISynon | undefined = await this.synons.get(id);
-    if (synon) {
-      synon.reply.push(value);
-      await this.synons.update(id, synon);
-    }
-  }
-
-  async deleteWordFromSynonInDB(id: string, value: string): Promise<void> {
-    const synon = await this.synons.get(id);
-    if (synon) {
-      synon.word = synon.word.filter((word) => word !== value);
-      await this.synons.update(id, synon);
-    }
-  }
-
-  async deleteReplyFromSynonInDB(id: string, value: string): Promise<void> {
-    const synon = await this.synons.get(id);
-    if (synon) {
-      synon.reply = synon.reply.filter((reply) => reply !== value);
-      await this.synons.update(id, synon);
-    }
-  }
-
-  async addSynonToDB(synon: ISynon): Promise<void> {
-    await this.synons.add({
-      ...synon,
-      createdAt: Date.now(),
-    });
-  }
-
-  async deleteSynonFromDB(id: string): Promise<void> {
-    await this.synons.delete(id);
-  }
-
-  async saveModelToDB(raw: any): Promise<void> {
-    await this.model.clear();
-    await this.model.add({
-      model: raw,
-      id: 0,
-    });
-    l("Model successfully saved");
-  }
-
-  async loadModelFromDB(): Promise<any> {
-    const modelData = (await this.model.toArray())[0];
-    // console.log(modelData);
-    return new Promise((resolve, reject) => {
-      if (modelData && modelData.model) {
-        l("Loaded classifier");
-        resolve(BayesClassifier.fromJson(modelData.model));
-      } else {
-        l("Created new classifier");
-        resolve(BayesClassifier());
-      }
-    });
-  }
-
-  async getAllMessages() {
-    return await this.messageList.orderBy("createdAt").toArray();
-  }
-  async getAllSynons() {
-    return await this.synons.toArray();
   }
 }
 
-export const db = new VexDB();
+export const db = new vexDB();
+
 db.on("populate", (tx: Transaction) => {
   tx.table("synons").add({
     word: ["oi", "olá", "e aí", "alô", "bom dia"],
@@ -179,5 +83,14 @@ db.on("populate", (tx: Transaction) => {
       "Goodbye, take care!",
     ],
     id: "4",
+  });
+});
+
+db.on("populate", (tx: Transaction) => {
+  tx.table("vexInfo").add({
+    id: 1,
+    name: "Vex",
+    // profileImage: "https://avatars.githubusercontent.com/u/119815111?s=512&v=4",
+    profileImage: "/Vex_320.png",
   });
 });

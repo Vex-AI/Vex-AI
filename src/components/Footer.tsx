@@ -1,24 +1,16 @@
-import { useState, useEffect, memo } from "react";
-import { Box, Typography, Avatar, Link } from "@mui/material";
+import {
+  IonFooter,
+  IonToolbar,
+  IonAvatar,
+  IonText,
+  IonLabel,
+} from "@ionic/react";
 import { motion } from "framer-motion";
+import React from "react";
 import { useTranslation } from "react-i18next";
-const Footer = () => {
-  const [userData, setUserData] = useState(null);
+
+const Footer: React.FC = () => {
   const { t } = useTranslation();
-
-  useEffect(() => {
-    fetch("https://api.github.com/users/cookieukw")
-      .then((response) => response.json())
-      .then((data) => setUserData(data))
-      .catch((error) => console.log(error));
-  }, []);
-
-  if (!userData) {
-    return null;
-  }
-
-  const { name, avatar_url, html_url } = userData;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -26,51 +18,55 @@ const Footer = () => {
       transition={{ duration: 0.5, delay: 0.2 }}
       style={{ position: "fixed", bottom: 0, width: "100%" }}
     >
-      <Box
-        sx={{
-          backgroundColor: "#212121",
-          borderTopStyle:"solid",
-          borderTopColor: "white",
-          borderTopWidth: "1px",
-          py: 4,
-          px: 2,
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+      <IonFooter>
+        <IonToolbar
+          style={{
+            backgroundColor: "#212121",
+            borderTop: "1px solid white",
+            padding: "16px",
           }}
         >
-          <Avatar src={avatar_url} alt={name} sx={{ marginRight: 2 }} />
-          <Typography variant="body1" sx={{ color: "#fff" }}>
-            {t("developedBy")}
-            <Link
-              href={html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ color: "#fff" }}
-            >
-              {name}
-            </Link>
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 1,
-          }}
-        >
-          <Typography variant="body2" sx={{ color: "#fff" }}>
-            © {new Date().getFullYear()} {t("allRights")}
-          </Typography>
-        </Box>
-      </Box>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <IonAvatar style={{ marginRight: "8px" }}>
+              <img src={"avatar_url"} alt={"name"} />
+            </IonAvatar>
+            <IonText color="light">
+              <p>
+                {t("developedBy")}&nbsp;
+                <a
+                  href={"html_url"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#fff", textDecoration: "none" }}
+                >
+                  CookieUkw
+                </a>
+              </p>
+            </IonText>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "8px",
+            }}
+          >
+            <IonLabel color="light">
+              © {new Date().getFullYear()} {t("allRights")}
+            </IonLabel>
+          </div>
+        </IonToolbar>
+      </IonFooter>
     </motion.div>
   );
 };
 
-export default memo(Footer);
+export default Footer;

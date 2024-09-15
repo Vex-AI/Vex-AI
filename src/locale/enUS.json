@@ -10,9 +10,8 @@
   "write_new_reply": "Write a new reply",
   "allready_registered_word": "This word is already registered!",
   "add": "Add",
-  "cancel": "Cancelar",
-  "back_button": "Exit button",
-  "add_button": "Add button",
+  "cancel": "Cancel",
+  "back": "Exit ",
   "cancel_button": "Cancel button",
   "min_word": "You must have at least 1 word",
   "min_reply": "You must have at least 1 reply",
@@ -56,5 +55,11 @@
   "savedToFile": "File saved at: ",
   "warningTestAI": "Notice: AI testing is only available in this section. Training is done using the data already saved.c",
   "trainModelBefore": "Train your AI (artificial intelligence) first!",
-  "useBayes":"Use Bayes algorithm"
+  "useBayes": "Use Bayes algorithm",
+  "next": "Next",
+  "deleteAllSynons": "Delet all synons",
+  "deleteAllSynonsClick": "Click me again",
+  "deleteALlSynonsSucess":"All synons delete sucess",
+  "deleteAllSynonsFail":"Error on delete all synons"
+
 }

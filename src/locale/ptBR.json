@@ -11,9 +11,7 @@
   "allready_registered_word": "Essa palavra ja foi registrada!",
   "add": "Adicionar",
   "cancel": "Cancelar",
-  "back_button": "Botão de sair",
-  "add_button": "Botão de adicionar",
-  "cancel_button": "Botão de cancelar",
+  "back_": "Sair",
   "min_word": "Você deve ter pelo menos 1 palavra",
   "min_reply": "Você deve ter pelo menos 1 resposta",
   "vex_message": "Olá, eu sou a Vex!",
@@ -45,6 +43,7 @@
   "importData": "Importar Dados do Arquivo",
   "exportData": "Exportar Dados para Arquivo",
   "fillField": "Preencha o campo!",
+  "synonsExported": "Sinônimos exportaos comn sucesso :)",
   "noSynonsData": "Não há dados de sinônimos para salvar.",
   "synonsAdded": "Sinônimos adicionados com sucesso!",
   "trainingStarted": "Treinando...",
@@ -56,5 +55,7 @@
   "savedToFile": "Aqui salvo em: ",
   "warningTestAI": "Aviso: o teste de IA está disponível apenas nesta seção. o treinamento é feito usando os dados já salvos.",
   "trainModelBefore": "Treine sua IA(Inteligência artificial) antes!",
-  "useBayes": "Usar algoritimo de Bayes"
+  "useBayes": "Usar algoritimo de Bayes",
+  "next": "Próximo",
+  "deleteAllSynonsClick": "Me clica de novo"
 }
