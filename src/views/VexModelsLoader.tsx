@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import {
   IonButton,
   IonCard,
@@ -6,7 +6,6 @@ import {
   IonCardTitle,
   IonList,
   IonItem,
-  IonLabel,
   IonIcon,
   IonPage,
   IonHeader,
@@ -22,7 +21,6 @@ import {
 } from "ionicons/icons";
 import { db, ISynon } from "../classes/vexDB";
 //@ts-ignore
-import listReactFiles from "list-react-files";
 
 interface VexModel {
   id: number;

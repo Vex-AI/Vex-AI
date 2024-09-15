@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   IonButton,
   IonButtons,
@@ -9,7 +9,6 @@ import {
   IonItem,
   IonLabel,
   IonModal,
-  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { addCircleOutline, trash, exit } from "ionicons/icons";
@@ -81,18 +80,17 @@ const WordModal: React.FC<WordModalProps> = ({
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        
-          <IonInput
-            className="input"
-            placeholder={t("write_new_word")}
-            label={t("write_new_word")}
-            labelPlacement="floating"
-            fill="outline"
-            shape="round"
-            value={newWord}
-            onIonChange={(e: any) => setNewWord(e.detail.value)}
-          />
-        
+        <IonInput
+          className="input"
+          placeholder={t("write_new_word")}
+          label={t("write_new_word")}
+          labelPlacement="floating"
+          fill="outline"
+          shape="round"
+          value={newWord}
+          onIonChange={(e: any) => setNewWord(e.detail.value)}
+        />
+
         <IonButton
           expand="full"
           shape="round"

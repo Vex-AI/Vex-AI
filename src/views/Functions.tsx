@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   IonButton,
   IonContent,
@@ -16,7 +16,6 @@ import {
 } from "@ionic/react";
 import { useTranslation } from "react-i18next";
 import { db, ISynon } from "../classes/vexDB";
-
 import {
   logoYoutube,
   trainSharp,
@@ -76,6 +75,8 @@ const Functions: React.FC = () => {
     modal.current?.dismiss();
   }
 
+  const CHUNK_SIZE = 64 * 1024; // Tamanho do chunk em bytes (64 KB por exemplo)
+
   const getSynonsFromFile = useCallback(() => {
     const input: HTMLInputElement = document.createElement("input");
     input.type = "file";
@@ -84,63 +85,85 @@ const Functions: React.FC = () => {
     input.addEventListener("change", (event: Event) => {
       const file: File | undefined = (event.target as HTMLInputElement)
         ?.files?.[0];
-      const reader: FileReader = new FileReader();
 
-      if (file) {
-        reader.onload = async (e: ProgressEvent<FileReader>) => {
-          setOperation(t("importing"));
-          setShowProgress(true);
-          dismiss();
-          setProgress(0);
-          const contents = e.target?.result as string | null;
+      if (!file) return;
+
+      setOperation(t("importing"));
+      setShowProgress(true);
+      setProgress(0);
+      dismiss();
+
+      let offset = 0;
+      const totalSize = file.size;
+
+      const reader = new FileReader();
+
+      reader.onload = async (e: ProgressEvent<FileReader>) => {
+        const chunk = e.target?.result as string | null;
+
+        if (chunk) {
           try {
-            if (contents) {
-              const jsonData: ISynon[] = JSON.parse(contents);
+            // Processa o conteúdo do chunk
+            const jsonData: ISynon[] = JSON.parse(chunk);
 
-              if (!Array.isArray(jsonData)) {
-                setShowToast({
-                  message: t("invalidSynonsArray"),
-                  duration: 2000,
-                });
-                dismiss();
-                setShowProgress(false);
-                return;
-              }
+            if (!Array.isArray(jsonData)) {
+              setShowToast({
+                message: t("invalidSynonsArray"),
+                duration: 2000,
+              });
+              setShowProgress(false);
+              dismiss();
+              return;
+            }
 
-              // await db.synons.clear();
+            // Processa os sinônimos do chunk
+            await processChunk(jsonData);
 
-              const totalItems = jsonData.length;
-              let processed = 0;
+            // Atualiza a barra de progresso
+            offset += CHUNK_SIZE;
+            setProgress((offset / totalSize) * 100);
 
-              for (const synon of jsonData) {
-                await db.synons.add(synon);
-
-                processed += 1;
-                setProgress(processed / totalItems);
-                await new Promise((resolve) => setTimeout(resolve, 10)); // Pequeno atraso para atualizar a UI
-              }
-
+            // Se ainda houver mais chunks para ler
+            if (offset < totalSize) {
+              readNextChunk();
+            } else {
               setShowToast({ message: t("synonsAdded"), duration: 2000 });
               setShowProgress(false);
             }
           } catch (error) {
-            dismiss();
+            console.log("Error processing file:", error);
+            setShowProgress(false);
             setShowToast({
               message: t("fileProcessingError"),
               duration: 2000,
             });
-            console.log("Error processing file:", error);
           }
-          setShowProgress(false);
-          dismiss();
-        };
+        }
+      };
 
-        reader.readAsText(file);
-      }
+      const readNextChunk = () => {
+        const chunk = file.slice(offset, offset + CHUNK_SIZE);
+        reader.readAsText(chunk);
+      };
+
+      readNextChunk();
     });
 
     input.click();
   }, [t]);
+
+  const processChunk = async (jsonData: ISynon[]) => {
+    // Processa cada sinônimo do chunk
+    for (const synon of jsonData) {
+      const existing = await db.synons.where("word").equals(synon.word).first();
+
+      if (!existing) {
+        await db.synons.add(synon);
+      }
+      // Adiciona um pequeno atraso para atualizar a UI
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+  };
 
   const saveSynonsToFile = useCallback(async () => {
     setOperation(t("exporting"));
@@ -281,7 +304,7 @@ const Functions: React.FC = () => {
           {t("exportData")}
         </IonButton>
         <IonModal
-         ref={modal}
+          ref={modal}
           style={{
             "--width": "fit-content",
             "--min-width": "250px",
@@ -289,7 +312,6 @@ const Functions: React.FC = () => {
             "--border-radius": "6px",
             "--box-shadow": "0 28px 48px rgba(0, 0, 0, 0.4)",
           }}
-          
           className="ion-padding"
           isOpen={showProgress}
         >

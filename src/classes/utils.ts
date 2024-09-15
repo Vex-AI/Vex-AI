@@ -1,8 +1,7 @@
 import diacritics from "diacritics";
 import { toast } from "react-toastify";
 import i18n from "./translation";
-import fs from "fs";
-import path from "path";
+
 export default {
   async getResponse() {
     const responsePromise = await import(
@@ -91,9 +90,4 @@ export default {
 
     return formatDate(messageDate);
   },
-
-  readdirS: async (path: string) => {
-    await fs.readdirSync(path, { encoding: "utf-8", withFileTypes: true });
-  },
-  isDirectory: (path: string): boolean => fs.lstatSync(path).isDirectory(),
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   IonMenu,
   IonContent,
@@ -17,7 +17,6 @@ import {
   school,
   language,
   trash,
-  menu,
   logOut,
 } from "ionicons/icons";
 
@@ -29,16 +28,13 @@ const SideMenu: React.FC = () => {
     router.push(path, "root", "replace");
   };
 
-  const handleMenuToggle = () => {
-    setIsOpen(!isOpen);
-  };
 
   const handleClearChat = async () => {
     await db.messages.clear();
   };
 
   return (
-    <IonMenu side="start" contentId="main-content" >
+    <IonMenu side="start" contentId="main-content">
       <IonHeader>
         <IonToolbar>
           <IonTitle>Menu</IonTitle>
@@ -47,15 +43,15 @@ const SideMenu: React.FC = () => {
 
       <IonContent>
         <IonList>
-          <IonItem button onClick={() => navigate("/customize")}>
+          <IonItem href="#" button onClick={() => navigate("/customize")}>
             <IonIcon color="light" slot="start" icon={brush} />
             Customization
           </IonItem>
-          <IonItem onClick={handleClearChat}>
+          <IonItem href="#" onClick={handleClearChat}>
             <IonIcon color="light" slot="start" icon={trash} />
             Clear Chat
           </IonItem>
-          <IonItem  onClick={() => navigate("/profile")}>
+          <IonItem href="#" onClick={() => navigate("/profile")}>
             <IonIcon color="light" slot="start" icon={person} />
             Vex Profile
           </IonItem>
@@ -63,15 +59,15 @@ const SideMenu: React.FC = () => {
             <IonIcon color="light" slot="start" icon={school} />
             Functions
           </IonItem>
-          <IonItem  onClick={() => navigate("/home")}>
+          <IonItem href="#" onClick={() => navigate("/home")}>
             <IonIcon color="light" slot="start" icon={home} />
             Home
           </IonItem>
-          <IonItem  onClick={() => navigate("/language")}>
+          <IonItem href="#" onClick={() => navigate("/language")}>
             <IonIcon color="light" slot="start" icon={language} />
             Select Language
           </IonItem>
-          <IonItem disabled >
+          <IonItem disabled>
             <IonIcon color="light" slot="start" icon={logOut} />
             Log Out
           </IonItem>

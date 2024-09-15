@@ -6,7 +6,6 @@ import {
   IonToolbar,
   IonTitle,
   IonButtons,
-  IonButton,
   IonIcon,
   IonInput,
   IonList,
@@ -23,23 +22,21 @@ import { analyzer } from "../classes/analyzer";
 import utils from "../classes/utils";
 import SideMenu from "../components/SideMenu";
 import DateSeparator from "../components/DateSeparator";
+//@ts-ignore
+import BayesClassifier from "bayes";
 
 const Home: React.FC = () => {
-  const [classifier, setClassifier] = useState<any>(null);
+  const classifierModel = useLiveQuery(() => db.classifier.get(1), []);
+  const classifier: BayesClassifier = classifierModel?.classifierData
+    ? BayesClassifier.fromJson(classifierModel?.classifierData)
+    : BayesClassifier();
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [text, setText] = useState<string>("");
   const [status, setStatus] = useState<string>("on-line");
-  const messages = useLiveQuery(() => db.messages.toArray(), []);
   const vexInfo = useLiveQuery<IVexInfo[]>(() => db.vexInfo.toArray(), []);
   const [isTrainDisabled, setIsTrainDisabled] = useState<boolean>(false);
   const endRef = useRef<HTMLDivElement>(null);
-
-  const handleInputChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setText(event.target.value);
-    },
-    []
-  );
-
+  const contentRef = createRef<HTMLIonContentElement>();
   const sendVexMessage = useCallback((content: string) => {
     const copy = content;
     const num: number = copy.length;
@@ -63,23 +60,27 @@ const Home: React.FC = () => {
           sendMessage(answer ?? (await utils.getResponse()), true);
           setStatus("on-line");
           setIsTrainDisabled(false);
+          scrollToBottom();
         }, timeout);
       })();
     }
   }, []);
 
-  const sendMessage = async (content: string, isVex: boolean) => {
+  const sendMessage = (content: string, isVex: boolean) => {
     if (content.trim() === "") return;
-    const copy = content;
-    setText("");
+
     const newMessage: IMessage = {
-      content: copy,
+      content,
       isVex,
       hour: new Date().toLocaleTimeString(),
       date: Date.now(),
     };
+    scrollToBottom();
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
 
-    await db.messages.add(newMessage);
+    db.messages.add(newMessage).catch((error) => {
+      console.error("Error adding message to Dexie:", error);
+    });
   };
 
   const shouldShowDateSeparator = (
@@ -90,9 +91,25 @@ const Home: React.FC = () => {
     const previous = new Date(previousDate).toDateString();
     return current !== previous;
   };
+  function scrollToBottom() {
+    contentRef.current?.scrollToBottom(500);
+  }
+
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollToBottom();
   });
+
+  useEffect(() => {
+    const loadMessages = async () => {
+      try {
+        const loadedMessages = await db.messages.toArray();
+        setMessages(loadedMessages);
+      } catch (error) {
+        console.error("Erro ao carregar mensagens do Dexie:", error);
+      }
+    };
+    loadMessages();
+  }, []);
   return (
     <>
       <SideMenu />
@@ -117,66 +134,64 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <IonContent className="chat-content">
+        <IonContent ref={contentRef} className="chat-content">
           <IonList>
-            {messages?.reduce((acc: JSX.Element[], msg, index) => {
+            {messages.map((msg: IMessage, index: number) => {
               const previousMsg = messages[index - 1];
               const showSeparator =
                 previousMsg &&
                 shouldShowDateSeparator(msg.date, previousMsg.date);
 
-              if (showSeparator) {
-                acc.push(
-                  <DateSeparator key={`separator-${index}`} date={msg.date} />
-                );
-              }
+              return (
+                <>
+                  {showSeparator && <DateSeparator date={msg.date} />}
 
-              acc.push(
-                <Message
-                  key={index}
-                  content={msg.content}
-                  isVex={msg.isVex}
-                  hour={utils.formatHour(msg.hour)}
-                  date={msg.date}
-                />
+                  <Message
+                    key={index}
+                    content={msg.content}
+                    isVex={msg.isVex}
+                    hour={utils.formatHour(msg.hour)}
+                    date={msg.date}
+                  />
+                </>
               );
-
-              return acc;
-            }, [])}
+            })}
           </IonList>
-          <div ref={endRef} />
         </IonContent>
 
-        <IonFooter>
-          <IonToolbar className="toolbar">
-            <IonInput
-              value={text}
-              onIonChange={handleInputChange}
-              placeholder="Type a message..."
-              label="Type a message..."
-              labelPlacement="floating"
-              fill="outline"
-              shape="round"
-              onKeyUp={(event: any) => {
-                if (event.key === "Enter") {
-                  sendMessage(text, false);
-                  sendVexMessage(text);
-                }
-              }}
-            />
-            <IonButton
-              disabled={isTrainDisabled}
+        <IonFooter className="ion-padding">
+          <IonInput
+            clearInput={true}
+            value={text}
+            onIonInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setText(event.target.value);
+            }}
+            placeholder="Type a message..."
+            label="Type a message..."
+            labelPlacement="floating"
+            fill="outline"
+            shape="round"
+            onKeyUp={(event: any) => {
+              if (event.key === "Enter") {
+                const copy = text;
+                setText("");
+                sendMessage(copy, false);
+                sendVexMessage(copy);
+              }
+            }}
+          >
+            <IonIcon
               onClick={() => {
-                sendMessage(text, false);
-                sendVexMessage(text);
+                const copy = text;
+                setText("");
+                sendMessage(copy, false);
+                sendVexMessage(copy);
               }}
               slot="end"
-              fill="clear"
-              className="send-button"
-            >
-              <IonIcon icon={send} color="light" />
-            </IonButton>
-          </IonToolbar>
+              icon={send}
+              color="light"
+            />
+          </IonInput>
         </IonFooter>
       </IonPage>
     </>

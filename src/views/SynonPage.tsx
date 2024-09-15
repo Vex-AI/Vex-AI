@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { v4 } from "uuid";
 import { useTranslation } from "react-i18next";
-
-import { db } from "../classes/vexDB";
-import Synon from "../components/Synon"; // Importe o componente Synon
+import { db, ISynon } from "../classes/vexDB";
+import Synon from "../components/Synon";
 import {
   IonButton,
   IonButtons,
   IonContent,
   IonIcon,
   IonInput,
-  IonItem,
-  IonLabel,
   IonList,
   IonHeader,
   IonPage,
@@ -24,11 +21,6 @@ import { arrowBack, addCircleOutline, trash } from "ionicons/icons";
 import ReplyModal from "../components/ReplyModal";
 import WordModal from "../components/WordModal";
 import { useLiveQuery } from "dexie-react-hooks";
-interface ISynon {
-  word: string[];
-  reply: string[];
-  id: string;
-}
 
 const SynonPage: React.FC = () => {
   const router = useIonRouter();
@@ -51,21 +43,25 @@ const SynonPage: React.FC = () => {
   } | null>({ message: "", duration: 2000 });
 
   const synons = useLiveQuery<ISynon[]>(() => db.synons.toArray(), []);
- 
-  const handleAddSynon = useCallback(async () => {
-    if (!word) return setShowToast({ message: t('write_word') });
-    if (!reply) return setShowToast({ message: t('write_reply') });
 
-    const existingSynon = await db.synons.where('word').equals(word.trim()).first();
-    if (existingSynon) return setShowToast({ message: t('already_registered_word') });
+  const handleAddSynon = useCallback(async () => {
+    if (!word) return setShowToast({ message: t("write_word") });
+    if (!reply) return setShowToast({ message: t("write_reply") });
+
+    const existingSynon = await db.synons
+      .where("word")
+      .equals(word.trim())
+      .first();
+    if (existingSynon)
+      return setShowToast({ message: t("already_registered_word") });
 
     await db.synons.add({
       word: [word.trim()],
       reply: [reply],
       id: v4(),
     });
-    setWord('');
-    setReply('');
+    setWord("");
+    setReply("");
   }, [word, reply, t]);
 
   const handleDeleteSynon = async (id: string) => {
@@ -73,26 +69,28 @@ const SynonPage: React.FC = () => {
   };
 
   const handleAddWord = async () => {
-    if (newWord.trim().length === 0) return setShowToast({ message: t('write_new_word') });
+    if (newWord.trim().length === 0)
+      return setShowToast({ message: t("write_new_word") });
 
     const synon = await db.synons.get(synonID);
     if (synon) {
       await db.synons.update(synonID, {
         word: [...synon.word, newWord.trim()],
       });
-      setNewWord('');
+      setNewWord("");
     }
   };
 
   const handleAddReply = async () => {
-    if (newReply.trim().length === 0) return setShowToast({ message: t('write_new_reply') });
+    if (newReply.trim().length === 0)
+      return setShowToast({ message: t("write_new_reply") });
 
     const synon = await db.synons.get(synonID);
     if (synon) {
       await db.synons.update(synonID, {
         reply: [...synon.reply, newReply.trim()],
       });
-      setNewReply('');
+      setNewReply("");
     }
   };
 
@@ -116,17 +114,20 @@ const SynonPage: React.FC = () => {
 
   const handleDeleteAllSynons = async () => {
     try {
-      await db.synons.clear(); 
-      setShowToast({ message: t('deleteALlSynonsSucess'), duration: 2000 });
+      await db.synons.clear();
+      setShowToast({ message: t("deleteALlSynonsSucess"), duration: 2000 });
     } catch (error) {
-      setShowToast({ message: `${t('deleteAllSynonsFail')}: ${error}`, duration: 2000 });
+      setShowToast({
+        message: `${t("deleteAllSynonsFail")}: ${error}`,
+        duration: 2000,
+      });
     }
   };
   const handleDoubleClick = () => {
     if (clickTimeout) {
       clearTimeout(clickTimeout);
       setClickTimeout(null);
-      handleDeleteAllSynons(); 
+      handleDeleteAllSynons();
     } else {
       setShowToast({ message: t("deleteAllSynonsClick"), duration: 2000 });
 
@@ -220,7 +221,7 @@ const SynonPage: React.FC = () => {
           handleAddWord={handleAddWord}
           handleDeleteWord={handleDeleteWord}
           synonID={synonID}
-          synons={synons??[]}
+          synons={synons ?? []}
         />
         <ReplyModal
           replyModal={replyModal}
@@ -230,7 +231,7 @@ const SynonPage: React.FC = () => {
           handleAddReply={handleAddReply}
           handleDeleteReply={handleDeleteReply}
           synonID={synonID}
-          synons={synons??[]}
+          synons={synons ?? []}
         />
 
         {showToast && (

@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  Suspense,
-} from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   IonButton,
   IonContent,
@@ -16,25 +10,19 @@ import {
   IonIcon,
   IonToast,
   IonCheckbox,
-  IonLabel,
-  IonItem,
   IonList,
   IonRange,
-  IonText,
-  IonRow,
-  IonCol,
   IonCard,
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
 } from "@ionic/react";
-import { chevronBack, save, trash, colorPalette } from "ionicons/icons";
+import { chevronBack, save, trash } from "ionicons/icons";
 import { ChromePicker } from "react-color";
 import Preview from "../components/Preview";
 import utils from "../classes/utils";
 import { useTranslation } from "react-i18next";
 import { useIonRouter } from "@ionic/react";
-import Loader from "../components/Loader";
 
 interface Style {
   borderTopRightRadius: number;

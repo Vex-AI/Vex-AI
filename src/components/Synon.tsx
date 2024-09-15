@@ -1,5 +1,3 @@
-// Synon.tsx
-import React from "react";
 import {
   IonButton,
   IonIcon,
@@ -11,8 +9,6 @@ import {
 import { gitNetworkOutline, trash, personCircleOutline } from "ionicons/icons";
 import { motion } from "framer-motion";
 import { ISynon } from "../classes/vexDB";
-
-
 
 interface SynonProps {
   syn: ISynon;
@@ -39,8 +35,8 @@ const Synon: React.FC<SynonProps> = ({
       transition={{ duration: 0.5, delay: 0.2 }}
     >
       <IonCard>
-        <IonCardContent color="medium" >
-          <IonItem  lines="full" style={{ borderBottom: "1px solid white" }}>
+        <IonCardContent color="medium">
+          <IonItem lines="full" style={{ borderBottom: "1px solid white" }}>
             <IonLabel>
               <h5>{word.length > 20 ? `${word.slice(0, 20)}...` : word}</h5>
             </IonLabel>
@@ -50,7 +46,7 @@ const Synon: React.FC<SynonProps> = ({
               <p>{reply.length > 20 ? `${reply.slice(0, 20)}...` : reply}</p>
             </IonLabel>
           </IonItem>
-          <IonItem lines="none" >
+          <IonItem lines="none">
             <IonButton color="light" onClick={onAddWordSynon} fill="clear">
               <IonIcon icon={personCircleOutline} />
             </IonButton>
