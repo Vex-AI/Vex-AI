@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
   IonButton,
   IonContent,
@@ -11,6 +11,8 @@ import {
   IonTitle,
   IonIcon,
   useIonRouter,
+  IonModal,
+  IonProgressBar,
 } from "@ionic/react";
 import { useTranslation } from "react-i18next";
 import { db, ISynon } from "../classes/vexDB";
@@ -27,9 +29,14 @@ import { useLiveQuery } from "dexie-react-hooks";
 import BayesClassifier from "bayes";
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
 import { Capacitor } from "@capacitor/core";
-const Train: React.FC = () => {
+
+const Functions: React.FC = () => {
   const [content, setContent] = useState<string>("");
   const classifierModel = useLiveQuery(() => db.classifier.get(1), []);
+  const [isTrainDisabled, setIsTrainDisabled] = useState<boolean>(false);
+  const [showProgress, setShowProgress] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [operation, setOperation] = useState<string>("");
   const classifier: BayesClassifier = classifierModel?.classifierData
     ? BayesClassifier.fromJson(classifierModel?.classifierData)
     : BayesClassifier();
@@ -38,11 +45,10 @@ const Train: React.FC = () => {
     message: string;
     duration: number;
   } | null>(null);
-
+  const modal = useRef<HTMLIonModalElement>(null);
   const { t } = useTranslation();
   const platform = Capacitor.getPlatform();
   const router = useIonRouter();
-  const [isTrainDisabled, setIsTrainDisabled] = useState<boolean>(false);
   const navigate = (path: string) => router.push(path, "root", "replace");
 
   const trainModel = useCallback(async () => {
@@ -66,8 +72,11 @@ const Train: React.FC = () => {
     setIsTrainDisabled(false);
     setShowToast({ message: t("trainingCompleted"), duration: 2000 });
   }, [classifier, t]);
+  function dismiss() {
+    modal.current?.dismiss();
+  }
 
-  const getSynonsToFile = useCallback(() => {
+  const getSynonsFromFile = useCallback(() => {
     const input: HTMLInputElement = document.createElement("input");
     input.type = "file";
     input.accept = ".vex";
@@ -79,6 +88,10 @@ const Train: React.FC = () => {
 
       if (file) {
         reader.onload = async (e: ProgressEvent<FileReader>) => {
+          setOperation(t("importing"));
+          setShowProgress(true);
+          dismiss();
+          setProgress(0);
           const contents = e.target?.result as string | null;
           try {
             if (contents) {
@@ -89,17 +102,37 @@ const Train: React.FC = () => {
                   message: t("invalidSynonsArray"),
                   duration: 2000,
                 });
+                dismiss();
+                setShowProgress(false);
                 return;
               }
-              await db.synons.clear();
-              await db.synons.bulkAdd(jsonData);
+
+              // await db.synons.clear();
+
+              const totalItems = jsonData.length;
+              let processed = 0;
+
+              for (const synon of jsonData) {
+                await db.synons.add(synon);
+
+                processed += 1;
+                setProgress(processed / totalItems);
+                await new Promise((resolve) => setTimeout(resolve, 10)); // Pequeno atraso para atualizar a UI
+              }
 
               setShowToast({ message: t("synonsAdded"), duration: 2000 });
+              setShowProgress(false);
             }
           } catch (error) {
-            setShowToast({ message: t("fileProcessingError"), duration: 2000 });
+            dismiss();
+            setShowToast({
+              message: t("fileProcessingError"),
+              duration: 2000,
+            });
             console.log("Error processing file:", error);
           }
+          setShowProgress(false);
+          dismiss();
         };
 
         reader.readAsText(file);
@@ -110,14 +143,22 @@ const Train: React.FC = () => {
   }, [t]);
 
   const saveSynonsToFile = useCallback(async () => {
+    setOperation(t("exporting"));
+    setShowProgress(true);
+    setProgress(0);
     const synons: ISynon[] = await db.synons.toArray();
 
     if (synons.length === 0) {
       setShowToast({ message: t("noSynonsData"), duration: 2000 });
-
+      setShowProgress(false);
       return;
     }
 
+    let steps = 100;
+    for (let i = 1; i <= steps; i++) {
+      setProgress(i / steps);
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
     const id: number = Math.floor(Math.random() * 10000);
     const fileName: string = `vex_db_${id}.vex`;
     const fileContents: string = JSON.stringify(synons);
@@ -143,6 +184,8 @@ const Train: React.FC = () => {
       link.click();
       URL.revokeObjectURL(url);
     }
+
+    setShowProgress(false);
   }, [t]);
 
   return (
@@ -192,7 +235,7 @@ const Train: React.FC = () => {
               });
               return;
             }
-            
+
             const result = await classifier.categorize(content);
             if (!result) {
               setShowToast({ message: t("trainModelBefore"), duration: 2000 });
@@ -220,7 +263,7 @@ const Train: React.FC = () => {
 
         <IonButton
           expand="full"
-          onClick={getSynonsToFile}
+          onClick={getSynonsFromFile}
           color="tertiary"
           shape="round"
         >
@@ -237,9 +280,31 @@ const Train: React.FC = () => {
           <IonIcon icon={saveOutline} slot="start" />
           {t("exportData")}
         </IonButton>
+        <IonModal
+         ref={modal}
+          style={{
+            "--width": "fit-content",
+            "--min-width": "250px",
+            "--height": "250px",
+            "--border-radius": "6px",
+            "--box-shadow": "0 28px 48px rgba(0, 0, 0, 0.4)",
+          }}
+          
+          className="ion-padding"
+          isOpen={showProgress}
+        >
+          <IonHeader>
+            <IonToolbar>
+              <IonTitle>{operation}</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent className="ion-padding">
+            <IonProgressBar value={progress} />
+          </IonContent>
+        </IonModal>
       </IonContent>
     </IonPage>
   );
 };
 
-export default Train;
+export default Functions;

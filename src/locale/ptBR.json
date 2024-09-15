@@ -57,5 +57,7 @@
   "trainModelBefore": "Treine sua IA(Inteligência artificial) antes!",
   "useBayes": "Usar algoritimo de Bayes",
   "next": "Próximo",
-  "deleteAllSynonsClick": "Me clica de novo"
+  "deleteAllSynonsClick": "Me clica de novo",
+   "importing": "Importando...",
+  "exporting": "Exportando..."
 }

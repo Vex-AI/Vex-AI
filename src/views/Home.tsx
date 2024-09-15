@@ -24,25 +24,6 @@ import utils from "../classes/utils";
 import SideMenu from "../components/SideMenu";
 import DateSeparator from "../components/DateSeparator";
 
-interface Style {
-  borderTopRightRadius: number;
-  borderTopLeftRadius: number;
-  borderBottomRightRadius: number;
-  borderBottomLeftRadius: number;
-  borderColor: string;
-  borderWidth: number;
-  backgroundColor: string;
-  textColor: string;
-}
-
-const vexStyle: Style = localStorage.getItem("vexStyle")
-  ? JSON.parse(localStorage.getItem("vexStyle") as string)
-  : {};
-
-const userStyle: Style = localStorage.getItem("userStyle")
-  ? JSON.parse(localStorage.getItem("userStyle") as string)
-  : {};
-
 const Home: React.FC = () => {
   const [classifier, setClassifier] = useState<any>(null);
   const [text, setText] = useState<string>("");
@@ -58,7 +39,7 @@ const Home: React.FC = () => {
     },
     []
   );
-  
+
   const sendVexMessage = useCallback((content: string) => {
     const copy = content;
     const num: number = copy.length;
@@ -82,7 +63,6 @@ const Home: React.FC = () => {
           sendMessage(answer ?? (await utils.getResponse()), true);
           setStatus("on-line");
           setIsTrainDisabled(false);
-          
         }, timeout);
       })();
     }
@@ -90,16 +70,16 @@ const Home: React.FC = () => {
 
   const sendMessage = async (content: string, isVex: boolean) => {
     if (content.trim() === "") return;
+    const copy = content;
+    setText("");
     const newMessage: IMessage = {
-      content,
+      content: copy,
       isVex,
       hour: new Date().toLocaleTimeString(),
       date: Date.now(),
     };
 
     await db.messages.add(newMessage);
-   
-    setText("");
   };
 
   const shouldShowDateSeparator = (
@@ -114,87 +94,92 @@ const Home: React.FC = () => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   });
   return (
-    <IonPage id="main-content">
+    <>
       <SideMenu />
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="end">
-            <IonMenuButton></IonMenuButton>
-          </IonButtons>
-          <IonTitle>
-            <div className="chat-contact">
-              <img src={vexInfo ? vexInfo[0]?.profileImage : ""} alt="avatar" />
-              <div className="chat-contact-details">
-                <p>{vexInfo ? vexInfo[0]?.name : "Vex"}</p>
-                <IonText color="medium">{status}</IonText>
+      <IonPage id="main-content">
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="end">
+              <IonMenuButton></IonMenuButton>
+            </IonButtons>
+            <IonTitle>
+              <div className="chat-contact">
+                <img
+                  src={vexInfo ? vexInfo[0]?.profileImage : "/Vex_320.png"}
+                  alt="avatar"
+                />
+                <div className="chat-contact-details">
+                  <p>{vexInfo ? vexInfo[0]?.name : "Vex"}</p>
+                  <IonText color="medium">{status}</IonText>
+                </div>
               </div>
-            </div>
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
+            </IonTitle>
+          </IonToolbar>
+        </IonHeader>
 
-      <IonContent  className="chat-content">
-        <IonList>
-          {messages?.reduce((acc: JSX.Element[], msg, index) => {
-            const previousMsg = messages[index - 1];
-            const showSeparator =
-              previousMsg &&
-              shouldShowDateSeparator(msg.date, previousMsg.date);
+        <IonContent className="chat-content">
+          <IonList>
+            {messages?.reduce((acc: JSX.Element[], msg, index) => {
+              const previousMsg = messages[index - 1];
+              const showSeparator =
+                previousMsg &&
+                shouldShowDateSeparator(msg.date, previousMsg.date);
 
-            if (showSeparator) {
+              if (showSeparator) {
+                acc.push(
+                  <DateSeparator key={`separator-${index}`} date={msg.date} />
+                );
+              }
+
               acc.push(
-                <DateSeparator key={`separator-${index}`} date={msg.date} />
+                <Message
+                  key={index}
+                  content={msg.content}
+                  isVex={msg.isVex}
+                  hour={utils.formatHour(msg.hour)}
+                  date={msg.date}
+                />
               );
-            }
 
-            acc.push(
-              <Message
-                key={index}
-                content={msg.content}
-                isVex={msg.isVex}
-                hour={utils.formatHour(msg.hour)}
-                date={msg.date}
-              />
-            );
+              return acc;
+            }, [])}
+          </IonList>
+          <div ref={endRef} />
+        </IonContent>
 
-            return acc;
-          }, [])}
-        </IonList>
-        <div ref={endRef} />
-      </IonContent>
-
-      <IonFooter>
-        <IonToolbar className="toolbar">
-          <IonInput
-            value={text}
-            onIonChange={handleInputChange}
-            placeholder="Type a message..."
-            label="Type a message..."
-            labelPlacement="floating"
-            fill="outline"
-            shape="round"
-            onKeyUp={(event: any) => {
-              if (event.key === "Enter") {
+        <IonFooter>
+          <IonToolbar className="toolbar">
+            <IonInput
+              value={text}
+              onIonChange={handleInputChange}
+              placeholder="Type a message..."
+              label="Type a message..."
+              labelPlacement="floating"
+              fill="outline"
+              shape="round"
+              onKeyUp={(event: any) => {
+                if (event.key === "Enter") {
+                  sendMessage(text, false);
+                  sendVexMessage(text);
+                }
+              }}
+            />
+            <IonButton
+              disabled={isTrainDisabled}
+              onClick={() => {
                 sendMessage(text, false);
                 sendVexMessage(text);
-              }
-            }}
-          />
-          <IonButton
-            disabled={isTrainDisabled}
-            onClick={() => {
-              sendMessage(text, false);
-              sendVexMessage(text);
-            }}
-            slot="end"
-            fill="clear"
-            className="send-button"
-          >
-            <IonIcon icon={send} color="light" />
-          </IonButton>
-        </IonToolbar>
-      </IonFooter>
-    </IonPage>
+              }}
+              slot="end"
+              fill="clear"
+              className="send-button"
+            >
+              <IonIcon icon={send} color="light" />
+            </IonButton>
+          </IonToolbar>
+        </IonFooter>
+      </IonPage>
+    </>
   );
 };
 

@@ -19,10 +19,10 @@ import "@ionic/react/css/display.css";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import Home from "./views/Home";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route } from "react-router-dom";
 import vexProfile from "./views/vexProfile";
 import Synons from "./views/SynonPage";
-import Train from "./views/Train";
+import Functions from "./views/Functions";
 import LanguageSelector from "./components/LanguageSelector";
 import Customize from "./views/Customize";
 import VexModelsLoader from "./views/VexModelsLoader";
@@ -35,7 +35,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/home" component={Home} />
         <Route path="/profile" component={vexProfile} />
         <Route path="/synons" component={Synons} />
-        <Route path="/train" component={Train} />
+        <Route path="/functions" component={Functions} />
         <Route path="/language" component={LanguageSelector} />
         <Route path="/customize" component={Customize} />
         <Route path="/loader" component={VexModelsLoader} />

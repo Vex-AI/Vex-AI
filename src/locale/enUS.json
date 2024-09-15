@@ -59,7 +59,8 @@
   "next": "Next",
   "deleteAllSynons": "Delet all synons",
   "deleteAllSynonsClick": "Click me again",
-  "deleteALlSynonsSucess":"All synons delete sucess",
-  "deleteAllSynonsFail":"Error on delete all synons"
-
+  "deleteALlSynonsSucess": "All synons delete sucess",
+  "deleteAllSynonsFail": "Error on delete all synons",
+  "importing": "Importing...",
+  "exporting": "Exporting..."
 }

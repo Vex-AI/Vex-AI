@@ -116,7 +116,7 @@ const SynonPage: React.FC = () => {
 
   const handleDeleteAllSynons = async () => {
     try {
-      await db.synons.clear(); // Remove todos os registros da tabela 'synons'
+      await db.synons.clear(); 
       setShowToast({ message: t('deleteALlSynonsSucess'), duration: 2000 });
     } catch (error) {
       setShowToast({ message: `${t('deleteAllSynonsFail')}: ${error}`, duration: 2000 });
@@ -126,11 +126,11 @@ const SynonPage: React.FC = () => {
     if (clickTimeout) {
       clearTimeout(clickTimeout);
       setClickTimeout(null);
-      handleDeleteAllSynons(); // Deleta todos os sinônimos no duplo clique
+      handleDeleteAllSynons(); 
     } else {
       setShowToast({ message: t("deleteAllSynonsClick"), duration: 2000 });
 
-      const timeout = setTimeout(() => setClickTimeout(null), 300); // Tempo limite para detecção de duplo clique
+      const timeout = setTimeout(() => setClickTimeout(null), 300);
       setClickTimeout(timeout);
     }
   };

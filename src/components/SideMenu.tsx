@@ -38,7 +38,7 @@ const SideMenu: React.FC = () => {
   };
 
   return (
-    <IonMenu side="start" contentId="main-content" swipeGesture={true}>
+    <IonMenu side="start" contentId="main-content" >
       <IonHeader>
         <IonToolbar>
           <IonTitle>Menu</IonTitle>
@@ -47,31 +47,31 @@ const SideMenu: React.FC = () => {
 
       <IonContent>
         <IonList>
-          <IonItem button href="#" onClick={() => navigate("/custom")}>
+          <IonItem button onClick={() => navigate("/customize")}>
             <IonIcon color="light" slot="start" icon={brush} />
             Customization
           </IonItem>
-          <IonItem href="#" onClick={handleClearChat}>
+          <IonItem onClick={handleClearChat}>
             <IonIcon color="light" slot="start" icon={trash} />
             Clear Chat
           </IonItem>
-          <IonItem href="#" onClick={() => navigate("/profile")}>
+          <IonItem  onClick={() => navigate("/profile")}>
             <IonIcon color="light" slot="start" icon={person} />
             Vex Profile
           </IonItem>
-          <IonItem href="#" onClick={() => navigate("/train")}>
+          <IonItem href="#" onClick={() => navigate("/functions")}>
             <IonIcon color="light" slot="start" icon={school} />
             Functions
           </IonItem>
-          <IonItem href="#" onClick={() => navigate("/home")}>
+          <IonItem  onClick={() => navigate("/home")}>
             <IonIcon color="light" slot="start" icon={home} />
             Home
           </IonItem>
-          <IonItem href="#" onClick={() => navigate("/language")}>
+          <IonItem  onClick={() => navigate("/language")}>
             <IonIcon color="light" slot="start" icon={language} />
             Select Language
           </IonItem>
-          <IonItem href="#">
+          <IonItem disabled >
             <IonIcon color="light" slot="start" icon={logOut} />
             Log Out
           </IonItem>
