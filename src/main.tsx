@@ -21,7 +21,7 @@ import Home from "./views/Home";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import vexProfile from "./views/vexProfile";
-import Synons from "./views/SynonPage";
+import SynonPage from "./views/SynonPage";
 import Functions from "./views/Functions";
 import LanguageSelector from "./components/LanguageSelector";
 import Customize from "./views/Customize";
@@ -34,7 +34,7 @@ createRoot(document.getElementById("root")!).render(
       <IonRouterOutlet>
         <Route path="/home" component={Home} />
         <Route path="/profile" component={vexProfile} />
-        <Route path="/synons" component={Synons} />
+        <Route path="/synons" component={SynonPage} />
         <Route path="/functions" component={Functions} />
         <Route path="/language" component={LanguageSelector} />
         <Route path="/customize" component={Customize} />

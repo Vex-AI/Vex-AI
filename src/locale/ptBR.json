@@ -54,10 +54,14 @@
   "functions": "Funções",
   "savedToFile": "Aqui salvo em: ",
   "warningTestAI": "Aviso: o teste de IA está disponível apenas nesta seção. o treinamento é feito usando os dados já salvos.",
-  "trainModelBefore": "Treine sua IA(Inteligência artificial) antes!",
+  "trainModelBefore": "Me treine primeiro, na aba \"funções\"!",
   "useBayes": "Usar algoritimo de Bayes",
   "next": "Próximo",
   "deleteAllSynonsClick": "Me clica de novo",
-   "importing": "Importando...",
-  "exporting": "Exportando..."
+  "importing": "Importando...",
+  "exporting": "Exportando...",
+  "vexLearning": "Aprendizado da Vex",
+  "typeThing": "Escreva alguma coisa",
+  "learnWarningTitle":"Treinei a Vex, mas ela não responde direito",
+  "learnWarning": "Caso a Vex não tenha aprendido muita coisa, pode ser necessário desativar o algotimo de bayes(no menu lateral) ou ensiná-la mais coisas em: "
 }

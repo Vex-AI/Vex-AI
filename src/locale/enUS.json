@@ -54,7 +54,7 @@
   "functions": "Functions",
   "savedToFile": "File saved at: ",
   "warningTestAI": "Notice: AI testing is only available in this section. Training is done using the data already saved.c",
-  "trainModelBefore": "Train your AI (artificial intelligence) first!",
+  "trainModelBefore": "Train me first, in tab \"functions\"!",
   "useBayes": "Use Bayes algorithm",
   "next": "Next",
   "deleteAllSynons": "Delet all synons",
@@ -62,5 +62,9 @@
   "deleteALlSynonsSucess": "All synons delete sucess",
   "deleteAllSynonsFail": "Error on delete all synons",
   "importing": "Importing...",
-  "exporting": "Exporting..."
+  "exporting": "Exporting...",
+  "vexLearning": "Vex learning",
+  "typeThing": "Write anything",
+  "learnWarningTitle":"I trained Vex, but she doesn't respond properly",
+  "learnWarning": "If Vex hasn't learned much, it may be necessary to deactivate the Bayes algorithm (in the side menu) or teach her more things in :"
 }

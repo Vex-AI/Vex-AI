@@ -40,8 +40,8 @@
   align-items: center;
 }
 .chat-contact img {
-  height: 2rem;
-  width: 2rem;
+  height: 3rem;
+  width: 3rem;
   border-radius: 500px;
 }
 
@@ -53,13 +53,17 @@
 }
 
 .chat-contact-details p {
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
   margin: 0;
 }
 
 .chat-contact-details ion-text {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 400;
+  --color: white;
+  color: rgb(255, 255, 255);
 }
 
 ion-toolbar.toolbar {

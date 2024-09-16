@@ -30,11 +30,8 @@
     "react-color": "^2.19.3",
     "react-dom": "^18.3.1",
     "react-i18next": "^15.0.1",
-    "react-magic-motion": "^1.1.2",
     "react-toastify": "^10.0.5",
-    "use-file-picker": "^2.1.2",
-    "uuid": "^10.0.0",
-    "zustand": "^4.5.5"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@capacitor/cli": "6.1.2",

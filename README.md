@@ -137,9 +137,7 @@ The Vex AI is currently hosted on [Vercel](https://vexxx.vercel.app/enUS). You c
 | `i18next`            | ^23.15.1 | Internationalization library for JavaScript applications, facilitating multi-language support. |
 | `react-color`        | ^2.19.3  | Library for color selection and manipulation in React applications.                            |
 | `react-i18next`      | ^15.0.1  | Integrates i18next with React, providing hooks and components for translation.                 |
-| `react-magic-motion` | ^1.1.2   | Library for smooth animations and visual effects in React.                                     |
 | `uuid`               | ^10.0.0  | Library for generating universally unique identifiers (UUIDs).                                 |
-| `zustand`            | ^4.5.5   | State management library for React with a simple and direct API.                               |
 
   </div>
 

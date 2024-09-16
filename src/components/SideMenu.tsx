@@ -1,4 +1,3 @@
-import  { useState } from "react";
 import {
   IonMenu,
   IonContent,
@@ -17,24 +16,25 @@ import {
   school,
   language,
   trash,
-  logOut,
+  libraryOutline,
 } from "ionicons/icons";
 
 import { db } from "../classes/vexDB";
+import { useTranslation } from "react-i18next";
+import BayesToggle from "./BayesToggle";
 const SideMenu: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
   const router = useIonRouter();
   const navigate = (path: string) => {
     router.push(path, "root", "replace");
   };
-
 
   const handleClearChat = async () => {
     await db.messages.clear();
   };
 
   return (
-    <IonMenu side="start" contentId="main-content">
+    <IonMenu menuId="sideMenu" side="start" contentId="main-content">
       <IonHeader>
         <IonToolbar>
           <IonTitle>Menu</IonTitle>
@@ -45,32 +45,34 @@ const SideMenu: React.FC = () => {
         <IonList>
           <IonItem href="#" button onClick={() => navigate("/customize")}>
             <IonIcon color="light" slot="start" icon={brush} />
-            Customization
+            {t("customization")}
           </IonItem>
           <IonItem href="#" onClick={handleClearChat}>
             <IonIcon color="light" slot="start" icon={trash} />
-            Clear Chat
+            {t("clearChat")}
           </IonItem>
           <IonItem href="#" onClick={() => navigate("/profile")}>
             <IonIcon color="light" slot="start" icon={person} />
-            Vex Profile
+            {t("vexProfile")}
           </IonItem>
           <IonItem href="#" onClick={() => navigate("/functions")}>
             <IonIcon color="light" slot="start" icon={school} />
-            Functions
+            {t("functions")}
           </IonItem>
           <IonItem href="#" onClick={() => navigate("/home")}>
             <IonIcon color="light" slot="start" icon={home} />
-            Home
+            {t("home")}
           </IonItem>
           <IonItem href="#" onClick={() => navigate("/language")}>
             <IonIcon color="light" slot="start" icon={language} />
-            Select Language
+            {t("select")}
           </IonItem>
-          <IonItem disabled>
-            <IonIcon color="light" slot="start" icon={logOut} />
-            Log Out
+
+          <IonItem href="#" onClick={() => navigate("/synons")}>
+            <IonIcon color="light" slot="start" icon={libraryOutline} />
+            {t("vexLearning")}
           </IonItem>
+          <BayesToggle></BayesToggle>
         </IonList>
       </IonContent>
     </IonMenu>

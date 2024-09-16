@@ -13,6 +13,8 @@ import {
   useIonRouter,
   IonModal,
   IonProgressBar,
+  IonAlert,
+  useIonAlert,
 } from "@ionic/react";
 import { useTranslation } from "react-i18next";
 import { db, ISynon } from "../classes/vexDB";
@@ -39,7 +41,7 @@ const Functions: React.FC = () => {
   const classifier: BayesClassifier = classifierModel?.classifierData
     ? BayesClassifier.fromJson(classifierModel?.classifierData)
     : BayesClassifier();
-
+  const [presentAlert] = useIonAlert();
   const [showToast, setShowToast] = useState<{
     message: string;
     duration: number;
@@ -70,7 +72,17 @@ const Functions: React.FC = () => {
     await db.classifier.put({ id: 1, classifierData: classifier.toJson() });
     setIsTrainDisabled(false);
     setShowToast({ message: t("trainingCompleted"), duration: 2000 });
+    if (!localStorage.getItem("learnWarning")) {
+      localStorage.setItem("learnWarning", "true");
+
+      presentAlert({
+        header: t("learnWarningTitle"),
+        message: ` ${t("learnWarning")}${t("vexLearning")}`,
+        buttons: ["Action"],
+      });
+    }
   }, [classifier, t]);
+
   function dismiss() {
     modal.current?.dismiss();
   }
@@ -238,7 +250,7 @@ const Functions: React.FC = () => {
           value={content}
           onIonChange={(e: any) => setContent(e.detail.value as string)}
           placeholder={t("placeholderText")}
-          label="Type a message..."
+          label={t("typeThing")}
           labelPlacement="floating"
           fill="outline"
           shape="round"
