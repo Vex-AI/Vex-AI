@@ -13,7 +13,6 @@ import {
   useIonRouter,
   IonModal,
   IonProgressBar,
-  IonAlert,
   useIonAlert,
 } from "@ionic/react";
 import { useTranslation } from "react-i18next";
@@ -41,6 +40,7 @@ const Functions: React.FC = () => {
   const classifier: BayesClassifier = classifierModel?.classifierData
     ? BayesClassifier.fromJson(classifierModel?.classifierData)
     : BayesClassifier();
+
   const [presentAlert] = useIonAlert();
   const [showToast, setShowToast] = useState<{
     message: string;

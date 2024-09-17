@@ -16,7 +16,12 @@ import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import {
+  IonApp,
+  IonRouterOutlet,
+  setupIonicReact,
+  useIonRouter,
+} from "@ionic/react";
 import Home from "./views/Home";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
@@ -26,21 +31,36 @@ import Functions from "./views/Functions";
 import LanguageSelector from "./components/LanguageSelector";
 import Customize from "./views/Customize";
 import VexModelsLoader from "./views/VexModelsLoader";
+import { App } from "@capacitor/app";
 
-setupIonicReact();
-createRoot(document.getElementById("root")!).render(
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} />
-        <Route path="/profile" component={vexProfile} />
-        <Route path="/synons" component={SynonPage} />
-        <Route path="/functions" component={Functions} />
-        <Route path="/language" component={LanguageSelector} />
-        <Route path="/customize" component={Customize} />
-        <Route path="/loader" component={VexModelsLoader} />
-        <Redirect exact from="/" to="/home" />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+setupIonicReact({
+  mode: "md",
+});
+const Main = () => {
+  const ionRouter = useIonRouter();
+  document.addEventListener("ionBackButton", (ev: any) => {
+    ev.detail.register(-1, () => {
+      if (!ionRouter.canGoBack()) {
+        App.exitApp();
+      }
+    });
+  });
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route path="/home" component={Home} />
+          <Route path="/profile" component={vexProfile} />
+          <Route path="/synons" component={SynonPage} />
+          <Route path="/functions" component={Functions} />
+          <Route path="/language" component={LanguageSelector} />
+          <Route path="/customize" component={Customize} />
+          <Route path="/loader" component={VexModelsLoader} />
+          <Redirect exact from="/" to="/home" />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
+
+createRoot(document.getElementById("root")!).render(<Main />);

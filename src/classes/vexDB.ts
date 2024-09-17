@@ -31,7 +31,7 @@ export class vexDB extends Dexie {
       messages: "++id, content, isVex, hour, date",
       synons: "++id, word, reply",
       vexInfo: "id,name, profileImage",
-      classifier: "id, classifierData", 
+      classifier: "id, classifierData",
     });
   }
 }
@@ -39,51 +39,61 @@ export class vexDB extends Dexie {
 export const db = new vexDB();
 
 db.on("populate", (tx: Transaction) => {
-  tx.table("synons").add({
-    word: ["oi", "olá", "e aí", "alô", "bom dia"],
-    reply: [
+  const addSynonyms = (id: string, word: string[], reply: string[]) => {
+    tx.table("synons").add({
+      id,
+      word,
+      reply,
+    });
+  };
+
+  addSynonyms(
+    "1",
+    ["oi", "olá", "e aí", "alô", "bom dia"],
+    [
       "Olá, tudo bem?",
       "Oi, como posso ajudar?",
       "E aí, tudo tranquilo?",
       "Alô, tem alguém aí?",
       "Bom dia, como você está?",
-    ],
-    id: "1",
-  });
-  tx.table("synons").add({
-    word: ["hola", "buenos días", "qué tal", "adiós", "hasta luego"],
-    reply: [
+    ]
+  );
+
+  addSynonyms(
+    "2",
+    ["hola", "buenos días", "qué tal", "adiós", "hasta luego"],
+    [
       "¡Hola!",
       "Buenos días, ¿cómo estás?",
       "¿Qué tal?",
       "¡Adiós!",
       "Hasta luego, nos vemos más tarde.",
-    ],
-    id: "2",
-  });
+    ]
+  );
 
-  tx.table("synons").add({
-    word: ["こんにちは", "おはよう", "さようなら", "おやすみ", "ありがとう"],
-    reply: [
+  addSynonyms(
+    "3",
+    ["こんにちは", "おはよう", "さようなら", "おやすみ", "ありがとう"],
+    [
       "こんにちは！",
       "おはようございます！",
       "さようなら！",
       "おやすみなさい。",
       "ありがとうございます！",
-    ],
-    id: "3",
-  });
-  tx.table("synons").add({
-    word: ["hello", "hi", "hey", "good morning", "goodbye"],
-    reply: [
+    ]
+  );
+
+  addSynonyms(
+    "4",
+    ["hello", "hi", "hey", "good morning", "goodbye"],
+    [
       "Hello!",
       "Hi, how can I assist you?",
       "Hey there!",
       "Good morning, how are you?",
       "Goodbye, take care!",
-    ],
-    id: "4",
-  });
+    ]
+  );
 });
 
 db.on("populate", (tx: Transaction) => {

@@ -14,7 +14,8 @@ import {
 } from "@ionic/react";
 import { useTranslation } from "react-i18next";
 
-import { chevronBack , arrowRedoCircleOutline} from "ionicons/icons";
+import { chevronBack, arrowRedoCircleOutline } from "ionicons/icons";
+import { useEffect } from "react";
 
 const LanguageSelector: React.FC = () => {
   const {
@@ -28,6 +29,10 @@ const LanguageSelector: React.FC = () => {
     localStorage.setItem("language", selectedLanguage);
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("language") === null)
+      localStorage.setItem("language", "enUS");
+  }, []);
   return (
     <IonPage>
       <IonHeader>
@@ -48,7 +53,7 @@ const LanguageSelector: React.FC = () => {
         <IonList style={{ display: "flex", flexDirection: "column" }}>
           <IonButton
             shape="round"
-            color={language === "enUS" ? "primary" : "light"}
+            color={language === "enUS" ? "secondary" : "light"}
             onClick={() => handleChangeLanguage("enUS")}
           >
             <IonLabel>{t("english")}</IonLabel>
@@ -56,7 +61,7 @@ const LanguageSelector: React.FC = () => {
 
           <IonButton
             shape="round"
-            color={language === "ptBR" ? "primary" : "light"}
+            color={language === "ptBR" ? "secondary" : "light"}
             onClick={() => handleChangeLanguage("ptBR")}
           >
             <IonLabel>{t("portuguese")}</IonLabel>
@@ -64,11 +69,11 @@ const LanguageSelector: React.FC = () => {
 
           <IonButton
             shape="round"
-            color="tertiary"
+            color="danger"
             onClick={() => router.push("/home", "root", "replace")}
           >
             <IonLabel>{t("next")}</IonLabel>
-            <IonIcon icon={arrowRedoCircleOutline}/>
+            <IonIcon icon={arrowRedoCircleOutline} />
           </IonButton>
         </IonList>
       </IonContent>

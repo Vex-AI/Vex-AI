@@ -12,6 +12,7 @@ import {
   IonFooter,
   IonText,
   IonMenuButton,
+  useIonRouter,
 } from "@ionic/react";
 import { menuController } from "@ionic/core/components";
 import { send } from "ionicons/icons";
@@ -32,10 +33,8 @@ const Home: React.FC = () => {
     await menuController.open("sideMenu");
   }
   const classifierModel = useLiveQuery(() => db.classifier.get(1), []);
-  const classifier: BayesClassifier = classifierModel?.classifierData
-    ? BayesClassifier.fromJson(classifierModel?.classifierData)
-    : BayesClassifier();
 
+  const router = useIonRouter();
   const messages = useLiveQuery<IMessage[]>(() => db.messages.toArray(), []);
   const [text, setText] = useState<string>("");
   const { t } = useTranslation();
@@ -44,46 +43,79 @@ const Home: React.FC = () => {
   const [isTrainDisabled, setIsTrainDisabled] = useState<boolean>(false);
   const contentRef = createRef<HTMLIonContentElement>();
 
-  const sendVexMessage = useCallback((content: string) => {
-    const copy = content;
-    const num: number = copy.length;
-    const timeout = num < 6 ? 1200 : num < 10 ? 1500 : num < 20 ? 2000 : 1800;
-    const useBayes =
-      localStorage.getItem("bayesEnabled") === null
-        ? true
-        : localStorage.getItem("bayesEnabled") ==="true"
-        
-    setIsTrainDisabled(true);
-    setStatus("digitando...");
-    {
-      (async () => {
-        let answer = "";
-        if (useBayes) {
-          console.log("with bayes");
-          answer = await classifier.categorize(content);
-          if (!answer) {
-            sendMessage(t("trainModelBefore"), true);
-            setStatus("on-line");
-            scrollToBottom();
+  const classifier: BayesClassifier = classifierModel?.classifierData
+    ? BayesClassifier.fromJson(classifierModel?.classifierData)
+    : BayesClassifier();
 
-            openFirstMenu();
-            setIsTrainDisabled(false);
-          }
-          return;
-        } else {
-          console.log("no bayes");
-          answer = await analyzer(content);
-        }
+  const sendVexMessage = useCallback(
+    async (content: string) => {
+      // Obtendo as informações do localStorage uma vez para evitar leituras repetidas
+      const bayesEnabled = localStorage.getItem("bayesEnabled");
+      const useBayes = bayesEnabled === null || bayesEnabled === "true";
+      const firstContact = localStorage.getItem("firstContact");
 
+      // Atualizando estados antes do processamento
+      setIsTrainDisabled(true);
+      setStatus("digitando...");
+
+      // Função auxiliar para lidar com a resposta do Bayes ou do analisador
+      const handleResponse = async (answer: string) => {
+        const answerLength = answer.length;
+
+        // Calcula o timeout baseado no tamanho da resposta da Vex
+        const timeout =
+          answerLength > 30
+            ? Math.floor(Math.random() * (4000 - 2000 + 1)) + 2000
+            : answerLength * 70;
+
+        // Envia a mensagem com o timeout baseado no tamanho da resposta
         setTimeout(async () => {
           sendMessage(answer ?? (await utils.getResponse()), true);
           setStatus("on-line");
           setIsTrainDisabled(false);
           scrollToBottom();
         }, timeout);
-      })();
-    }
-  }, []);
+      };
+
+      // Função para lidar com o "firstContact" e abrir o menu
+      const handleFirstContact = () => {
+        if (firstContact === null) {
+          setTimeout(() => {
+            openFirstMenu();
+            localStorage.setItem("firstContact", "true");
+            setStatus("on-line");
+            setIsTrainDisabled(false);
+          }, 2000);
+        }
+      };
+
+      // Processamento com Bayes
+      if (useBayes) {
+        console.log("with bayes");
+        const answer = await classifier.categorize(content);
+
+        if (!answer) {
+          sendMessage(t("trainModelBefore"), true); // Mensagem de treinamento necessário
+          handleFirstContact();
+          setStatus("on-line");
+          setIsTrainDisabled(false);
+          scrollToBottom();
+          return;
+        }
+
+        // Se houver resposta, envia a mensagem normalmente
+        await handleResponse(answer);
+      } else {
+        // Processamento sem Bayes (usando o analisador)
+        console.log("no bayes");
+        const answer = await analyzer(content);
+
+        // Resposta com timeout (simulando um delay na resposta)
+        await handleResponse(answer);
+      }
+    },
+    [classifier, analyzer, utils] // Dependências do hook
+  );
 
   const sendMessage = (content: string, isVex: boolean) => {
     if (content.trim() === "") return;
@@ -113,6 +145,11 @@ const Home: React.FC = () => {
     contentRef.current?.scrollToBottom(500);
   }
 
+  useEffect(() => {
+    if (localStorage.getItem("language") === null) {
+      router.push("/language", "root", "replace");
+    }
+  }, []);
   return (
     <>
       <SideMenu />

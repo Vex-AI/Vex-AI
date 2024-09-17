@@ -116,20 +116,17 @@ const VexProfile: React.FC = () => {
         </IonItem>
 
         <div
-         
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-           
           }}
         >
           <IonButton
             href="https://github.com/Vex-AI/VexAI"
             target="_blank"
             fill="clear"
-          
             color="light"
           >
             <IonIcon icon={logoGithub} />

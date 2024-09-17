@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IonButton,
   IonCard,
@@ -124,33 +124,32 @@ const VexModelsLoader: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-
-      <IonList>
-        {filesList.map((file: IFile) => (
-          <IonCard key={file.filePath}>
-            <IonCardHeader>
-              <IonCardTitle color="light">{file.fileName}</IonCardTitle>
-            </IonCardHeader>
-            <IonItem>
-              {file.installed ? (
-                <IonButton color="tertiary" shape="round" disabled>
-                  <IonIcon slot="start" icon={cloudDoneOutline} />
-                  Installed
-                </IonButton>
-              ) : (
-                <IonButton
-                  color="tertiary"
-                  shape="round"
-                  onClick={() => handleFileImport(file.filePath)}
-                >
-                  <IonIcon slot="start" icon={cloudDownloadOutline} />
-                  Install
-                </IonButton>
-              )}
-            </IonItem>
-          </IonCard>
-        ))}
-      </IonList>
+        <IonList>
+          {filesList.map((file: IFile) => (
+            <IonCard key={file.filePath}>
+              <IonCardHeader>
+                <IonCardTitle color="light">{file.fileName}</IonCardTitle>
+              </IonCardHeader>
+              <IonItem>
+                {file.installed ? (
+                  <IonButton color="tertiary" shape="round" disabled>
+                    <IonIcon slot="start" icon={cloudDoneOutline} />
+                    Installed
+                  </IonButton>
+                ) : (
+                  <IonButton
+                    color="tertiary"
+                    shape="round"
+                    onClick={() => handleFileImport(file.filePath)}
+                  >
+                    <IonIcon slot="start" icon={cloudDownloadOutline} />
+                    Install
+                  </IonButton>
+                )}
+              </IonItem>
+            </IonCard>
+          ))}
+        </IonList>
       </IonContent>
     </IonPage>
   );
