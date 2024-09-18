@@ -7,10 +7,17 @@ interface DateSeparatorProps {
 
 const DateSeparator: React.FC<DateSeparatorProps> = ({ date }) => {
   return (
-    <IonItem lines="none">
-      <IonLabel className="date-separator">
-        {utils.formatDate(date)}
-      </IonLabel>
+    <IonItem
+      lines="none"
+      style={{
+        "--background": "#057b70",
+        borderRadius: "15px",
+        textAlign: "center",
+        margin: "auto",
+        width: "fit-content",
+      }}
+    >
+      <IonLabel className="date-separator">{utils.formatDate(date)}</IonLabel>
     </IonItem>
   );
 };

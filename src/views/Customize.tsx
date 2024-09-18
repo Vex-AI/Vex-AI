@@ -31,9 +31,10 @@ interface Style {
   borderBottomLeftRadius: number;
   borderColor: string;
   borderWidth: number;
-  backgroundColor: string;
+  "--background": string;
   color: string;
   rippleColor: string;
+  padding: string
 }
 
 const defaultStyle: Style = {
@@ -43,9 +44,10 @@ const defaultStyle: Style = {
   borderBottomLeftRadius: 10,
   borderColor: "#fff",
   borderWidth: 2,
-  backgroundColor: "rgba(220, 17, 47, 0.9)",
+  "--background": "rgba(220, 17, 47, 0.9)",
   color: "#fff",
   rippleColor: "#000",
+  padding: '10px',
 };
 
 const Customize: React.FC = () => {
@@ -174,8 +176,8 @@ const Customize: React.FC = () => {
           </IonCardHeader>
           <IonCardContent>
             <ChromePicker
-              color={style.backgroundColor}
-              onChange={(color) => updateStyle({ backgroundColor: color.hex })}
+              color={style["--background"]}
+              onChange={(color) => updateStyle({ "--background": color.hex })}
             />
           </IonCardContent>
         </IonCard>

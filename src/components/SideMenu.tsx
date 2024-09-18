@@ -17,6 +17,7 @@ import {
   language,
   trash,
   libraryOutline,
+  codeDownloadOutline
 } from "ionicons/icons";
 
 import { db } from "../classes/vexDB";
@@ -71,6 +72,10 @@ const SideMenu: React.FC = () => {
           <IonItem href="#" onClick={() => navigate("/synons")}>
             <IonIcon color="light" slot="start" icon={libraryOutline} />
             {t("vexLearning")}
+          </IonItem>
+          <IonItem href="#" onClick={() => navigate("/loader")}>
+            <IonIcon color="light" slot="start" icon={codeDownloadOutline} />
+            {t("downloadModel")}
           </IonItem>
           <BayesToggle></BayesToggle>
         </IonList>

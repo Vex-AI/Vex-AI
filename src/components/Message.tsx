@@ -9,7 +9,7 @@ interface Style {
   borderBottomLeftRadius: number;
   borderColor: string;
   borderWidth: number;
-  backgroundColor: string;
+  "--background": string;
   textColor: string;
   rippleColor: string;
 }
@@ -18,7 +18,7 @@ interface MessageProps {
   content: string;
   isVex: boolean;
   hour: string;
-  date: number
+  date: number;
 }
 
 const Message: React.FC<MessageProps> = ({ content, isVex, hour }) => {
@@ -34,7 +34,7 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour }) => {
       } else if (!isVex && userStyle) {
         return JSON.parse(userStyle);
       }
-      return null; 
+      return null;
     };
 
     setStyle(loadStyles());
@@ -48,7 +48,7 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour }) => {
         borderBottomRightRadius: `${style.borderBottomRightRadius}px`,
         borderWidth: `${style.borderWidth}px`,
         borderColor: style.borderColor,
-        backgroundColor: style.backgroundColor,
+        "--background": style["--background"],
         color: style.textColor,
         borderStyle: "solid",
         transition: "all 0.3s ease",
@@ -64,6 +64,8 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour }) => {
       transition={{ duration: 0.3 }}
     >
       <IonItem
+        button
+      
         className={`message ${isVex ? "message-vex" : "message-other"}`}
         lines="none"
         style={messageStyle}

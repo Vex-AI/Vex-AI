@@ -57,11 +57,15 @@
   "trainModelBefore": "Me treine primeiro, na aba \"funções\"!",
   "useBayes": "Usar algoritimo de Bayes",
   "next": "Próximo",
-  "deleteAllSynonsClick": "Me clica de novo",
+  "deleteAllSynons": "Deletar todo os sinônimos",
+  "deleteAllSynonsClick": "Me clique de novo",
+  "deleteALlSynonsSucess": "Todos os sinônimos deletados com sucesso",
+  "deleteAllSynonsFail": "Erro ao deletar todos os sinônimos",
   "importing": "Importando...",
   "exporting": "Exportando...",
   "vexLearning": "Aprendizado da Vex",
   "typeThing": "Escreva alguma coisa",
-  "learnWarningTitle":"Treinei a Vex, mas ela não responde direito",
-  "learnWarning": "Caso a Vex não tenha aprendido muita coisa, pode ser necessário desativar o algotimo de bayes(no menu lateral) ou ensiná-la mais coisas em: "
+  "learnWarningTitle": "Treinei a Vex, mas ela não responde direito",
+  "learnWarning": "Caso a Vex não tenha aprendido muita coisa, pode ser necessário desativar o algotimo de bayes(no menu lateral) ou ensiná-la mais coisas em: ",
+  "downloadModel": "Baixar modelos"
 }

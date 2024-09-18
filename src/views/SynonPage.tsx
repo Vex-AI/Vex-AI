@@ -16,17 +16,14 @@ import {
   IonToolbar,
   useIonRouter,
   IonAlert,
+  IonItem,
 } from "@ionic/react";
-import { arrowBack, addCircleOutline, trash } from "ionicons/icons";
+import { arrowBack, addCircleOutline, trash, school } from "ionicons/icons";
 import ReplyModal from "../components/ReplyModal";
 import WordModal from "../components/WordModal";
 import { useLiveQuery } from "dexie-react-hooks";
 
 const SynonPage: React.FC = () => {
-  const router = useIonRouter();
-  const navigate = (path: string) => {
-    router.push(path, "root", "replace");
-  };
   const { t } = useTranslation();
   const [word, setWord] = useState<string>("");
   const [reply, setReply] = useState<string>("");
@@ -43,7 +40,10 @@ const SynonPage: React.FC = () => {
   } | null>({ message: "", duration: 2000 });
 
   const synons = useLiveQuery<ISynon[]>(() => db.synons.toArray(), []);
-
+  const router = useIonRouter();
+  const navigate = (path: string) => {
+    router.push(path, "root", "replace");
+  };
   const handleAddSynon = useCallback(async () => {
     if (!word) return setShowToast({ message: t("write_word") });
     if (!reply) return setShowToast({ message: t("write_reply") });
@@ -163,7 +163,6 @@ const SynonPage: React.FC = () => {
           value={word}
           onIonChange={(e: any) => setWord(e.detail.value)}
         />
-
         <IonInput
           labelPlacement="floating"
           label={t("write_reply")}
@@ -173,7 +172,6 @@ const SynonPage: React.FC = () => {
           value={reply}
           onIonChange={(e: any) => setReply(e.detail.value)}
         />
-
         <IonButton
           className="ion-padding"
           onClick={handleAddSynon}
@@ -185,6 +183,16 @@ const SynonPage: React.FC = () => {
           {t("add")}
         </IonButton>
         <IonButton
+         className="ion-padding"
+          shape="round"
+          color="primary"
+          expand="full"
+          onClick={() => navigate("/functions")}
+        >
+          <IonIcon color="light" slot="start" icon={school} />
+          {t("functions")}
+        </IonButton>
+        <IonButton
           className="ion-padding"
           shape="round"
           color="danger"
@@ -193,7 +201,7 @@ const SynonPage: React.FC = () => {
         >
           <IonIcon icon={trash} />
           {t("deleteAllSynons")}
-        </IonButton>
+        </IonButton>{" "}
         <IonList>
           {synons?.map((syn, index) => (
             <Synon
@@ -212,7 +220,6 @@ const SynonPage: React.FC = () => {
             />
           ))}
         </IonList>
-
         <WordModal
           wordModal={wordModal}
           setWordModal={setWordModal}
@@ -233,7 +240,6 @@ const SynonPage: React.FC = () => {
           synonID={synonID}
           synons={synons ?? []}
         />
-
         {showToast && (
           <IonToast
             isOpen={!!showToast}
@@ -242,7 +248,6 @@ const SynonPage: React.FC = () => {
             onDidDismiss={() => setShowToast(null)}
           />
         )}
-
         <IonAlert
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}

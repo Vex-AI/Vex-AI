@@ -3,11 +3,13 @@
   --color: white;
   border-radius: 15px;
   margin: 10px;
-
-  display: flex;
   flex-direction: column;
-  min-width: 50px; /* Largura mínima */
-  white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+  max-width: fit-content;
+  display: flex;
+  min-width: 40%;
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: center;
 }
 
 .message p {
@@ -16,8 +18,6 @@
 .message-other {
   margin-left: auto;
   align-self: flex-start;
-
-  width: fit-content;
   border-top-right-radius: 0;
   --background: rgba(66, 43, 177, 0.9);
 }
@@ -25,10 +25,7 @@
 .message-vex {
   --background: rgba(220, 17, 47, 0.9);
   align-self: flex-start;
-  width: fit-content;
   margin-right: 10px;
-  max-width: 80%;
-
   border-top-left-radius: 0;
 }
 
