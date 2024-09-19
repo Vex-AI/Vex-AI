@@ -35,10 +35,10 @@ const SideMenu: React.FC = () => {
   };
 
   return (
-    <IonMenu menuId="sideMenu" side="start" contentId="main-content">
+    <IonMenu  menuId="sideMenu" side="start" contentId="main-content">
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Menu</IonTitle>
+        <IonToolbar >
+          <IonTitle >Menu</IonTitle>
         </IonToolbar>
       </IonHeader>
 

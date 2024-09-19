@@ -75,6 +75,7 @@ const ReplyModal: React.FC<ReplyModalProps> = ({
 
       <IonContent className="ion-padding">
         <IonInput
+          clearInput={true}
           labelPlacement="floating"
           label={t("write_reply")}
           placeholder={t("write_new_reply")}

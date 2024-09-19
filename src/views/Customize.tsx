@@ -33,8 +33,8 @@ interface Style {
   borderWidth: number;
   "--background": string;
   color: string;
-  rippleColor: string;
-  padding: string
+  "--ripple-color": string;
+  padding: string;
 }
 
 const defaultStyle: Style = {
@@ -46,8 +46,8 @@ const defaultStyle: Style = {
   borderWidth: 2,
   "--background": "rgba(220, 17, 47, 0.9)",
   color: "#fff",
-  rippleColor: "#000",
-  padding: '10px',
+  "--ripple-color": "#000",
+  padding: "10px",
 };
 
 const Customize: React.FC = () => {
@@ -111,9 +111,20 @@ const Customize: React.FC = () => {
         }}
         text={key === "vexStyle" ? t("vex_message") : t("user_message")}
       />
-      <IonContent className="ion-padding">
-        <IonList>
+      <IonContent
+       
+        className="ion-padding"
+      >
+        <IonList  style={{
+         
+          textAlign:"center"
+        }}>
           <IonCheckbox
+            style={{
+              transition:"all 1s ease",
+              border:"1px solid white",
+              margin: "auto",
+            }}
             labelPlacement="start"
             className="ion-padding"
             color="light"
@@ -151,7 +162,11 @@ const Customize: React.FC = () => {
               max: 10,
             },
           ].map(({ label, value, key, max = 30 }) => (
-            <IonCard key={key} className="ion-padding">
+            <IonCard
+              style={{ border: "1px solid white" }}
+              key={key}
+              className="ion-padding"
+            >
               <IonCardHeader>
                 <IonCardTitle color="light">{label}</IonCardTitle>
               </IonCardHeader>
@@ -159,6 +174,9 @@ const Customize: React.FC = () => {
               <IonCardContent>
                 <IonRange
                   min={0}
+                  pin={true}
+                  ticks={true}
+                  snaps={true}
                   max={max}
                   value={value}
                   onIonChange={(e: CustomEvent) =>
@@ -170,7 +188,14 @@ const Customize: React.FC = () => {
           ))}
         </IonList>
 
-        <IonCard color="medium">
+        <IonCard
+          style={{
+            width: "fit-content",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+          color="medium"
+        >
           <IonCardHeader>
             <IonCardTitle color="light">{t("backgroundColor")}</IonCardTitle>
           </IonCardHeader>
@@ -182,19 +207,33 @@ const Customize: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonCard color="medium">
+        <IonCard
+          style={{
+            width: "fit-content",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+          color="medium"
+        >
           <IonCardHeader>
             <IonCardTitle color="light">{t("ripple_color")}</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <ChromePicker
-              color={style.rippleColor}
-              onChange={(color) => updateStyle({ rippleColor: color.hex })}
+              color={style["--ripple-color"]}
+              onChange={(color) => updateStyle({ "--ripple-color": color.hex })}
             />
           </IonCardContent>
         </IonCard>
 
-        <IonCard color="medium">
+        <IonCard
+          style={{
+            width: "fit-content",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+          color="medium"
+        >
           <IonCardHeader>
             <IonCardTitle color="light">{t("text_color")}</IonCardTitle>
           </IonCardHeader>

@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { IonToggle, IonItem, IonLabel } from "@ionic/react";
+import { IonToggle, IonItem } from "@ionic/react";
 import { useTranslation } from "react-i18next";
 
 const BayesToggle: React.FC = () => {
   const [isBayesEnabled, setIsBayesEnabled] = useState<boolean>(false);
   const { t } = useTranslation();
   useEffect(() => {
-    const storedPreference = localStorage.getItem("bayesEnabled") === null
-      ? true
-      : localStorage.getItem("bayesEnabled") ==="true"
-     
-     
+    const storedPreference =
+      localStorage.getItem("bayesEnabled") === null
+        ? true
+        : localStorage.getItem("bayesEnabled") === "true";
+
     if (storedPreference) {
       setIsBayesEnabled(storedPreference);
     }
@@ -24,8 +24,15 @@ const BayesToggle: React.FC = () => {
 
   return (
     <IonItem>
-      <IonLabel>{t("useBayes")}</IonLabel>
-      <IonToggle checked={isBayesEnabled} onIonChange={handleToggleChange} />
+      <IonToggle
+        className="ion-text-center"
+        aria-label="Bayes toggle"
+        color="warning"
+        checked={isBayesEnabled}
+        onIonChange={handleToggleChange}
+      >
+        {t("useBayes")}
+      </IonToggle>
     </IonItem>
   );
 };

@@ -1,6 +1,15 @@
-import { IonItem, IonLabel } from "@ionic/react";
+import {
+  IonIcon,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+} from "@ionic/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { trash } from "ionicons/icons";
+import { useTranslation } from "react-i18next";
 
 interface Style {
   borderTopRightRadius: number;
@@ -19,11 +28,12 @@ interface MessageProps {
   isVex: boolean;
   hour: string;
   date: number;
+  onClose: () => void;
 }
 
-const Message: React.FC<MessageProps> = ({ content, isVex, hour }) => {
+const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
   const [style, setStyle] = useState<Style | null>(null);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const loadStyles = () => {
       const userStyle = localStorage.getItem("userStyle");
@@ -63,18 +73,31 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <IonItem
-        button
-      
-        className={`message ${isVex ? "message-vex" : "message-other"}`}
-        lines="none"
-        style={messageStyle}
-      >
-        <IonLabel style={labelStyle}>
-          <p>{content}</p>
-          <small>{hour}</small>
-        </IonLabel>
-      </IonItem>
+      <IonItemSliding>
+        <IonItemOptions side={isVex ? "start" : "end"}>
+          <IonItemOption
+            onClick={async () => {
+              onClose();
+            }}
+            expandable
+            color="danger"
+          >
+            <IonIcon slot="icon-only" icon={trash}></IonIcon>{" "}
+            {t("deleteMessage")}
+          </IonItemOption>
+        </IonItemOptions>
+        <IonItem
+          button
+          className={`message ${isVex ? "message-vex" : "message-other"}`}
+          lines="none"
+          style={messageStyle}
+        >
+          <IonLabel style={labelStyle}>
+            <p>{content}</p>
+            <small>{hour}</small>
+          </IonLabel>
+        </IonItem>
+      </IonItemSliding>
     </motion.div>
   );
 };

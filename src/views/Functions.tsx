@@ -247,6 +247,7 @@ const Functions: React.FC = () => {
         )}
 
         <IonInput
+          clearInput={true}
           value={content}
           onIonChange={(e: any) => setContent(e.detail.value as string)}
           placeholder={t("placeholderText")}

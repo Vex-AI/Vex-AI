@@ -8,6 +8,7 @@ interface PreviewProps {
 const Preview: React.FC<PreviewProps> = ({ style, text }) => {
   return (
     <IonCard
+      button
       style={{
         ...style,
         padding: "1rem",
@@ -18,7 +19,7 @@ const Preview: React.FC<PreviewProps> = ({ style, text }) => {
       }}
     >
       <IonCardContent>
-        <IonText color="light" style={{color:style.color}}>
+        <IonText color="light" style={{ color: style.color }}>
           <h2>{text}</h2>
         </IonText>
       </IonCardContent>

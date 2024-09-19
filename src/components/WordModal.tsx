@@ -81,6 +81,7 @@ const WordModal: React.FC<WordModalProps> = ({
       </IonHeader>
       <IonContent className="ion-padding">
         <IonInput
+          clearInput={true}
           className="input"
           placeholder={t("write_new_word")}
           label={t("write_new_word")}

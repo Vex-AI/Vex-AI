@@ -67,5 +67,6 @@
   "typeThing": "Escreva alguma coisa",
   "learnWarningTitle": "Treinei a Vex, mas ela não responde direito",
   "learnWarning": "Caso a Vex não tenha aprendido muita coisa, pode ser necessário desativar o algotimo de bayes(no menu lateral) ou ensiná-la mais coisas em: ",
-  "downloadModel": "Baixar modelos"
+  "downloadModel": "Baixar modelos",
+   "deleteMessage":"apagar"
 }

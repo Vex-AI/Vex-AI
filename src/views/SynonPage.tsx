@@ -154,6 +154,7 @@ const SynonPage: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding">
         <IonInput
+          clearInput={true}
           style={{ marginBottom: "1rem" }}
           labelPlacement="floating"
           label={t("write_word")}
@@ -164,6 +165,7 @@ const SynonPage: React.FC = () => {
           onIonChange={(e: any) => setWord(e.detail.value)}
         />
         <IonInput
+          clearInput={true}
           labelPlacement="floating"
           label={t("write_reply")}
           placeholder={t("write_new_reply")}

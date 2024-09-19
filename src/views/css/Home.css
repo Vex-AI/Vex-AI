@@ -36,7 +36,7 @@
   justify-content: flex-start;
   align-items: center;
 }
-.chat-contact img {
+.chat-contact ion-img {
   height: 3rem;
   width: 3rem;
   border-radius: 500px;
@@ -66,4 +66,45 @@
 ion-toolbar.toolbar {
   margin-bottom: 10px;
   padding: 10px;
+}
+
+ion-toggle::part(track) {
+  height: 6px;
+  width: 40px;
+
+  /* Required for iOS handle to overflow the height of the track */
+  overflow: visible;
+}
+
+ion-toggle {
+  --handle-background: #ff1900;
+  --handle-background-checked: #95c34e;
+  --track-background: #b34545;
+
+  --handle-width: 15px;
+  --handle-height: 15px;
+  --handle-max-height: auto;
+  --handle-spacing: 6px;
+
+  --handle-border-radius: 4px;
+  --handle-box-shadow: none;
+}
+ion-range {
+  --bar-background: #f5f5f5;
+  --bar-background-active: #ff5e00;
+  --bar-border-radius: 8px;
+  --knob-background: #ff7504;
+  --knob-size: 40px;
+  --pin-background: #ff005d;
+  --pin-color: #ffffff;
+}
+
+ion-checkbox {
+  --color: white;
+  border: 1px solid white;
+}
+
+ion-checkbox::part(container) {
+  border-radius: 6px;
+  border: 1px solid white;
 }

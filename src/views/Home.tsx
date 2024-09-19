@@ -13,6 +13,9 @@ import {
   IonText,
   IonMenuButton,
   useIonRouter,
+  IonThumbnail,
+  IonSkeletonText,
+  IonImg,
 } from "@ionic/react";
 import { menuController } from "@ionic/core/components";
 import { send } from "ionicons/icons";
@@ -145,6 +148,16 @@ const Home: React.FC = () => {
     contentRef.current?.scrollToBottom(500);
   }
 
+  // Função para deletar uma mensagem pelo ID
+  const deleteMessage = async (id: number) => {
+    try {
+      await db.messages.delete(id);
+
+      console.log(`Message with id ${id} deleted successfully`);
+    } catch (error) {
+      console.error("Failed to delete message:", error);
+    }
+  };
   useEffect(() => {
     if (localStorage.getItem("language") === null) {
       router.push("/language", "root", "replace");
@@ -161,10 +174,16 @@ const Home: React.FC = () => {
             </IonButtons>
             <IonTitle>
               <div className="chat-contact">
-                <img
-                  src={vexInfo ? vexInfo[0]?.profileImage : "/Vex_320.png"}
-                  alt="avatar"
-                />
+                {!vexInfo ? (
+                  <IonThumbnail slot="start">
+                    <IonSkeletonText animated={true}></IonSkeletonText>
+                  </IonThumbnail>
+                ) : (
+                  <IonThumbnail slot="start">
+                    <IonImg src={vexInfo[0]?.profileImage ?? "/Vex_320.png"} />
+                  </IonThumbnail>
+                )}
+
                 <div className="chat-contact-details">
                   <p>{vexInfo ? vexInfo[0]?.name : "Vex"}</p>
                   <IonText color="medium">{status}</IonText>
@@ -187,6 +206,9 @@ const Home: React.FC = () => {
                   {showSeparator && <DateSeparator date={msg.date} />}
 
                   <Message
+                    onClose={() => {
+                      if (msg.id) deleteMessage(msg.id);
+                    }}
                     content={msg.content}
                     isVex={msg.isVex}
                     hour={utils.formatHour(msg.hour)}

@@ -5,6 +5,7 @@ export interface IMessage {
   isVex: boolean;
   hour: string;
   date: number;
+  id?: number
 }
 export interface IVexInfo {
   name: string;
