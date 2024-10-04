@@ -75,7 +75,7 @@ const VexProfile: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/home" color="light" />
           </IonButtons>
-          <IonTitle>Vex Profile</IonTitle>
+          <IonTitle>{t("vex_profile")}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -109,7 +109,7 @@ const VexProfile: React.FC = () => {
         </IonItem>
 
         <IonItem lines="none" style={{ justifyContent: "center" }}>
-          <IonLabel>Reset Profile</IonLabel>
+          <IonLabel>{t("reset_profile")}</IonLabel>
           <IonButton color="light" fill="clear" onClick={handleResetProfile}>
             <IonIcon icon={trashOutline} size="small" />
           </IonButton>
@@ -144,26 +144,35 @@ const VexProfile: React.FC = () => {
         <IonModal isOpen={isEditNameModalOpen}>
           <IonHeader>
             <IonToolbar>
-              <IonTitle>Edit Name</IonTitle>
+              <IonTitle>{t("editName")}</IonTitle>
               <IonButtons slot="end">
                 <IonButton onClick={() => setIsEditNameModalOpen(false)}>
-                  Close
+                  {t("close")}
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
           <IonContent>
             <IonItem>
-              <IonLabel position="floating">Novo nome</IonLabel>
               <IonInput
                 value={newName}
                 onIonChange={(e: any) => setNewName(e.detail.value!)}
                 maxlength={12}
+                label={t("typeThing")}
+                labelPlacement="floating"
+                fill="outline"
+                shape="round"
                 placeholder="Digite um novo nome"
               />
             </IonItem>
-            <IonButton expand="block" onClick={handleSaveName}>
-              Save
+            <IonButton
+              color={"tertiary"}
+              className="ion-padding"
+              shape="round"
+              expand="full"
+              onClick={handleSaveName}
+            >
+              {t("save")}
             </IonButton>
           </IonContent>
         </IonModal>
@@ -171,16 +180,26 @@ const VexProfile: React.FC = () => {
         <IonModal isOpen={isEditImageModalOpen}>
           <IonHeader>
             <IonToolbar>
-              <IonTitle>Edit Image</IonTitle>
+              <IonTitle>{t("edit_image")}</IonTitle>
               <IonButtons slot="end">
                 <IonButton onClick={() => setIsEditImageModalOpen(false)}>
-                  Close
+                  {t("close")}
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
           <IonContent>
-            <input type="file" accept="image/*" onChange={handleSelectImage} />
+            <input
+              style={{
+                textAlign: "center",
+                margin: "auto",
+                width: "auto",
+              }}
+              className="ion-padding ion-text-align"
+              type="file"
+              accept="image/*"
+              onChange={handleSelectImage}
+            />
           </IonContent>
         </IonModal>
       </IonContent>

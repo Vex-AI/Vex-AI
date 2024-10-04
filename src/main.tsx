@@ -25,18 +25,23 @@ import {
 import Home from "./views/Home";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import vexProfile from "./views/vexProfile";
+
 import SynonPage from "./views/SynonPage";
 import Functions from "./views/Functions";
 import LanguageSelector from "./components/LanguageSelector";
 import Customize from "./views/Customize";
 import VexModelsLoader from "./views/VexModelsLoader";
 import { App } from "@capacitor/app";
+import VexProfile from "./views/VexProfile";
+import { initializeAdmob, showInterstitial } from "./classes/admob";
 
 setupIonicReact({
   mode: "md",
 });
 const Main = () => {
+  initializeAdmob()
+  showInterstitial()
+ 
   const ionRouter = useIonRouter();
   document.addEventListener("ionBackButton", (ev: any) => {
     ev.detail.register(-1, () => {
@@ -50,7 +55,7 @@ const Main = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route path="/home" component={Home} />
-          <Route path="/profile" component={vexProfile} />
+          <Route path="/profile" component={VexProfile} />
           <Route path="/synons" component={SynonPage} />
           <Route path="/functions" component={Functions} />
           <Route path="/language" component={LanguageSelector} />

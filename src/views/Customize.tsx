@@ -96,7 +96,7 @@ const Customize: React.FC = () => {
               <IonIcon icon={chevronBack} />
             </IonButton>
           </IonButtons>
-          <IonTitle>{t("customize")}</IonTitle>
+          <IonTitle>{t("customization")}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <Preview

@@ -14,6 +14,11 @@ import {
   IonModal,
   IonProgressBar,
   useIonAlert,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
 } from "@ionic/react";
 import { useTranslation } from "react-i18next";
 import { db, ISynon } from "../classes/vexDB";
@@ -87,8 +92,6 @@ const Functions: React.FC = () => {
     modal.current?.dismiss();
   }
 
-  const CHUNK_SIZE = 64 * 1024; // Tamanho do chunk em bytes (64 KB por exemplo)
-
   const getSynonsFromFile = useCallback(() => {
     const input: HTMLInputElement = document.createElement("input");
     input.type = "file";
@@ -105,17 +108,15 @@ const Functions: React.FC = () => {
       setProgress(0);
       dismiss();
 
-      let offset = 0;
-      const totalSize = file.size;
-
       const reader = new FileReader();
 
+      reader.readAsText(file, "utf-8");
+      // input.click();
       reader.onload = async (e: ProgressEvent<FileReader>) => {
         const chunk = e.target?.result as string | null;
 
         if (chunk) {
           try {
-            // Processa o conteúdo do chunk
             const jsonData: ISynon[] = JSON.parse(chunk);
 
             if (!Array.isArray(jsonData)) {
@@ -128,20 +129,7 @@ const Functions: React.FC = () => {
               return;
             }
 
-            // Processa os sinônimos do chunk
             await processChunk(jsonData);
-
-            // Atualiza a barra de progresso
-            offset += CHUNK_SIZE;
-            setProgress((offset / totalSize) * 100);
-
-            // Se ainda houver mais chunks para ler
-            if (offset < totalSize) {
-              readNextChunk();
-            } else {
-              setShowToast({ message: t("synonsAdded"), duration: 2000 });
-              setShowProgress(false);
-            }
           } catch (error) {
             console.log("Error processing file:", error);
             setShowProgress(false);
@@ -152,25 +140,22 @@ const Functions: React.FC = () => {
           }
         }
       };
-
-      const readNextChunk = () => {
-        const chunk = file.slice(offset, offset + CHUNK_SIZE);
-        reader.readAsText(chunk);
-      };
-
-      readNextChunk();
     });
 
     input.click();
   }, [t]);
 
   const processChunk = async (jsonData: ISynon[]) => {
-    // Processa cada sinônimo do chunk
+    let index = 0;
+    console.log("adiçao iniciada");
     for (const synon of jsonData) {
       const existing = await db.synons.where("word").equals(synon.word).first();
-
+      setProgress(Math.floor(index / 100));
       if (!existing) {
         await db.synons.add(synon);
+        console.log("sinonimo foi gravado");
+      } else {
+        console.log("sinonimo ja existe");
       }
       // Adiciona um pequeno atraso para atualizar a UI
       await new Promise((resolve) => setTimeout(resolve, 10));
@@ -259,6 +244,7 @@ const Functions: React.FC = () => {
 
         <IonButton
           expand="full"
+          className="ion-padding"
           onClick={async () => {
             if (!content) {
               setShowToast({ message: t("fillField"), duration: 2000 });
@@ -287,6 +273,7 @@ const Functions: React.FC = () => {
         </IonButton>
 
         <IonButton
+          className="ion-padding"
           expand="full"
           onClick={trainModel}
           color="secondary"
@@ -298,6 +285,7 @@ const Functions: React.FC = () => {
         </IonButton>
 
         <IonButton
+          className="ion-padding"
           expand="full"
           onClick={getSynonsFromFile}
           color="tertiary"
@@ -308,6 +296,7 @@ const Functions: React.FC = () => {
         </IonButton>
 
         <IonButton
+          className="ion-padding"
           expand="full"
           onClick={saveSynonsToFile}
           color="success"
@@ -316,6 +305,14 @@ const Functions: React.FC = () => {
           <IonIcon icon={saveOutline} slot="start" />
           {t("exportData")}
         </IonButton>
+
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle color={"light"}>{t("warning")}</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent color={"light"}>{t("vexAlgorithm")}</IonCardContent>
+        </IonCard>
+
         <IonModal
           ref={modal}
           style={{

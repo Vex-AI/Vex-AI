@@ -184,16 +184,7 @@ const SynonPage: React.FC = () => {
           <IonIcon icon={addCircleOutline} />
           {t("add")}
         </IonButton>
-        <IonButton
-         className="ion-padding"
-          shape="round"
-          color="primary"
-          expand="full"
-          onClick={() => navigate("/functions")}
-        >
-          <IonIcon color="light" slot="start" icon={school} />
-          {t("functions")}
-        </IonButton>
+      
         <IonButton
           className="ion-padding"
           shape="round"

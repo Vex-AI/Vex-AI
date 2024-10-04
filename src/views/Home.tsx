@@ -185,7 +185,7 @@ const Home: React.FC = () => {
                 )}
 
                 <div className="chat-contact-details">
-                  <p>{vexInfo ? vexInfo[0]?.name : "Vex"}</p>
+                  <p> {vexInfo ? vexInfo[0]?.name : "Vex"}</p>
                   <IonText color="medium">{status}</IonText>
                 </div>
               </div>
@@ -227,8 +227,8 @@ const Home: React.FC = () => {
             onIonInput={(event: React.ChangeEvent<HTMLInputElement>) => {
               setText(event.target.value);
             }}
-            placeholder="Type a message..."
-            label="Type a message..."
+            placeholder={t("write_message")}
+            label={t("write_message")}
             labelPlacement="floating"
             fill="outline"
             shape="round"

@@ -56,10 +56,6 @@ const SideMenu: React.FC = () => {
             <IonIcon color="light" slot="start" icon={person} />
             {t("vexProfile")}
           </IonItem>
-          <IonItem href="#" onClick={() => navigate("/functions")}>
-            <IonIcon color="light" slot="start" icon={school} />
-            {t("functions")}
-          </IonItem>
           <IonItem href="#" onClick={() => navigate("/home")}>
             <IonIcon color="light" slot="start" icon={home} />
             {t("home")}
@@ -73,11 +69,12 @@ const SideMenu: React.FC = () => {
             <IonIcon color="light" slot="start" icon={libraryOutline} />
             {t("vexLearning")}
           </IonItem>
-          <IonItem href="#" onClick={() => navigate("/loader")}>
-            <IonIcon color="light" slot="start" icon={codeDownloadOutline} />
-            {t("downloadModel")}
+          <IonItem href="#" onClick={() => navigate("/functions")}>
+            <IonIcon color="light" slot="start" icon={school} />
+            {t("functions")}
           </IonItem>
-          <BayesToggle></BayesToggle>
+          
+          <BayesToggle/>
         </IonList>
       </IonContent>
     </IonMenu>
