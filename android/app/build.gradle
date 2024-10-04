@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
-def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
-def appVersion = packageJson.version
+//def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
+//def appVersion = packageJson.version
 
 android {
     namespace "com.cookieukw.vex"

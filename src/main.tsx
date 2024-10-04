@@ -32,8 +32,8 @@ import LanguageSelector from "./components/LanguageSelector";
 import Customize from "./views/Customize";
 import VexModelsLoader from "./views/VexModelsLoader";
 import { App } from "@capacitor/app";
-import VexProfile from "./views/VexProfile";
 import { initializeAdmob, showInterstitial } from "./classes/admob";
+import EditProfile from "./views/EditProfile";
 
 setupIonicReact({
   mode: "md",
@@ -55,7 +55,7 @@ const Main = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route path="/home" component={Home} />
-          <Route path="/profile" component={VexProfile} />
+          <Route path="/profile" component={EditProfile} />
           <Route path="/synons" component={SynonPage} />
           <Route path="/functions" component={Functions} />
           <Route path="/language" component={LanguageSelector} />

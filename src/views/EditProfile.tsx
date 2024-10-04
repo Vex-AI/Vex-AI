@@ -29,7 +29,7 @@ import StarsBG from "../components/StarsBG";
 import { useTranslation } from "react-i18next";
 import Footer from "../components/Footer";
 
-const VexProfile: React.FC = () => {
+const EditProfile: React.FC = () => {
   const [isEditNameModalOpen, setIsEditNameModalOpen] = useState(false);
   const [isEditImageModalOpen, setIsEditImageModalOpen] = useState(false);
   const [newName, setNewName] = useState<string>("");
@@ -209,4 +209,4 @@ const VexProfile: React.FC = () => {
   );
 };
 
-export default VexProfile;
+export default EditProfile;
