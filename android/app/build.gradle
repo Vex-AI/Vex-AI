@@ -19,7 +19,7 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-     signingConfigs {
+      signingConfigs {
         release {
             storeFile file(System.getenv("ANDROID_KEYSTORE_PATH"))
             storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
@@ -27,6 +27,7 @@ android {
             keyPassword System.getenv("ANDROID_KEY_PASSWORD")
         }
     }
+        
     buildTypes {
         release {
             minifyEnabled false
