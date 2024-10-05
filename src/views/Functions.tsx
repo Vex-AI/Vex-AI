@@ -92,7 +92,7 @@ const Functions: React.FC = () => {
     modal.current?.dismiss();
   }
 
-  const getSynonsFromFile = useCallback(() => {
+  const importSynonsFile = useCallback(() => {
     const input: HTMLInputElement = document.createElement("input");
     input.type = "file";
     input.accept = ".vex";
@@ -130,6 +130,7 @@ const Functions: React.FC = () => {
             }
 
             await processChunk(jsonData);
+            setShowProgress(false);
           } catch (error) {
             console.log("Error processing file:", error);
             setShowProgress(false);
@@ -147,21 +148,33 @@ const Functions: React.FC = () => {
 
   const processChunk = async (jsonData: ISynon[]) => {
     let index = 0;
-    console.log("adiçao iniciada");
+    console.log("Início da adição de sinônimos...");
+  
     for (const synon of jsonData) {
-      const existing = await db.synons.where("word").equals(synon.word).first();
-      setProgress(Math.floor(index / 100));
+      // Verifica se qualquer palavra do array 'word' já existe no banco de dados
+      const existing = await db.synons
+        .where('word')
+        .anyOf(synon.word) // Checa se qualquer palavra no array já está no banco
+        .first(); // Pega o primeiro resultado encontrado
+  
+      setProgress(Math.floor((index / jsonData.length) * 100));
+      
       if (!existing) {
+        // Adiciona o sinônimo apenas se não existir
         await db.synons.add(synon);
-        console.log("sinonimo foi gravado");
+        //console.log("Sinônimo foi gravado:", synon.word);
       } else {
-        console.log("sinonimo ja existe");
+       // console.log("Sinônimo já existe:", synon.word);
       }
-      // Adiciona um pequeno atraso para atualizar a UI
+  
+      // Adiciona um pequeno atraso para atualizar a UI e não travar a aplicação
       await new Promise((resolve) => setTimeout(resolve, 10));
+      index++;
     }
+  
+    console.log("Processo de adição finalizado.");
   };
-
+  
   const saveSynonsToFile = useCallback(async () => {
     setOperation(t("exporting"));
     setShowProgress(true);
@@ -287,7 +300,7 @@ const Functions: React.FC = () => {
         <IonButton
           className="ion-padding"
           expand="full"
-          onClick={getSynonsFromFile}
+          onClick={importSynonsFile}
           color="tertiary"
           shape="round"
         >
