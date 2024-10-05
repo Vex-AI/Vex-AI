@@ -102,19 +102,19 @@ const Functions: React.FC = () => {
         ?.files?.[0];
 
       if (!file) return;
-
       setOperation(t("importing"));
       setShowProgress(true);
       setProgress(0);
       dismiss();
+      console.log("Início da leitura do arquivo");
 
       const reader = new FileReader();
 
       reader.readAsText(file, "utf-8");
       // input.click();
       reader.onload = async (e: ProgressEvent<FileReader>) => {
+        console.log("Início do processamento da leitura...");
         const chunk = e.target?.result as string | null;
-
         if (chunk) {
           try {
             const jsonData: ISynon[] = JSON.parse(chunk);
@@ -149,32 +149,31 @@ const Functions: React.FC = () => {
   const processChunk = async (jsonData: ISynon[]) => {
     let index = 0;
     console.log("Início da adição de sinônimos...");
-  
+
     for (const synon of jsonData) {
-      // Verifica se qualquer palavra do array 'word' já existe no banco de dados
       const existing = await db.synons
-        .where('word')
+        .where("word")
         .anyOf(synon.word) // Checa se qualquer palavra no array já está no banco
-        .first(); // Pega o primeiro resultado encontrado
-  
+        .first();
+
       setProgress(Math.floor((index / jsonData.length) * 100));
-      
+      const { id, ...synonWithoutId } = synon;
+
       if (!existing) {
-        // Adiciona o sinônimo apenas se não existir
-        await db.synons.add(synon);
+        await db.synons.add(synonWithoutId);
         //console.log("Sinônimo foi gravado:", synon.word);
       } else {
-       // console.log("Sinônimo já existe:", synon.word);
+        // console.log("Sinônimo já existe:", synon.word);
       }
-  
+
       // Adiciona um pequeno atraso para atualizar a UI e não travar a aplicação
       await new Promise((resolve) => setTimeout(resolve, 10));
       index++;
     }
-  
+
     console.log("Processo de adição finalizado.");
   };
-  
+
   const saveSynonsToFile = useCallback(async () => {
     setOperation(t("exporting"));
     setShowProgress(true);
@@ -327,6 +326,7 @@ const Functions: React.FC = () => {
         </IonCard>
 
         <IonModal
+          canDismiss={async (data?: any, role?: string) => role !== "gesture"}
           ref={modal}
           style={{
             "--width": "fit-content",
