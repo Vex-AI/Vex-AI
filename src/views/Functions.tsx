@@ -17,7 +17,6 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardSubtitle,
   IonCardContent,
 } from "@ionic/react";
 import { useTranslation } from "react-i18next";
@@ -34,6 +33,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import BayesClassifier from "bayes";
 import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
 import { Capacitor } from "@capacitor/core";
+import { v4 } from "uuid";
 
 const Functions: React.FC = () => {
   const [content, setContent] = useState<string>("");
@@ -151,19 +151,19 @@ const Functions: React.FC = () => {
     console.log("Início da adição de sinônimos...");
 
     for (const synon of jsonData) {
+      synon.id = v4();
       const existing = await db.synons
         .where("word")
         .anyOf(synon.word) // Checa se qualquer palavra no array já está no banco
         .first();
 
       setProgress(Math.floor((index / jsonData.length) * 100));
-      const { id, ...synonWithoutId } = synon;
 
       if (!existing) {
-        await db.synons.add(synonWithoutId);
-        //console.log("Sinônimo foi gravado:", synon.word);
+        await db.synons.add(synon);
+        //console.log("Sinônimo foi gravado:");
       } else {
-        // console.log("Sinônimo já existe:", synon.word);
+       // console.log("Sinônimo já existe:");
       }
 
       // Adiciona um pequeno atraso para atualizar a UI e não travar a aplicação

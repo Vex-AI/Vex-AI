@@ -14,8 +14,11 @@ export interface IVexInfo {
 export interface ISynon {
   word: string[];
   reply: string[];
-  id?: string;
+  id :string
 }
+
+
+
 interface IClassifier {
   id: number;
   classifierData: string;
