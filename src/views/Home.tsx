@@ -16,6 +16,7 @@ import {
   IonThumbnail,
   IonSkeletonText,
   IonImg,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import { menuController } from "@ionic/core/components";
 import { send } from "ionicons/icons";
@@ -30,6 +31,7 @@ import DateSeparator from "../components/DateSeparator";
 //@ts-ignore
 import BayesClassifier from "bayes";
 import { useTranslation } from "react-i18next";
+import { initializeAdmob, showInterstitial } from "../classes/admob";
 
 const Home: React.FC = () => {
   async function openFirstMenu() {
@@ -163,6 +165,12 @@ const Home: React.FC = () => {
       router.push("/language", "root", "replace");
     }
   }, []);
+
+  useIonViewWillEnter(() => {
+    initializeAdmob();
+    showInterstitial();
+  });
+  
   return (
     <>
       <SideMenu />

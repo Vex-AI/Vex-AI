@@ -32,15 +32,13 @@ import LanguageSelector from "./components/LanguageSelector";
 import Customize from "./views/Customize";
 import VexModelsLoader from "./views/VexModelsLoader";
 import { App } from "@capacitor/app";
-import { initializeAdmob, showInterstitial } from "./classes/admob";
 import EditProfile from "./views/EditProfile";
 
 setupIonicReact({
   mode: "md",
 });
 const Main = () => {
-  initializeAdmob()
-  showInterstitial()
+
  
   const ionRouter = useIonRouter();
   document.addEventListener("ionBackButton", (ev: any) => {
