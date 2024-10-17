@@ -54,6 +54,7 @@ const Home: React.FC = () => {
 
   const sendVexMessage = useCallback(
     async (content: string) => {
+      if (content.trim() === "") return;
       // Obtendo as informações do localStorage uma vez para evitar leituras repetidas
       const bayesEnabled = localStorage.getItem("bayesEnabled");
       const useBayes = bayesEnabled === null || bayesEnabled === "true";

@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
             }}
           >
             <IonAvatar style={{ marginRight: "8px" }}>
-              <img src={"avatar_url"} alt={"name"} />
+              <img src={"/cookieukw.jpg"} alt={"name"} />
             </IonAvatar>
             <IonText color="light">
               <p>

@@ -54,7 +54,7 @@
   "functions": "Teach the Bayes algorithm",
   "savedToFile": "File saved at: ",
   "warningTestAI": "Notice: AI testing is only available in this section. Training is done using the data already saved.c",
-  "trainModelBefore": "Train me first, in tab \"Teach vex\"!",
+  "trainModelBefore": "Train me first, in tab \"Teach the Bayes algorithm\"!",
   "useBayes": "Use Bayes algorithm",
   "next": "Next",
   "deleteAllSynons": "Delet all synons",
