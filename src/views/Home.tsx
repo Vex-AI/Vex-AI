@@ -19,7 +19,7 @@ import {
   useIonViewWillEnter,
 } from "@ionic/react";
 import { menuController } from "@ionic/core/components";
-import { send } from "ionicons/icons";
+import { navigate, send } from "ionicons/icons";
 import { useLiveQuery } from "dexie-react-hooks";
 import "./css/Home.css";
 import Message from "../components/Message";
@@ -32,6 +32,10 @@ import DateSeparator from "../components/DateSeparator";
 import BayesClassifier from "bayes";
 import { useTranslation } from "react-i18next";
 import { initializeAdmob, showInterstitial } from "../classes/admob";
+import { scheduleRandomNotification } from "../classes/notifications";
+
+import { monitorAppUsage, scheduleStreakReminder } from "../classes/streaks";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 const Home: React.FC = () => {
   async function openFirstMenu() {
@@ -47,6 +51,9 @@ const Home: React.FC = () => {
   const vexInfo = useLiveQuery<IVexInfo[]>(() => db.vexInfo.toArray(), []);
   const [isTrainDisabled, setIsTrainDisabled] = useState<boolean>(false);
   const contentRef = createRef<HTMLIonContentElement>();
+  const navigate = (path: string) => {
+    router.push(path, "root", "replace");
+  };
 
   const classifier: BayesClassifier = classifierModel?.classifierData
     ? BayesClassifier.fromJson(classifierModel?.classifierData)
@@ -167,11 +174,29 @@ const Home: React.FC = () => {
     }
   }, []);
 
+  // useEffect para monitorar o uso do app quando o componente for montado
+  useEffect(() => {
+    monitorAppUsage(); // Inicia monitoramento do uso
+    scheduleStreakReminder(); // Verifica e agenda a notificação se necessário
+    scheduleRandomNotification();
+    const checkPermission = async () => {
+      const result = await LocalNotifications.checkPermissions();
+      if (result.display !== "granted") {
+        navigate("/consent");
+      }
+    };
+
+    checkPermission();
+    return () => {
+      //LocalNotifications.cancel({ notifications: [{ id: 1 }] }); // Cancela notificações pendentes ao sair do app
+    };
+  }, []);
+
   useIonViewWillEnter(() => {
     initializeAdmob();
     showInterstitial();
   });
-  
+
   return (
     <>
       <SideMenu />

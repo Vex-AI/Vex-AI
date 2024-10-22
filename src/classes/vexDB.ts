@@ -17,11 +17,15 @@ export interface ISynon {
   id :string
 }
 
-
-
 interface IClassifier {
   id: number;
   classifierData: string;
+}
+
+interface IStreak {
+  currentStreak: number;  
+  lastAccessed: string;  
+  dailyUsage: number;  
 }
 
 export class vexDB extends Dexie {
@@ -29,13 +33,15 @@ export class vexDB extends Dexie {
   vexInfo!: Table<IVexInfo>;
   synons!: Table<ISynon>;
   classifier!: Table<IClassifier>;
+  streaks!: Table<IStreak>;
   constructor() {
     super("chatDatabase");
-    this.version(1).stores({
+    this.version(2).stores({
       messages: "++id, content, isVex, hour, date",
       synons: "++id, word, reply",
       vexInfo: "id,name, profileImage",
       classifier: "id, classifierData",
+      streaks: 'currentStreak, lastAccessed',
     });
   }
 }

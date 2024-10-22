@@ -17,7 +17,6 @@ import {
   language,
   trash,
   libraryOutline,
-  codeDownloadOutline
 } from "ionicons/icons";
 
 import { db } from "../classes/vexDB";
