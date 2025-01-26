@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { notificationsOutline } from "ionicons/icons";
 import { LocalNotifications } from "@capacitor/local-notifications";
+import { t } from "i18next"; // Importa a função `t` para traduções
 
 const ConsentPage: React.FC = () => {
   const router = useIonRouter();
@@ -21,36 +22,71 @@ const ConsentPage: React.FC = () => {
   const requestNotificationPermission = async () => {
     const result = await LocalNotifications.requestPermissions();
     if (result.display === "granted") {
-      console.log("Notification permission grated.");
-      navigate("home")
+      console.log(t("notification.permissionGranted")); // Log traduzido
+      navigate("home");
     } else {
-      console.log("Notification permission denied.");
+      console.log(t("notification.permissionDenied"));
     }
+  };
+
+  const handleDenyPermission = () => {
+    console.log(t("notification.permissionRejected"));
+    navigate("home");
   };
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Notification Consent</IonTitle>
+          <IonTitle>{t("notification.title")}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <div style={{ textAlign: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            textAlign: "center",
+          }}
+        >
           <IonIcon
             icon={notificationsOutline}
-            style={{ fontSize: "100px", color: "#3880ff" }}
+            style={{ fontSize: "120px", color: "#3b82f6", marginBottom: "16px" }}
           />
-          <h2>We'd like to send you notifications!</h2>
-          <p>
-            Stay up to date with the latest features and updates by enabling
-            notifications.
+          <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "8px" }}>
+            {t("notification.header")}
+          </h2>
+          <p style={{ fontSize: "1rem", color: "#6b7280", marginBottom: "24px" }}>
+            {t("notification.description")}
           </p>
 
-          {/* Button to request notifications */}
-          <IonButton expand="block" onClick={requestNotificationPermission}>
-            Enable Notifications
-          </IonButton>
+          <div style={{ width: "100%", maxWidth: "360px" }}>
+            <IonButton
+              expand="block"
+              onClick={requestNotificationPermission}
+              style={{
+                borderRadius: "24px",
+                marginBottom: "16px",
+              }}
+            >
+              {t("notification.enable")}
+            </IonButton>
+
+            <IonButton
+              expand="block"
+              fill="outline"
+              color="medium"
+              onClick={handleDenyPermission}
+              style={{
+                borderRadius: "24px",
+              }}
+            >
+              {t("notification.deny")}
+            </IonButton>
+          </div>
         </div>
       </IonContent>
     </IonPage>

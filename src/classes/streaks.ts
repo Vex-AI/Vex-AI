@@ -8,110 +8,135 @@ interface IStreak {
   dailyUsage: number;
 }
 
-let debug = false; // Variável booleana para ativar o modo de debug
+const DEBUG_MODE = false; // Define o modo de depuração (debug)
 
-// Verifica se o streak é válido e se o usuário passou 4 minutos no app
-export const checkStreak = async (timeSpent: number) => {
-  const streak = await db.streaks.get(1);
-  const today = dayjs().format("YYYY-MM-DD");
-  const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
+// Atualiza o streak do usuário no banco de dados
+export const checkStreak = async (timeSpent: number): Promise<void> => {
+  try {
+    const streak = await db.streaks.get(1);
+    const today = dayjs().format("YYYY-MM-DD");
+    const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 
-  if (streak) {
-    const updatedDailyUsage = streak.dailyUsage + timeSpent;
+    if (streak) {
+      const updatedDailyUsage = streak.dailyUsage + timeSpent;
 
-    if (streak.lastAccessed === yesterday && updatedDailyUsage >= 240) {
-      // Atualiza o streak
-      streak.currentStreak += 1;
-      streak.lastAccessed = today;
-      streak.dailyUsage = timeSpent;
-      await db.streaks.put(streak, 1);
-    } else if (streak.lastAccessed !== today) {
-      streak.currentStreak = 1;
-      streak.lastAccessed = today;
-      streak.dailyUsage = timeSpent;
+      // Atualiza o streak se o dia anterior foi acessado e o tempo mínimo foi atingido
+      if (streak.lastAccessed === yesterday && updatedDailyUsage >= 240) {
+        streak.currentStreak += 1;
+        streak.lastAccessed = today;
+        streak.dailyUsage = timeSpent;
+      } else if (streak.lastAccessed !== today) {
+        // Reseta o streak se não foi acessado ontem
+        streak.currentStreak = 1;
+        streak.lastAccessed = today;
+        streak.dailyUsage = timeSpent;
+      } else {
+        // Atualiza apenas o uso diário
+        streak.dailyUsage = updatedDailyUsage;
+      }
       await db.streaks.put(streak, 1);
     } else {
-      streak.dailyUsage = updatedDailyUsage; // Atualiza o uso diário
-      await db.streaks.put(streak, 1);
+      // Caso seja a primeira entrada
+      await db.streaks.put(
+        {
+          currentStreak: 1,
+          lastAccessed: today,
+          dailyUsage: timeSpent,
+        },
+        1
+      );
     }
-  } else {
-    console.log("salvando streak");
-    await db.streaks.put(
-      {
-        currentStreak: 1,
-        lastAccessed: today,
-        dailyUsage: timeSpent,
-      },
-      1
-    );
+  } catch (error) {
+    console.error("Erro ao verificar o streak:", error);
   }
 };
 
-// Modificada para verificar `debug` e enviar notificação a cada 10 segundos
-export const scheduleStreakReminder = async () => {
-  const streak = await db.streaks.get(1);
-  const today = dayjs().format("YYYY-MM-DD");
+// Agenda a notificação diária de streak
+export const scheduleStreakReminder = async (): Promise<void> => {
+  try {
+    const streak = await db.streaks.get(1);
+    const today = dayjs().format("YYYY-MM-DD");
 
-  if (streak?.lastAccessed !== today) {
-    // Define o horário-alvo para a notificação (3 horas antes da meia-noite)
-    const now = dayjs();
-    const targetTime = dayjs().endOf("day").subtract(3, "hours");
+    if (!streak || streak.lastAccessed !== today) {
+      const now = dayjs();
+      const targetTime = dayjs().endOf("day").subtract(3, "hours");
 
-    const sendNotification = async () => {
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            id: 1,
-            title: "Keep your streak alive!",
-            body: "You haven’t used the app today. Don’t forget to keep your streak going!",
-            schedule: { at: new Date() }, // Imediato, pois é para debug
-          },
-        ],
-      });
-    };
-
-    if (debug) {
-      // Se debug estiver ativo, enviar notificação a cada 10 segundos
-      setInterval(() => {
-        console.log("Debug ativo: notificações sendo enviadas a cada 10 segundos");
-        sendNotification();
-      }, 10000); // 10 segundos
-    } else if (now.isBefore(targetTime)) {
-      // Se não estiver no modo debug, agenda para 3 horas antes da meia-noite
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            id: 1,
-            title: "Keep your streak alive!",
-            body: "You haven’t used the app today. Don’t forget to keep your streak going!",
-            schedule: { at: targetTime.toDate() },
-          },
-        ],
-      });
+      if (DEBUG_MODE) {
+        // Notificações frequentes no modo debug
+        setInterval(async () => {
+          console.log("DEBUG: Enviando notificação de streak.");
+          await sendNotification("Keep your streak alive!", "Use o app por 4 minutos hoje para manter seu streak!");
+        }, 10000); // 10 segundos
+      } else if (now.isBefore(targetTime)) {
+        // Agenda para 3 horas antes da meia-noite
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              id: 1,
+              title: "Keep your streak alive!",
+              body: "Use o app por 4 minutos hoje para manter seu streak!",
+              schedule: { at: targetTime.toDate() },
+            },
+          ],
+        });
+      }
     }
+  } catch (error) {
+    console.error("Erro ao agendar a notificação de streak:", error);
   }
 };
 
-// Função para monitorar o tempo de uso do app
-export const monitorAppUsage = () => {
+// Envia uma notificação imediata
+const sendNotification = async (title: string, body: string): Promise<void> => {
+  try {
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id: Math.floor(Math.random() * 1000), // ID único para evitar conflitos
+          title,
+          body,
+          schedule: { at: new Date() }, // Envia imediatamente
+        },
+      ],
+    });
+  } catch (error) {
+    console.error("Erro ao enviar notificação:", error);
+  }
+};
+
+// Monitoramento do tempo de uso do app
+export const monitorAppUsage = (): void => {
   let timeSpent = 0;
+
   const interval = setInterval(() => {
     timeSpent += 1; // Incrementa 1 segundo a cada segundo
 
     if (timeSpent >= 240) {
-      clearInterval(interval); // Para o monitoramento após 4 minutos
-      checkStreak(timeSpent); // Checa e atualiza o streak
+      // Após 4 minutos (240 segundos), atualiza o streak e para o monitoramento
+      clearInterval(interval);
+      checkStreak(timeSpent);
     }
   }, 1000);
 };
 
+// Recupera o streak atual do banco de dados
 export const getStreakFromDB = async (): Promise<IStreak | undefined> => {
-  return await db.streaks.get(1);
+  try {
+    return await db.streaks.get(1);
+  } catch (error) {
+    console.error("Erro ao buscar streak do banco de dados:", error);
+    return undefined;
+  }
 };
 
+// Atualiza o uso diário no banco de dados
 export const updateDailyUsage = async (timeSpent: number): Promise<void> => {
-  const streak = await getStreakFromDB();
-  if (streak) {
-    await db.streaks.update(1, { dailyUsage: timeSpent });
+  try {
+    const streak = await getStreakFromDB();
+    if (streak) {
+      await db.streaks.update(1, { dailyUsage: timeSpent });
+    }
+  } catch (error) {
+    console.error("Erro ao atualizar o uso diário:", error);
   }
 };

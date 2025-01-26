@@ -61,8 +61,8 @@ const Main = () => {
           <Route path="/language" component={LanguageSelector} />
           <Route path="/customize" component={Customize} />
           <Route path="/loader" component={VexModelsLoader} />
-          <Route path="/streak" component={ConsentPage} />
-          <Route path="/consent" component={StreakPage} />
+          <Route path="/consent" component={ConsentPage} />
+          <Route path="/streak" component={StreakPage} />
           <Redirect exact from="/" to="/home" />
         </IonRouterOutlet>
       </IonReactRouter>
