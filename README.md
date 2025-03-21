@@ -16,13 +16,11 @@
     <a href="https://github.com/Vex-AI/VexAI_Java">Vex native app
     repository(read only)</a>
   </li>
-  <li>
+  <div align="center">
   <img
   src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg"
   width="50%">
-
-  </li>
-  
+  </div>
 </ul>
 
 <br>
