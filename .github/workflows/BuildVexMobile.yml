@@ -53,9 +53,13 @@ jobs:
         run: chmod +x ./android/gradlew
 
       - name: Build the React application
+        env:
+         VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: npm run build
 
       - name: Sync files with Capacitor
+        env:
+         VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: npx cap sync
 
       - name: Verify Capacitor platform
@@ -66,14 +70,15 @@ jobs:
 
       - name: Build Android APK
         env:
+          VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/cookie.keystore
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           cd android
-          ./gradlew bundleRelease
-          ./gradlew assembleRelease
+          ./gradlew bundleRelease -PVEX_GEMINI_KEY=$VITE_GEMINI_API_KEY
+          ./gradlew assembleRelease -PVEX_GEMINI_KEY=$VITE_GEMINI_API_KEY
 
       - name: Create draft release
         uses: softprops/action-gh-release@v1

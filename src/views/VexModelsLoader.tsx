@@ -64,6 +64,7 @@ const VexModelsLoader: React.FC = () => {
 
   useEffect(() => {
     const getList = async () => {
+      /* @vite-ignore */
       const fileListGlob = import.meta.glob("/src/vexModels/*.json");
       const fileList: string[] = Object.keys(fileListGlob);
       setFilesList([]);

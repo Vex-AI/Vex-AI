@@ -3,6 +3,28 @@ import { db } from "./vexDB";
 import util from "./utils";
 import i18n from "./translation";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+import { Capacitor } from "@capacitor/core";
+import { registerPlugin } from "@capacitor/core";
+
+const SecretBridge = registerPlugin<any>("SecretBridge", {
+    web: () => import("./environment.web").then(m => new m.EnvironmentWeb())
+});
+
+const getGeminiKey = async (): Promise<string> => {
+    if (Capacitor.getPlatform() == "web") {
+        return import.meta.env.VITE_GEMINI_API_KEY;
+    }
+
+    try {
+        const { key } = await SecretBridge.getGeminiKey();
+        return key;
+    } catch (error) {
+        console.error("Error getting key:", error);
+        return ""; // Fallback seguro
+    }
+};
+
 
 // Cache para dados estáticos
 let synonsCache: ISynon[] | null = null;
@@ -18,19 +40,33 @@ interface IChatHistory {
     role: string;
     parts: { text: string }[];
 }
+const safetySettings = [
+    {
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_NONE
+    },
+    {
+        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        threshold: HarmBlockThreshold.BLOCK_NONE
+    },
+    {
+        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        threshold: HarmBlockThreshold.BLOCK_NONE
+    }
+];
+//const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
 // Carregar dados iniciais uma única vez
 async function initializeAnalyzer() {
     if (!synonsCache) {
         synonsCache = await db.synons.toArray();
     }
-
+const genAI = new GoogleGenerativeAI(await getGeminiKey());
     if (!geminiModel) {
         geminiModel = genAI.getGenerativeModel({
             model: "tunedModels/vexfinetuned-qdghi3ai6rx0",
-            
+            safetySettings
         });
     }
 }
@@ -52,7 +88,7 @@ export async function analyzer(message: string): Promise<string> {
                 history: await getCachedHistory(),
                 generationConfig: {
                     temperature: 1,
-                    maxOutputTokens: 150
+                    maxOutputTokens: 500
                 }
             });
 
