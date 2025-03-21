@@ -37,7 +37,7 @@ export const scheduleRandomNotification = async (): Promise<void> => {
     }
 
     const message = getRandomMessage();
-    console.log("Mensagem selecionada:", message);
+    
 
     // Define o intervalo de tempo com base no modo debug
     const intervalInMilliseconds = debug ? 10_000 : 5 * 60 * 60 * 1000; // 10 segundos ou 5 horas
@@ -61,7 +61,7 @@ export const scheduleRandomNotification = async (): Promise<void> => {
         if (debug) {
             setInterval(async () => {
                 const repeatedMessage = getRandomMessage();
-                console.log("Enviando notificação repetida:", repeatedMessage);
+                
 
                 await LocalNotifications.schedule({
                     notifications: [

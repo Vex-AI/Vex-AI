@@ -22,16 +22,16 @@ const ConsentPage: React.FC = () => {
   const requestNotificationPermission = async () => {
     const result = await LocalNotifications.requestPermissions();
     if (result.display === "granted") {
-      console.log(t("notification.permissionGranted")); 
+      
       navigate("home");
     } else {
-      console.log(t("notification.permissionDenied"));
+      
     }
     localStorage.setItem("notification","true")
   };
 
   const handleDenyPermission = () => {
-    console.log(t("notification.permissionRejected"));
+    
     navigate("home");
   };
 

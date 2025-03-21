@@ -116,7 +116,7 @@ const Home: React.FC = () => {
                 (!localStorage.getItem("geminiEnabled") ||
                     localStorage.getItem("geminiEnabled") === "false")
             ) {
-                console.log("with bayes");
+                
                 const answer = await classifier.categorize(content);
 
                 if (!answer) {
@@ -132,7 +132,7 @@ const Home: React.FC = () => {
                 await handleResponse(answer);
             } else {
                 // Processamento sem Bayes (usando o analisador)
-                console.log("no bayes");
+                
                 const answer = await analyzer(content);
 
                 // Resposta com timeout (simulando um delay na resposta)

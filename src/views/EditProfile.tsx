@@ -52,7 +52,7 @@ const EditProfile: React.FC = () => {
         const reader = new FileReader();
         reader.onload = async (e) => {
           const imageContent: string = e.target?.result as string;
-          console.log(imageContent);
+          
           await db.vexInfo.update(1, { profileImage: imageContent });
         };
         reader.readAsDataURL(file);

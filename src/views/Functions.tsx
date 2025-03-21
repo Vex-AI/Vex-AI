@@ -106,14 +106,14 @@ const Functions: React.FC = () => {
       setShowProgress(true);
       setProgress(0);
       dismiss();
-      console.log("Início da leitura do arquivo");
+      
 
       const reader = new FileReader();
 
       reader.readAsText(file, "utf-8");
       // input.click();
       reader.onload = async (e: ProgressEvent<FileReader>) => {
-        console.log("Início do processamento da leitura...");
+        
         const chunk = e.target?.result as string | null;
         if (chunk) {
           try {
@@ -148,7 +148,7 @@ const Functions: React.FC = () => {
 
   const processChunk = async (jsonData: ISynon[]) => {
     let index = 0;
-    console.log("Início da adição de sinônimos...");
+    
 
     for (const synon of jsonData) {
       synon.id = v4();
@@ -194,7 +194,7 @@ const Functions: React.FC = () => {
     const id: number = Math.floor(Math.random() * 10000);
     const fileName: string = `vex_db_${id}.vex`;
     const fileContents: string = JSON.stringify(synons);
-    console.log({ platform });
+    
     if (platform === "android") {
       await Filesystem.writeFile({
         path: fileName,
