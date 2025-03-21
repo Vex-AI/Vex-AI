@@ -18,6 +18,8 @@ import {
     IonImg,
     useIonViewWillEnter
 } from "@ionic/react";
+import { AnimatePresence, motion } from "framer-motion";
+import TypingIndicator from "../components/TypingIndicator";
 import { menuController } from "@ionic/core/components";
 import { navigate, send } from "ionicons/icons";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -77,7 +79,9 @@ const Home: React.FC = () => {
 
                 // Calcula o timeout baseado no tamanho da resposta da Vex
                 const timeout =
-                    answerLength > 30
+                    localStorage.getItem("geminiEnabled") === "true"
+                        ? 0
+                        : answerLength > 30
                         ? Math.floor(Math.random() * (4000 - 2000 + 1)) + 2000
                         : answerLength * 70;
 
@@ -92,7 +96,11 @@ const Home: React.FC = () => {
 
             // Função para lidar com o "firstContact" e abrir o menu
             const handleFirstContact = () => {
-                if (firstContact === null) {
+                if (
+                    (firstContact === null &&
+                        localStorage.getItem("geminiEnabled") === null) ||
+                    !localStorage.getItem("geminiEnabled")
+                ) {
                     setTimeout(() => {
                         openFirstMenu();
                         localStorage.setItem("firstContact", "true");
@@ -103,7 +111,11 @@ const Home: React.FC = () => {
             };
 
             // Processamento com Bayes
-            if (useBayes) {
+            if (
+                useBayes &&
+                (!localStorage.getItem("geminiEnabled") ||
+                    localStorage.getItem("geminiEnabled") === "false")
+            ) {
                 console.log("with bayes");
                 const answer = await classifier.categorize(content);
 
@@ -127,7 +139,7 @@ const Home: React.FC = () => {
                 await handleResponse(answer);
             }
         },
-        [classifier, analyzer, utils] // Dependências do hook
+        [classifier, analyzer, utils]
     );
 
     const sendMessage = (content: string, isVex: boolean) => {
@@ -176,7 +188,6 @@ const Home: React.FC = () => {
             return;
         }
 
-        
         monitorAppUsage(); // Inicia monitoramento do uso
         scheduleStreakReminder(); // Verifica e agenda a notificação se necessário
         scheduleRandomNotification();
@@ -186,8 +197,7 @@ const Home: React.FC = () => {
                 navigate("/consent");
             }
         };
-
-        checkPermission();
+        if (!localStorage.getItem("notification")) checkPermission();
     }, []);
 
     useIonViewWillEnter(() => {
@@ -223,11 +233,46 @@ const Home: React.FC = () => {
                                     </IonThumbnail>
                                 )}
 
-                                <div className="chat-contact-details">
-                                    <p> {vexInfo ? vexInfo[0]?.name : "Vex"}</p>
-                                    <IonText color="medium">{status}</IonText>
+
+
+                                    <div className="chat-contact-details">
+                                        <p>
+                                            {vexInfo ? vexInfo[0]?.name : "Vex"}
+                                        </p>
+                                        <div
+                                            style={{
+                                                position: "relative",
+                                                height: "20px"
+                                            }}
+                                        >
+                                            <AnimatePresence mode="wait">
+                                                <motion.div
+                                                    key={status}
+                                                    initial={{
+                                                        opacity: 0,
+                                                        y: 5
+                                                    }}
+                                                    animate={{
+                                                        opacity: 1,
+                                                        y: 0
+                                                    }}
+                                                    exit={{ opacity: 0, y: -5 }}
+                                                    transition={{
+                                                        duration: 0.3
+                                                    }}
+                                                    style={{
+                                                        position: "absolute"
+                                                    }}
+                                                >
+                                                    <IonText color="medium">
+                                                        {status}
+                                                    </IonText>
+                                                </motion.div>
+                                            </AnimatePresence>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            
                         </IonTitle>
                     </IonToolbar>
                 </IonHeader>
@@ -262,6 +307,8 @@ const Home: React.FC = () => {
                             );
                         })}
                     </IonList>
+
+                    {status !== "on-line" && <TypingIndicator />}
                 </IonContent>
 
                 <IonFooter className="ion-padding">

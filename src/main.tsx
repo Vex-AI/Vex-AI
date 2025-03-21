@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import {useEffect} from "react"
 import "./index.css";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -17,10 +18,10 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 import {
-  IonApp,
-  IonRouterOutlet,
-  setupIonicReact,
-  useIonRouter,
+    IonApp,
+    IonRouterOutlet,
+    setupIonicReact,
+    useIonRouter
 } from "@ionic/react";
 import Home from "./views/Home";
 import { IonReactRouter } from "@ionic/react-router";
@@ -37,37 +38,39 @@ import ConsentPage from "./views/ConsentPage";
 import StreakPage from "./views/StreakPage";
 
 setupIonicReact({
-  mode: "md",
+    mode: "md"
 });
 const Main = () => {
-
- 
-  const ionRouter = useIonRouter();
-  document.addEventListener("ionBackButton", (ev: any) => {
-    ev.detail.register(-1, () => {
-      if (!ionRouter.canGoBack()) {
-        App.exitApp();
-      }
+    const ionRouter = useIonRouter();
+    
+    useEffect(()=>{
+      
+    document.addEventListener("ionBackButton", (ev: any) => {
+        ev.detail.register(-1, () => {
+            if (!ionRouter.canGoBack()) {
+                App.exitApp();
+            }
+        });
     });
-  });
-  return (
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route path="/home" component={Home} />
-          <Route path="/profile" component={EditProfile} />
-          <Route path="/synons" component={SynonPage} />
-          <Route path="/functions" component={Functions} />
-          <Route path="/language" component={LanguageSelector} />
-          <Route path="/customize" component={Customize} />
-          <Route path="/loader" component={VexModelsLoader} />
-          <Route path="/consent" component={ConsentPage} />
-          <Route path="/streak" component={StreakPage} />
-          <Redirect exact from="/" to="/home" />
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
-  );
+    },[])
+    return (
+        <IonApp>
+            <IonReactRouter>
+                <IonRouterOutlet>
+                    <Route path="/home" component={Home} />
+                    <Route path="/profile" component={EditProfile} />
+                    <Route path="/synons" component={SynonPage} />
+                    <Route path="/functions" component={Functions} />
+                    <Route path="/language" component={LanguageSelector} />
+                    <Route path="/customize" component={Customize} />
+                    <Route path="/loader" component={VexModelsLoader} />
+                    <Route path="/consent" component={ConsentPage} />
+                    <Route path="/streak" component={StreakPage} />
+                    <Redirect exact from="/" to="/home" />
+                </IonRouterOutlet>
+            </IonReactRouter>
+        </IonApp>
+    );
 };
 
 createRoot(document.getElementById("root")!).render(<Main />);

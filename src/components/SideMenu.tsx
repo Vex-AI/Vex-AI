@@ -19,6 +19,8 @@ import {
   libraryOutline,
 } from "ionicons/icons";
 
+import GeminiToggle from "./GeminiToggle";
+
 import { db } from "../classes/vexDB";
 import { useTranslation } from "react-i18next";
 import BayesToggle from "./BayesToggle";
@@ -73,6 +75,8 @@ const SideMenu: React.FC = () => {
             {t("functions")}
           </IonItem>
           
+
+  <GeminiToggle />
           <BayesToggle/>
         </IonList>
       </IonContent>
