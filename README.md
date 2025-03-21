@@ -9,14 +9,20 @@
 
 <ul>
   <li>
-    <a href="https://vex-ai.netlify.app/enUS">Website</a>
+    <a href="https://vexxx.vercel.app/enUS">Website</a>
+  </li>
+
+  <li>
+    <a href="https://github.com/Vex-AI/VexAI_Java">Vex native app
+    repository(read only)</a>
   </li>
   <li>
-    <a href="https://vexai.netlify.app/">Vex online demo</a>
+  <img
+  src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg"
+  width="50%">
+
   </li>
-  <li>
-    <a href="https://github.com/Vex-AI/VexAI_Java">Vex native app repository</a>
-  </li>
+  
 </ul>
 
 <br>
@@ -57,15 +63,15 @@ The Vex AI is currently hosted on [Vercel](https://vexxx.vercel.app/enUS). You c
 
 1. Install the dependencies:
 
-   ```sh
-     npm i
-   ```
+    ```sh
+      npm i
+    ```
 
 2. Run:
 
-   ```sh
-     npm run dev
-   ```
+    ```sh
+      npm run dev
+    ```
 
   </div>
 
@@ -86,60 +92,77 @@ The Vex AI is currently hosted on [Vercel](https://vexxx.vercel.app/enUS). You c
   | Features                          |
   | --------------------------------- |
   | Save locally                      | 
-  | API In testing phase              |
+  | Gemini API integration            |
   | Synonyms                          |
-  | Machine learning in testing phase |
+  | Change name and profile           |
+  | Delete all answers, synonyms, etc  |
+  |Export and import database data(synons) |
+  | Customize the chat bubbles |
+  | Off-line work(without gemini api)|
   
   </div>
   
   <br>
 
-  <div align="center">
-    <h3>Discontinued Version Functions to Implement</h3>
-
-| Features                                |
-| --------------------------------------- |
-| Change name and profile                 |
-| Delete all answers, synonyms, etc.      |
-| Export and import database data(synons) |
-| Customize the chat                      |
-
-  </div>
-
   <br>
 
-  <div align="center">
-    <h3>Ideas for Future Development</h3>
+<div align="center">
+  <h3>🚀 Future Development Roadmap</h3>
 
-| Feature           | Use                                                                     |
-| ----------------- | ----------------------------------------------------------------------- |
-| Custom animations | Customize animations in chat items, database, etc.                      |
-| Context           | Vex knows the context of the chat                                       |
-| "Global user"     | A chat where people talk to Vex for global training                     |
-| RPG story         | Ability to tell stories or run an RPG                                   |
-| Big data          | Vex accepts various types of data, queries and everything else at scale |
-| Feelings and mood | Vex's mood and feelings can change depending on the conversation        |
+| Category          | Feature                          | Description                                                           | Impact Level |
+| ----------------- | -------------------------------- | --------------------------------------------------------------------- | ------------ |
+| **Interaction**   | Emotion-Driven Animations        | Dynamic animations/emojis that reflect detected conversation emotions | ★★★★★        |
+|                   | Cross-Device Memory Sync         | Persistent chat memory across sessions and platforms                  | ★★★★☆        |
+| **Technology**    | AR/VR Chat Interface             | Immersive conversations through augmented/virtual reality integration | ★★★☆☆        |
+|                   | Real-Time Language Bridge        | Instant translation for multilingual conversations                    | ★★★★☆        |
+| **Storytelling**  | Collaborative Story Engine       | Multi-user interactive narrative creation system                      | ★★★★☆        |
+|                   | Dynamic RPG Adventure AI         | Morality-based story branching with evolving quests                   | ★★★★★        |
+| **Education**     | Adaptive Learning Companion      | AI-curated learning paths based on user's cognitive patterns          | ★★★★☆        |
+|                   | Virtual Experiment Simulator     | Interactive STEM simulations with contextual explanations             | ★★★☆☆        |
+| **Advanced AI**   | Emotional Voice Synthesis        | Natural speech with contextual tonality and emotional inflection      | ★★★★★        |
+|                   | Predictive Mental Health Support | Proactive emotional crisis detection with coping resources            | ★★★★★        |
+| **Security**      | Privacy Guardian System          | Granular data control with self-destructing sensitive conversations   | ★★★★☆        |
+|                   | Digital Legacy Vault             | Secure management of meaningful chat memories                         | ★★★☆☆        |
+| **Gamification**  | Knowledge Ecosystem              | XP/achievement system integrated with educational platforms           | ★★★★☆        |
+|                   | AI Trivia Arena                  | Daily knowledge challenges with skill-based rewards                   | ★★★☆☆        |
+| **Innovation**    | Quantum AI Framework             | Future-proof architecture for quantum-enhanced processing             | ★★☆☆☆        |
+|                   | Holographic Persona              | 3D interactive avatar with environmental awareness                    | ★★★☆☆        |
+| **Social Impact** | Mental Health First Responder    | Emotional triage system with local support resource mapping           | ★★★★★        |
+|                   | Cultural Context Adaptor         | Automatic localization of cultural references and idioms              | ★★★★☆        |
 
-  </div>
-
+</div>
   <br>
 
-  <div align="center">
-    <h3>Libraries</h3>
+<div align="center">
+  <h3>📦 Project Dependencies</h3>
 
-| Library              | Version  | Description                                                                                    |
-| -------------------- | -------- | ---------------------------------------------------------------------------------------------- |
-| `@capacitor/android` | 6.1.2    | Capacitor plugin for Android, allowing integration with native Android APIs.                   |
-| `@ionic/react`       | ^8.3.0   | React component library for building user interfaces with Ionic style.                         |
-| `bayes`              | ^1.0.0   | Library for Bayesian classification and probabilistic inference.                               |
-| `dexie`              | ^4.0.8   | Library for IndexedDB that simplifies database operations in JavaScript.                       |
-| `diacritics`         | ^1.3.0   | Library for handling diacritics in strings, useful for normalization and text comparisons.     |
-| `i18next`            | ^23.15.1 | Internationalization library for JavaScript applications, facilitating multi-language support. |
-| `react-color`        | ^2.19.3  | Library for color selection and manipulation in React applications.                            |
-| `react-i18next`      | ^15.0.1  | Integrates i18next with React, providing hooks and components for translation.                 |
-| `uuid`               | ^10.0.0  | Library for generating universally unique identifiers (UUIDs).                                 |
+| Library                          | Version  | Description                                  |
+| -------------------------------- | -------- | -------------------------------------------- |
+| `@capacitor/android`             | 6.1.2    | Native Android runtime and API integration   |
+| `@capacitor/app`                 | 6.0.1    | App lifecycle and URL handling               |
+| `@capacitor/core`                | 6.1.2    | Core Capacitor runtime infrastructure        |
+| `@capacitor/filesystem`          | ^6.0.1   | Native filesystem operations                 |
+| `@capacitor/haptics`             | 6.0.1    | Vibration/haptic feedback control            |
+| `@capacitor/keyboard`            | 6.0.2    | Native keyboard handling                     |
+| `@capacitor/local-notifications` | ^6.1.0   | Local notification scheduling and management |
+| `@capacitor/status-bar`          | 6.0.1    | Status bar customization                     |
+| `@capacitor-community/admob`     | ^6.0.0   | AdMob integration for monetization           |
+| `@google/generative-ai`          | ^0.24.0  | Official Gemini AI SDK integration           |
+| `@ionic/react`                   | ^8.3.0   | Ionic UI components for React                |
+| `@ionic/react-router`            | ^8.3.0   | Routing integration for Ionic+React          |
+| `bayes`                          | ^1.0.0   | Naive Bayes classifier implementation        |
+| `dayjs`                          | ^1.11.13 | Lightweight date library                     |
+| `dexie`                          | ^4.0.8   | IndexedDB wrapper with promises              |
+| `dexie-react-hooks`              | ^1.1.7   | React hooks for Dexie integration            |
+| `diacritics`                     | ^1.3.0   | Diacritics removal for text normalization    |
+| `framer-motion`                  | ^11.5.4  | Production-ready animations for React        |
+| `i18next`                        | ^23.15.1 | Internationalization framework               |
+| `react-color`                    | ^2.19.3  | Color picker component                       |
+| `react-i18next`                  | ^15.0.1  | React bindings for i18next                   |
+| `react-toastify`                 | ^10.0.5  | Notification toast system                    |
+| `uuid`                           | ^10.0.0  | UUID generation library                      |
 
-  </div>
+</div>
 
 <div align="center">
   <h2>License</h2>
