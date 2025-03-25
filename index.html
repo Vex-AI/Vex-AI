@@ -39,7 +39,16 @@
     <div id="root"></div>
     
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+
+
+<script>
+  if (window.location.hostname === 'localhost' && window.location.port === '5173') {
+    
+      eruda.init();
+    }
+  
+
+</script>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>

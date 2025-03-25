@@ -6,8 +6,12 @@ const config: CapacitorConfig = {
     webDir: "dist",
     android: {
         buildOptions: {
-            signingType: "apksigner",
-            extraArgs: [`-PVEX_GEMINI_KEY=${process.env.VITE_GEMINI_API_KEY}`]
+            signingType: "apksigner"
+        }
+    },
+    plugins: {
+        Environment: {
+            VITE_GEMINI_API_KEY: import.meta.env.VITE_GEMINI_API_KEY
         }
     }
 };
