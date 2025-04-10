@@ -51,7 +51,7 @@
     "fileProcessingError": "Error processing file:",
     "invalidSynonsArray": "The file does not contain a valid array of synons.",
     "placeholderText": "Write something",
-    "functions": "Teach the Bayes algorithm",
+    "functions": "Bayes config",
     "savedToFile": "File saved at: ",
     "warningTestAI": "Notice: AI testing is only available in this section. Training is done using the data already saved.c",
     "trainModelBefore": "Train me first, in tab \"Teach the Bayes algorithm\"!",
@@ -63,7 +63,7 @@
     "deleteAllSynonsFail": "Error on delete all synons",
     "importing": "Importing...",
     "exporting": "Exporting...",
-    "vexLearning": "Teach Vex",
+    "vexLearning": "Basic algorithm config",
     "typeThing": "Write anything",
 
     "learnWarningTitle": "I trained Vex, but she doesn't respond properly",

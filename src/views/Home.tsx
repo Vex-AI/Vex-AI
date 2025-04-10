@@ -1,4 +1,3 @@
-import { createRef, useCallback, useEffect, useRef, useState } from "react";
 import {
     IonContent,
     IonHeader,
@@ -18,10 +17,11 @@ import {
     IonImg,
     useIonViewWillEnter
 } from "@ionic/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import TypingIndicator from "../components/TypingIndicator";
 import { menuController } from "@ionic/core/components";
-import { navigate, send } from "ionicons/icons";
+import { send } from "ionicons/icons";
 import { useLiveQuery } from "dexie-react-hooks";
 import "./css/Home.css";
 import Message from "../components/Message";
@@ -35,169 +35,132 @@ import BayesClassifier from "bayes";
 import { useTranslation } from "react-i18next";
 import { initializeAdmob, showInterstitial } from "../classes/admob";
 import { scheduleRandomNotification } from "../classes/notifications";
-
 import { monitorAppUsage, scheduleStreakReminder } from "../classes/streaks";
 import { LocalNotifications } from "@capacitor/local-notifications";
 
 const Home: React.FC = () => {
-    async function openFirstMenu() {
-        await menuController.open("sideMenu");
-    }
-    const classifierModel = useLiveQuery(() => db.classifier.get(1), []);
-
     const router = useIonRouter();
-    const messages = useLiveQuery<IMessage[]>(() => db.messages.toArray(), []);
+    const contentRef = useRef<HTMLIonContentElement>(null);
+    const messages = useLiveQuery(() => db.messages.toArray(), []);
+    const classifierModel = useLiveQuery(() => db.classifier.get(1), []);
+    const vexInfo = useLiveQuery(() => db.vexInfo.toArray(), []);
+
     const [text, setText] = useState<string>("");
+    const [status, setStatus] = useState("on-line");
+    const [isTrainDisabled, setIsTrainDisabled] = useState(false);
     const { t } = useTranslation();
-    const [status, setStatus] = useState<string>("on-line");
-    const vexInfo = useLiveQuery<IVexInfo[]>(() => db.vexInfo.toArray(), []);
-    const [isTrainDisabled, setIsTrainDisabled] = useState<boolean>(false);
-    const contentRef = createRef<HTMLIonContentElement>();
+
+    let classifier = BayesClassifier();
+
+    // Treinar automaticamente com as mensagens do usuário
+    useEffect(() => {
+        const trainFromMessages = async () => {
+            const msgs = await db.messages.toArray();
+            const pairs = msgs
+                .filter(msg => !msg.isVex)
+                .map(async msg => {
+                    const reply = msgs.find(r => r.date > msg.date && r.isVex);
+                    if (reply) classifier.learn(msg.content, reply.content);
+                });
+            await Promise.all(pairs);
+            const data = classifier.toJson();
+            await db.classifier.put({ id: 1, classifierData: data });
+        };
+        trainFromMessages();
+    }, []);
+
+    if (classifierModel?.classifierData) {
+        classifier = BayesClassifier.fromJson(classifierModel.classifierData);
+    }
+
     const navigate = (path: string) => {
         router.push(path, "root", "replace");
     };
 
-    const classifier: BayesClassifier = classifierModel?.classifierData
-        ? BayesClassifier.fromJson(classifierModel?.classifierData)
-        : BayesClassifier();
-
-    const sendVexMessage = useCallback(
-        async (content: string) => {
-            if (content.trim() === "") return;
-            // Obtendo as informações do localStorage uma vez para evitar leituras repetidas
-            const bayesEnabled = localStorage.getItem("bayesEnabled");
-            const useBayes = bayesEnabled === null || bayesEnabled === "true";
-            const firstContact = localStorage.getItem("firstContact");
-
-            // Atualizando estados antes do processamento
-            setIsTrainDisabled(true);
-            setStatus("digitando...");
-
-            // Função auxiliar para lidar com a resposta do Bayes ou do analisador
-            const handleResponse = async (answer: string) => {
-                const answerLength = answer.length;
-
-                // Calcula o timeout baseado no tamanho da resposta da Vex
-                const timeout =
-                    localStorage.getItem("geminiEnabled") === "true"
-                        ? 0
-                        : answerLength > 30
-                        ? Math.floor(Math.random() * (4000 - 2000 + 1)) + 2000
-                        : answerLength * 70;
-
-                // Envia a mensagem com o timeout baseado no tamanho da resposta
-                setTimeout(async () => {
-                    sendMessage(answer ?? (await utils.getResponse()), true);
-                    setStatus("on-line");
-                    setIsTrainDisabled(false);
-                    scrollToBottom();
-                }, timeout);
-            };
-
-            // Função para lidar com o "firstContact" e abrir o menu
-            const handleFirstContact = () => {
-                if (
-                    (firstContact === null &&
-                        localStorage.getItem("geminiEnabled") === null) ||
-                    !localStorage.getItem("geminiEnabled")
-                ) {
-                    setTimeout(() => {
-                        openFirstMenu();
-                        localStorage.setItem("firstContact", "true");
-                        setStatus("on-line");
-                        setIsTrainDisabled(false);
-                    }, 2000);
-                }
-            };
-
-            // Processamento com Bayes
-            if (
-                useBayes &&
-                (!localStorage.getItem("geminiEnabled") ||
-                    localStorage.getItem("geminiEnabled") === "false")
-            ) {
-                
-                const answer = await classifier.categorize(content);
-
-                if (!answer) {
-                    sendMessage(t("trainModelBefore"), true); // Mensagem de treinamento necessário
-                    handleFirstContact();
-                    setStatus("on-line");
-                    setIsTrainDisabled(false);
-                    scrollToBottom();
-                    return;
-                }
-
-                // Se houver resposta, envia a mensagem normalmente
-                await handleResponse(answer);
-            } else {
-                // Processamento sem Bayes (usando o analisador)
-                
-                const answer = await analyzer(content);
-
-                // Resposta com timeout (simulando um delay na resposta)
-                await handleResponse(answer);
-            }
-        },
-        [classifier, analyzer, utils]
-    );
+    const scrollToBottom = () => {
+        contentRef.current?.scrollToBottom(500);
+    };
 
     const sendMessage = (content: string, isVex: boolean) => {
-        if (content.trim() === "") return;
-
         const newMessage: IMessage = {
             content,
             isVex,
             hour: new Date().toLocaleTimeString(),
             date: Date.now()
         };
-        scrollToBottom();
-
-        db.messages.add(newMessage).catch(error => {
-            console.error("Error adding message to Dexie:", error);
-        });
+        db.messages.add(newMessage).then(scrollToBottom);
     };
 
-    const shouldShowDateSeparator = (
-        currentDate: number,
-        previousDate: number
-    ) => {
-        const current = new Date(currentDate).toDateString();
-        const previous = new Date(previousDate).toDateString();
-        return current !== previous;
-    };
-    function scrollToBottom() {
-        contentRef.current?.scrollToBottom(500);
-    }
+    const sendVexMessage = useCallback(
+        async (raw: string) => {
+            const content = String(raw);
+            if (!content.trim()) return;
 
-    // Função para deletar uma mensagem pelo ID
-    const deleteMessage = async (id: number) => {
-        try {
-            await db.messages.delete(id);
+            const geminiEnabled =
+                localStorage.getItem("geminiEnabled") === "true";
+            const useBayes =
+                !geminiEnabled &&
+                localStorage.getItem("bayesEnabled") !== "false";
 
-            console.log(`Message with id ${id} deleted successfully`);
-        } catch (error) {
-            console.error("Failed to delete message:", error);
+            setIsTrainDisabled(true);
+            setStatus("digitando...");
+
+            const handleResponse = async (answer: string) => {
+                const delay =
+                    answer.length > 30
+                        ? 2000 + Math.random() * 2000
+                        : answer.length * 50;
+                setTimeout(() => {
+                    sendMessage(answer, true);
+                    setStatus("on-line");
+                    setIsTrainDisabled(false);
+                }, delay);
+            };
+
+            if (useBayes) {
+                try {
+                    const answer = await classifier.categorize(content);
+                    await handleResponse(answer);
+                    return;
+                } catch (e) {
+                    console.error("Bayes error:", e);
+                }
+            }
+
+            try {
+                const answer = await analyzer(content);
+                await handleResponse(answer);
+            } catch (e) {
+                console.error("Erro no analyzer:", e);
+                await handleResponse(t("error_default"));
+            }
+        },
+        [classifier]
+    );
+
+    const handleKeyUp = (e: any) => {
+        if (e.key === "Enter") {
+            const copy = text;
+            setText("");
+            sendMessage(copy, false);
+            sendVexMessage(copy);
         }
     };
 
-    // useEffect para monitorar o uso do app quando o componente for montado
     useEffect(() => {
         if (localStorage.getItem("language") === null) {
             router.push("/language", "root", "replace");
-            return;
         }
 
-        monitorAppUsage(); // Inicia monitoramento do uso
-        scheduleStreakReminder(); // Verifica e agenda a notificação se necessário
+        monitorAppUsage();
+        scheduleStreakReminder();
         scheduleRandomNotification();
-        const checkPermission = async () => {
-            const result = await LocalNotifications.checkPermissions();
-            if (result.display !== "granted") {
-                navigate("/consent");
-            }
-        };
-        if (!localStorage.getItem("notification")) checkPermission();
+
+        if (!localStorage.getItem("notification")) {
+            LocalNotifications.checkPermissions().then(result => {
+                if (result.display !== "granted") navigate("/consent");
+            });
+        }
     }, []);
 
     useIonViewWillEnter(() => {
@@ -212,127 +175,90 @@ const Home: React.FC = () => {
                 <IonHeader>
                     <IonToolbar>
                         <IonButtons slot="end">
-                            <IonMenuButton></IonMenuButton>
+                            <IonMenuButton />
                         </IonButtons>
                         <IonTitle>
                             <div className="chat-contact">
-                                {!vexInfo ? (
-                                    <IonThumbnail slot="start">
-                                        <IonSkeletonText
-                                            animated={true}
-                                        ></IonSkeletonText>
-                                    </IonThumbnail>
-                                ) : (
-                                    <IonThumbnail slot="start">
+                                <IonThumbnail slot="start">
+                                    {!vexInfo ? (
+                                        <IonSkeletonText animated />
+                                    ) : (
                                         <IonImg
                                             src={
                                                 vexInfo[0]?.profileImage ??
                                                 "/Vex_320.png"
                                             }
                                         />
-                                    </IonThumbnail>
-                                )}
-
-
-
-                                    <div className="chat-contact-details">
-                                        <p>
-                                            {vexInfo ? vexInfo[0]?.name : "Vex"}
-                                        </p>
-                                        <div
-                                            style={{
-                                                position: "relative",
-                                                height: "20px"
-                                            }}
-                                        >
-                                            <AnimatePresence mode="wait">
-                                                <motion.div
-                                                    key={status}
-                                                    initial={{
-                                                        opacity: 0,
-                                                        y: 5
-                                                    }}
-                                                    animate={{
-                                                        opacity: 1,
-                                                        y: 0
-                                                    }}
-                                                    exit={{ opacity: 0, y: -5 }}
-                                                    transition={{
-                                                        duration: 0.3
-                                                    }}
-                                                    style={{
-                                                        position: "absolute"
-                                                    }}
-                                                >
-                                                    <IonText color="medium">
-                                                        {status}
-                                                    </IonText>
-                                                </motion.div>
-                                            </AnimatePresence>
-                                        </div>
+                                    )}
+                                </IonThumbnail>
+                                <div className="chat-contact-details">
+                                    <p>{vexInfo ? vexInfo[0]?.name : "Vex"}</p>
+                                    <div
+                                        style={{
+                                            position: "relative",
+                                            height: "20px"
+                                        }}
+                                    >
+                                        <AnimatePresence mode="wait">
+                                            <motion.div
+                                                key={status}
+                                                initial={{ opacity: 0, y: 5 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -5 }}
+                                                transition={{ duration: 0.3 }}
+                                                style={{ position: "absolute" }}
+                                            >
+                                                <IonText color="medium">
+                                                    {status}
+                                                </IonText>
+                                            </motion.div>
+                                        </AnimatePresence>
                                     </div>
                                 </div>
-                            
+                            </div>
                         </IonTitle>
                     </IonToolbar>
                 </IonHeader>
 
                 <IonContent ref={contentRef} className="chat-content">
                     <IonList>
-                        {messages?.map((msg: IMessage, index: number) => {
-                            const previousMsg = messages[index - 1];
-                            const showSeparator =
-                                previousMsg &&
-                                shouldShowDateSeparator(
-                                    msg.date,
-                                    previousMsg.date
-                                );
-
+                        {messages?.map((msg, i) => {
+                            const prev = messages[i - 1];
+                            const showDate =
+                                prev &&
+                                new Date(msg.date).toDateString() !==
+                                    new Date(prev.date).toDateString();
                             return (
-                                <div key={`${msg.date}-${index}`}>
-                                    {showSeparator && (
+                                <div key={msg.id ?? `${msg.date}-${i}`}>
+                                    {showDate && (
                                         <DateSeparator date={msg.date} />
                                     )}
-
                                     <Message
-                                        onClose={() => {
-                                            if (msg.id) deleteMessage(msg.id);
-                                        }}
                                         content={msg.content}
                                         isVex={msg.isVex}
                                         hour={utils.formatHour(msg.hour)}
                                         date={msg.date}
+                                        onClose={() =>
+                                            msg.id && db.messages.delete(msg.id)
+                                        }
                                     />
                                 </div>
                             );
                         })}
                     </IonList>
-
                     {status !== "on-line" && <TypingIndicator />}
                 </IonContent>
 
                 <IonFooter className="ion-padding">
                     <IonInput
-                        clearInput={true}
+                        clearInput
                         value={text}
-                        onIonInput={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                            setText(event.target.value);
-                        }}
+                        onIonInput={(e: any) => setText(e.target.value)}
                         placeholder={t("write_message")}
-                        label={t("write_message")}
                         labelPlacement="floating"
                         fill="outline"
                         shape="round"
-                        onKeyUp={(event: any) => {
-                            if (event.key === "Enter") {
-                                const copy = text;
-                                setText("");
-                                sendMessage(copy, false);
-                                sendVexMessage(copy);
-                            }
-                        }}
+                        onKeyUp={handleKeyUp}
                         disabled={isTrainDisabled}
                     >
                         <IonIcon
