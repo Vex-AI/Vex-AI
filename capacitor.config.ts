@@ -9,11 +9,7 @@ const config: CapacitorConfig = {
             signingType: "apksigner"
         }
     },
-    plugins: {
-        Environment: {
-            VITE_GEMINI_API_KEY: import.meta.env.VITE_GEMINI_API_KEY
-        }
-    }
+    
 };
 
 export default config;
