@@ -4,5 +4,4 @@
     <string name="title_activity_main">Vex</string>
     <string name="package_name">com.cookieukw.vex</string>
     <string name="custom_url_scheme">com.cookieukw.vex</string>
-    <string name="admob_app_id">ca-app-pub-3239733554197124~8614456450</string>
 </resources>
