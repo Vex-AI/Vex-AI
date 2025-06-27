@@ -1,0 +1,17 @@
+[
+  {
+    "name": "saudacao",
+    "trainingPhrases": ["oi", "ola", "bom dia", "boa tarde", "e aí", "tudo bem"],
+    "responses": ["Olá! Como posso ajudar?", "Oi! Tudo bem? No que posso ser útil hoje?"]
+  },
+  {
+    "name": "informar_preco",
+    "trainingPhrases": ["qual o preço", "quanto custa", "valor do produto", "me fala o preço"],
+    "responses": ["O produto custa R$ 99,90. Você pode encontrá-lo em nosso site."]
+  },
+  {
+    "name": "verificar_estoque",
+    "trainingPhrases": ["tem em estoque?", "ainda tem o produto?", "está disponível"],
+    "responses": ["Sim, temos o produto em estoque!", "No momento, este item está disponível para compra."]
+  }
+]
