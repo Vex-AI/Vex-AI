@@ -1,5 +1,5 @@
 // components/GeminiToggle.tsx
-import { IonItem, IonToggle, IonLabel } from "@ionic/react";
+import { IonToggle } from "@ionic/react";
 import { useState, useEffect } from "react";
 
 const GeminiToggle: React.FC = () => {
@@ -17,14 +17,11 @@ const GeminiToggle: React.FC = () => {
   };
 
   return (
-    <IonItem>
-      <IonLabel>Ativar Gemini</IonLabel>
-      <IonToggle
+    <IonToggle
       color="warning"
-        checked={isEnabled}
-        onIonChange={handleToggle}
-      />
-    </IonItem>
+      checked={isEnabled}
+      onIonChange={handleToggle}
+    />
   );
 };
 
