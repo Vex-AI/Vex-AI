@@ -25,7 +25,7 @@ import "@ionic/react/css/display.css";
 /* Pages */
 import Home from "@/app/page";
 import EditProfile from "@/app/profile/page";
-import SynonPage from "@/app/synons/page";
+import IntentPage from "@/app/intents/page";
 import Functions from "@/app/functions/page";
 import LanguageSelector from "@/app/language/page";
 import Customize from "@/app/customize/page";
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
       { path: "/", element: <Navigate to="/home" replace /> },
       { path: "/home", element: <Home /> },
       { path: "/profile", element: <EditProfile /> },
-      { path: "/synons", element: <SynonPage /> },
+      { path: "/intents", element: <IntentPage /> },
       { path: "/functions", element: <Functions /> },
       { path: "/language", element: <LanguageSelector /> },
       { path: "/customize", element: <Customize /> },
