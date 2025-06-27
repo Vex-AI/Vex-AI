@@ -1,60 +1,37 @@
-import { useCallback, useState } from "react";
-import { t } from "i18next";
-import { UseVexMessageProps } from "@/types";
-import { sendMessage } from "@/lib/utils";
+// hooks/useVexMessage.ts - VERSÃO ISOLADA E FINAL
 
-export function useVexMessage({ classifier, analyzer }: UseVexMessageProps) {
-  const [isTrainDisabled, setIsTrainDisabled] = useState(false);
-  const [status, setStatus] = useState("on-line");
+import { useState } from 'react';
+import { analyzer } from '@/lib/analyzer';
+import { sendMessage } from '@/lib/utils';
 
-  const sendVexMessage = useCallback(
-    async (raw: string) => {
-      const content = String(raw);
-      if (!content.trim()) return;
+// O tipo de estado continua o mesmo.
+export type ProcessingStatus = 'online' | 'processing';
 
-      const geminiEnabled = localStorage.getItem("geminiEnabled") === "true";
-      const useBayes =
-        !geminiEnabled && localStorage.getItem("bayesEnabled") !== "false";
+export const useVexMessage = () => {
+  // O estado é puramente lógico.
+  const [status, setStatus] = useState<ProcessingStatus>('online');
 
-      setIsTrainDisabled(true);
-      setStatus("digitando...");
+  const sendVexMessage = async (userMessage: string) => {
+    if (!userMessage.trim()) return;
 
-      const handleResponse = async (answer: string) => {
-        console.log({answer})
-        const delay =
-          answer.length > 30 ? 2000 + Math.random() * 2000 : answer.length * 50;
-        setTimeout(() => {
-          sendMessage(answer, true);
-          setStatus("on-line");
-          setIsTrainDisabled(false);
-        }, delay);
-      };
+    setStatus('processing');
 
-      if (useBayes) {
-        try {
-          const answer = await classifier.categorize(content);
-          await handleResponse(answer);
-          return;
-        } catch (e) {
-          console.error("Bayes error:", e);
-        }
-      }
-
-      try {
-        const answer = await analyzer(content);
-        await handleResponse(answer);
-      } catch (e) {
-        console.error("Erro no analyzer:", e);
-        await handleResponse(t("error_default"));
-      }
-    },
-    []
-  );
+    try {
+      const vexReply = await analyzer(userMessage);
+      sendMessage(vexReply, true);
+    } catch (error) {
+      console.error("Ocorreu um erro ao processar a resposta de Vex:", error);
+      sendMessage("Desculpe, tive um problema para processar sua mensagem.", true);
+    } finally {
+      setStatus('online');
+    }
+  };
 
   return {
     sendVexMessage,
-    isTrainDisabled,
+    // A lógica de processamento continua simples.
+    isProcessing: status === 'processing',
+    // RETORNAMOS O ESTADO BRUTO. O componente vai decidir como exibi-lo.
     status,
-    setStatus,
   };
-}
+};

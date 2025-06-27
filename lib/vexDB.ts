@@ -1,90 +1,68 @@
-import { IClassifier, IMessage, IStreak, ISynon, IVexInfo } from "@/types";
-import Dexie, { Table, Transaction } from "dexie";
+// lib/vexDB.ts
 
+import {
+  IIntent,
+  IMessage,
+  IStreak,
+  IUnclassifiedMessage,
+  IVexInfo,
+} from "@/types";
+import Dexie, { Table, Transaction } from "dexie";
 
 export class vexDB extends Dexie {
   messages!: Table<IMessage>;
   vexInfo!: Table<IVexInfo>;
-  synons!: Table<ISynon>;
-  classifier!: Table<IClassifier>;
   streaks!: Table<IStreak>;
+  intents!: Table<IIntent>;
+  unclassified!: Table<IUnclassifiedMessage>;
+
   constructor() {
     super("chatDatabase");
-    this.version(2).stores({
+
+    this.version(6).stores({
       messages: "++id, content, isVex, hour, date",
-      synons: "++id, word, reply",
-      vexInfo: "id,name, profileImage",
-      classifier: "id, classifierData",
-      streaks: 'currentStreak, lastAccessed',
+      vexInfo: "++id, name, profileImage", // Usamos ++id para autoincremento
+      streaks: "++id, currentStreak, lastAccessed",
+      intents: "++id, name",
+      unclassified: "++id, timestamp",
     });
+
+    // UMA ÚNICA FONTE DE VERDADE PARA POPULAR O DB
+    this.on("populate", this.populateDatabase);
+  }
+
+  // A função que popula o banco de dados na criação
+  async populateDatabase(tx: Transaction) {
+    console.log("Executando populate do banco de dados inicial...");
+
+    // Adiciona informações padrão do Vex
+    await tx.table("vexInfo").add({
+      name: "Vex",
+      profileImage: "/Vex_320.png",
+    });
+
+    // Pega o idioma do localStorage ou usa o padrão 'enUS'
+    const initialLanguage = localStorage.getItem("language") || "enUS";
+    console.log(`Populando com o modelo inicial para: ${initialLanguage}`);
+
+    try {
+      // Usa a mesma lógica de importação dinâmica
+      //@ts-ignore
+      const intentsToSeedModule = await import(
+        `../vexModels/new_models/${initialLanguage}.json`
+      );
+      const intentsToSeed = intentsToSeedModule.default;
+
+      if (intentsToSeed && intentsToSeed.length > 0) {
+        await tx.table("intents").bulkAdd(intentsToSeed);
+      }
+      console.log("Banco de dados populado com sucesso!");
+    } catch (error) {
+      console.error(
+        "Falha ao popular o banco de dados com intenções iniciais:",
+        error
+      );
+    }
   }
 }
-
 export const db = new vexDB();
-
-db.on("populate", (tx: Transaction) => {
-  const addSynonyms = (id: string, word: string[], reply: string[]) => {
-    tx.table("synons").add({
-      id,
-      word,
-      reply,
-    });
-  };
-
-  addSynonyms(
-    "1",
-    ["oi", "olá", "e aí", "alô", "bom dia"],
-    [
-      "Olá, tudo bem?",
-      "Oi, como posso ajudar?",
-      "E aí, tudo tranquilo?",
-      "Alô, tem alguém aí?",
-      "Bom dia, como você está?",
-    ]
-  );
-
-  addSynonyms(
-    "2",
-    ["hola", "buenos días", "qué tal", "adiós", "hasta luego"],
-    [
-      "¡Hola!",
-      "Buenos días, ¿cómo estás?",
-      "¿Qué tal?",
-      "¡Adiós!",
-      "Hasta luego, nos vemos más tarde.",
-    ]
-  );
-
-  addSynonyms(
-    "3",
-    ["こんにちは", "おはよう", "さようなら", "おやすみ", "ありがとう"],
-    [
-      "こんにちは！",
-      "おはようございます！",
-      "さようなら！",
-      "おやすみなさい。",
-      "ありがとうございます！",
-    ]
-  );
-
-  addSynonyms(
-    "4",
-    ["hello", "hi", "hey", "good morning", "goodbye"],
-    [
-      "Hello!",
-      "Hi, how can I assist you?",
-      "Hey there!",
-      "Good morning, how are you?",
-      "Goodbye, take care!",
-    ]
-  );
-});
-
-db.on("populate", (tx: Transaction) => {
-  tx.table("vexInfo").add({
-    id: 1,
-    name: "Vex",
-    // profileImage: "https://avatars.githubusercontent.com/u/119815111?s=512&v=4",
-    profileImage: "/Vex_320.png",
-  });
-});
