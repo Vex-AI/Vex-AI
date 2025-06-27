@@ -72,10 +72,36 @@ export interface MessageProps {
   onClose: () => void;
 }
 
-export interface SynonProps {
+export interface IntentItemProps {
   syn: ISynon;
   onAddWordSynon?: () => void;
   onDeleteSynon?: () => void;
   onAddReplySynon?: () => void;
   index: number;
+}
+
+export interface IIntent {
+    id?: number; // Opcional, auto-incrementado
+    name: string; // Um nome único para a intenção, ex: "informar_preco"
+    trainingPhrases: string[]; // Frases de exemplo que ativam essa intenção
+    responses: string[]; // Respostas possíveis para essa intenção
+}
+
+export interface IUnclassifiedMessage {
+    id?: number;
+    text: string; // O texto original da mensagem
+    timestamp: Date;
+}
+
+
+
+export interface PhraseModalProps {
+  PhraseModal: boolean;
+  setPhraseModal: React.Dispatch<React.SetStateAction<boolean>>;
+  newWord: string;
+  setNewWord: React.Dispatch<React.SetStateAction<string>>;
+  handleAddWord: () => void;
+  handleDeleteWord: (word: string) => void;
+  synonID: string | null;
+  synons: ISynon[];
 }
