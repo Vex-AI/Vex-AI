@@ -12,8 +12,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       '@capacitor/android':
-        specifier: 7.4.0
-        version: 7.4.0(@capacitor/core@7.2.0)
+        specifier: 7.2.0
+        version: 7.2.0(@capacitor/core@7.2.0)
       '@capacitor/app':
         specifier: ^7.0.1
         version: 7.0.1(@capacitor/core@7.2.0)
@@ -247,10 +247,10 @@ packages:
     resolution: {integrity: sha512-aogZipDosRZB5+RWNukKI1DhPnp7nZNw7KJqnL8Ii6rgYGJaCjpeBvN9bJjFbl1K2jNnCe5lp/a/YlLonBkUQA==}
     engines: {node: '>=20.0.0'}
 
-  '@capacitor/android@7.4.0':
-    resolution: {integrity: sha512-HVCQsnUobviGt/MR5qCfXsfkSyZ5gjJVW6Jbn0CI5NHhsvUkBtazGjaMjdt5JueIz1pfKXpiuZc/njfRHwjx6Q==}
+  '@capacitor/android@7.2.0':
+    resolution: {integrity: sha512-zdhEy3jZPG5Toe/pGzKtDgIiBGywjaoEuQWnGVjBYPlSAEUtAhpZ2At7V0SCb26yluAuzrAUV0Ue+LQeEtHwFQ==}
     peerDependencies:
-      '@capacitor/core': ^7.4.0
+      '@capacitor/core': ^7.2.0
 
   '@capacitor/app@7.0.1':
     resolution: {integrity: sha512-ArlVZAAla4MwQoKh26x2AaTDOBh5Vhp1VhMKR3RwqZSsZnazKTFGNrPbr9Ez5r1knnEDfApyjwp1uZnXK1WTYQ==}
@@ -2123,7 +2123,7 @@ snapshots:
       '@capacitor/core': 7.2.0
       '@rdlabo/capacitor-docgen': 0.4.1
 
-  '@capacitor/android@7.4.0(@capacitor/core@7.2.0)':
+  '@capacitor/android@7.2.0(@capacitor/core@7.2.0)':
     dependencies:
       '@capacitor/core': 7.2.0
 
