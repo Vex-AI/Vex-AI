@@ -1,141 +1,186 @@
 // classes/nlp-util.ts
 
-// Lista de stop words em português. Pode ser expandida.
+// List of Portuguese stop words. Can be expanded.
 const stopWords = new Set([
-    "a", "o", "as", "os", "ao", "aos", "de", "do", "da", "dos", "das", "em", "no", "na", "nos", "nas",
-    "um", "uma", "uns", "umas", "e", "ou", "mas", "se", "que", "qual", "quem", "com", "por", "para",
-    "sem", "sob", "sobre", "é", "são", "foi", "ser", "ter", "meu", "seu", "sua", "pelo", "pela"
+  "a",
+  "o",
+  "as",
+  "os",
+  "ao",
+  "aos",
+  "de",
+  "do",
+  "da",
+  "dos",
+  "das",
+  "em",
+  "no",
+  "na",
+  "nos",
+  "nas",
+  "um",
+  "uma",
+  "uns",
+  "umas",
+  "e",
+  "ou",
+  "mas",
+  "se",
+  "que",
+  "qual",
+  "quem",
+  "com",
+  "por",
+  "para",
+  "sem",
+  "sob",
+  "sobre",
+  "é",
+  "são",
+  "foi",
+  "ser",
+  "ter",
+  "meu",
+  "seu",
+  "sua",
+  "pelo",
+  "pela",
 ]);
 
 /**
- * Limpa o texto: remove acentos, converte para minúsculas, remove pontuação e stop words.
- * @param text O texto a ser limpo.
- * @returns Um array de palavras (tokens) limpas e relevantes.
+ * Cleans the text: removes accents, converts to lowercase, removes punctuation and stop words.
+ * @param text The text to be cleaned.
+ * @returns An array of clean and relevant words (tokens).
  */
 export function cleanAndTokenize(text: string): string[] {
-    const withoutAccents = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const lowercased = withoutAccents.toLowerCase();
-    const tokens = lowercased.match(/\b\w+\b/g) || [];
-    return tokens.filter(token => !stopWords.has(token));
+  const withoutAccents = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const lowercased = withoutAccents.toLowerCase();
+  const tokens = lowercased.match(/\b\w+\b/g) || [];
+  return tokens.filter((token) => !stopWords.has(token));
 }
 
 /**
- * Calcula a frequência dos termos (TF) em um documento (array de tokens).
- * @param tokens Array de palavras do documento.
- * @returns Um Map onde a chave é o termo e o valor é sua frequência.
+ * Calculates the Term Frequency (TF) in a document (array of tokens).
+ * @param tokens Array of words from the document.
+ * @returns A Map where the key is the term and the value is its frequency.
  */
 function calculateTf(tokens: string[]): Map<string, number> {
-    const tf = new Map<string, number>();
-    const tokenCount = tokens.length;
-    if (tokenCount === 0) return tf;
+  const tf = new Map<string, number>();
+  const tokenCount = tokens.length;
+  if (tokenCount === 0) return tf;
 
-    for (const token of tokens) {
-        tf.set(token, (tf.get(token) || 0) + 1);
-    }
+  for (const token of tokens) {
+    tf.set(token, (tf.get(token) || 0) + 1);
+  }
 
-    // Normaliza a frequência
-    for (const [token, count] of tf.entries()) {
-        tf.set(token, count / tokenCount);
-    }
-    return tf;
+  // Normalizes the frequency
+  for (const [token, count] of tf.entries()) {
+    tf.set(token, count / tokenCount);
+  }
+  return tf;
 }
 
 /**
- * Calcula o IDF para um corpus de documentos.
- * @param documentsTokens Array de documentos, onde cada documento é um array de tokens.
- * @returns Um Map onde a chave é o termo e o valor é seu score IDF.
+ * Calculates the IDF for a document corpus.
+ * @param documentsTokens Array of documents, where each document is an array of tokens.
+ * @returns A Map where the key is the term and the value is its IDF score.
  */
 function calculateIdf(documentsTokens: string[][]): Map<string, number> {
-    const idf = new Map<string, number>();
-    const docCount = documentsTokens.length;
-    const docFrequency = new Map<string, number>();
+  const idf = new Map<string, number>();
+  const docCount = documentsTokens.length;
+  const docFrequency = new Map<string, number>();
 
-    // Conta em quantos documentos cada termo aparece
-    for (const tokens of documentsTokens) {
-        const uniqueTokens = new Set(tokens);
-        for (const token of uniqueTokens) {
-            docFrequency.set(token, (docFrequency.get(token) || 0) + 1);
-        }
+  // Counts how many documents each term appears in
+  for (const tokens of documentsTokens) {
+    const uniqueTokens = new Set(tokens);
+    for (const token of uniqueTokens) {
+      docFrequency.set(token, (docFrequency.get(token) || 0) + 1);
     }
+  }
 
-    // Calcula o score IDF
-    for (const [token, freq] of docFrequency.entries()) {
-        idf.set(token, Math.log(docCount / (1 + freq))); // +1 para evitar divisão por zero
-    }
-    return idf;
+  // Calculates the IDF score
+  for (const [token, freq] of docFrequency.entries()) {
+    idf.set(token, Math.log(docCount / (1 + freq))); // +1 to avoid division by zero
+  }
+  return idf;
 }
 
 /**
- * Interface para armazenar os dados pré-processados para a busca local.
+ * Interface to store pre-processed data for local search.
  */
 export interface IProcessedSynon {
-    id: string;
-    vector: Map<string, number>; // Vetor TF-IDF
-    originalReplies: string[];
+  id: string;
+  vector: Map<string, number>; // TF-IDF vector
+  originalReplies: string[];
 }
 
 /**
- * Pré-processa uma lista de sinônimos para calcular seus vetores TF-IDF.
- * @param synons A lista de sinônimos do banco de dados.
- * @returns Um objeto contendo a lista de sinônimos processados e o mapa IDF.
+ * Pre-processes a list of synonyms to calculate their TF-IDF vectors.
+ * @param synons The list of synonyms from the database.
+ * @returns An object containing the list of processed synonyms and the IDF map.
  */
-export function preprocessSynons(synons: { word: string[], reply: string[], id: string }[]): { processed: IProcessedSynon[], idf: Map<string, number> } {
-    // Usaremos a primeira palavra/frase de cada sinônimo como o "documento"
-    const documents = synons.map(s => s.word[0] || "");
-    const documentsTokens = documents.map(doc => cleanAndTokenize(doc));
-    
-    const idf = calculateIdf(documentsTokens);
-    const processed: IProcessedSynon[] = [];
+export function preprocessSynons(
+  synons: { word: string[]; reply: string[]; id: string }[]
+): { processed: IProcessedSynon[]; idf: Map<string, number> } {
+  // We will use the first word/phrase of each synonym as the "document"
+  const documents = synons.map((s) => s.word[0] || "");
+  const documentsTokens = documents.map((doc) => cleanAndTokenize(doc));
 
-    for (let i = 0; i < synons.length; i++) {
-        const synon = synons[i];
-        const tokens = documentsTokens[i];
-        const tf = calculateTf(tokens);
-        const vector = new Map<string, number>();
+  const idf = calculateIdf(documentsTokens);
+  const processed: IProcessedSynon[] = [];
 
-        for (const [token, value] of tf.entries()) {
-            vector.set(token, value * (idf.get(token) || 0));
-        }
+  for (let i = 0; i < synons.length; i++) {
+    const synon = synons[i];
+    const tokens = documentsTokens[i];
+    const tf = calculateTf(tokens);
+    const vector = new Map<string, number>();
 
-        processed.push({
-            id: synon.id,
-            vector,
-            originalReplies: synon.reply
-        });
+    for (const [token, value] of tf.entries()) {
+      vector.set(token, value * (idf.get(token) || 0));
     }
 
-    return { processed, idf };
+    processed.push({
+      id: synon.id,
+      vector,
+      originalReplies: synon.reply,
+    });
+  }
+
+  return { processed, idf };
 }
 
 /**
- * Calcula a similaridade de cossenos entre dois vetores TF-IDF.
- * @param vecA Vetor A.
- * @param vecB Vetor B.
- * @returns Um score de similaridade entre 0 e 1.
+ * Calculates the cosine similarity between two TF-IDF vectors.
+ * @param vecA Vector A.
+ * @param vecB Vector B.
+ * @returns A similarity score between 0 and 1.
  */
-export function cosineSimilarity(vecA: Map<string, number>, vecB: Map<string, number>): number {
-    let dotProduct = 0;
-    let magnitudeA = 0;
-    let magnitudeB = 0;
+export function cosineSimilarity(
+  vecA: Map<string, number>,
+  vecB: Map<string, number>
+): number {
+  let dotProduct = 0;
+  let magnitudeA = 0;
+  let magnitudeB = 0;
 
-    const allKeys = new Set([...vecA.keys(), ...vecB.keys()]);
+  const allKeys = new Set([...vecA.keys(), ...vecB.keys()]);
 
-    for (const key of allKeys) {
-        const valA = vecA.get(key) || 0;
-        const valB = vecB.get(key) || 0;
-        dotProduct += valA * valB;
-        magnitudeA += valA * valA;
-        magnitudeB += valB * valB;
-    }
-    
-    magnitudeA = Math.sqrt(magnitudeA);
-    magnitudeB = Math.sqrt(magnitudeB);
+  for (const key of allKeys) {
+    const valA = vecA.get(key) || 0;
+    const valB = vecB.get(key) || 0;
+    dotProduct += valA * valB;
+    magnitudeA += valA * valA;
+    magnitudeB += valB * valB;
+  }
 
-    if (magnitudeA === 0 || magnitudeB === 0) {
-        return 0;
-    }
+  magnitudeA = Math.sqrt(magnitudeA);
+  magnitudeB = Math.sqrt(magnitudeB);
 
-    return dotProduct / (magnitudeA * magnitudeB);
+  if (magnitudeA === 0 || magnitudeB === 0) {
+    return 0;
+  }
+
+  return dotProduct / (magnitudeA * magnitudeB);
 }
 
 export function levenshtein(a: string, b: string): number {
