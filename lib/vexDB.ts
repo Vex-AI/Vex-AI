@@ -21,32 +21,32 @@ export class vexDB extends Dexie {
 
     this.version(6).stores({
       messages: "++id, content, isVex, hour, date",
-      vexInfo: "++id, name, profileImage", // Usamos ++id para autoincremento
+      vexInfo: "++id, name, profileImage", // We use ++id for autoincrement
       streaks: "++id, currentStreak, lastAccessed",
       intents: "++id, name",
       unclassified: "++id, timestamp",
     });
 
-    // UMA ÚNICA FONTE DE VERDADE PARA POPULAR O DB
+    // A SINGLE SOURCE OF TRUTH FOR POPULATING THE DB
     this.on("populate", this.populateDatabase);
   }
 
-  // A função que popula o banco de dados na criação
+  // The function that populates the database on creation
   async populateDatabase(tx: Transaction) {
-    console.log("Executando populate do banco de dados inicial...");
+    console.log("Executing initial database populate...");
 
-    // Adiciona informações padrão do Vex
+    // Adds default Vex information
     await tx.table("vexInfo").add({
       name: "Vex",
       profileImage: "/Vex_320.png",
     });
 
-    // Pega o idioma do localStorage ou usa o padrão 'enUS'
+    // Gets the language from localStorage or defaults to 'enUS'
     const initialLanguage = localStorage.getItem("language") || "enUS";
-    console.log(`Populando com o modelo inicial para: ${initialLanguage}`);
+    console.log(`Populating with the initial model for: ${initialLanguage}`);
 
     try {
-      // Usa a mesma lógica de importação dinâmica
+      // Uses the same dynamic import logic
       //@ts-ignore
       const intentsToSeedModule = await import(
         `../vexModels/new_models/${initialLanguage}.json`
@@ -56,10 +56,10 @@ export class vexDB extends Dexie {
       if (intentsToSeed && intentsToSeed.length > 0) {
         await tx.table("intents").bulkAdd(intentsToSeed);
       }
-      console.log("Banco de dados populado com sucesso!");
+      console.log("Database populated successfully!");
     } catch (error) {
       console.error(
-        "Falha ao popular o banco de dados com intenções iniciais:",
+        "Failed to populate the database with initial intents:",
         error
       );
     }
