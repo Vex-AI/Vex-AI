@@ -81,19 +81,17 @@ export interface IntentItemProps {
 }
 
 export interface IIntent {
-    id?: number; // Opcional, auto-incrementado
-    name: string; // Um nome único para a intenção, ex: "informar_preco"
-    trainingPhrases: string[]; // Frases de exemplo que ativam essa intenção
-    responses: string[]; // Respostas possíveis para essa intenção
+    id?: number; 
+    name: string; 
+    trainingPhrases: string[]; 
+    responses: string[];
 }
 
 export interface IUnclassifiedMessage {
     id?: number;
-    text: string; // O texto original da mensagem
+    text: string; 
     timestamp: Date;
 }
-
-
 
 export interface PhraseModalProps {
   PhraseModal: boolean;
@@ -105,3 +103,10 @@ export interface PhraseModalProps {
   synonID: string | null;
   synons: ISynon[];
 }
+
+export interface ICachedIntent {
+  name: string;
+  responses: string[];
+  cachedCleanedPhrases: string[];
+}
+
