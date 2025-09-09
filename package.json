@@ -9,7 +9,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "type": "npx tsc --noEmit"
+    "type": "npx tsc --noEmit",
+    "apk": "cd android && ./gradlew assembleRelease && cd -",
+    "aab": "cd android && ./gradlew bundleRelease && cd -"
   },
   "dependencies": {
     "@capacitor-community/admob": "^7.0.3",
