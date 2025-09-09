@@ -1,80 +1,78 @@
 import { LocalNotifications } from "@capacitor/local-notifications";
 import i18n from "i18next";
 
-// Variável de debug para alternar o comportamento entre produção e desenvolvimento
+// Debug flag to toggle behavior between production and development
 const debug = false;
 
-// Carrega as mensagens de notificação localizadas
+// Loads the localized notification messages
 const notificationMessages = i18n.t("notifications", {
-    returnObjects: true
+  returnObjects: true,
 }) as { notifications: string[] };
 
-// Função para solicitar permissão de notificações
+// Function to request notification permission
 export const requestNotificationPermission = async (): Promise<boolean> => {
-    const { display } = await LocalNotifications.requestPermissions();
-    return display === "granted";
+  const { display } = await LocalNotifications.requestPermissions();
+  return display === "granted";
 };
 
-// Função para obter uma mensagem aleatória das mensagens disponíveis
+// Function to get a random message from the available messages
 export const getRandomMessage = (): string => {
-    if (!notificationMessages || !notificationMessages.notifications.length) {
-        console.error("Nenhuma mensagem de notificação disponível.");
-        return "Mensagem padrão"; // Fallback para evitar erros
-    }
-    const randomIndex = Math.floor(
-        Math.random() * notificationMessages.notifications.length
-    );
-    return notificationMessages.notifications[randomIndex];
+  if (!notificationMessages || !notificationMessages.notifications.length) {
+    console.error("No notification messages available.");
+    return "Default message"; // Fallback to prevent errors
+  }
+  const randomIndex = Math.floor(
+    Math.random() * notificationMessages.notifications.length
+  );
+  return notificationMessages.notifications[randomIndex];
 };
 
-// Função para agendar notificações aleatórias
+// Function to schedule random notifications
 export const scheduleRandomNotification = async (): Promise<void> => {
-    const permissionGranted = await requestNotificationPermission();
+  const permissionGranted = await requestNotificationPermission();
 
-    if (!permissionGranted) {
-        console.warn("Permissão para notificações não concedida.");
-        return;
-    }
+  if (!permissionGranted) {
+    console.warn("Permission for notifications not granted.");
+    return;
+  }
 
-    const message = getRandomMessage();
-    
+  const message = getRandomMessage();
 
-    // Define o intervalo de tempo com base no modo debug
-    const intervalInMilliseconds = debug ? 10_000 : 5 * 60 * 60 * 1000; // 10 segundos ou 5 horas
+  // Defines the time interval based on the debug mode
+  const intervalInMilliseconds = debug ? 10_000 : 5 * 60 * 60 * 1000; // 10 seconds or 5 hours
 
-    // Agenda a notificação inicial
-    try {
+  // Schedules the initial notification
+  try {
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id: Date.now(), // Unique ID for each notification
+          title: "Hey!",
+          body: message,
+          schedule: {
+            at: new Date(Date.now() + intervalInMilliseconds), // First notification at the defined interval
+          },
+        },
+      ],
+    });
+
+    // Sets up continuous repetition with the defined interval
+    if (debug) {
+      setInterval(async () => {
+        const repeatedMessage = getRandomMessage();
+
         await LocalNotifications.schedule({
-            notifications: [
-                {
-                    id: Date.now(), // ID único para cada notificação
-                    title: "Hey!",
-                    body: message,
-                    schedule: {
-                        at: new Date(Date.now() + intervalInMilliseconds) // Primeira notificação no intervalo definido
-                    }
-                }
-            ]
+          notifications: [
+            {
+              id: Date.now(),
+              title: "Hey!",
+              body: repeatedMessage,
+            },
+          ],
         });
-
-        // Configura repetição contínua com intervalo definido
-        if (debug) {
-            setInterval(async () => {
-                const repeatedMessage = getRandomMessage();
-                
-
-                await LocalNotifications.schedule({
-                    notifications: [
-                        {
-                            id: Date.now(),
-                            title: "Hey!",
-                            body: repeatedMessage
-                        }
-                    ]
-                });
-            }, intervalInMilliseconds);
-        }
-    } catch (error) {
-        console.error("Erro ao agendar notificações:", error);
+      }, intervalInMilliseconds);
     }
+  } catch (error) {
+    console.error("Error scheduling notifications:", error);
+  }
 };
