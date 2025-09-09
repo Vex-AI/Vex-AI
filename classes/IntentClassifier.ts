@@ -1,79 +1,86 @@
 // lib/IntentClassifier.ts
 
-// Importa a instância do banco de dados (provavelmente IndexedDB via Dexie.js) e utilitários de PLN.
+// Imports the database instance (likely IndexedDB via Dexie.js) and NLP utilities.
 import { db } from "@/lib/vexDB";
-import * as nlp from "./nlp-util"; // Contém funções como tokenização, stemming, levenshtein, etc.
-import { IIntent } from "@/types"; // Define a estrutura de dados de uma intenção.
+import * as nlp from "./nlp-util"; // Contains functions like tokenization, stemming, levenshtein, etc.
+import { ICachedIntent } from "@/types"; // Defines the data structure for a cached intent.
 
 /**
  * @interface IProcessedIntent
- * @description Define a estrutura de uma intenção após ser processada pelo método `train`.
- * Contém o vetor TF-IDF e as respostas associadas.
+ * @description Defines the structure of an intent after being processed by the `train` method.
+ * It contains the TF-IDF vector and associated responses.
  */
 interface IProcessedIntent {
-  name: string; // Nome da intenção (ex: "saudacao").
-  vector: Map<string, number>; // Vetor TF-IDF da intenção. O mapa associa cada token ao seu peso.
-  responses: string[]; // Lista de respostas possíveis para esta intenção.
+  name: string; // Name of the intent (e.g., "greeting").
+  vector: Map<string, number>; // The intent's TF-IDF vector. The map associates each token with its weight.
+  responses: string[]; // List of possible responses for this intent.
 }
 
 /**
  * @class IntentClassifier
- * @description Classifica a intenção do usuário com base em uma mensagem de texto,
- * usando uma abordagem híbrida de similaridade de string e vetores TF-IDF.
+ * @description Classifies user intent based on a text message,
+ * using a hybrid approach of string similarity and TF-IDF vectors.
  */
 export class IntentClassifier {
-  private isTrained = false; // Flag para indicar se o classificador já foi treinado.
-  private processedIntents: IProcessedIntent[] = []; // Armazena as intenções já vetorizadas.
-  private idf: Map<string, number> | null = null; // Armazena os pesos IDF para cada token do vocabulário.
-  // Propriedade para guardar os dados originais para a checagem por similaridade exata/próxima.
-  private allIntentsForExactMatch: IIntent[] = [];
+  private isTrained = false; // Flag to indicate if the classifier has been trained.
+  private processedIntents: IProcessedIntent[] = []; // Stores the already vectorized intents.
+  private idf: Map<string, number> | null = null; // Stores the IDF weights for each token in the vocabulary.
+  // Property to store the pre-processed data for the exact/close similarity check.
+  private allIntentsForExactMatch: ICachedIntent[] = [];
 
   /**
    * @method train
-   * @description Treina o classificador carregando intenções do banco de dados e calculando seus vetores TF-IDF.
-   * Este método é assíncrono porque a leitura do banco de dados é uma operação I/O.
+   * @description Trains the classifier by loading intents from the database and calculating their TF-IDF vectors.
+   * This method is asynchronous because reading from the database is an I/O operation.
    */
   async train(): Promise<void> {
-    console.log("Iniciando treinamento do classificador...");
+    console.log("Starting classifier training...");
     const allIntents = await db.intents.toArray();
 
-    // Guarda uma cópia das intenções originais para a busca por similaridade de Levenshtein no método `predict`.
-    this.allIntentsForExactMatch = allIntents;
+    // Stores a cached copy of the cleaned training phrases for the Levenshtein check in the `predict` method.
+    this.allIntentsForExactMatch = allIntents.map((intent) => ({
+      name: intent.name,
+      responses: intent.responses,
+      // Creates a new property with the phrases already cleaned and ready for use
+      cachedCleanedPhrases: intent.trainingPhrases.map((phrase) =>
+        nlp.cleanAndTokenize(phrase).join(" ")
+      ),
+    }));
 
     if (allIntents.length === 0) {
-      console.warn("Nenhuma intenção encontrada para treinamento.");
+      console.warn("No intents found for training.");
       this.isTrained = false;
       return;
     }
 
-    // Cria um "documento" único para cada intenção, juntando todas as suas frases de treinamento.
+    // Creates a single "document" for each intent by joining all its training phrases.
     const documents = allIntents.map((intent) =>
       intent.trainingPhrases.join(" ")
     );
-    // Limpa e tokeniza cada documento (transforma em um array de palavras normalizadas).
+    // Cleans and tokenizes each document (transforms it into an array of normalized words).
     const documentsTokens = documents.map((doc) => nlp.cleanAndTokenize(doc));
 
-    // Calcula o IDF (Inverse Document Frequency) para todo o corpus de documentos.
-    // O IDF mede a importância de uma palavra. Palavras raras têm IDF alto, palavras comuns têm IDF baixo.
+    // Calculates the IDF (Inverse Document Frequency) for the entire document corpus.
+    // IDF measures the importance of a word. Rare words have a high IDF, common words have a low IDF.
     const idf = this.calculateIdf(documentsTokens);
     this.idf = idf;
 
     this.processedIntents = [];
-    // Itera por cada intenção para calcular seu vetor TF-IDF.
+    // Iterates through each intent to calculate its TF-IDF vector.
     for (let i = 0; i < allIntents.length; i++) {
       const intent = allIntents[i];
       const tokens = documentsTokens[i];
-      // Calcula o TF (Term Frequency) para os tokens da intenção atual.
+      // Calculates the TF (Term Frequency) for the current intent's tokens.
       const tf = this.calculateTf(tokens);
       const vector = new Map<string, number>();
 
-      // Constrói o vetor TF-IDF: para cada token, multiplica seu TF pelo seu IDF.
+      // Builds the TF-IDF vector: for each token, multiply its TF by its IDF.
       for (const [token, value] of tf.entries()) {
-        // `idf.get(token) || 0` garante que se uma palavra nunca foi vista, seu peso seja 0.
+        // `idf.get(token) || 0` ensures that if a word was never seen, its weight is 0.
         vector.set(token, value * (idf.get(token) || 0));
       }
 
-      // Armazena a intenção processada com seu vetor e respostas.
+      // Stores the processed intent with its vector and responses.
       this.processedIntents.push({
         name: intent.name,
         vector,
@@ -83,93 +90,86 @@ export class IntentClassifier {
 
     this.isTrained = true;
     console.log(
-      "Classificador treinado com sucesso com",
+      "Classifier successfully trained with",
       allIntents.length,
-      "intenções."
+      "intents."
     );
   }
 
   /**
    * @method predict
-   * @description Prediz a intenção de uma mensagem usando uma abordagem híbrida.
-   * @param {string} message - A mensagem do usuário.
-   * @param {number} confidenceThreshold - O limiar de confiança mínimo para a predição por similaridade de cosseno.
-   * @returns {{ intent: string; response: string; confidence: number } | null} - O objeto da intenção encontrada ou nulo.
+   * @description Predicts the intent of a message using a hybrid approach.
+   * @param {string} message - The user's message.
+   * @param {number} confidenceThreshold - The minimum confidence threshold for the cosine similarity prediction.
+   * @returns {{ intent: string; response: string; confidence: number } | null} - The found intent object or null.
    */
   predict(
     message: string,
     confidenceThreshold = 0.35
   ): { intent: string; response: string; confidence: number } | null {
     if (!this.isTrained || !this.idf) {
-      console.error("O classificador deve ser treinado antes de fazer predições.");
+      console.error(
+        "The classifier must be trained before making predictions."
+      );
       return null;
     }
 
-    // Limpa e tokeniza a mensagem do usuário para a comparação.
+    // Cleans and tokenizes the user's message for comparison.
     const cleanedMessage = nlp.cleanAndTokenize(message).join(" ");
 
-    // ETAPA 1: VERIFICAÇÃO DE SIMILARIDADE DE STRING (Levenshtein)
-    // Tenta encontrar uma correspondência quase exata primeiro. É mais rápido e preciso para erros de digitação.
+    // STEP 1: STRING SIMILARITY CHECK (Levenshtein)
+    // Tries to find a near-exact match first. It's faster and more accurate for typos.
     for (const intent of this.allIntentsForExactMatch) {
-      for (const trainingPhrase of intent.trainingPhrases) {
-        const cleanedTrainingPhrase = nlp
-          .cleanAndTokenize(trainingPhrase)
-          .join(" ");
+      // Iterates directly over the ALREADY CLEANED phrases from the cache:
+      for (const cachedPhrase of intent.cachedCleanedPhrases) {
+        // No more cleaning needed! Just calculate the distance:
+        const distance = nlp.levenshtein(cleanedMessage, cachedPhrase);
 
-        // Calcula a distância de Levenshtein: o número de edições para as strings serem iguais.
-        const distance = nlp.levenshtein(cleanedMessage, cleanedTrainingPhrase);
-
-        // Define um limiar de aceitação dinâmico. Permite mais erros em frases mais longas.
-        // Ex: Uma frase de 20 caracteres pode ter até 5 erros.
-        const threshold = Math.floor(cleanedTrainingPhrase.length / 4);
+        const threshold = Math.floor(cachedPhrase.length / 4);
 
         if (distance <= threshold) {
-          console.log(
-            `Correspondência por similaridade de string encontrada para a intenção: ${intent.name} (Distância: ${distance})`
-          );
+          // ... (rest of the return logic)
           return {
             intent: intent.name,
-            // Seleciona uma resposta aleatória da lista de respostas da intenção.
             response:
               intent.responses[
                 Math.floor(Math.random() * intent.responses.length)
               ],
-            // A confiança é calculada com base na distância. Quanto menor a distância, maior a confiança.
-            confidence: 1.0 - distance / cleanedTrainingPhrase.length,
+            confidence: 1.0 - distance / cachedPhrase.length,
           };
         }
       }
     }
 
-    // ETAPA 2: CÁLCULO DE SIMILARIDADE DE VETORES (Fallback de Inteligência Semântica)
-    // Se a Etapa 1 falhou, usa a abordagem TF-IDF para entender o significado semântico.
+    // STEP 2: VECTOR SIMILARITY CALCULATION (Semantic Fallback)
+    // If Step 1 failed, use the TF-IDF approach to understand the semantic meaning.
     const messageTokens = nlp.cleanAndTokenize(message);
     const messageVector = new Map<string, number>();
     const messageTf = this.calculateTf(messageTokens);
 
-    // Cria o vetor TF-IDF para a mensagem do usuário.
+    // Creates the TF-IDF vector for the user's message.
     for (const [token, value] of messageTf.entries()) {
       messageVector.set(token, value * (this.idf.get(token) || 0));
     }
 
     let bestMatch = { confidence: -1, index: -1 };
 
-    // Compara o vetor da mensagem com o vetor de cada intenção treinada.
+    // Compares the message vector with each trained intent vector.
     for (let i = 0; i < this.processedIntents.length; i++) {
       const intent = this.processedIntents[i];
-      // Calcula a similaridade de cosseno entre os dois vetores.
+      // Calculates the cosine similarity between the two vectors.
       const similarity = nlp.cosineSimilarity(messageVector, intent.vector);
       if (similarity > bestMatch.confidence) {
         bestMatch = { confidence: similarity, index: i };
       }
     }
 
-    // Se a melhor correspondência encontrada superar o limiar de confiança, retorna o resultado.
+    // If the best match found exceeds the confidence threshold, return the result.
     if (bestMatch.confidence > confidenceThreshold) {
       const matchedIntent = this.processedIntents[bestMatch.index];
       return {
         intent: matchedIntent.name,
-        // Seleciona uma resposta aleatória.
+        // Selects a random response.
         response:
           matchedIntent.responses[
             Math.floor(Math.random() * matchedIntent.responses.length)
@@ -178,28 +178,28 @@ export class IntentClassifier {
       };
     }
 
-    // Se nenhuma intenção atingir o limiar de confiança, retorna nulo.
+    // If no intent reaches the confidence threshold, return null.
     return null;
   }
 
   /**
    * @method calculateTf
    * @private
-   * @description Calcula a Frequência do Termo (Term Frequency - TF) para um conjunto de tokens.
-   * @param {string[]} tokens - Um array de palavras (tokens).
-   * @returns {Map<string, number>} - Um mapa de cada token para sua frequência normalizada.
+   * @description Calculates the Term Frequency (TF) for a set of tokens.
+   * @param {string[]} tokens - An array of words (tokens).
+   * @returns {Map<string, number>} - A map of each token to its normalized frequency.
    */
   private calculateTf(tokens: string[]): Map<string, number> {
     const tf = new Map<string, number>();
     const tokenCount = tokens.length;
     if (tokenCount === 0) return tf;
 
-    // Conta a ocorrência de cada token.
+    // Counts the occurrence of each token.
     for (const token of tokens) {
       tf.set(token, (tf.get(token) || 0) + 1);
     }
 
-    // Normaliza a contagem dividindo pelo número total de tokens no documento.
+    // Normalizes the count by dividing by the total number of tokens in the document.
     for (const [token, count] of tf.entries()) {
       tf.set(token, count / tokenCount);
     }
@@ -209,26 +209,26 @@ export class IntentClassifier {
   /**
    * @method calculateIdf
    * @private
-   * @description Calcula a Frequência Inversa do Documento (Inverse Document Frequency - IDF) para um corpus.
-   * @param {string[][]} documentsTokens - Um array de documentos, onde cada documento é um array de tokens.
-   * @returns {Map<string, number>} - Um mapa de cada token para seu peso IDF.
+   * @description Calculates the Inverse Document Frequency (IDF) for a corpus.
+   * @param {string[][]} documentsTokens - An array of documents, where each document is an array of tokens.
+   * @returns {Map<string, number>} - A map of each token to its IDF weight.
    */
   private calculateIdf(documentsTokens: string[][]): Map<string, number> {
     const idf = new Map<string, number>();
     const docCount = documentsTokens.length;
-    const docFrequency = new Map<string, number>(); // Conta em quantos documentos cada token aparece.
+    const docFrequency = new Map<string, number>(); // Counts how many documents each token appears in.
 
-    // Calcula a frequência de cada token no total de documentos.
+    // Calculates the frequency of each token across all documents.
     for (const tokens of documentsTokens) {
-      const uniqueTokens = new Set(tokens); // Usa Set para contar cada token apenas uma vez por documento.
+      const uniqueTokens = new Set(tokens); // Uses a Set to count each token only once per document.
       for (const token of uniqueTokens) {
         docFrequency.set(token, (docFrequency.get(token) || 0) + 1);
       }
     }
 
-    // Calcula o peso IDF para cada token usando a fórmula padrão.
-    // O logaritmo suaviza o peso, evitando que palavras muito raras dominem excessivamente.
-    // `1 + freq` no denominador evita a divisão por zero.
+    // Calculates the IDF weight for each token using the standard formula.
+    // The logarithm smooths the weight, preventing very rare words from dominating excessively.
+    // `1 + freq` in the denominator avoids division by zero.
     for (const [token, freq] of docFrequency.entries()) {
       idf.set(token, Math.log(docCount / (1 + freq)));
     }
