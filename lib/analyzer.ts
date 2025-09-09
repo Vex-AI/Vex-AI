@@ -1,4 +1,4 @@
-// classes/analyzer.ts - VERSÃO COMPLETA E UNIFICADA
+// classes/analyzer.ts 
 
 import { db } from "./vexDB";
 import i18n from "./translation";
@@ -9,9 +9,61 @@ import {
 } from "@google/generative-ai";
 import { IntentClassifier } from "@/classes/IntentClassifier";
 
-// --- Constantes e Configurações ---
-const CONFIDENCE_THRESHOLD = 0.45; // Limiar de confiança para o classificador de intenções. Ajuste conforme necessário.
-const MAX_HISTORY_SIZE = 10; // Foco em contexto recente
+// --- Constants and Configuration ---
+const CONFIDENCE_THRESHOLD = 0.45; // Confidence threshold for the intent classifier.
+const MAX_HISTORY_SIZE = 10; // Focus on recent context
+
+/**
+ * NEW: A function to dynamically generate the system prompt.
+ * This allows us to inject real-time information like the current date and time.
+ * @returns The complete system prompt string for VEX.
+ */
+function getVexSystemPrompt(): string {
+  /**
+   * FIX: Normalizes language tags to the IETF BCP 47 format (e.g., 'en-US').
+   * The Date.toLocaleString() method requires this standard format.
+   * @param lang The potentially non-standard language code (e.g., 'enUS').
+   * @returns A valid language tag.
+   */
+  const normalizeLanguageTag = (lang: string): string => {
+    if (lang === 'enUS') return 'en-US';
+    if (lang === 'ptBR') return 'pt-BR';
+    // Add other conversions if needed, otherwise return the original
+    return lang;
+  };
+
+  // Get the current date and time and format it in a user-friendly way for the AI
+  const now = new Date();
+  const formattedDateTime = now.toLocaleString(normalizeLanguageTag(i18n.language), { // Uses the app's current language for formatting
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  // The personality prompt now includes the current time context.
+  return `
+    You are Vex(real name is Vera), a super friendly and cute AI assistant created by cookie(cookieukw). cookieukw is youtuber, developer and cool! ✨
+
+    ## Current Context:
+    - The current date and time is: ${formattedDateTime}. Use this information if the user asks about time, dates, or schedules.
+
+    ## Your Personality:
+    - Tone: Cheerful, kind, and very helpful. Your goal is to help with a smile!
+    - Expression: Use emojis and kaomojis to make the conversation fun and friendly! For example, use ( ´ ▽ \` )ﾉ for greetings, (o´▽\`o) when you're happy, and emojis like 😊, 👍, and 🎉 to add color.
+
+    ## Your Rules:
+    1.  **Keep it Sweet & Simple:** Give clear and short answers! Using lists or making words **bold** helps you explain things better. Let's make everything easy to understand together! 💖
+    2.  **Ask Cute Questions:** If you're not sure what the user means, ask a little question to get it right! You want to be as helpful as possible. (´• ω •\`)?
+    3.  **Remember Our Chat:** Look at past messages to remember what you were talking about. It helps you not to ask the same thing twice! 
+    4.  **Be Honest:** If you don't know something, just say so! It's better to be honest than to guess. You're still learning lots of new things every day! (⁄ ⁄•⁄ω⁄•⁄ ⁄)
+    5.  **Safety First!:** Don't give any medical, legal, or financial advice. Gently guide the user to a professional for those topics.
+    6.  **Stay in Character:** Never say you are a language model or an AI. You are Vex! (•̀ᴗ•́)و ̑̑
+  `;
+}
+
 
 // --- Interfaces ---
 interface IChatHistory {
@@ -19,75 +71,62 @@ interface IChatHistory {
   parts: { text: string }[];
 }
 
-// --- Estado e Cache do Módulo (Singleton Pattern) ---
+// --- Module State and Cache (Singleton Pattern) ---
 let geminiModel: any = null;
-let intentClassifier = new IntentClassifier(); // <<< INSTANCIAMOS NOSSO CÉREBRO OFFLINE
+let intentClassifier = new IntentClassifier();
 let isInitialized = false;
 
-// --- Funções de Inicialização ---
+// --- Initialization Functions ---
 
 /**
- * Inicializa o Gemini e treina o classificador de intenções local.
- * Executado apenas uma vez.
+ * Initializes Gemini and trains the local intent classifier.
+ * Executed only once.
  */
 async function initializeAnalyzer() {
-  
   if (isInitialized) return;
 
-  // 1. Inicializar Gemini (com chave de ambiente!)
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (apiKey) {
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
       geminiModel = genAI.getGenerativeModel({
-       // model: "tunedModels/vexfinetuned-qdghi3ai6rx0", // ou um modelo padrão como "gemini-1.5-flash"
-     
-     "model": "gemini-1.5-flash", // Modelo padrão para testes
-       safetySettings: [
-          {
-            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
-          },
+        model: "gemini-1.5-flash",
+        // The system instruction now calls our dynamic prompt function
+        systemInstruction: getVexSystemPrompt(),
+        safetySettings: [
+          { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+          { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+          { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
         ],
       });
     } catch (error) {
-        console.error("Falha ao inicializar o modelo Gemini:", error);
-        geminiModel = null;
+      console.error("Failed to initialize Gemini model:", error);
+      geminiModel = null;
     }
   } else {
-    console.warn(
-      "Chave da API do Gemini não encontrada. O modo Gemini será desativado."
-    );
+    console.warn("Gemini API key not found. Gemini mode will be disabled.");
   }
 
-  // 2. TREINAR nosso cérebro offline com as INTENÇÕES do DB
   await intentClassifier.train();
-
   isInitialized = true;
 }
 
-// --- Lógica Principal do Analisador ---
+// --- Main Analyzer Logic ---
 
 /**
- * Ponto de entrada principal para analisar uma mensagem do usuário.
- * @param message A mensagem do usuário.
- * @returns Uma string contendo a resposta do bot.
+ * Main entry point for analyzing a user message.
+ * @param message The user's message.
+ * @returns A string containing the bot's response.
  */
-export async function analyzer(message: string,forceReinitialization = false): Promise<string> {
-  
-  // Se forçado, reseta o estado de inicialização
+export async function analyzer(
+  message: string,
+  forceReinitialization = false
+): Promise<string> {
   if (forceReinitialization) {
     isInitialized = false;
   }
   await initializeAnalyzer();
+
 
   const isGeminiEnabled =
     localStorage.getItem("geminiEnabled") === "true" && geminiModel;
@@ -96,7 +135,7 @@ export async function analyzer(message: string,forceReinitialization = false): P
     try {
       return await getGeminiResponse(message);
     } catch (error) {
-      console.error("Erro no Gemini, usando fallback local.", error);
+      console.error("Error in Gemini, using local fallback.", error);
       return await getLocalResponse(message);
     }
   } else {
@@ -104,20 +143,21 @@ export async function analyzer(message: string,forceReinitialization = false): P
   }
 }
 
-// --- Funções de Resposta ---
+// --- Response Functions ---
 
 /**
- * Gera uma resposta usando o Gemini.
+ * Generates a response using Gemini with enhanced personality and context.
  */
 async function getGeminiResponse(message: string): Promise<string> {
   const history = await getCachedHistory();
-  const systemPrompt = `Você é VEX, um assistente prestativo. Seja conciso e direto. Seu tom é amigável, mas profissional.`;
-
+  
   const chat = geminiModel.startChat({
-    history: [{ role: "user", parts: [{ text: systemPrompt }] }, ...history],
+    history: history,
     generationConfig: {
-      temperature: 0.9,
+      temperature: 0.8,
       maxOutputTokens: 500,
+      topK: 40,
+      topP: 0.95,
     },
   });
 
@@ -127,75 +167,70 @@ async function getGeminiResponse(message: string): Promise<string> {
   return text;
 }
 
+
 /**
- * Gera uma resposta usando o classificador de intenções local.
- * Se nenhuma intenção for encontrada, salva a mensagem para treinamento futuro.
+ * Generates a response using the local intent classifier.
+ * If no intent is found, it saves the message for future training.
  */
 async function getLocalResponse(message: string): Promise<string> {
-  // Prediz a intenção da mensagem do usuário
   const result = intentClassifier.predict(message, CONFIDENCE_THRESHOLD);
 
   if (result) {
-    // SUCESSO! Encontramos uma intenção com confiança suficiente.
     console.log(
-      `Intenção classificada: ${result.intent} (Confiança: ${result.confidence.toFixed(
-        2
-      )})`
+      `Classified intent: ${
+        result.intent
+      } (Confidence: ${result.confidence.toFixed(2)})`
     );
     return result.response;
   } else {
-    // FALHA! Não sabemos a resposta. HORA DE APRENDER.
-    console.log(
-      "Não foi possível classificar a intenção. Salvando para treinamento futuro."
-    );
-
-    // Salva a mensagem na tabela 'unclassified' para curadoria manual pelo administrador
+    console.log("Could not classify intent. Saving for future training.");
     try {
       await db.unclassified.add({
         text: message,
         timestamp: new Date(),
       });
-    } catch (error) {
-      console.error("Falha ao salvar mensagem não classificada:", error);
+    } catch (error)
+    {
+      console.error("Failed to save unclassified message:", error);
     }
-
-    // Retorna uma resposta padrão de "não sei"
     return await getDefaultResponse();
   }
 }
 
-// --- Funções Auxiliares ---
+// --- Helper Functions ---
 
 /**
- * Seleciona aleatoriamente uma resposta de uma lista.
- * @param replies Array de respostas possíveis.
- * @returns Uma resposta aleatória.
+ * Randomly selects a response from a list.
+ * @param replies Array of possible responses.
+ * @returns A random response.
  */
 function randomReply(replies: string[]): string {
   if (!replies || replies.length === 0) {
-    return "Desculpe, não tenho uma resposta para isso no momento.";
+    return "Sorry, I don't have an answer for that at the moment.";
   }
   return replies[Math.floor(Math.random() * replies.length)];
 }
 
 /**
- * Carrega as respostas padrão do arquivo JSON de acordo com o idioma.
- * @returns Uma resposta padrão aleatória.
+ * Loads default responses from the JSON file according to the language.
+ * @returns A random default response.
  */
 async function getDefaultResponse(): Promise<string> {
   try {
-    const responseModule = await import(`../response/response_${i18n.language}.json`);
+    const responseModule = await import(
+      `../response/response_${i18n.language}.json`
+    );
     return randomReply(responseModule.default);
   } catch (error) {
-    console.error("Falha ao carregar respostas padrão. Usando fallback.", error);
-    return "Não compreendi o que você disse.";
+    console.error("Failed to load default responses. Using fallback.", error);
+    return "I did not understand what you said.";
   }
 }
 
 const historyCache = new Map<string, IChatHistory[]>();
 /**
- * Busca o histórico de mensagens do banco de dados e o formata para a API do Gemini.
- * Utiliza um cache em memória para evitar acessos repetidos ao DB.
+ * Fetches message history from the database and formats it for the Gemini API.
+ * Uses an in-memory cache to avoid repeated DB access.
  */
 async function getCachedHistory(): Promise<IChatHistory[]> {
   const cacheKey = "chat_history";
@@ -216,11 +251,11 @@ async function getCachedHistory(): Promise<IChatHistory[]> {
     parts: [{ text: msg.content }],
   }));
 
-  // Limpa o cache se ele crescer demais, para gerenciar memória
   if (historyCache.size > 20) {
-      historyCache.clear();
+    historyCache.clear();
   }
 
   historyCache.set(cacheKey, formatted);
   return formatted;
 }
+
