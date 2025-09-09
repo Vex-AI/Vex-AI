@@ -1,5 +1,3 @@
-// Home.tsx - VERSÃO FINAL E LIMPA
-
 import {
   IonContent,
   IonHeader,
@@ -26,16 +24,13 @@ import { send } from "ionicons/icons";
 import { useLiveQuery } from "dexie-react-hooks";
 import Message from "@/components/Message";
 import { db } from "@/lib/vexDB";
-// O 'analyzer' é importado pelo nosso hook, não precisamos mais dele diretamente aqui.
+
 import SideMenu from "@/components/SideMenu";
 import DateSeparator from "@/components/DateSeparator";
-// NÂO PRECISAMOS MAIS DO BAYESCLASSIFIER
-// import BayesClassifier from "bayes";
 
 import { useTranslation } from "react-i18next";
 import { initializeAdmob, showInterstitial } from "@/lib/admob";
 import { scheduleRandomNotification } from "@/lib/notifications";
-import { monitorAppUsage, scheduleStreakReminder } from "@/lib/streaks";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { useNavigate } from "react-router";
 import { formatHour, scrollToBottom, sendMessage } from "@/lib/utils";
@@ -46,19 +41,12 @@ const Home: React.FC = () => {
   const contentRef = useRef<HTMLIonContentElement>(null);
   const messages = useLiveQuery(() => db.messages.toArray(), []);
 
-  // const classifierModel = useLiveQuery(() => db.classifier.get(1), []);
-
   const vexInfo = useLiveQuery(() => db.vexInfo.toArray(), []);
   const [text, setText] = useState<string>("");
 
   const { t } = useTranslation();
 
-  // O hook agora é muito mais simples de usar!
   const { sendVexMessage, isProcessing, status } = useVexMessage();
-
-  // REMOVEMOS COMPLETAMENTE O useEffect DE TREINAMENTO.
-  // O treinamento agora acontece uma vez, dentro do 'initializeAnalyzer'.
-  // O componente da UI não precisa saber sobre isso.
 
   const go = (path: string) => {
     navigate(path, { replace: true });
@@ -68,9 +56,9 @@ const Home: React.FC = () => {
     const messageToSend = text.trim();
     if (!messageToSend) return;
 
-    setText(""); // Limpa o input imediatamente
-    sendMessage(messageToSend, false); // Mostra a mensagem do usuário na tela
-    sendVexMessage(messageToSend); // Envia para a IA processar
+    setText("");
+    sendMessage(messageToSend, false);
+    sendVexMessage(messageToSend);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLIonInputElement>) => {
@@ -80,12 +68,10 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    // Este bloco de inicialização está ótimo!
     if (!localStorage.getItem("language")) {
       go("/language");
     }
-    monitorAppUsage();
-    scheduleStreakReminder();
+
     scheduleRandomNotification();
     if (!localStorage.getItem("notification")) {
       LocalNotifications.checkPermissions().then((result) => {
@@ -107,13 +93,11 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const checkAndSeedVexInfo = async () => {
-      // Conta quantos registros existem na tabela vexInfo.
       const count = await db.vexInfo.count();
-      // Se não houver nenhum (count === 0), adiciona o padrão.
+
       if (count === 0) {
         console.log("Dados do Vex não encontrados, inserindo dados padrão...");
         await db.vexInfo.add({
-          //id: 1, // Adicionamos um ID fixo
           name: "Vex",
           profileImage: "/Vex_320.png",
         });
@@ -124,17 +108,14 @@ const Home: React.FC = () => {
       if (count === 0) {
         console.log("Populando intenções iniciais com o novo DB...");
 
-        // Adiciona todas as intenções ao banco de dados
-       
         console.log("Novas intenções populadas com sucesso!");
       }
     };
     checkAndSeedIntents();
     checkAndSeedVexInfo();
-  }, []); // O array vazio [] garante que isso só rode uma vez quando o componente montar.
+  }, []);
 
   useEffect(() => {
-    // Função para garantir que os dados do Vex existam
     const checkAndSeedVexInfo = async () => {
       const count = await db.vexInfo.count();
       if (count === 0) {
@@ -147,12 +128,11 @@ const Home: React.FC = () => {
       }
     };
 
-    // Função para garantir que as intenções básicas existam
     const checkAndSeedIntents = async () => {
       const count = await db.intents.count();
       if (count === 0) {
         console.log("Populando intenções iniciais...");
-        // Usando uma função auxiliar para facilitar
+
         const addIntent = (
           name: string,
           trainingPhrases: string[],
@@ -161,7 +141,6 @@ const Home: React.FC = () => {
           return db.intents.add({ name, trainingPhrases, responses });
         };
 
-        // Adiciona as intenções aqui
         await Promise.all([
           addIntent(
             "saudacao",
@@ -182,19 +161,15 @@ const Home: React.FC = () => {
       }
     };
 
-    // Roda as duas verificações
     checkAndSeedVexInfo();
     checkAndSeedIntents();
-  }, []); // O array vazio garante que isso só rode uma vez.
-
-  // Dentro do useEffect em Home.tsx ou page.tsx
+  }, []);
 
   return (
     <>
       <SideMenu />
       <IonPage id="main-content">
         <IonHeader>
-          {/* O seu código do Header está perfeito, sem necessidade de alteração */}
           <IonToolbar>
             <IonButtons slot="end">
               <IonMenuButton />
@@ -265,7 +240,7 @@ const Home: React.FC = () => {
             fill="outline"
             shape="round"
             onKeyUp={handleKeyUp}
-            disabled={isProcessing} // Desabilitado enquanto Vex está "digitando"
+            disabled={isProcessing}
           >
             <IonIcon
               onClick={handleSendMessage}
