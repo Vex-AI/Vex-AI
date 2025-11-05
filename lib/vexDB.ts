@@ -1,11 +1,11 @@
-// lib/vexDB.ts
-
 import {
   IIntent,
   IMessage,
   IStreak,
   IUnclassifiedMessage,
   IVexInfo,
+  ISynon,
+  IClassifier,
 } from "@/types";
 import Dexie, { Table, Transaction } from "dexie";
 
@@ -16,38 +16,83 @@ export class vexDB extends Dexie {
   intents!: Table<IIntent>;
   unclassified!: Table<IUnclassifiedMessage>;
 
+  synons!: Table<ISynon>;
+  classifier!: Table<IClassifier>;
+
   constructor() {
     super("chatDatabase");
 
+    this.version(2).stores({
+      messages: "++id, content, isVex, hour, date",
+      synons: "++id, word, reply",
+      vexInfo: "id,name, profileImage",
+      classifier: "id, classifierData",
+      streaks: "currentStreak, lastAccessed",
+    });
+
+    this.version(3)
+      .stores({
+        intents: "++id, name, trainingPhrases, responses",
+        unclassified: "++id, text, timestamp",
+        messages: "++id, content, isVex, hour, date",
+        vexInfo: "id,name, profileImage",
+        streaks: "currentStreak, lastAccessed",
+        synons: null,
+        classifier: null,
+      })
+      .upgrade(async (tx: Transaction) => {
+        console.log(
+          "Executando migração V2 -> V3: Convertendo 'synons' para 'intents'..."
+        );
+        try {
+          const oldSynons = await tx.table("synons").toArray();
+          if (oldSynons.length > 0) {
+            const newIntents = oldSynons.map((synon: ISynon) => ({
+              name:
+                synon.word && synon.word.length > 0 ? synon.word[0] : synon.id,
+              trainingPhrases: synon.word,
+              responses: synon.reply,
+            }));
+            await tx.table("intents").bulkAdd(newIntents);
+            console.log(
+              `Migração V2 -> V3 concluída. ${newIntents.length} 'synons' movidos para 'intents'.`
+            );
+          } else {
+            console.log(
+              "Migração V2 -> V3: Tabela 'synons' encontrada, mas estava vazia."
+            );
+          }
+        } catch (error) {
+          console.error("Erro durante a migração V2 -> V3:", error);
+        }
+      });
+
     this.version(6).stores({
       messages: "++id, content, isVex, hour, date",
-      vexInfo: "++id, name, profileImage", // We use ++id for autoincrement
-      streaks: "++id, currentStreak, lastAccessed",
+
+      vexInfo: "id, name, profileImage",
+      streaks: "currentStreak, lastAccessed",
+
       intents: "++id, name",
       unclassified: "++id, timestamp",
     });
 
-    // A SINGLE SOURCE OF TRUTH FOR POPULATING THE DB
     this.on("populate", this.populateDatabase);
   }
 
-  // The function that populates the database on creation
   async populateDatabase(tx: Transaction) {
-    console.log("Executing initial database populate...");
+    console.log("Executando initial database populate (v6)...");
 
-    // Adds default Vex information
-    await tx.table("vexInfo").add({
-      name: "Vex",
-      profileImage: "/Vex_320.png",
-    });
-
-    // Gets the language from localStorage or defaults to 'enUS'
     const initialLanguage = localStorage.getItem("language") || "enUS";
     console.log(`Populating with the initial model for: ${initialLanguage}`);
 
     try {
-      // Uses the same dynamic import logic
-      //@ts-ignore
+      await tx.table("vexInfo").add({
+        id: 1,
+        name: "Vex",
+        profileImage: "/Vex_320.png",
+      });
+
       const intentsToSeedModule = await import(
         `../vexModels/new_models/${initialLanguage}.json`
       );
@@ -65,4 +110,5 @@ export class vexDB extends Dexie {
     }
   }
 }
+
 export const db = new vexDB();
