@@ -1,6 +1,4 @@
-// pages/IntentPage.tsx - O novo painel de controle da IA
-
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { db } from "@/lib/vexDB";
 import {
@@ -16,21 +14,21 @@ import {
   IonToolbar,
   IonAlert,
 } from "@ionic/react";
-import { arrowBack, addCircleOutline, trash, school } from "ionicons/icons";
+import { arrowBack, addCircleOutline, trash, school, saveOutline, folderOpenOutline } from "ionicons/icons";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useNavigate } from "react-router";
 import { IIntent } from "@/types";
-import IntentItem from "@/components/IntentItem"; // -> Componente renomeado de Synon para IntentItem
-import PhraseModal from "@/components/PhraseModal"; // -> Componente renomeado de WordModal para PhraseModal
-import ResponseModal from "@/components/ResponseModal"; // -> Componente renomeado de ReplyModal para ResponseModal
-import { analyzer } from "@/lib/analyzer"; // -> Importamos o analyzer para o retreino
+import IntentItem from "@/components/IntentItem"; 
+import PhraseModal from "@/components/PhraseModal"; 
+import ResponseModal from "@/components/ResponseModal";  
+import { analyzer } from "@/lib/analyzer"; 
 
-// -> Renomeamos o componente para refletir sua nova função
+
 const IntentPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // -> Estados renomeados para clareza
+
   const [intentName, setIntentName] = useState<string>("");
   const [initialPhrase, setInitialPhrase] = useState<string>("");
   const [initialResponse, setInitialResponse] = useState<string>("");
@@ -40,6 +38,7 @@ const IntentPage: React.FC = () => {
   const [newPhrase, setNewPhrase] = useState<string>("");
   const [responseModalOpen, setResponseModalOpen] = useState<boolean>(false);
   const [newResponse, setNewResponse] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null); 
 
   const [showAlert, setShowAlert] = useState(false);
   const [showToast, setShowToast] = useState<{
@@ -47,14 +46,59 @@ const IntentPage: React.FC = () => {
     duration?: number;
   } | null>(null);
 
-  // -> Carrega os dados da tabela 'intents' em vez de 'synons'
+
   const intents = useLiveQuery<IIntent[]>(() => db.intents.toArray(), []);
 
   const go = (path: string) => {
     navigate(path, { replace: true });
   };
 
-  // -> Lógica para adicionar uma NOVA INTENÇÃO
+   const handleImportClick = () => {
+
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const text = e.target?.result;
+        if (typeof text !== 'string') throw new Error("File could not be read");
+        
+        const importedIntents: IIntent[] = JSON.parse(text);
+
+       
+        if (!Array.isArray(importedIntents)) {
+           throw new Error("Invalid format: JSON is not an array.");
+        }
+
+    
+        await db.transaction('rw', db.intents, async () => {
+            await db.intents.clear(); 
+            await db.intents.bulkAdd(importedIntents); 
+        });
+
+        setShowToast({ message: t("import_success", "Intenções importadas! Retreinando a IA...") });
+        
+        await handleRetrain();
+
+      } catch (error) {
+        console.error("Import failed:", error);
+        setShowToast({ message: t("import_failed", "Falha ao importar: arquivo inválido ou corrompido.") });
+      } finally {
+       
+        if(fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+      }
+    };
+    reader.readAsText(file);
+  };
+
+
   const handleAddIntent = useCallback(async () => {
     if (!intentName.trim())
       return setShowToast({ message: t("write_intent_name") });
@@ -83,7 +127,7 @@ const IntentPage: React.FC = () => {
     setShowToast({ message: t("intent_added_success") });
   }, [intentName, initialPhrase, initialResponse, t]);
 
-  // -> Funções de CRUD agora operam na tabela 'intents' e nas propriedades corretas
+  
   const handleDeleteIntent = async (id: number | undefined) => {
     if (id === undefined) return;
     await db.intents.delete(id);
@@ -138,12 +182,29 @@ const IntentPage: React.FC = () => {
     setShowToast({ message: t("all_intents_deleted") });
   };
 
-  // -> NOVA FUNÇÃO: Retreinar a IA
+
   const handleRetrain = async () => {
     setShowToast({ message: t("training_ai_start") });
-    // Forçamos o analyzer a se reinicializar, o que inclui o retreinamento
-    await analyzer(""); // Passamos um segundo parâmetro para forçar o retreino
+    
+    await analyzer(""); 
     setShowToast({ message: t("training_ai_success") });
+  };
+const handleExport = async () => {
+    try {
+      const allIntents = await db.intents.toArray();
+      const dataStr = JSON.stringify(allIntents, null, 2);
+      const blob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "intents.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error exporting intents:", error);
+    }
   };
 
   return (
@@ -158,7 +219,52 @@ const IntentPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        {/* Adicione um container para o formulário */}
+      {/* Adicione um container para o formulário */}
+        <div className="intent-form-container">
+          <h2>{t("add_new_intent_title", "Adicionar Nova Intenção")}</h2>
+
+      
+
+          <IonButton onClick={handleAddIntent} color="tertiary" shape="round">
+            <IonIcon slot="start" icon={addCircleOutline} />
+            {t("add_intent", "Adicionar Intenção")}
+          </IonButton>
+
+          {/* NOVOS BOTÕES DE IMPORTAR E EXPORTAR */}
+          <IonButton onClick={handleExport} color="primary" shape="round">
+            <IonIcon slot="start" icon={saveOutline} />
+            {t("export_intents", "Exportar Intenções")}
+          </IonButton>
+
+          <IonButton onClick={handleImportClick} color="primary" shape="round">
+            <IonIcon slot="start" icon={folderOpenOutline} />
+            {t("import_intents", "Importar Intenções")}
+          </IonButton>
+          {/* FIM DOS NOVOS BOTÕES */}
+
+          <IonButton onClick={handleRetrain} color="secondary" shape="round">
+            <IonIcon slot="start" icon={school} />
+            {t("retrain_ai", "Retreinar IA")}
+          </IonButton>
+
+          <IonButton
+            onClick={() => setShowAlert(true)}
+            color="danger"
+            shape="round"
+          >
+            <IonIcon slot="start" icon={trash} />
+            {t("delete_all_intents", "Apagar Todas Intenções")}
+          </IonButton>
+
+          {/* Input de arquivo escondido */}
+          <input
+            type="file"
+            accept=".json"
+            ref={fileInputRef}
+            onChange={handleFileSelected}
+            style={{ display: 'none' }}
+          />
+        </div>
         <div className="intent-form-container">
           <h2>{t("add_new_intent_title", "Adicionar Nova Intenção")}</h2>
 
@@ -202,7 +308,7 @@ const IntentPage: React.FC = () => {
             clearInput
           />
 
-          {/* Botões agora sem 'expand="full"' para serem controlados pelo CSS */}
+         
           <IonButton onClick={handleAddIntent} color="tertiary" shape="round">
             <IonIcon slot="start" icon={addCircleOutline} />
             {t("add_intent", "Adicionar Intenção")}
@@ -224,7 +330,7 @@ const IntentPage: React.FC = () => {
         </div>
 
         <hr style={{ margin: "2rem 0" }} />
-        {/* -> Lista de Intenções */}
+   
         <IonList>
           {intents?.map((intent) => (
             <IntentItem
@@ -239,7 +345,7 @@ const IntentPage: React.FC = () => {
                 setEditingIntentId(intent.id);
                 setResponseModalOpen(true);
               }}
-              // Passando as novas funções para deleção individual
+            
               onDeletePhrase={(phrase) => {
                 setEditingIntentId(intent.id);
                 handleDeletePhrase(phrase);
@@ -252,7 +358,7 @@ const IntentPage: React.FC = () => {
           ))}
         </IonList>
 
-        {/* -> Modais renomeados e adaptados */}
+      
         <PhraseModal
           isOpen={phraseModalOpen}
           onClose={() => setPhraseModalOpen(false)}
