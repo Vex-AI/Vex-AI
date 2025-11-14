@@ -183,7 +183,7 @@ async function getLocalResponse(message: string): Promise<string> {
     );
     return result.response;
   } else {
-    console.log("Could not classify intent. Saving for future training.");
+   // console.log("Could not classify intent. Saving for future training.");
     try {
       await db.unclassified.add({
         text: message,

@@ -18,12 +18,12 @@ const intentClassifier = new IntentClassifier();
  * @param language - The language code (e.g., 'enUS', 'ptBR').
  */
 export async function loadIntentsForLanguage(language: string) {
-  console.log(`Starting intent loading for language: ${language}`);
+  //console.log(`Starting intent loading for language: ${language}`);
 
   try {
     // 1. Clears the current intents table to avoid duplicates or mixed data.
     await db.intents.clear();
-    console.log("Intents table cleared.");
+   // console.log("Intents table cleared.");
 
     // 2. Dynamically imports the model JSON file corresponding to the language.
     // Vite/Webpack will handle this, finding the correct file.
@@ -38,14 +38,12 @@ export async function loadIntentsForLanguage(language: string) {
 
     // 3. Adds the new intents in bulk (bulkAdd) to the table.
     await db.intents.bulkAdd(intentsToSeed);
-    console.log(
-      `${intentsToSeed.length} intents for '${language}' loaded into the DB.`
-    );
+   // console.log( `${intentsToSeed.length} intents for '${language}' loaded into the DB.`);
 
     // 4. Forces the classifier to retrain with the new data.
     // This is crucial so that the bot responds in the correct language.
     await intentClassifier.train();
-    console.log("Intent classifier retrained successfully.");
+   // console.log("Intent classifier retrained successfully.");
 
     mkToast(`Language and model updated to ${language}!`);
   } catch (error) {
