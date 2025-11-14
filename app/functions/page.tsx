@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+/* import { useState, useCallback, useRef } from "react";
 import {
   IonButton,
   IonContent,
@@ -353,3 +353,10 @@ const Functions: React.FC = () => {
 };
 
 export default Functions;
+ */
+
+const Teste= ()=> {
+  return ( <div>teste</div>)
+}
+ 
+export default Teste

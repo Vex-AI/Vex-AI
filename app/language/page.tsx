@@ -1,110 +1,108 @@
-import {
-  IonButton,
-  IonContent,
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonButtons,
-  IonIcon,
-  IonTitle,
-  IonList,
-  IonLabel,
-  IonSpinner, 
-} from "@ionic/react";
-import { useTranslation } from "react-i18next";
-import { chevronBack, arrowRedoCircleOutline } from "ionicons/icons";
-import { useEffect, useState } from "react"; 
-import { useNavigate } from "react-router";
-import { loadIntentsForLanguage } from "@/lib/IntentManager"; 
-import { mkToast } from "@/lib/utils"; 
+"use client";
 
-const LanguageSelector: React.FC = () => {
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
+
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Loader2, ArrowRightCircle } from "lucide-react";
+
+import { loadIntentsForLanguage } from "@/lib/IntentManager";
+import { mkToast } from "@/lib/utils";
+import Header from "@/components/header";
+
+export default function LanguageSelector() {
+  const navigate = useNavigate();
   const {
     t,
     i18n: { language, changeLanguage },
   } = useTranslation();
-  const navigate = useNavigate();
-  // Adiciona um estado de carregamento para dar feedback ao usuário
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const go = (path: string) => {
-    navigate(path, { replace: true });
-  };
+  const go = (path: string) => navigate(path, { replace: true });
 
   const handleChangeLanguage = async (selectedLanguage: string) => {
-    // Se o idioma já for o selecionado, não faz nada
     if (language === selectedLanguage) return;
 
-    setIsLoading(true); // Inicia o carregamento
+    setIsLoading(true);
 
     try {
-      // 1. Muda o idioma da UI (i18next)
       await changeLanguage(selectedLanguage);
       localStorage.setItem("language", selectedLanguage);
 
-      // 2. Carrega os modelos de intenção correspondentes no DB
       await loadIntentsForLanguage(selectedLanguage);
-
-    } catch (error) {
-      console.error("Falha ao trocar de idioma e modelo:", error);
+    } catch (err) {
+      console.error(err);
       mkToast("Failed to switch language.");
     } finally {
-      setIsLoading(false); // Finaliza o carregamento
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem("language") === null)
+    if (!localStorage.getItem("language")) {
       localStorage.setItem("language", "enUS");
+    }
   }, []);
-  
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton onClick={() => go("/home")} color="light" disabled={isLoading}>
-              <IonIcon icon={chevronBack} />
-            </IonButton>
-          </IonButtons>
-          <IonTitle>{t("select")}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
 
-      <IonContent className="ion-padding">
-        {/* Mostra um spinner durante o carregamento dos modelos */}
+  return (
+    <div className="min-h-screen bg-neutral-950 text-white p-4 flex flex-col gap-4">
+      {/* Header */}
+      <Header />
+
+      {/* Content */}
+      <Card className="bg-neutral-900 border-neutral-800 p-4 flex flex-col gap-3">
         {isLoading ? (
-          <div className="ion-text-center">
-            <IonSpinner name="crescent" />
-            <p>{t("loading_model")}</p> {/* Adicione essa tradução nos seus JSONs */}
+          <div className="flex flex-col items-center gap-3 py-6">
+            <Loader2 className="size-6 animate-spin text-purple-500" />
+            <p className="text-neutral-300">{t("loading_model")}</p>
           </div>
         ) : (
-          <IonList style={{ display: "flex", flexDirection: "column" }}>
-            <IonButton
-              shape="round"
-              color={language === "enUS" ? "secondary" : "light"}
+          <>
+            <Button
+              className="w-full rounded-xl"
+              variant={language === "enUS" ? "default" : "secondary"}
               onClick={() => handleChangeLanguage("enUS")}
             >
-              <IonLabel>{t("english")}</IonLabel>
-            </IonButton>
+              {t("english")}
+            </Button>
 
-            <IonButton
-              shape="round"
-              color={language === "ptBR" ? "secondary" : "light"}
+            <Button
+              className={`w-full rounded-xl flex items-center justify-between transition-all
+    ${
+      language === "enUS"
+        ? "bg-purple-600"
+        : "bg-neutral-800 hover:bg-neutral-700 border border-neutral-700"
+    }`}
+              onClick={() => handleChangeLanguage("enUS")}
+            >
+              {t("english")}
+            </Button>
+
+            <Button
+              className={`w-full rounded-xl flex items-center justify-between transition-all
+    ${
+      language === "ptBR"
+        ? "bg-purple-600 hover:bg-purple-700 )]"
+        : "bg-neutral-800 hover:bg-neutral-700 border border-neutral-700"
+    }`}
               onClick={() => handleChangeLanguage("ptBR")}
             >
-              <IonLabel>{t("portuguese")}</IonLabel>
-            </IonButton>
+              {t("portuguese")}
+            </Button>
 
-            <IonButton shape="round" color="danger" onClick={() => go("/home")}>
-              <IonLabel>{t("next")}</IonLabel>
-              <IonIcon icon={arrowRedoCircleOutline} />
-            </IonButton>
-          </IonList>
+            <Button
+              className="w-full rounded-xl bg-purple-600 hover:bg-purple-700"
+              onClick={() => go("/home")}
+            >
+              {t("next")}
+              <ArrowRightCircle className="size-4 ml-2" />
+            </Button>
+          </>
         )}
-      </IonContent>
-    </IonPage>
+      </Card>
+    </div>
   );
-};
-
-export default LanguageSelector;
+}

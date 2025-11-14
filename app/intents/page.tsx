@@ -1,33 +1,37 @@
-import { useState, useCallback, useRef } from "react";
+// src/pages/IntentPage.tsx
+"use client";
+
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { db } from "@/lib/vexDB";
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonIcon,
-  IonInput,
-  IonList,
-  IonHeader,
-  IonPage,
-  IonToast,
-  IonToolbar,
-  IonAlert,
-} from "@ionic/react";
-import { arrowBack, addCircleOutline, trash, school, saveOutline, folderOpenOutline } from "ionicons/icons";
-import { useLiveQuery } from "dexie-react-hooks";
 import { useNavigate } from "react-router";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/lib/vexDB";
+import { analyzer } from "@/lib/analyzer";
 import { IIntent } from "@/types";
-import IntentItem from "@/components/IntentItem"; 
-import PhraseModal from "@/components/PhraseModal"; 
-import ResponseModal from "@/components/ResponseModal";  
-import { analyzer } from "@/lib/analyzer"; 
 
+import ResponseModal from "@/components/response-modal";
 
-const IntentPage: React.FC = () => {
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+
+import { Trash2, PlusCircle, ArrowLeft, GraduationCap } from "lucide-react";
+import IntentItem from "@/components/intent-item";
+import PhraseModal from "@/components/phrase-modal";
+
+export default function IntentPage(): JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
 
   const [intentName, setIntentName] = useState<string>("");
   const [initialPhrase, setInitialPhrase] = useState<string>("");
@@ -38,81 +42,37 @@ const IntentPage: React.FC = () => {
   const [newPhrase, setNewPhrase] = useState<string>("");
   const [responseModalOpen, setResponseModalOpen] = useState<boolean>(false);
   const [newResponse, setNewResponse] = useState<string>("");
-  const fileInputRef = useRef<HTMLInputElement>(null); 
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [showToast, setShowToast] = useState<{
+  const [toast, setToast] = useState<{
     message: string;
     duration?: number;
   } | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
-
+  // dexie live query
   const intents = useLiveQuery<IIntent[]>(() => db.intents.toArray(), []);
 
-  const go = (path: string) => {
-    navigate(path, { replace: true });
-  };
+  const go = (path: string) => navigate(path, { replace: true });
 
-   const handleImportClick = () => {
-
-    fileInputRef.current?.click();
-  };
-
-  const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const text = e.target?.result;
-        if (typeof text !== 'string') throw new Error("File could not be read");
-        
-        const importedIntents: IIntent[] = JSON.parse(text);
-
-       
-        if (!Array.isArray(importedIntents)) {
-           throw new Error("Invalid format: JSON is not an array.");
-        }
-
-    
-        await db.transaction('rw', db.intents, async () => {
-            await db.intents.clear(); 
-            await db.intents.bulkAdd(importedIntents); 
-        });
-
-        setShowToast({ message: t("import_success", "Intenções importadas! Retreinando a IA...") });
-        
-        await handleRetrain();
-
-      } catch (error) {
-        console.error("Import failed:", error);
-        setShowToast({ message: t("import_failed", "Falha ao importar: arquivo inválido ou corrompido.") });
-      } finally {
-       
-        if(fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
-      }
-    };
-    reader.readAsText(file);
-  };
-
+  const pushToast = useCallback((message: string, duration = 2000) => {
+    setToast({ message, duration });
+    setTimeout(() => setToast(null), duration);
+  }, []);
 
   const handleAddIntent = useCallback(async () => {
     if (!intentName.trim())
-      return setShowToast({ message: t("write_intent_name") });
+      return pushToast(t("intent_page.write_intent_name"));
     if (!initialPhrase.trim())
-      return setShowToast({ message: t("write_training_phrase") });
+      return pushToast(t("intent_page.write_training_phrase"));
     if (!initialResponse.trim())
-      return setShowToast({ message: t("write_intent_response") });
+      return pushToast(t("intent_page.write_intent_response"));
 
     const existingIntent = await db.intents
       .where("name")
       .equalsIgnoreCase(intentName.trim())
       .first();
     if (existingIntent) {
-      return setShowToast({ message: t("intent_already_exists") });
+      return pushToast(t("intent_page.intent_already_exists"));
     }
 
     await db.intents.add({
@@ -124,16 +84,15 @@ const IntentPage: React.FC = () => {
     setIntentName("");
     setInitialPhrase("");
     setInitialResponse("");
-    setShowToast({ message: t("intent_added_success") });
-  }, [intentName, initialPhrase, initialResponse, t]);
+    pushToast(t("intent_page.intent_added_success"));
+  }, [intentName, initialPhrase, initialResponse, t, pushToast]);
 
-  
-  const handleDeleteIntent = async (id: number | undefined) => {
+  const handleDeleteIntent = useCallback(async (id: number | undefined) => {
     if (id === undefined) return;
     await db.intents.delete(id);
-  };
+  }, []);
 
-  const handleAddPhrase = async () => {
+  const handleAddPhrase = useCallback(async () => {
     if (!newPhrase.trim() || !editingIntentId) return;
     const intent = await db.intents.get(editingIntentId);
     if (intent) {
@@ -142,9 +101,9 @@ const IntentPage: React.FC = () => {
       });
       setNewPhrase("");
     }
-  };
+  }, [newPhrase, editingIntentId]);
 
-  const handleAddResponse = async () => {
+  const handleAddResponse = useCallback(async () => {
     if (!newResponse.trim() || !editingIntentId) return;
     const intent = await db.intents.get(editingIntentId);
     if (intent) {
@@ -153,252 +112,233 @@ const IntentPage: React.FC = () => {
       });
       setNewResponse("");
     }
-  };
+  }, [newResponse, editingIntentId]);
 
-  const handleDeletePhrase = async (phraseToDelete: string) => {
-    if (!editingIntentId) return;
-    const intent = await db.intents.get(editingIntentId);
-    if (intent) {
-      await db.intents.update(editingIntentId, {
-        trainingPhrases: intent.trainingPhrases.filter(
-          (p) => p !== phraseToDelete
-        ),
-      });
-    }
-  };
+  const handleDeletePhrase = useCallback(
+    async (phraseToDelete: string) => {
+      if (!editingIntentId) return;
+      const intent = await db.intents.get(editingIntentId);
+      if (intent) {
+        await db.intents.update(editingIntentId, {
+          trainingPhrases: intent.trainingPhrases.filter(
+            (p) => p !== phraseToDelete
+          ),
+        });
+      }
+    },
+    [editingIntentId]
+  );
 
-  const handleDeleteResponse = async (responseToDelete: string) => {
-    if (!editingIntentId) return;
-    const intent = await db.intents.get(editingIntentId);
-    if (intent) {
-      await db.intents.update(editingIntentId, {
-        responses: intent.responses.filter((r) => r !== responseToDelete),
-      });
-    }
-  };
+  const handleDeleteResponse = useCallback(
+    async (responseToDelete: string) => {
+      if (!editingIntentId) return;
+      const intent = await db.intents.get(editingIntentId);
+      if (intent) {
+        await db.intents.update(editingIntentId, {
+          responses: intent.responses.filter((r) => r !== responseToDelete),
+        });
+      }
+    },
+    [editingIntentId]
+  );
 
-  const handleDeleteAllIntents = async () => {
+  const handleDeleteAllIntents = useCallback(async () => {
     await db.intents.clear();
-    setShowToast({ message: t("all_intents_deleted") });
-  };
+    pushToast(t("intent_page.all_intents_deleted"));
+  }, [pushToast, t]);
 
-
-  const handleRetrain = async () => {
-    setShowToast({ message: t("training_ai_start") });
-    
-    await analyzer(""); 
-    setShowToast({ message: t("training_ai_success") });
-  };
-const handleExport = async () => {
-    try {
-      const allIntents = await db.intents.toArray();
-      const dataStr = JSON.stringify(allIntents, null, 2);
-      const blob = new Blob([dataStr], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "intents.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error exporting intents:", error);
-    }
-  };
+  const handleRetrain = useCallback(async () => {
+    pushToast(t("intent_page.training_ai_start"));
+    await analyzer("");
+    pushToast(t("intent_page.training_ai_success"));
+  }, [pushToast, t]);
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton onClick={() => go("/home")} color="light">
-              <IonIcon icon={arrowBack} />
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding">
-      {/* Adicione um container para o formulário */}
-        <div className="intent-form-container">
-          <h2>{t("add_new_intent_title", "Adicionar Nova Intenção")}</h2>
-
-      
-
-          <IonButton onClick={handleAddIntent} color="tertiary" shape="round">
-            <IonIcon slot="start" icon={addCircleOutline} />
-            {t("add_intent", "Adicionar Intenção")}
-          </IonButton>
-
-          {/* NOVOS BOTÕES DE IMPORTAR E EXPORTAR */}
-          <IonButton onClick={handleExport} color="primary" shape="round">
-            <IonIcon slot="start" icon={saveOutline} />
-            {t("export_intents", "Exportar Intenções")}
-          </IonButton>
-
-          <IonButton onClick={handleImportClick} color="primary" shape="round">
-            <IonIcon slot="start" icon={folderOpenOutline} />
-            {t("import_intents", "Importar Intenções")}
-          </IonButton>
-          {/* FIM DOS NOVOS BOTÕES */}
-
-          <IonButton onClick={handleRetrain} color="secondary" shape="round">
-            <IonIcon slot="start" icon={school} />
-            {t("retrain_ai", "Retreinar IA")}
-          </IonButton>
-
-          <IonButton
-            onClick={() => setShowAlert(true)}
-            color="danger"
-            shape="round"
+    <main className="min-h-screen bg-neutral-950 text-white">
+      {/* Top bar */}
+      <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[rgba(0,0,0,0.18)] border-b border-white/5">
+        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-4">
+          <button
+            aria-label="voltar"
+            onClick={() => go("/home")}
+            className="p-2 rounded-md hover:bg-white/6"
           >
-            <IonIcon slot="start" icon={trash} />
-            {t("delete_all_intents", "Apagar Todas Intenções")}
-          </IonButton>
+            <ArrowLeft className="size-5" />
+          </button>
 
-          {/* Input de arquivo escondido */}
-          <input
-            type="file"
-            accept=".json"
-            ref={fileInputRef}
-            onChange={handleFileSelected}
-            style={{ display: 'none' }}
-          />
+          <h1 className="text-lg font-semibold flex-1">
+          {t("intent_page.title")}
+          </h1>
+
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              onClick={handleRetrain}
+              className="flex items-center gap-2"
+            >
+              <GraduationCap className="size-4" />
+             {t("intent_page.retrain_ai")}
+            </Button>
+
+            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="destructive"
+                  className="flex items-center gap-2"
+                >
+                  <Trash2 className="size-4" />
+                  {t("intent_page.delete_all")}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent aria-describedby={undefined}>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {t("intent_page.confirmation")}
+                  </AlertDialogTitle>
+                  <div className="text-sm text-neutral-400 mt-2">
+                    {t("intent_page.are_you_sure_delete_all_intents")}
+                  </div>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={async () => {
+                      await handleDeleteAllIntents();
+                      setConfirmOpen(false);
+                    }}
+                    className="bg-red-600"
+                  >
+                    {t("delete")}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
-        <div className="intent-form-container">
-          <h2>{t("add_new_intent_title", "Adicionar Nova Intenção")}</h2>
+      </div>
 
-          <IonInput
-            style={{ marginBottom: "1rem" }}
-            labelPlacement="floating"
-            label={t("intent_name_label", "Nome da Intenção")}
-            placeholder={t(
-              "intent_name_placeholder",
-              "Ex: saudacao, despedida"
-            )}
-            value={intentName}
-            onIonChange={(e) => setIntentName(e.detail.value!)}
-            fill="outline"
-            shape="round"
-            clearInput
-          />
-          <IonInput
-            style={{ marginBottom: "1rem" }}
-            labelPlacement="floating"
-            label={t("initial_phrase_label", "Frase de Treinamento Inicial")}
-            placeholder={t("initial_phrase_placeholder", "Ex: olá, tudo bem?")}
-            value={initialPhrase}
-            onIonChange={(e) => setInitialPhrase(e.detail.value!)}
-            fill="outline"
-            shape="round"
-            clearInput
-          />
-          <IonInput
-            style={{ marginBottom: "1rem" }}
-            labelPlacement="floating"
-            label={t("initial_response_label", "Resposta Inicial")}
-            placeholder={t(
-              "initial_response_placeholder",
-              "Ex: Olá! Como posso ajudar?"
-            )}
-            value={initialResponse}
-            onIonChange={(e) => setInitialResponse(e.detail.value!)}
-            fill="outline"
-            shape="round"
-            clearInput
-          />
+      {/* page content */}
+      <div className="max-w-3xl mx-auto px-4 pt-[72px] pb-20">
+        <section className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5 mb-6 shadow-lg">
+          <h2 className="text-xl font-semibold mb-4">
+            {t("intent_page.add_new_intent_title")}
+          </h2>
 
-         
-          <IonButton onClick={handleAddIntent} color="tertiary" shape="round">
-            <IonIcon slot="start" icon={addCircleOutline} />
-            {t("add_intent", "Adicionar Intenção")}
-          </IonButton>
-
-          <IonButton onClick={handleRetrain} color="secondary" shape="round">
-            <IonIcon slot="start" icon={school} />
-            {t("retrain_ai", "Retreinar IA")}
-          </IonButton>
-
-          <IonButton
-            onClick={() => setShowAlert(true)}
-            color="danger"
-            shape="round"
-          >
-            <IonIcon slot="start" icon={trash} />
-            {t("delete_all_intents", "Apagar Todas Intenções")}
-          </IonButton>
-        </div>
-
-        <hr style={{ margin: "2rem 0" }} />
-   
-        <IonList>
-          {intents?.map((intent) => (
-            <IntentItem
-              key={intent.id}
-              intent={intent}
-              onDeleteIntent={() => handleDeleteIntent(intent.id)}
-              onAddPhrase={() => {
-                setEditingIntentId(intent.id);
-                setPhraseModalOpen(true);
-              }}
-              onAddResponse={() => {
-                setEditingIntentId(intent.id);
-                setResponseModalOpen(true);
-              }}
-            
-              onDeletePhrase={(phrase) => {
-                setEditingIntentId(intent.id);
-                handleDeletePhrase(phrase);
-              }}
-              onDeleteResponse={(response) => {
-                setEditingIntentId(intent.id);
-                handleDeleteResponse(response);
-              }}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Input
+              placeholder={t("intent_page.intent_name_placeholder")}
+              value={intentName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setIntentName(e.target.value)
+              }
+              className="md:col-span-1 bg-neutral-800 border-neutral-700 text-white"
             />
-          ))}
-        </IonList>
 
-      
-        <PhraseModal
-          isOpen={phraseModalOpen}
-          onClose={() => setPhraseModalOpen(false)}
-          newPhrase={newPhrase}
-          setNewPhrase={setNewPhrase}
-          onAddPhrase={handleAddPhrase}
-          onDeletePhrase={handleDeletePhrase}
-          intentId={editingIntentId}
-          intents={intents ?? []}
-        />
-        <ResponseModal
-          isOpen={responseModalOpen}
-          onClose={() => setResponseModalOpen(false)}
-          newResponse={newResponse}
-          setNewResponse={setNewResponse}
-          onAddResponse={handleAddResponse}
-          onDeleteResponse={handleDeleteResponse}
-          intentId={editingIntentId}
-          intents={intents ?? []}
-        />
+            <Input
+              placeholder={t("intent_page.initial_phrase_placeholder")}
+              value={initialPhrase}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setInitialPhrase(e.target.value)
+              }
+              className="md:col-span-1 bg-neutral-800 border-neutral-700 text-white"
+            />
 
-        <IonToast
-          isOpen={!!showToast}
-          message={showToast?.message}
-          duration={showToast?.duration || 2000}
-          onDidDismiss={() => setShowToast(null)}
-        />
-        <IonAlert
-          isOpen={showAlert}
-          onDidDismiss={() => setShowAlert(false)}
-          header={t("confirmation")}
-          message={t("are_you_sure_delete_all_intents")}
-          buttons={[
-            { text: t("cancel"), role: "cancel" },
-            { text: t("confirm"), handler: handleDeleteAllIntents },
-          ]}
-        />
-      </IonContent>
-    </IonPage>
+            <Input
+              placeholder={t("intent_page.initial_response_placeholder")}
+              value={initialResponse}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setInitialResponse(e.target.value)
+              }
+              className="md:col-span-1 bg-neutral-800 border-neutral-700 text-white"
+            />
+          </div>
+
+          <div className="flex gap-3 mt-4 flex-wrap">
+            <Button
+              onClick={handleAddIntent}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              <PlusCircle className="size-4 mr-2" />
+              {t("intent_page.add_intent")}
+            </Button>
+
+            <Button variant="secondary" onClick={handleRetrain}>
+              <GraduationCap className="size-4 mr-2" />
+              {t("intent_page.retrain_ai")}
+            </Button>
+
+            <Button variant="ghost" onClick={() => setConfirmOpen(true)}>
+              {t("intent_page.delete_all_intents")}
+            </Button>
+          </div>
+        </section>
+
+        <Separator />
+
+        <section className="mt-6 space-y-4">
+          {intents && intents.length > 0 ? (
+            intents.map((intent) => (
+              <IntentItem
+                key={intent.id}
+                intent={intent}
+                onDeleteIntent={() => handleDeleteIntent(intent.id)}
+                onAddPhrase={() => {
+                  setEditingIntentId(intent.id);
+                  setPhraseModalOpen(true);
+                }}
+                onAddResponse={() => {
+                  setEditingIntentId(intent.id);
+                  setResponseModalOpen(true);
+                }}
+                onDeletePhrase={(phrase) => {
+                  setEditingIntentId(intent.id);
+                  handleDeletePhrase(phrase);
+                }}
+                onDeleteResponse={(response) => {
+                  setEditingIntentId(intent.id);
+                  handleDeleteResponse(response);
+                }}
+              />
+            ))
+          ) : (
+            <div className="py-12 text-center text-neutral-400">
+             {t("intent_page.no_intents_found")}
+            </div>
+          )}
+        </section>
+      </div>
+
+      {/* Modals */}
+      <PhraseModal
+        isOpen={phraseModalOpen}
+        onClose={() => setPhraseModalOpen(false)}
+        newPhrase={newPhrase}
+        setNewPhrase={setNewPhrase}
+        onAddPhrase={handleAddPhrase}
+        onDeletePhrase={handleDeletePhrase}
+        intentId={editingIntentId}
+        intents={intents ?? []}
+      />
+
+      <ResponseModal
+        isOpen={responseModalOpen}
+        onClose={() => setResponseModalOpen(false)}
+        newResponse={newResponse}
+        setNewResponse={setNewResponse}
+        onAddResponse={handleAddResponse}
+        onDeleteResponse={handleDeleteResponse}
+        intentId={editingIntentId}
+        intents={intents ?? []}
+      />
+
+      {/* Toast (simple) */}
+      {toast && (
+        <div className="fixed right-6 bottom-6 z-50">
+          <div className="bg-neutral-800 text-white px-4 py-2 rounded-lg shadow-lg">
+            {toast.message}
+          </div>
+        </div>
+      )}
+    </main>
   );
-};
-
-export default IntentPage;
+}

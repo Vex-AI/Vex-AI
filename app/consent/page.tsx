@@ -1,17 +1,11 @@
+"use client";
+
 import React from "react";
-import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButton,
-  IonIcon,
-} from "@ionic/react";
-import { notificationsOutline } from "ionicons/icons";
-import { LocalNotifications } from "@capacitor/local-notifications";
-import { t } from "i18next";
 import { useNavigate } from "react-router";
+import { t } from "i18next";
+import { LocalNotifications } from "@capacitor/local-notifications";
+import { BellRing } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const ConsentPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,82 +18,51 @@ const ConsentPage: React.FC = () => {
     if (result.display === "granted") {
       go("/home");
     } else {
+      go("/home");
     }
-    localStorage.setItem("notification", "true");
+
+    localStorage.setItem("notification_consent_given", "true");
   };
 
   const handleDenyPermission = () => {
+    localStorage.setItem("notification_consent_given", "true");
     go("/home");
   };
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>{t("notification.title")}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            textAlign: "center",
-          }}
-        >
-          <IonIcon
-            icon={notificationsOutline}
-            style={{
-              fontSize: "120px",
-              color: "#3b82f6",
-              marginBottom: "16px",
-            }}
-          />
-          <h2
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              marginBottom: "8px",
-            }}
-          >
+    <div className="flex h-screen w-full flex-col bg-background">
+      <header className="flex h-16 items-center justify-center border-b px-4">
+        <h1 className="text-xl font-bold">{t("notification.title")}</h1>
+      </header>
+      <main className="flex-1 overflow-y-auto p-4">
+        <div className="flex h-full flex-col items-center justify-center text-center">
+          <BellRing className="mb-4 h-32 w-32 text-primary" />
+          <h2 className="mb-2 text-2xl font-bold">
             {t("notification.header")}
           </h2>
-          <p
-            style={{ fontSize: "1rem", color: "#6b7280", marginBottom: "24px" }}
-          >
+          <p className="mb-6 text-muted-foreground">
             {t("notification.description")}
           </p>
-
-          <div style={{ width: "100%", maxWidth: "360px" }}>
-            <IonButton
-              expand="block"
+          <div className="w-full max-w-sm space-y-4">
+            <Button
+              size="lg"
+              className="w-full"
               onClick={requestNotificationPermission}
-              style={{
-                borderRadius: "24px",
-                marginBottom: "16px",
-              }}
             >
               {t("notification.enable")}
-            </IonButton>
-
-            <IonButton
-              expand="block"
-              fill="outline"
-              color="medium"
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full"
               onClick={handleDenyPermission}
-              style={{
-                borderRadius: "24px",
-              }}
             >
               {t("notification.deny")}
-            </IonButton>
+            </Button>
           </div>
         </div>
-      </IonContent>
-    </IonPage>
+      </main>
+    </div>
   );
 };
 
