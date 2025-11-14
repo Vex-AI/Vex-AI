@@ -34,7 +34,7 @@ export class IntentClassifier {
    * This method is asynchronous because reading from the database is an I/O operation.
    */
   async train(): Promise<void> {
-    console.log("Starting classifier training...");
+  //  console.log("Starting classifier training...");
     const allIntents = await db.intents.toArray();
 
     // Stores a cached copy of the cleaned training phrases for the Levenshtein check in the `predict` method.
