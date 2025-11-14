@@ -5,6 +5,15 @@ import {
   AdmobConsentStatus,
 } from "@capacitor-community/admob";
 
+if (typeof window !== "undefined" && navigator.userAgent.includes("Chrome")) {
+  const originalLog = console.log;
+  console.log = (...args: any[]) => {
+    const stack = new Error().stack || "";
+    if (stack.includes("AdMobWeb.")) return;
+    originalLog(...args);
+  };
+}
+
 export async function initializeAdmob(): Promise<void> {
   await AdMob.initialize();
 
