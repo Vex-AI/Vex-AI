@@ -5,6 +5,8 @@ import i18n from "@/lib/translation";
 import { IChatHistory, IMessage } from "@/types";
 import { db } from "./vexDB";
 import { RefObject } from "react";
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export const historyCache = new Map<string, IChatHistory[]>();
 export const MAX_HISTORY_SIZE = 20;
@@ -51,12 +53,17 @@ export function mkToast(message: string) {
     theme: "dark",
   });
 }
-
-export function scrollToBottom(
-  ref: RefObject<{ scrollToBottom: (duration?: number) => void }>
-) {
-  ref.current?.scrollToBottom(500);
-}
+export const scrollToBottom = (
+  contentRef: HTMLDivElement | null,
+  behavior: ScrollBehavior = "smooth"
+) => {
+  if (contentRef) {
+    contentRef.scrollTo({
+      top: contentRef.scrollHeight,
+      behavior: behavior,
+    });
+  }
+};
 
 export function formatHour(time: string) {
   const [hours, minutes] = time.split(":");
@@ -140,3 +147,11 @@ export const getRandomAnimation = <T extends Record<string, any>>(
   const animations = Object.keys(animationVariants) as (keyof T)[];
   return animations[Math.floor(Math.random() * animations.length)];
 };
+
+
+
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+

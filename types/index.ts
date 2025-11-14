@@ -6,6 +6,7 @@ export interface IMessage {
   id?: number;
 }
 export interface IVexInfo {
+  id: number;
   name: string;
   profileImage: string;
 }
@@ -59,8 +60,8 @@ export interface Style {
   borderBottomLeftRadius: number;
   borderColor: string;
   borderWidth: number;
-  "--background": string;
-  textColor: string;
+  background: string;
+  color: string;
   rippleColor: string;
 }
 
