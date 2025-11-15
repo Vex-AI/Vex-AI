@@ -148,6 +148,11 @@
   "display_name": "Nome exibido",
   "reset_all": "Resetar tudo",
   "oficial_links": " Links oficiais",
+  "menu": "Menu",
+  "navigation": "Navegação",
+  "actions": "Ações",
+  "config": "Configurações",
+  "enable_gemini": "Ativar gemini",
   "notification": {
     "title": "Consentimento para Notificações",
     "header": "Gostaríamos de enviar notificações para você!",
