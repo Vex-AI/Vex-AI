@@ -10,10 +10,9 @@ import { Label } from "@/components/ui/label";
 import { useTranslation } from "react-i18next";
 import { ChromePicker } from "react-color";
 import { toast } from "sonner";
-import { ArrowLeft, Save, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router";
+import { Save, Trash2 } from "lucide-react";
 import Preview from "@/components/preview";
-
+import Header from "@/components/header";
 
 const defaultStyle = {
   borderTopRightRadius: 10,
@@ -30,7 +29,6 @@ const defaultStyle = {
 
 export default function Customize() {
   const { t } = useTranslation();
-  const nav = useNavigate();
 
   const [key, setKey] = useState<"vexStyle" | "userStyle">("vexStyle");
 
@@ -42,7 +40,7 @@ export default function Customize() {
   const [style, setStyle] = useState(savedStyle);
 
   const update = (obj: any) =>
-    setStyle((prev:any) => ({
+    setStyle((prev: any) => ({
       ...prev,
       ...obj,
     }));
@@ -64,15 +62,9 @@ export default function Customize() {
   }, [key]);
 
   return (
-    <div className="max-w-xl mx-auto p-4 space-y-6">
+    <div className="max-w-xl pb-20 mx-auto p-4 space-y-6  w-screen">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={() => nav("/home")}>
-          <ArrowLeft className="size-5" />
-        </Button>
-        <h1 className="text-xl font-bold">{t("customization")}</h1>
-      </div>
-
+      <Header/>
       {/* Preview */}
       <Preview
         style={{
@@ -90,21 +82,33 @@ export default function Customize() {
         <CardHeader>
           <CardTitle>{t("choose_profile")}</CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center justify-between py-3">
-          <Label className="text-base">
-            {key === "vexStyle" ? t("isVex") : t("isUser")}
-          </Label>
-          <Switch
-            checked={key === "vexStyle"}
-            onCheckedChange={() =>
-              setKey((p) => (p === "vexStyle" ? "userStyle" : "vexStyle"))
-            }
-          />
+        <CardContent className="flex items-center justify-between w-full">
+          <div className="flex items-center space-x-2 ">
+            <Switch
+              checked={key === "vexStyle"}
+              onCheckedChange={() =>
+                setKey((p) => (p === "vexStyle" ? "userStyle" : "vexStyle"))
+              }
+              id="change-style"
+              className="
+             
+    data-[state=checked]:bg-blue-500
+    data-[state=unchecked]:bg-zinc-700
+
+    [&>span]:data-[state=checked]:bg-white
+    [&>span]:data-[state=unchecked]:bg-zinc-300
+  "
+            />
+
+            <Label htmlFor="change-style" className="text-base w-100">
+              {key === "vexStyle" ? t("isVex") : t("isUser")}
+            </Label>
+          </div>
         </CardContent>
       </Card>
 
       {/* Radius + Border Controls */}
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>{t("bubble_style")}</CardTitle>
         </CardHeader>
@@ -120,6 +124,7 @@ export default function Customize() {
             <div key={item} className="flex flex-col gap-2">
               <Label>{label}</Label>
               <Slider
+                className=" bg-red-500"
                 defaultValue={[style[item]]}
                 max={item === "borderWidth" ? 10 : 30}
                 step={1}
@@ -131,7 +136,7 @@ export default function Customize() {
       </Card>
 
       {/* Color Pickers */}
-      <Card>
+      <Card className="flex justify-center items-center flex-col">
         <CardHeader>
           <CardTitle>{t("colors")}</CardTitle>
         </CardHeader>
@@ -165,11 +170,15 @@ export default function Customize() {
 
       {/* Buttons */}
       <div className="space-y-3">
-        <Button className="w-full" onClick={save}>
+        <Button
+          variant="destructive"
+          className="w-full bg-green-700"
+          onClick={save}
+        >
           <Save className="size-4 mr-2" /> {t("save_styles")}
         </Button>
 
-        <Button variant="destructive" className="w-full" onClick={remove}>
+        <Button className="w-full bg-red-700" onClick={remove}>
           <Trash2 className="size-4 mr-2" /> {t("delete_styles")}
         </Button>
       </div>

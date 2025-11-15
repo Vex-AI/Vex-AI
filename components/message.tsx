@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useEffect, Fragment, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Trash2 } from "lucide-react";
 
 import { MessageProps, Style } from "@/types";
-import { getCodePoint, getRandomAnimation } from "@/lib/utils";
-
+import { getCodePoint } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 import {
@@ -16,6 +14,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -25,55 +24,57 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+
 import AnimatedEmoji from "./animated-emoji";
 import StaticEmoji from "./static-emoji";
 
-const animationVariants = {
-  scaleUp: {
-    opacity: 0,
-    scale: 0.8,
-    transition: { duration: 0.3 },
-  },
-  slideIn: {
-    opacity: 0,
-    x: 50,
-    transition: { duration: 0.4 },
-  },
-  rotateEnter: {
-    opacity: 0,
-    rotate: -15,
-    scale: 0.9,
-    transition: { duration: 0.35 },
-  },
-  popIn: {
-    opacity: 0,
-    scale: 0.5,
-    y: 20,
-    transition: { type: "spring", stiffness: 200 },
-  },
-};
+export function MessageSkeleton({ isVex }: { isVex: boolean }) {
+  return (
+    <div
+      className={cn(
+        "w-fit max-w-[85%] rounded-xl ",
+        isVex ? "mr-auto" : "ml-auto"
+      )}
+    >
+      <div className="w-fit max-w-[85%] rounded-xl p-2">
+        <div
+          className={`flex flex-col  gap-2 ${
+            isVex ? "items-start" : "items-end"
+          }`}
+        >
+          <Skeleton className="h-4 w-[250px] bg-[#413c3c]" />
+          <Skeleton className="h-4 w-[200px] bg-[#413c3c]" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
-  const [style, setStyle] = useState<Style | null>(null);
   const { t } = useTranslation();
-  const processedContent = useMemo(() => processContent(content), [content]);
-  const [randomAnimation] = useState<keyof typeof animationVariants>(() =>
-    getRandomAnimation(animationVariants)
-  );
-
+  const [style, setStyle] = useState<Style | null>(null);
+  const [loading, setLoading] = useState(true);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 
+  const processedContent = useMemo(() => processContent(content), [content]);
+
   useEffect(() => {
-    const loadStyles = () => {
+    const load = () => {
       const userStyle = localStorage.getItem("userStyle");
       const vexStyle = localStorage.getItem("vexStyle");
       return JSON.parse((isVex && vexStyle) || (!isVex && userStyle) || "null");
     };
-    setStyle(loadStyles());
+
+    setStyle(load());
+    setLoading(false);
   }, [isVex]);
 
-  const messageStyle = style
+  if (loading) return <MessageSkeleton isVex={isVex} />;
+
+  const bubbleStyle = style
     ? {
         borderTopLeftRadius: `${style.borderTopLeftRadius}px`,
         borderTopRightRadius: `${style.borderTopRightRadius}px`,
@@ -81,14 +82,13 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
         borderBottomRightRadius: `${style.borderBottomRightRadius}px`,
         borderWidth: `${style.borderWidth}px`,
         borderColor: style.borderColor,
-        backgroundColor: style["background"],
+        backgroundColor: style.background,
         color: style.color,
         borderStyle: "solid" as const,
-        transition: "all 0.3s ease",
       }
-    : undefined;
+    : {};
 
-  const labelStyle = style ? { color: style.color } : undefined;
+  const textColor = style ? { color: style.color } : undefined;
 
   const handleDelete = () => {
     onClose();
@@ -96,108 +96,85 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
   };
 
   return (
-    <motion.div
-      initial={randomAnimation}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        x: 0,
-        rotate: 0,
-        transition: {
-          type: "spring",
-          stiffness: 150,
-          damping: 15,
-          mass: 0.5,
-        },
-      }}
-      variants={animationVariants}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      style={{ originX: isVex ? 0 : 1 }}
-      className="w-full"
-    >
-      <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
-        <ContextMenu>
-          <ContextMenuTrigger asChild>
-            <div
-              className={cn(
-                "relative w-fit max-w-[85%] rounded-xl px-3.5 py-2.5 shadow-md",
-                isVex
-                  ? "mr-auto bg-muted text-muted-foreground message-vex"
-                  : "ml-auto bg-primary text-primary-foreground message-other",
-                style && "border"
-              )}
-              style={messageStyle}
-            >
-              <div style={labelStyle}>
-                <p className={`whitespace-pre-wrap wrap-break-words`}>
-                  {processedContent.map((part, index) => (
-                    <Fragment key={index}>{part}</Fragment>
-                  ))}
-                </p>
-                <small
-                  style={{ color: "white" }}
-                  className={cn(
-                    "mt-1 block text-right text-xs ",
+    <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
+      <ContextMenu>
+        <ContextMenuTrigger asChild>
+          <div
+            className={cn(
+              "relative w-fit max-w-[85%] rounded-xl px-4 py-3 shadow-sm transition-all",
+              isVex
+                ? "mr-auto bg-muted message-vex"
+                : "ml-auto bg-primary text-primary-foreground message-other",
+              style && "border"
+            )}
+            style={bubbleStyle}
+          >
+            <div style={textColor}>
+              <p className="whitespace-pre-wrap wrap-break-words">
+                {processedContent.map((part, i) => (
+                  <Fragment key={i}>{part}</Fragment>
+                ))}
+              </p>
 
-                    isVex
-                      ? "text-muted-foreground/80"
-                      : "text-primary-foreground/70"
-                  )}
-                >
-                  {hour}
-                </small>
-              </div>
+              <small
+                className={cn(
+                  "mt-1 block text-right text-xs opacity-60",
+                  isVex ? "text-muted-foreground" : "text-primary-foreground"
+                )}
+              >
+                {hour}
+              </small>
             </div>
-          </ContextMenuTrigger>
+          </div>
+        </ContextMenuTrigger>
 
-          <ContextMenuContent>
-            <ContextMenuItem
-              className="text-destructive focus:text-destructive"
-              onSelect={() => setIsDeleteAlertOpen(true)}
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              {t("deleteMessage")}
-            </ContextMenuItem>
-          </ContextMenuContent>
-        </ContextMenu>
+        <ContextMenuContent>
+          <ContextMenuItem
+            className="text-destructive focus:text-destructive"
+            onSelect={() => setIsDeleteAlertOpen(true)}
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            {t("deleteMessage")}
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
 
-        <AlertDialogContent aria-describedby={undefined}>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("deleteConfirmation.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("deleteConfirmation.message")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t("cancel", "Cancelar")}</AlertDialogCancel>
-            <Button variant="destructive" onClick={handleDelete}>
-              {t("deleteMessage")}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </motion.div>
+      <AlertDialogContent aria-describedby={undefined}>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{t("deleteConfirmation.title")}</AlertDialogTitle>
+          <AlertDialogDescription>
+            {t("deleteConfirmation.message")}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+          <Button variant="destructive" onClick={handleDelete}>
+            {t("deleteMessage")}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
+
+export default Message;
 
 function processContent(content: string) {
   const emojiRegex = /([\uD800-\uDBFF][\uDC00-\uDFFF])/g;
   const tokens: (string | any)[] = [];
-  let lastIndex = 0;
+  let last = 0;
   let animatedCount = 0;
 
-  let match;
-  while ((match = emojiRegex.exec(content)) !== null) {
-    const start = match.index;
+  let m;
+  while ((m = emojiRegex.exec(content)) !== null) {
+    const start = m.index;
     const end = emojiRegex.lastIndex;
-    const emoji = match[0];
 
-    if (start > lastIndex) {
-      tokens.push(content.substring(lastIndex, start));
-    }
+    if (start > last) tokens.push(content.substring(last, start));
 
-    const code = getCodePoint(emoji);
+    const code = getCodePoint(m[0]);
+
     if (animatedCount < 10) {
       tokens.push(<AnimatedEmoji code={code} key={start} />);
       animatedCount++;
@@ -205,14 +182,10 @@ function processContent(content: string) {
       tokens.push(<StaticEmoji code={code} key={start} />);
     }
 
-    lastIndex = end;
+    last = end;
   }
 
-  if (lastIndex < content.length) {
-    tokens.push(content.substring(lastIndex));
-  }
+  if (last < content.length) tokens.push(content.substring(last));
 
   return tokens;
 }
-
-export default Message;

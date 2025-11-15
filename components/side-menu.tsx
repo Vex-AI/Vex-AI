@@ -75,14 +75,14 @@ const SideMenu = () => {
       >
         <SheetHeader className="px-6 py-5 border-b border-white/10">
           <SheetTitle className="text-lg font-semibold tracking-tight">
-            {t("Menu") ?? "Menu"}
+            {t("menu") }
           </SheetTitle>
         </SheetHeader>
 
         <div className="flex flex-col h-full">
           <div className="px-4 py-5">
             <p className="mb-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">
-              {t("Navegação")}
+              {t("navigation")}
             </p>
 
             <div className="flex flex-col gap-1">
@@ -108,7 +108,7 @@ const SideMenu = () => {
 
           <div className="px-4 py-5">
             <p className="mb-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">
-              {t("Ações")}
+              {t("actions")}
             </p>
 
             <AlertDialog aria-describedby={undefined}>
@@ -178,12 +178,12 @@ const SideMenu = () => {
 
           <div className="px-4 py-5">
             <p className="mb-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">
-              {t("Configurações da IA")}
+              {t("config")}
             </p>
 
             <div className="flex items-center justify-between rounded-lg px-3 py-3 hover:bg-white/10 transition-colors">
               <Label className="text-base cursor-pointer">
-                {t("enableGemini", "Ativar Gemini")}
+                {t("enable_gemini")}
               </Label>
               <GeminiToggle />
             </div>
