@@ -156,40 +156,56 @@ export default function IntentPage(): JSX.Element {
   return (
     <main className="min-h-screen bg-neutral-950 text-white">
       {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[rgba(0,0,0,0.18)] border-b border-white/5">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-4">
+      <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/5">
+        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <button
             aria-label="voltar"
             onClick={() => go("/home")}
-            className="p-2 rounded-md hover:bg-white/6"
+            className="p-2 rounded-md hover:bg-white/10 shrink-0"
           >
             <ArrowLeft className="size-5" />
           </button>
 
-          <h1 className="text-lg font-semibold flex-1">
-          {t("intent_page.title")}
+          <h1 className="text-base sm:text-lg font-semibold flex-1 truncate">
+            {t("intent_page.title")}
           </h1>
 
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            {/* some buttons somem no mobile, viram só ícone */}
             <Button
               variant="ghost"
               onClick={handleRetrain}
-              className="flex items-center gap-2"
+              className="hidden sm:flex items-center gap-2"
             >
               <GraduationCap className="size-4" />
-             {t("intent_page.retrain_ai")}
+              {t("intent_page.retrain_ai")}
+            </Button>
+
+            <Button
+              variant="ghost"
+              onClick={handleRetrain}
+              className="sm:hidden p-2"
+            >
+              <GraduationCap className="size-5" />
             </Button>
 
             <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
               <AlertDialogTrigger asChild>
                 <Button
                   variant="destructive"
-                  className="flex items-center gap-2"
+                  className="hidden sm:flex items-center gap-2"
                 >
                   <Trash2 className="size-4" />
                   {t("intent_page.delete_all")}
                 </Button>
               </AlertDialogTrigger>
+
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="sm:hidden p-2">
+                  <Trash2 className="size-5" />
+                </Button>
+              </AlertDialogTrigger>
+
               <AlertDialogContent aria-describedby={undefined}>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
@@ -199,8 +215,10 @@ export default function IntentPage(): JSX.Element {
                     {t("intent_page.are_you_sure_delete_all_intents")}
                   </div>
                 </AlertDialogHeader>
+
                 <AlertDialogFooter>
                   <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+
                   <AlertDialogAction
                     onClick={async () => {
                       await handleDeleteAllIntents();
@@ -302,7 +320,7 @@ export default function IntentPage(): JSX.Element {
             ))
           ) : (
             <div className="py-12 text-center text-neutral-400">
-             {t("intent_page.no_intents_found")}
+              {t("intent_page.no_intents_found")}
             </div>
           )}
         </section>
