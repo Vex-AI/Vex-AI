@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
     namespace "com.cookieukw.vex"
     compileSdk rootProject.ext.compileSdkVersion
@@ -17,12 +24,13 @@ android {
         }
     }
 
-     signingConfigs {
+    signingConfigs {
         release {
-            storeFile file(MY_KEYSTORE)
-            storePassword MY_KEYSTORE_PASSWORD
-            keyAlias MY_KEY_ALIAS
-            keyPassword MY_KEY_PASSWORD
+            //
+            storeFile file(localProperties['keystore.storeFile'])
+            storePassword localProperties['keystore.storePassword']
+            keyAlias localProperties['keystore.keyAlias']
+            keyPassword localProperties['keystore.keyPassword']
         }
     }
 
