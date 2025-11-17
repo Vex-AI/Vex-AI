@@ -1,13 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   RouterProvider,
   createBrowserRouter,
   Navigate,
   Outlet,
-  useLocation,
 } from "react-router";
-import { App as CapacitorApp } from "@capacitor/app";
+
 import { Toaster } from "sonner";
 
 import "@/index.css";
@@ -21,6 +19,7 @@ import Customize from "@/app/customize/page";
 import ConsentPage from "@/app/consent/page";
 import StreakPage from "@/app/streak/page";
 import { ThemeProvider } from "@/components/theme-provider";
+import React from "react";
 
 const Layout = () => {
   return (

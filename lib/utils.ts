@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import i18n from "@/lib/translation";
 import { IChatHistory, IMessage } from "@/types";
 import { db } from "./vexDB";
-import { RefObject } from "react";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 

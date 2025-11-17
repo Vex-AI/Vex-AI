@@ -3,8 +3,6 @@
 
 import { motion } from "framer-motion"
 import { useTranslation } from "react-i18next"
-import { Separator } from "@/components/ui/separator"
-import React from "react"
 
 const Footer = () => {
   const { t } = useTranslation()
