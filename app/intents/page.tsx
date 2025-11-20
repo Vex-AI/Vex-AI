@@ -1,7 +1,7 @@
 // src/pages/IntentPage.tsx
 "use client";
 
-import React, { useCallback, useState } from "react";
+import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -10,6 +10,8 @@ import { analyzer } from "@/lib/analyzer";
 import { IIntent } from "@/types";
 
 import ResponseModal from "@/components/response-modal";
+import PhraseModal from "@/components/phrase-modal";
+import IntentItem from "@/components/intent-item";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -26,54 +28,56 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Trash2, PlusCircle, ArrowLeft, GraduationCap } from "lucide-react";
-import IntentItem from "@/components/intent-item";
-import PhraseModal from "@/components/phrase-modal";
 
-export default function IntentPage(): JSX.Element {
+export default function IntentPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [intentName, setIntentName] = useState<string>("");
-  const [initialPhrase, setInitialPhrase] = useState<string>("");
-  const [initialResponse, setInitialResponse] = useState<string>("");
+  const [intentName, setIntentName] = useState("");
+  const [initialPhrase, setInitialPhrase] = useState("");
+  const [initialResponse, setInitialResponse] = useState("");
 
-  const [editingIntentId, setEditingIntentId] = useState<number | undefined>();
-  const [phraseModalOpen, setPhraseModalOpen] = useState<boolean>(false);
-  const [newPhrase, setNewPhrase] = useState<string>("");
-  const [responseModalOpen, setResponseModalOpen] = useState<boolean>(false);
-  const [newResponse, setNewResponse] = useState<string>("");
+  const [editingIntentId, setEditingIntentId] = useState<number>();
+  const [phraseModalOpen, setPhraseModalOpen] = useState(false);
+  const [responseModalOpen, setResponseModalOpen] = useState(false);
 
+  const [newPhrase, setNewPhrase] = useState("");
+  const [newResponse, setNewResponse] = useState("");
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [toast, setToast] = useState<{
     message: string;
     duration?: number;
   } | null>(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
 
-  // dexie live query
   const intents = useLiveQuery<IIntent[]>(() => db.intents.toArray(), []);
 
   const go = (path: string) => navigate(path, { replace: true });
 
-  const pushToast = useCallback((message: string, duration = 2000) => {
-    setToast({ message, duration });
+  const pushToast = useCallback((msg: string, duration = 2000) => {
+    setToast({ message: msg, duration });
     setTimeout(() => setToast(null), duration);
   }, []);
 
-  const handleAddIntent = useCallback(async () => {
-    if (!intentName.trim())
-      return pushToast(t("intent_page.write_intent_name"));
-    if (!initialPhrase.trim())
-      return pushToast(t("intent_page.write_training_phrase"));
-    if (!initialResponse.trim())
-      return pushToast(t("intent_page.write_intent_response"));
+  const updateIntent = async (id: number, data: Partial<IIntent>) =>
+    db.intents.update(id, data);
 
-    const existingIntent = await db.intents
+  const validateInputs = () => {
+    if (!intentName.trim()) return t("intent_page.write_intent_name");
+    if (!initialPhrase.trim()) return t("intent_page.write_training_phrase");
+    if (!initialResponse.trim()) return t("intent_page.write_intent_response");
+    return null;
+  };
+
+  const handleAddIntent = useCallback(async () => {
+    const err = validateInputs();
+    if (err) return pushToast(err);
+
+    const exists = await db.intents
       .where("name")
       .equalsIgnoreCase(intentName.trim())
       .first();
-    if (existingIntent) {
-      return pushToast(t("intent_page.intent_already_exists"));
-    }
+    if (exists) return pushToast(t("intent_page.intent_already_exists"));
 
     await db.intents.add({
       name: intentName.trim(),
@@ -84,84 +88,79 @@ export default function IntentPage(): JSX.Element {
     setIntentName("");
     setInitialPhrase("");
     setInitialResponse("");
+
     pushToast(t("intent_page.intent_added_success"));
   }, [intentName, initialPhrase, initialResponse, t, pushToast]);
 
-  const handleDeleteIntent = useCallback(async (id: number | undefined) => {
-    if (id === undefined) return;
-    await db.intents.delete(id);
-  }, []);
+  const handleRetrain = async () => {
+    pushToast(t("intent_page.training_ai_start"));
+    await analyzer("oi");
+    pushToast(t("intent_page.training_ai_success"));
+  };
 
-  const handleAddPhrase = useCallback(async () => {
+  const handleDeleteIntent = async (id?: number) => {
+    if (id) await db.intents.delete(id);
+  };
+
+  const handleAddPhrase = async () => {
     if (!newPhrase.trim() || !editingIntentId) return;
-    const intent = await db.intents.get(editingIntentId);
-    if (intent) {
-      await db.intents.update(editingIntentId, {
-        trainingPhrases: [...intent.trainingPhrases, newPhrase.trim()],
-      });
-      setNewPhrase("");
-    }
-  }, [newPhrase, editingIntentId]);
 
-  const handleAddResponse = useCallback(async () => {
+    const intent = await db.intents.get(editingIntentId);
+    if (!intent) return;
+
+    await updateIntent(editingIntentId, {
+      trainingPhrases: [...intent.trainingPhrases, newPhrase.trim()],
+    });
+
+    setNewPhrase("");
+  };
+
+  const handleAddResponse = async () => {
     if (!newResponse.trim() || !editingIntentId) return;
+
     const intent = await db.intents.get(editingIntentId);
-    if (intent) {
-      await db.intents.update(editingIntentId, {
-        responses: [...intent.responses, newResponse.trim()],
-      });
-      setNewResponse("");
-    }
-  }, [newResponse, editingIntentId]);
+    if (!intent) return;
 
-  const handleDeletePhrase = useCallback(
-    async (phraseToDelete: string) => {
-      if (!editingIntentId) return;
-      const intent = await db.intents.get(editingIntentId);
-      if (intent) {
-        await db.intents.update(editingIntentId, {
-          trainingPhrases: intent.trainingPhrases.filter(
-            (p) => p !== phraseToDelete
-          ),
-        });
-      }
-    },
-    [editingIntentId]
-  );
+    await updateIntent(editingIntentId, {
+      responses: [...intent.responses, newResponse.trim()],
+    });
 
-  const handleDeleteResponse = useCallback(
-    async (responseToDelete: string) => {
-      if (!editingIntentId) return;
-      const intent = await db.intents.get(editingIntentId);
-      if (intent) {
-        await db.intents.update(editingIntentId, {
-          responses: intent.responses.filter((r) => r !== responseToDelete),
-        });
-      }
-    },
-    [editingIntentId]
-  );
+    setNewResponse("");
+  };
 
-  const handleDeleteAllIntents = useCallback(async () => {
+  const handleDeletePhrase = async (phrase: string) => {
+    if (!editingIntentId) return;
+    const intent = await db.intents.get(editingIntentId);
+    if (!intent) return;
+
+    await updateIntent(editingIntentId, {
+      trainingPhrases: intent.trainingPhrases.filter((p) => p !== phrase),
+    });
+  };
+
+  const handleDeleteResponse = async (response: string) => {
+    if (!editingIntentId) return;
+    const intent = await db.intents.get(editingIntentId);
+    if (!intent) return;
+
+    await updateIntent(editingIntentId, {
+      responses: intent.responses.filter((r) => r !== response),
+    });
+  };
+
+  const handleDeleteAll = async () => {
     await db.intents.clear();
     pushToast(t("intent_page.all_intents_deleted"));
-  }, [pushToast, t]);
-
-  const handleRetrain = useCallback(async () => {
-    pushToast(t("intent_page.training_ai_start"));
-    await analyzer("");
-    pushToast(t("intent_page.training_ai_success"));
-  }, [pushToast, t]);
+  };
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white">
-      {/* Top bar */}
       <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/5">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <button
             aria-label="voltar"
             onClick={() => go("/home")}
-            className="p-2 rounded-md hover:bg-white/10 shrink-0"
+            className="p-2 rounded-md hover:bg-white/10"
           >
             <ArrowLeft className="size-5" />
           </button>
@@ -171,11 +170,10 @@ export default function IntentPage(): JSX.Element {
           </h1>
 
           <div className="flex items-center gap-2">
-            {/* some buttons somem no mobile, viram só ícone */}
             <Button
               variant="ghost"
               onClick={handleRetrain}
-              className="hidden sm:flex items-center gap-2"
+              className="hidden sm:flex gap-2"
             >
               <GraduationCap className="size-4" />
               {t("intent_page.retrain_ai")}
@@ -191,10 +189,54 @@ export default function IntentPage(): JSX.Element {
 
             <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
               <AlertDialogTrigger asChild>
-                <Button
-                  variant="destructive"
-                  className="hidden sm:flex items-center gap-2"
-                >
+                <div className="flex items-center gap-2">
+                  {/* desktop */}
+                  <Button
+                    variant="destructive"
+                    className="hidden sm:flex gap-2"
+                  >
+                    <Trash2 className="size-4" />
+                    {t("intent_page.delete_all")}
+                  </Button>
+
+                  {/* mobile */}
+                  <Button variant="destructive" className="sm:hidden p-2">
+                    <Trash2 className="size-5" />
+                  </Button>
+                </div>
+              </AlertDialogTrigger>
+
+              <AlertDialogContent
+                className="bg-[#090b0c]"
+                aria-describedby={undefined}
+              >
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {t("intent_page.confirmation")}
+                  </AlertDialogTitle>
+                  <p className="text-sm text-neutral-400 mt-2">
+                    {t("intent_page.are_you_sure_delete_all_intents")}
+                  </p>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+
+                  <AlertDialogAction
+                    className="bg-red-600"
+                    onClick={async () => {
+                      await handleDeleteAll();
+                      setConfirmOpen(false);
+                    }}
+                  >
+                    {t("clear")}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="hidden sm:flex gap-2">
                   <Trash2 className="size-4" />
                   {t("intent_page.delete_all")}
                 </Button>
@@ -206,27 +248,29 @@ export default function IntentPage(): JSX.Element {
                 </Button>
               </AlertDialogTrigger>
 
-              <AlertDialogContent aria-describedby={undefined}>
+              <AlertDialogContent
+                className="bg-[#090b0c]"
+                aria-describedby={undefined}
+              >
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     {t("intent_page.confirmation")}
                   </AlertDialogTitle>
-                  <div className="text-sm text-neutral-400 mt-2">
+                  <p className="text-sm text-neutral-400 mt-2">
                     {t("intent_page.are_you_sure_delete_all_intents")}
-                  </div>
+                  </p>
                 </AlertDialogHeader>
 
                 <AlertDialogFooter>
                   <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-
                   <AlertDialogAction
+                    className="bg-red-600"
                     onClick={async () => {
-                      await handleDeleteAllIntents();
+                      await handleDeleteAll();
                       setConfirmOpen(false);
                     }}
-                    className="bg-red-600"
                   >
-                    {t("delete")}
+                    {t("clear")}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -235,7 +279,6 @@ export default function IntentPage(): JSX.Element {
         </div>
       </div>
 
-      {/* page content */}
       <div className="max-w-3xl mx-auto px-4 pt-[72px] pb-20">
         <section className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5 mb-6 shadow-lg">
           <h2 className="text-xl font-semibold mb-4">
@@ -246,28 +289,22 @@ export default function IntentPage(): JSX.Element {
             <Input
               placeholder={t("intent_page.intent_name_placeholder")}
               value={intentName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setIntentName(e.target.value)
-              }
-              className="md:col-span-1 bg-neutral-800 border-neutral-700 text-white"
+              onChange={(e) => setIntentName(e.target.value)}
+              className="bg-neutral-800 border-neutral-700 text-white"
             />
 
             <Input
               placeholder={t("intent_page.initial_phrase_placeholder")}
               value={initialPhrase}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setInitialPhrase(e.target.value)
-              }
-              className="md:col-span-1 bg-neutral-800 border-neutral-700 text-white"
+              onChange={(e) => setInitialPhrase(e.target.value)}
+              className="bg-neutral-800 border-neutral-700 text-white"
             />
 
             <Input
               placeholder={t("intent_page.initial_response_placeholder")}
               value={initialResponse}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setInitialResponse(e.target.value)
-              }
-              className="md:col-span-1 bg-neutral-800 border-neutral-700 text-white"
+              onChange={(e) => setInitialResponse(e.target.value)}
+              className="bg-neutral-800 border-neutral-700 text-white"
             />
           </div>
 
@@ -294,7 +331,7 @@ export default function IntentPage(): JSX.Element {
         <Separator />
 
         <section className="mt-6 space-y-4">
-          {intents && intents.length > 0 ? (
+          {intents?.length ? (
             intents.map((intent) => (
               <IntentItem
                 key={intent.id}
@@ -308,13 +345,13 @@ export default function IntentPage(): JSX.Element {
                   setEditingIntentId(intent.id);
                   setResponseModalOpen(true);
                 }}
-                onDeletePhrase={(phrase) => {
+                onDeletePhrase={(p) => {
                   setEditingIntentId(intent.id);
-                  handleDeletePhrase(phrase);
+                  handleDeletePhrase(p);
                 }}
-                onDeleteResponse={(response) => {
+                onDeleteResponse={(r) => {
                   setEditingIntentId(intent.id);
-                  handleDeleteResponse(response);
+                  handleDeleteResponse(r);
                 }}
               />
             ))
@@ -326,7 +363,6 @@ export default function IntentPage(): JSX.Element {
         </section>
       </div>
 
-      {/* Modals */}
       <PhraseModal
         isOpen={phraseModalOpen}
         onClose={() => setPhraseModalOpen(false)}
@@ -349,10 +385,9 @@ export default function IntentPage(): JSX.Element {
         intents={intents ?? []}
       />
 
-      {/* Toast (simple) */}
       {toast && (
         <div className="fixed right-6 bottom-6 z-50">
-          <div className="bg-neutral-800 text-white px-4 py-2 rounded-lg shadow-lg">
+          <div className="bg-neutral-800 text-white px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-4">
             {toast.message}
           </div>
         </div>
