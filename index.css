@@ -1,11 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-
 html,
 body,
 * {
-  
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE e Edge */
 }
@@ -40,17 +38,16 @@ body::-webkit-scrollbar,
   align-self: flex-start;
   border-top-right-radius: 0;
   /*   background: rgba(66, 43, 177, 0.9); */
-  background: rgb(65 56 105 / 65%);
+  background: rgb(22 111 108);
 }
 
 .message-vex {
   /* background: rgba(220, 17, 47, 0.9); */
-  background: rgb(78 46 48);
+  background: rgb(111 22 28);
   align-self: flex-start;
   margin-right: 10px;
   border-top-left-radius: 0;
 }
-
 
 :root {
   --radius: 0.625rem;
@@ -121,9 +118,8 @@ body::-webkit-scrollbar,
   --sidebar-ring: oklch(0.552 0.016 285.938);
 }
 
-
 /* remove cor bizonha do backdrop */
 [data-state="open"] ~ .fixed.inset-0 {
-  background: rgb(0 0 0 / .4) !important;
+  background: rgb(0 0 0 / 0.4) !important;
   backdrop-filter: blur(6px);
 }
