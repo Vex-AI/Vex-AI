@@ -77,7 +77,7 @@ export class vexDB extends Dexie {
       unclassified: "++id, timestamp",
     });
 
-    this.on("populate", this.populateDatabase);
+   // this.on("populate", this.populateDatabase);
   }
 
   async populateDatabase(tx: Transaction) {
