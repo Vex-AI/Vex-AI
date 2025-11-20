@@ -49,13 +49,10 @@ export default function EditProfile() {
 
   return (
     <div className="max-w-md mx-auto p-6 space-y-10">
-
       <Header />
       <div className="space-y-1">
         <h1 className="text-xl font-semibold">{t("vex_profile")}</h1>
-        <p className="text-sm text-muted-foreground">
-          {t("vex_profile_text")}
-        </p>
+        <p className="text-sm text-muted-foreground">{t("vex_profile_text")}</p>
       </div>
 
       {/* AVATAR */}
@@ -93,7 +90,11 @@ export default function EditProfile() {
             <p className="font-medium">{vexInfo?.name || "Vex"}</p>
           </div>
 
-          <Button variant="ghost" size="icon" onClick={() => setNameModal(true)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setNameModal(true)}
+          >
             <Pencil className="size-4" />
           </Button>
         </div>
@@ -101,12 +102,7 @@ export default function EditProfile() {
 
       {/* RESET */}
       <div className="space-y-2">
-     
-        <Button
-          variant="destructive"
-          className="w-full"
-          onClick={reset}
-        >
+        <Button variant="destructive" className="w-full" onClick={reset}>
           <Trash2 className="size-4 mr-2" />
           {t("reset_profile")}
         </Button>
@@ -115,7 +111,7 @@ export default function EditProfile() {
       {/* SOCIAL */}
       <div className="space-y-3 pt-2">
         <p className="text-sm text-muted-foreground text-center">
-         {t("oficial_links")}
+          {t("oficial_links")}
         </p>
         <div className="flex justify-center gap-4">
           <Button variant="ghost" size="icon" asChild>
@@ -134,18 +130,17 @@ export default function EditProfile() {
 
       {/* MODAL – NAME */}
       <Dialog open={nameModal} onOpenChange={setNameModal}>
-        <DialogContent aria-describedby={undefined}>
+        <DialogContent aria-describedby={undefined} className="bg-red-700">
           <DialogHeader>
             <DialogTitle>{t("editName")}</DialogTitle>
           </DialogHeader>
-
+          
           <Input
             placeholder={t("typeThing")}
             maxLength={12}
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
           />
-
           <div className="flex justify-end pt-4">
             <Button onClick={saveName}>{t("save")}</Button>
           </div>
