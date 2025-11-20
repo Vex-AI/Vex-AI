@@ -56,7 +56,6 @@ const Home: React.FC = () => {
       if (stored) return stored;
 
       const sys = navigator.language || navigator.languages?.[0] || "en-US";
-
       let normalized = "enUS";
 
       if (sys.toLowerCase().startsWith("pt")) normalized = "ptBR";
@@ -65,11 +64,11 @@ const Home: React.FC = () => {
       localStorage.setItem("language", normalized);
       return normalized;
     };
-  
+
     const lang = detectLang();
 
-    changeLanguage(lang); 
-    loadIntentsForLanguage(lang); 
+    changeLanguage(lang);
+    // loadIntentsForLanguage(lang);
 
     scheduleRandomNotification();
 
@@ -90,8 +89,10 @@ const Home: React.FC = () => {
           profileImage: "/Vex_320.png",
         });
       }
+
       if ((await db.intents.count()) === 0) {
-      //  console.log("Seeding intents...");
+        console.log("Banco vazio. Carregando intents...");
+        await loadIntentsForLanguage(lang);
       }
     };
 
@@ -105,7 +106,7 @@ const Home: React.FC = () => {
   const info = vexInfo?.[0];
 
   return (
-    <div className="flex h-screen flex-col bg-background text-foreground">
+    <div className="flex h-screen max-w-screen flex-col bg-background text-foreground">
       <ChatHeader info={info} status={status} />
 
       <main
