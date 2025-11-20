@@ -15,12 +15,12 @@ import Preview from "@/components/preview";
 import Header from "@/components/header";
 
 const defaultStyle = {
-  borderTopRightRadius: 10,
-  borderTopLeftRadius: 10,
-  borderBottomRightRadius: 10,
-  borderBottomLeftRadius: 10,
+  borderTopRightRadius: 15,
+  borderTopLeftRadius: 15,
+  borderBottomRightRadius: 15,
+  borderBottomLeftRadius: 15,
   borderColor: "#ffffff",
-  borderWidth: 2,
+  borderWidth: 0,
   background: "rgba(220, 17, 47, 0.9)",
   color: "#ffffff",
   ripple: "#000000",
@@ -62,7 +62,7 @@ export default function Customize() {
   }, [key]);
 
   return (
-    <div className="max-w-xl pb-20 mx-auto p-4 space-y-6  w-screen">
+    <div className="max-w-xl pb-20 mx-auto p-4 space-y-6 ">
       {/* Header */}
       <Header/>
       {/* Preview */}
@@ -82,7 +82,7 @@ export default function Customize() {
         <CardHeader>
           <CardTitle>{t("choose_profile")}</CardTitle>
         </CardHeader>
-        <CardContent className="flex items-center justify-between w-full">
+        <CardContent >
           <div className="flex items-center space-x-2 ">
             <Switch
               checked={key === "vexStyle"}
