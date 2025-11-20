@@ -1,4 +1,4 @@
-// classes/analyzer.ts 
+// classes/analyzer.ts
 
 import { db } from "./vexDB";
 import i18n from "./translation";
@@ -26,22 +26,26 @@ function getVexSystemPrompt(): string {
    * @returns A valid language tag.
    */
   const normalizeLanguageTag = (lang: string): string => {
-    if (lang === 'enUS') return 'en-US';
-    if (lang === 'ptBR') return 'pt-BR';
+    if (lang === "enUS") return "en-US";
+    if (lang === "ptBR") return "pt-BR";
     // Add other conversions if needed, otherwise return the original
     return lang;
   };
 
   // Get the current date and time and format it in a user-friendly way for the AI
   const now = new Date();
-  const formattedDateTime = now.toLocaleString(normalizeLanguageTag(i18n.language), { // Uses the app's current language for formatting
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const formattedDateTime = now.toLocaleString(
+    normalizeLanguageTag(i18n.language),
+    {
+      // Uses the app's current language for formatting
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
 
   // The personality prompt now includes the current time context.
   return `
@@ -64,7 +68,6 @@ function getVexSystemPrompt(): string {
   `;
 }
 
-
 // --- Interfaces ---
 interface IChatHistory {
   role: string;
@@ -73,8 +76,20 @@ interface IChatHistory {
 
 // --- Module State and Cache (Singleton Pattern) ---
 let geminiModel: any = null;
-let intentClassifier = new IntentClassifier();
+
+// 1. Mudamos para 'export const' ou apenas mantemos aqui, mas criamos a função de refresh abaixo
+const intentClassifier = new IntentClassifier();
 let isInitialized = false;
+
+/**
+ * EXPORTED FUNCTION: Allows external modules (like IntentManager) to force a retrain
+ * of the classifier used by the analyzer.
+ */
+export async function refreshClassifier() {
+  console.log("Refreshing Analyzer's IntentClassifier...");
+  await intentClassifier.train();
+  console.log("Analyzer's IntentClassifier retrained.");
+}
 
 // --- Initialization Functions ---
 
@@ -91,12 +106,20 @@ async function initializeAnalyzer() {
       const genAI = new GoogleGenerativeAI(apiKey);
       geminiModel = genAI.getGenerativeModel({
         model: "gemini-1.5-flash",
-        // The system instruction now calls our dynamic prompt function
         systemInstruction: getVexSystemPrompt(),
         safetySettings: [
-          { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
-          { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
-          { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+          {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
         ],
       });
     } catch (error) {
@@ -107,26 +130,23 @@ async function initializeAnalyzer() {
     console.warn("Gemini API key not found. Gemini mode will be disabled.");
   }
 
+  // Use the internal instance
   await intentClassifier.train();
   isInitialized = true;
 }
 
 // --- Main Analyzer Logic ---
 
-/**
- * Main entry point for analyzing a user message.
- * @param message The user's message.
- * @returns A string containing the bot's response.
- */
 export async function analyzer(
   message: string,
   forceReinitialization = false
 ): Promise<string> {
+
   if (forceReinitialization) {
     isInitialized = false;
   }
-  await initializeAnalyzer();
 
+  await initializeAnalyzer();
 
   const isGeminiEnabled =
     localStorage.getItem("geminiEnabled") === "true" && geminiModel;
@@ -145,12 +165,9 @@ export async function analyzer(
 
 // --- Response Functions ---
 
-/**
- * Generates a response using Gemini with enhanced personality and context.
- */
 async function getGeminiResponse(message: string): Promise<string> {
   const history = await getCachedHistory();
-  
+
   const chat = geminiModel.startChat({
     history: history,
     generationConfig: {
@@ -167,13 +184,15 @@ async function getGeminiResponse(message: string): Promise<string> {
   return text;
 }
 
-
 /**
  * Generates a response using the local intent classifier.
  * If no intent is found, it saves the message for future training.
  */
 async function getLocalResponse(message: string): Promise<string> {
+  // Use the singleton instance
   const result = intentClassifier.predict(message, CONFIDENCE_THRESHOLD);
+
+
 
   if (result) {
     console.log(
@@ -183,27 +202,19 @@ async function getLocalResponse(message: string): Promise<string> {
     );
     return result.response;
   } else {
-   // console.log("Could not classify intent. Saving for future training.");
     try {
       await db.unclassified.add({
         text: message,
         timestamp: new Date(),
       });
-    } catch (error)
-    {
+    } catch (error) {
       console.error("Failed to save unclassified message:", error);
     }
     return await getDefaultResponse();
   }
 }
 
-// --- Helper Functions ---
-
-/**
- * Randomly selects a response from a list.
- * @param replies Array of possible responses.
- * @returns A random response.
- */
+// ... (Mantenha as helper functions randomReply, getDefaultResponse, getCachedHistory iguais) ...
 function randomReply(replies: string[]): string {
   if (!replies || replies.length === 0) {
     return "Sorry, I don't have an answer for that at the moment.";
@@ -211,10 +222,6 @@ function randomReply(replies: string[]): string {
   return replies[Math.floor(Math.random() * replies.length)];
 }
 
-/**
- * Loads default responses from the JSON file according to the language.
- * @returns A random default response.
- */
 async function getDefaultResponse(): Promise<string> {
   try {
     const responseModule = await import(
@@ -228,10 +235,7 @@ async function getDefaultResponse(): Promise<string> {
 }
 
 const historyCache = new Map<string, IChatHistory[]>();
-/**
- * Fetches message history from the database and formats it for the Gemini API.
- * Uses an in-memory cache to avoid repeated DB access.
- */
+
 async function getCachedHistory(): Promise<IChatHistory[]> {
   const cacheKey = "chat_history";
   if (historyCache.has(cacheKey)) {
@@ -258,4 +262,3 @@ async function getCachedHistory(): Promise<IChatHistory[]> {
   historyCache.set(cacheKey, formatted);
   return formatted;
 }
-
