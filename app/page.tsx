@@ -20,11 +20,13 @@ import DateSeparator from "@/components/date-separator";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { App } from "@capacitor/app";
 
 import { Loader2, Send } from "lucide-react";
 import ChatHeader from "@/components/chat-header";
 import { loadIntentsForLanguage } from "@/lib/IntentManager";
 import { changeLanguage } from "i18next";
+//import  ChatLoading  from "@/components/chat-loading";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -102,9 +104,18 @@ const Home: React.FC = () => {
   useEffect(() => {
     if (messages && contentRef.current) scrollToBottom(contentRef.current);
   }, [messages]);
-
+ // const isLoading = !messages || !vexInfo;
+  
+ 
   const info = vexInfo?.[0];
 
+  App.addListener("backButton", ({ canGoBack }) => {
+    if (canGoBack) {
+      window.history.back(); // Navigate back in the web history
+    } else {
+      App.exitApp(); // Exit the app if no more history to navigate back
+    }
+  });
   return (
     <div className="flex h-screen max-w-screen flex-col bg-background text-foreground">
       <ChatHeader info={info} status={status} />
