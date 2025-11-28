@@ -19,7 +19,7 @@ import Customize from "@/app/customize/page";
 import ConsentPage from "@/app/consent/page";
 import StreakPage from "@/app/streak/page";
 import { ThemeProvider } from "@/components/theme-provider";
-import React from "react";
+
 import ChatLoading from "@/components/chat-loading";
 
 const Layout = () => {
@@ -50,10 +50,8 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="app-theme">
-      <RouterProvider router={router} />
-      <Toaster richColors />
-    </ThemeProvider>
-  </React.StrictMode>
+  <ThemeProvider defaultTheme="dark" storageKey="app-theme">
+    <RouterProvider router={router} />
+    <Toaster richColors />
+  </ThemeProvider>
 );
