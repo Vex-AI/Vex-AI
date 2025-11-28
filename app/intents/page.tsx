@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/vexDB";
-import { analyzer } from "@/lib/analyzer";
 import { IIntent } from "@/types";
 
 import ResponseModal from "@/components/response-modal";
@@ -27,7 +26,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
-import { Trash2, PlusCircle, ArrowLeft, GraduationCap } from "lucide-react";
+import { Trash2, PlusCircle, ArrowLeft } from "lucide-react";
 
 export default function IntentPage() {
   const { t } = useTranslation();
@@ -92,11 +91,6 @@ export default function IntentPage() {
     pushToast(t("intent_page.intent_added_success"));
   }, [intentName, initialPhrase, initialResponse, t, pushToast]);
 
-  const handleRetrain = async () => {
-    pushToast(t("intent_page.training_ai_start"));
-    await analyzer("oi");
-    pushToast(t("intent_page.training_ai_success"));
-  };
 
   const handleDeleteIntent = async (id?: number) => {
     if (id) await db.intents.delete(id);
@@ -170,40 +164,13 @@ export default function IntentPage() {
           </h1>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              onClick={handleRetrain}
-              className="hidden sm:flex gap-2"
-            >
-              <GraduationCap className="size-4" />
-              {t("intent_page.retrain_ai")}
-            </Button>
+           
 
-            <Button
-              variant="ghost"
-              onClick={handleRetrain}
-              className="sm:hidden p-2"
-            >
-              <GraduationCap className="size-5" />
-            </Button>
+            
 
             <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
               <AlertDialogTrigger asChild>
-                <div className="flex items-center gap-2">
-                  {/* desktop */}
-                  <Button
-                    variant="destructive"
-                    className="hidden sm:flex gap-2"
-                  >
-                    <Trash2 className="size-4" />
-                    {t("intent_page.delete_all")}
-                  </Button>
-
-                  {/* mobile */}
-                  <Button variant="destructive" className="sm:hidden p-2">
-                    <Trash2 className="size-5" />
-                  </Button>
-                </div>
+        
               </AlertDialogTrigger>
 
               <AlertDialogContent
@@ -317,14 +284,8 @@ export default function IntentPage() {
               {t("intent_page.add_intent")}
             </Button>
 
-            <Button variant="secondary" onClick={handleRetrain}>
-              <GraduationCap className="size-4 mr-2" />
-              {t("intent_page.retrain_ai")}
-            </Button>
-
-            <Button variant="ghost" onClick={() => setConfirmOpen(true)}>
-              {t("intent_page.delete_all_intents")}
-            </Button>
+     
+            
           </div>
         </section>
 
