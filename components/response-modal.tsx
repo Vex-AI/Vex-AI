@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+
 import {
   Dialog,
   DialogContent,
@@ -15,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Trash2, PlusCircle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { IIntent } from "@/types";
 
 export interface ResponseModalProps {
@@ -29,7 +29,7 @@ export interface ResponseModalProps {
   intents: IIntent[];
 }
 
-export default function ResponseModal({
+function ResponseModalBase({
   isOpen,
   onClose,
   newResponse,
@@ -42,12 +42,18 @@ export default function ResponseModal({
   const { t } = useTranslation();
 
   const currentIntent = useMemo(() => {
+    if (!intentId) return undefined;
     return intents.find((i) => i.id === intentId);
   }, [intentId, intents]);
 
+  const responses = currentIntent?.responses ?? [];
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent aria-describedby={undefined} className="bg-neutral-900 text-white border-neutral-800 max-w-lg">
+      <DialogContent
+        aria-describedby={undefined}
+        className="bg-neutral-900 text-white border-neutral-800 max-w-lg"
+      >
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">
             {t("response_modal.title")}
@@ -72,31 +78,26 @@ export default function ResponseModal({
             </Button>
           </div>
 
-          <ScrollArea className="max-h-72 pr-2">
-            <AnimatePresence>
-              {currentIntent?.responses.map((resp) => (
-                <motion.div
-                  key={resp}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.7 }}
-                  className="flex items-center justify-between bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 mb-2"
-                >
-                  <span className="text-sm text-neutral-200 wrap-break-words">
-                    {resp}
-                  </span>
+          <ScrollArea className="h-100 pr-2">
+            {responses.map((resp, index) => (
+              <div
+                key={index}
+                className="flex items-start justify-between bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 mb-2 w-full gap-2"
+              >
+                <span className="text-sm text-neutral-200 break-words whitespace-normal w-full">
+                  {resp}
+                </span>
 
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-400 hover:text-red-500"
-                    onClick={() => onDeleteResponse(resp)}
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-red-400 hover:text-red-500 shrink-0"
+                  onClick={() => onDeleteResponse(resp)}
+                >
+                  <Trash2 className="size-4" />
+                </Button>
+              </div>
+            ))}
           </ScrollArea>
         </div>
 
@@ -114,3 +115,5 @@ export default function ResponseModal({
     </Dialog>
   );
 }
+
+export default memo(ResponseModalBase);
