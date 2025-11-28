@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useEffect, useMemo, useState } from "react";
+import React, { Fragment, memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Trash2 } from "lucide-react";
 
@@ -158,7 +158,7 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
   );
 };
 
-export default Message;
+export default memo(Message);
 
 function processContent(content: string) {
   const emojiRegex = /([\uD800-\uDBFF][\uDC00-\uDFFF])/g;
