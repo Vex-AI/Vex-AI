@@ -153,6 +153,10 @@
   "actions": "Ações",
   "config": "Configurações",
   "enable_gemini": "Ativar gemini",
+  "choose_profile": "Escolher perfil",
+  "bubble_style": "Estilo da bolha",
+  "colors": "Cor",
+  "background_color": "Cor de fundo",
   "notification": {
     "title": "Consentimento para Notificações",
     "header": "Gostaríamos de enviar notificações para você!",
