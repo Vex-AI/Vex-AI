@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo, memo } from "react";
 
 import {
   Dialog,
@@ -6,29 +9,51 @@ import {
   DialogTitle,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import {  Trash2, PlusCircle } from "lucide-react"
-
-import { IIntent } from "@/types"
-import { motion, AnimatePresence } from "framer-motion"
-import { useMemo } from "react"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Trash2, PlusCircle } from "lucide-react";
+import { IIntent } from "@/types";
 
 export interface PhraseModalProps {
-  isOpen: boolean
-  onClose: () => void
-  newPhrase: string
-  setNewPhrase: (phrase: string) => void
-  onAddPhrase: () => void
-  onDeletePhrase: (phrase: string) => void
-  intentId?: number
-  intents: IIntent[]
+  isOpen: boolean;
+  onClose: () => void;
+  newPhrase: string;
+  setNewPhrase: (phrase: string) => void;
+  onAddPhrase: () => void;
+  onDeletePhrase: (phrase: string) => void;
+  intentId?: number;
+  intents: IIntent[];
 }
 
-export default function PhraseModal({
+const PhraseItem = memo(function PhraseItem({
+  phrase,
+  onDeletePhrase,
+}: {
+  phrase: string;
+  onDeletePhrase: (p: string) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 mb-2">
+      <span className="text-sm text-neutral-200 break-words whitespace-normal w-full">
+        {phrase}
+      </span>
+
+      <Button
+        variant="ghost"
+        size="icon"
+        className="text-red-400 hover:text-red-500 shrink-0"
+        onClick={() => onDeletePhrase(phrase)}
+      >
+        <Trash2 className="size-4" />
+      </Button>
+    </div>
+  );
+});
+
+export default memo(function PhraseModal({
   isOpen,
   onClose,
   newPhrase,
@@ -39,21 +64,27 @@ export default function PhraseModal({
   intents,
 }: PhraseModalProps) {
   const currentIntent = useMemo(() => {
-    return intents.find((i) => i.id === intentId)
-  }, [intentId, intents])
+    return intents.find((i) => i.id === intentId);
+  }, [intentId, intents]);
+
+  const phrases = useMemo(
+    () => currentIntent?.trainingPhrases || [],
+    [currentIntent]
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent aria-describedby={undefined} className="bg-neutral-900 text-white border-neutral-800 max-w-lg">
+      <DialogContent
+        aria-describedby={undefined}
+        className="bg-neutral-900 text-white border-neutral-800 max-w-lg"
+      >
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">
-            Editar Frases de Treinamento
+            Editar Frases
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-
-          {/* Input + Add */}
           <div className="flex gap-2">
             <Input
               placeholder="Digite uma nova variação"
@@ -71,43 +102,28 @@ export default function PhraseModal({
             </Button>
           </div>
 
-          {/* Lista */}
-          <ScrollArea className="max-h-72 pr-2">
-            <AnimatePresence>
-              {currentIntent?.trainingPhrases.map((phrase) => (
-                <motion.div
-                  key={phrase}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.7 }}
-                  className="flex items-center justify-between bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 mb-2"
-                >
-                  <span className="text-sm text-neutral-200 wrap-break-words">
-                    {phrase}
-                  </span>
-
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-400 hover:text-red-500"
-                    onClick={() => onDeletePhrase(phrase)}
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+          <ScrollArea className="max-h-full h-100 pr-2">
+            {phrases.map((phrase) => (
+              <PhraseItem
+                key={phrase}
+                phrase={phrase}
+                onDeletePhrase={onDeletePhrase}
+              />
+            ))}
           </ScrollArea>
         </div>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" className="border-neutral-700 text-neutral-300">
+            <Button
+              variant="outline"
+              className="border-neutral-700 text-neutral-300"
+            >
               Fechar
             </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+});
