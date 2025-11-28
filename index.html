@@ -2,7 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
+    <script>
+      (() => {
+        const t = localStorage.getItem("app-theme") || "dark";
+        document.documentElement.classList.add(t);
+      })();
+    </script>
     <link rel="icon" href="/web/icon-192-maskable.png" sizes="any" />
     <link rel="apple-touch-icon" href="/web/icon-192.png" />
 
@@ -34,21 +39,25 @@
     <meta property="og:url" content="https://vex-ai.netlify.app/enUS" />
     <meta property="og:type" content="website" />
     <title>Vex, your virtual friend</title>
+    <style>
+      html {
+        background-color: black;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
-    
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 
-<script>
-  if (window.location.hostname === 'localhost' && window.location.port === '5173') {
-    
-      eruda.init();
-    }
-  
-
-</script>
+    <script>
+      if (
+        window.location.hostname === "localhost" &&
+        window.location.port === "5173"
+      ) {
+        eruda.init();
+      }
+    </script>
 
     <script type="module" src="/app/main.tsx"></script>
   </body>
