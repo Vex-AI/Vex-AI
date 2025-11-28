@@ -20,6 +20,7 @@ import ConsentPage from "@/app/consent/page";
 import StreakPage from "@/app/streak/page";
 import { ThemeProvider } from "@/components/theme-provider";
 import React from "react";
+import ChatLoading from "@/components/chat-loading";
 
 const Layout = () => {
   return (
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
       { path: "/customize", element: <Customize /> },
       { path: "/consent", element: <ConsentPage /> },
       { path: "/streak", element: <StreakPage /> },
+      { path: "/teste", element: <ChatLoading /> },
     ],
   },
 ]);
