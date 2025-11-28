@@ -1,5 +1,6 @@
 import { formatDate } from "@/lib/utils";
 import { DateSeparatorProps } from "@/types";
+import { memo } from "react";
 
 const DateSeparator: React.FC<DateSeparatorProps> = ({ date }) => {
   return (
@@ -21,4 +22,4 @@ const DateSeparator: React.FC<DateSeparatorProps> = ({ date }) => {
   );
 };
 
-export default DateSeparator;
+export default memo(DateSeparator);
