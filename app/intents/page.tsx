@@ -1,12 +1,10 @@
-// src/pages/IntentPage.tsx
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/vexDB";
-import { IIntent } from "@/types";
 
 import ResponseModal from "@/components/response-modal";
 import PhraseModal from "@/components/phrase-modal";
@@ -27,6 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Trash2, PlusCircle, ArrowLeft } from "lucide-react";
+import { IIntent } from "@/types";
 
 export default function IntentPage() {
   const { t } = useTranslation();
@@ -44,29 +43,49 @@ export default function IntentPage() {
   const [newResponse, setNewResponse] = useState("");
 
   const [confirmOpen, setConfirmOpen] = useState(false);
+
   const [toast, setToast] = useState<{
     message: string;
     duration?: number;
   } | null>(null);
+  const toastTimerRef = useRef<number | null>(null);
 
-  const intents = useLiveQuery<IIntent[]>(() => db.intents.toArray(), []);
+  // LiveQuery isolado do resto
+  const intents = useLiveQuery(() => db.intents.toArray(), []);
 
-  const go = (path: string) => navigate(path, { replace: true });
+  const go = useCallback(
+    (path: string) => {
+      navigate(path, { replace: true });
+    },
+    [navigate]
+  );
 
   const pushToast = useCallback((msg: string, duration = 2000) => {
     setToast({ message: msg, duration });
-    setTimeout(() => setToast(null), duration);
+
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = null;
+    }
+    toastTimerRef.current = window.setTimeout(() => {
+      setToast(null);
+      toastTimerRef.current = null;
+    }, duration);
   }, []);
 
-  const updateIntent = async (id: number, data: Partial<IIntent>) =>
-    db.intents.update(id, data);
+  const updateIntent = useCallback(
+    async (id: number, data: Partial<IIntent>) => {
+      return db.intents.update(id, data);
+    },
+    []
+  );
 
-  const validateInputs = () => {
+  const validateInputs = useCallback(() => {
     if (!intentName.trim()) return t("intent_page.write_intent_name");
     if (!initialPhrase.trim()) return t("intent_page.write_training_phrase");
     if (!initialResponse.trim()) return t("intent_page.write_intent_response");
     return null;
-  };
+  }, [intentName, initialPhrase, initialResponse, t]);
 
   const handleAddIntent = useCallback(async () => {
     const err = validateInputs();
@@ -87,72 +106,115 @@ export default function IntentPage() {
     setIntentName("");
     setInitialPhrase("");
     setInitialResponse("");
-
     pushToast(t("intent_page.intent_added_success"));
-  }, [intentName, initialPhrase, initialResponse, t, pushToast]);
+  }, [
+    intentName,
+    initialPhrase,
+    initialResponse,
+    validateInputs,
+    pushToast,
+    t,
+  ]);
 
+  const handleDeleteIntent = useCallback(async (id?: number) => {
+    if (!id) return;
+    await db.intents.delete(id);
+  }, []);
 
-  const handleDeleteIntent = async (id?: number) => {
-    if (id) await db.intents.delete(id);
-  };
-
-  const handleAddPhrase = async () => {
+  const handleAddPhrase = useCallback(async () => {
     if (!newPhrase.trim() || !editingIntentId) return;
-
     const intent = await db.intents.get(editingIntentId);
     if (!intent) return;
 
     await updateIntent(editingIntentId, {
       trainingPhrases: [...intent.trainingPhrases, newPhrase.trim()],
     });
-
     setNewPhrase("");
-  };
+  }, [newPhrase, editingIntentId, updateIntent]);
 
-  const handleAddResponse = async () => {
+  const handleAddResponse = useCallback(async () => {
     if (!newResponse.trim() || !editingIntentId) return;
-
     const intent = await db.intents.get(editingIntentId);
     if (!intent) return;
 
     await updateIntent(editingIntentId, {
       responses: [...intent.responses, newResponse.trim()],
     });
-
     setNewResponse("");
-  };
+  }, [newResponse, editingIntentId, updateIntent]);
 
-  const handleDeletePhrase = async (phrase: string) => {
-    if (!editingIntentId) return;
-    const intent = await db.intents.get(editingIntentId);
-    if (!intent) return;
+  const handleDeletePhrase = useCallback(
+    async (phrase: string) => {
+      if (!editingIntentId) return;
+      const intent = await db.intents.get(editingIntentId);
+      if (!intent) return;
 
-    await updateIntent(editingIntentId, {
-      trainingPhrases: intent.trainingPhrases.filter((p) => p !== phrase),
-    });
-  };
+      await updateIntent(editingIntentId, {
+        trainingPhrases: intent.trainingPhrases.filter((p) => p !== phrase),
+      });
+    },
+    [editingIntentId, updateIntent]
+  );
 
-  const handleDeleteResponse = async (response: string) => {
-    if (!editingIntentId) return;
-    const intent = await db.intents.get(editingIntentId);
-    if (!intent) return;
+  const handleDeleteResponse = useCallback(
+    async (response: string) => {
+      if (!editingIntentId) return;
+      const intent = await db.intents.get(editingIntentId);
+      if (!intent) return;
 
-    await updateIntent(editingIntentId, {
-      responses: intent.responses.filter((r) => r !== response),
-    });
-  };
+      await updateIntent(editingIntentId, {
+        responses: intent.responses.filter((r) => r !== response),
+      });
+    },
+    [editingIntentId, updateIntent]
+  );
 
-  const handleDeleteAll = async () => {
+  const handleDeleteAll = useCallback(async () => {
     await db.intents.clear();
     pushToast(t("intent_page.all_intents_deleted"));
-  };
+  }, [pushToast, t]);
+
+  // Handlers fixos pra cada Intent (evita recriar funções no map)
+  const handlersRef = useRef(new Map());
+
+  const getHandlersForIntent = useCallback(
+    (id: number) => {
+      if (handlersRef.current.has(id)) return handlersRef.current.get(id);
+
+      const h = {
+        onDeleteIntent: () => handleDeleteIntent(id),
+        onAddPhrase: () => {
+          setEditingIntentId(id);
+          setPhraseModalOpen(true);
+        },
+        onAddResponse: () => {
+          setEditingIntentId(id);
+          setResponseModalOpen(true);
+        },
+        onDeletePhrase: (p: string) => {
+          setEditingIntentId(id);
+          handleDeletePhrase(p);
+        },
+        onDeleteResponse: (r: string) => {
+          setEditingIntentId(id);
+          handleDeleteResponse(r);
+        },
+      };
+
+      handlersRef.current.set(id, h);
+      return h;
+    },
+    [handleDeleteIntent, handleDeletePhrase, handleDeleteResponse]
+  );
+
+  const memoIntents = useMemo(() => intents ?? [], [intents]);
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white">
+      {/* TOP BAR */}
       <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/5">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <button
-            aria-label="voltar"
             onClick={() => go("/home")}
             className="p-2 rounded-md hover:bg-white/10"
           >
@@ -163,90 +225,50 @@ export default function IntentPage() {
             {t("intent_page.title")}
           </h1>
 
-          <div className="flex items-center gap-2">
-           
+          <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="hidden sm:flex gap-2">
+                <Trash2 className="size-4" />
+                {t("intent_page.delete_all")}
+              </Button>
+            </AlertDialogTrigger>
 
-            
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="sm:hidden p-2">
+                <Trash2 className="size-5" />
+              </Button>
+            </AlertDialogTrigger>
 
-            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-              <AlertDialogTrigger asChild>
-        
-              </AlertDialogTrigger>
+            <AlertDialogContent
+              className="bg-[#090b0c]"
+              aria-describedby={undefined}
+            >
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  {t("intent_page.confirmation")}
+                </AlertDialogTitle>
+                <p className="text-sm text-neutral-400 mt-2">
+                  {t("intent_page.are_you_sure_delete_all_intents")}
+                </p>
+              </AlertDialogHeader>
 
-              <AlertDialogContent
-                className="bg-[#090b0c]"
-                aria-describedby={undefined}
-              >
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    {t("intent_page.confirmation")}
-                  </AlertDialogTitle>
-                  <p className="text-sm text-neutral-400 mt-2">
-                    {t("intent_page.are_you_sure_delete_all_intents")}
-                  </p>
-                </AlertDialogHeader>
-
-                <AlertDialogFooter>
-                  <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-
-                  <AlertDialogAction
-                    className="bg-red-600"
-                    onClick={async () => {
-                      await handleDeleteAll();
-                      setConfirmOpen(false);
-                    }}
-                  >
-                    {t("clear")}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" className="hidden sm:flex gap-2">
-                  <Trash2 className="size-4" />
-                  {t("intent_page.delete_all")}
-                </Button>
-              </AlertDialogTrigger>
-
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" className="sm:hidden p-2">
-                  <Trash2 className="size-5" />
-                </Button>
-              </AlertDialogTrigger>
-
-              <AlertDialogContent
-                className="bg-[#090b0c]"
-                aria-describedby={undefined}
-              >
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    {t("intent_page.confirmation")}
-                  </AlertDialogTitle>
-                  <p className="text-sm text-neutral-400 mt-2">
-                    {t("intent_page.are_you_sure_delete_all_intents")}
-                  </p>
-                </AlertDialogHeader>
-
-                <AlertDialogFooter>
-                  <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="bg-red-600"
-                    onClick={async () => {
-                      await handleDeleteAll();
-                      setConfirmOpen(false);
-                    }}
-                  >
-                    {t("clear")}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-red-600"
+                  onClick={handleDeleteAll}
+                >
+                  {t("clear")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
 
+      {/* CONTENT */}
       <div className="max-w-3xl mx-auto px-4 pt-[72px] pb-20">
+        {/* ADD INTENT */}
         <section className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5 mb-6 shadow-lg">
           <h2 className="text-xl font-semibold mb-4">
             {t("intent_page.add_new_intent_title")}
@@ -254,68 +276,47 @@ export default function IntentPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <Input
-              placeholder={t("intent_page.intent_name_placeholder")}
               value={intentName}
               onChange={(e) => setIntentName(e.target.value)}
+              placeholder={t("intent_page.intent_name_placeholder")}
               className="bg-neutral-800 border-neutral-700 text-white"
             />
 
             <Input
-              placeholder={t("intent_page.initial_phrase_placeholder")}
               value={initialPhrase}
               onChange={(e) => setInitialPhrase(e.target.value)}
+              placeholder={t("intent_page.initial_phrase_placeholder")}
               className="bg-neutral-800 border-neutral-700 text-white"
             />
 
             <Input
-              placeholder={t("intent_page.initial_response_placeholder")}
               value={initialResponse}
               onChange={(e) => setInitialResponse(e.target.value)}
+              placeholder={t("intent_page.initial_response_placeholder")}
               className="bg-neutral-800 border-neutral-700 text-white"
             />
           </div>
 
-          <div className="flex gap-3 mt-4 flex-wrap">
-            <Button
-              onClick={handleAddIntent}
-              className="bg-purple-600 hover:bg-purple-700"
-            >
-              <PlusCircle className="size-4 mr-2" />
-              {t("intent_page.add_intent")}
-            </Button>
-
-     
-            
-          </div>
+          <Button
+            onClick={handleAddIntent}
+            className="bg-purple-600 hover:bg-purple-700 mt-4"
+          >
+            <PlusCircle className="size-4 mr-2" />
+            {t("intent_page.add_intent")}
+          </Button>
         </section>
 
         <Separator />
 
+        {/* INTENT LIST */}
         <section className="mt-6 space-y-4">
-          {intents?.length ? (
-            intents.map((intent) => (
-              <IntentItem
-                key={intent.id}
-                intent={intent}
-                onDeleteIntent={() => handleDeleteIntent(intent.id)}
-                onAddPhrase={() => {
-                  setEditingIntentId(intent.id);
-                  setPhraseModalOpen(true);
-                }}
-                onAddResponse={() => {
-                  setEditingIntentId(intent.id);
-                  setResponseModalOpen(true);
-                }}
-                onDeletePhrase={(p) => {
-                  setEditingIntentId(intent.id);
-                  handleDeletePhrase(p);
-                }}
-                onDeleteResponse={(r) => {
-                  setEditingIntentId(intent.id);
-                  handleDeleteResponse(r);
-                }}
-              />
-            ))
+          {memoIntents.length ? (
+            memoIntents.map((intent) => {
+              const handlers = getHandlersForIntent(intent.id!);
+              return (
+                <IntentItem key={intent.id} intent={intent} {...handlers} />
+              );
+            })
           ) : (
             <div className="py-12 text-center text-neutral-400">
               {t("intent_page.no_intents_found")}
@@ -324,31 +325,36 @@ export default function IntentPage() {
         </section>
       </div>
 
-      <PhraseModal
-        isOpen={phraseModalOpen}
-        onClose={() => setPhraseModalOpen(false)}
-        newPhrase={newPhrase}
-        setNewPhrase={setNewPhrase}
-        onAddPhrase={handleAddPhrase}
-        onDeletePhrase={handleDeletePhrase}
-        intentId={editingIntentId}
-        intents={intents ?? []}
-      />
+      {/* MODAIS */}
+      {phraseModalOpen && (
+        <PhraseModal
+          isOpen={phraseModalOpen}
+          onClose={() => setPhraseModalOpen(false)}
+          newPhrase={newPhrase}
+          setNewPhrase={setNewPhrase}
+          onAddPhrase={handleAddPhrase}
+          onDeletePhrase={handleDeletePhrase}
+          intentId={editingIntentId}
+          intents={memoIntents}
+        />
+      )}
 
-      <ResponseModal
-        isOpen={responseModalOpen}
-        onClose={() => setResponseModalOpen(false)}
-        newResponse={newResponse}
-        setNewResponse={setNewResponse}
-        onAddResponse={handleAddResponse}
-        onDeleteResponse={handleDeleteResponse}
-        intentId={editingIntentId}
-        intents={intents ?? []}
-      />
+      {responseModalOpen && (
+        <ResponseModal
+          isOpen={responseModalOpen}
+          onClose={() => setResponseModalOpen(false)}
+          newResponse={newResponse}
+          setNewResponse={setNewResponse}
+          onAddResponse={handleAddResponse}
+          onDeleteResponse={handleDeleteResponse}
+          intentId={editingIntentId}
+          intents={memoIntents}
+        />
+      )}
 
       {toast && (
         <div className="fixed right-6 bottom-6 z-50">
-          <div className="bg-neutral-800 text-white px-4 py-2 rounded-lg shadow-lg animate-in fade-in slide-in-from-bottom-4">
+          <div className="bg-neutral-800 text-white px-4 py-2 rounded-lg shadow-lg">
             {toast.message}
           </div>
         </div>
