@@ -1,9 +1,10 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import SideMenu from "./side-menu"
+import { memo } from "react";
 
 
-export default function ChatHeader({ info, status }: { info?: { name?: string; profileImage?: string }, status?: string }) {
+const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: string }, status?: string })=> {
 
   return (
     <header
@@ -57,3 +58,5 @@ export default function ChatHeader({ info, status }: { info?: { name?: string; p
     </header>
   )
 }
+
+export default memo(ChatHeader)
