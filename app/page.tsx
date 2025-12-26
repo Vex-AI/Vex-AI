@@ -21,6 +21,7 @@ import { Loader2, Send } from "lucide-react";
 import ChatHeader from "@/components/chat-header";
 import { loadIntentsForLanguage } from "@/lib/IntentManager";
 import { changeLanguage } from "i18next";
+import EmptyState from "@/components/empty-state";
 
 const Home: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -104,7 +105,9 @@ const Home: React.FC = () => {
 
   const renderedMessages = useMemo(() => {
     if (!messages) return null;
-
+    if (messages.length === 0) {
+      return <EmptyState />;
+    }
     return messages.map((msg, i) => {
       const prev = messages[i - 1];
       const showDate =

@@ -1,36 +1,32 @@
 /* src/components/IntentItem.module.css */
 
-/* Estilo principal do Card */
+
 .intentCard {
-  --background: var(--ion-color-step-150, #f0f0f0); /* Fundo sutil que adapta ao tema */
+  --background: var(--ion-color-step-150, #f0f0f0); 
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 1.5rem;
   transition: all 0.3s ease-in-out;
 }
 
-/* Cabeçalho do Card */
 .cardHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 0.5rem; /* Menos espaçamento inferior */
+  padding-bottom: 0.5rem; 
 }
 
-/* Título da intenção */
 .cardTitle {
   font-size: 1.25rem;
   font-weight: bold;
   color: var(--ion-text-color, #000);
 }
 
-/* Botão de deletar a intenção */
 .deleteIntentButton {
   --padding-start: 8px;
   --padding-end: 8px;
 }
 
-/* Estilo para as seções de chips (frases e respostas) */
 .chipSection {
   margin-top: 1rem;
 }
@@ -48,7 +44,7 @@
   gap: 8px;
 }
 
-/* Container que agrupa os chips */
+
 .chipContainer {
   display: flex;
   flex-wrap: wrap;
@@ -56,7 +52,7 @@
   margin-bottom: 1rem;
 }
 
-/* Estilo base para os chips */
+
 .chip {
   color: #ffffff;
   font-weight: 500;
@@ -64,12 +60,10 @@
   --padding-end: 12px;
 }
 
-/* Cor específica para chips de frase */
 .phraseChip {
   --background: var(--ion-color-secondary, #3dc2ff);
 }
 
-/* Cor específica para chips de resposta */
 .responseChip {
   --background: var(--ion-color-primary, #3880ff);
 }
@@ -81,7 +75,7 @@
   font-size: 1.2rem;
 }
 
-/* Efeito de hover para o ícone de remoção */
+
 .chipIcon:hover {
   opacity: 1;
   transform: scale(1.1);
