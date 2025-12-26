@@ -15,6 +15,12 @@ export class vexDB extends Dexie {
   streaks!: Table<IStreak>;
   intents!: Table<IIntent>;
   unclassified!: Table<IUnclassifiedMessage>;
+  backup_v5!: Table<{
+    id?: number;
+    table: string;
+    data: any;
+    createdAt: number;
+  }>;
 
   synons!: Table<ISynon>;
   classifier!: Table<IClassifier>;
@@ -44,6 +50,15 @@ export class vexDB extends Dexie {
         console.log(
           "Executando migração V2 -> V3: Convertendo 'synons' para 'intents'..."
         );
+        const dump = {
+          messages: await tx.table("messages_bkp").toArray(),
+          intents: await tx.table("intents_bkp").toArray(),
+          synons: await tx.table("synons_bkp").toArray(),
+          vexInfo: await tx.table("vexInfo_bkp").toArray(),
+          streaks: await tx.table("streaks_bkp").toArray(),
+        };
+
+        localStorage.setItem("db_backup_v5", JSON.stringify(dump));
         try {
           const oldSynons = await tx.table("synons").toArray();
           if (oldSynons.length > 0) {
@@ -77,7 +92,7 @@ export class vexDB extends Dexie {
       unclassified: "++id, timestamp",
     });
 
-   // this.on("populate", this.populateDatabase);
+    // this.on("populate", this.populateDatabase);
   }
 
   async populateDatabase(tx: Transaction) {
