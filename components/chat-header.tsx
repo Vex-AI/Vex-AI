@@ -44,21 +44,21 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
         <SideMenu />
         
         {/* Perfil (Centro) no estilo pílula moderna */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-white/5 transition-colors cursor-default">
-          <div className="h-6 w-6 rounded-full overflow-hidden bg-indigo-500/20 flex items-center justify-center shadow-inner">
+        <div className="flex items-center gap-3 px-3 py-1.5 rounded-xl hover:bg-white/5 transition-colors cursor-default">
+          <div className="h-8 w-8 rounded-full overflow-hidden bg-indigo-500/20 flex items-center justify-center shadow-inner">
             {!info ? (
               <div className="w-full h-full animate-pulse bg-neutral-800" />
             ) : !useDynamicAvatar ? (
               <img src={info.profileImage || "/Vex_320.png"} className="w-full h-full object-cover" />
             ) : (
-              <div className="transform scale-[0.8] flex items-center justify-center">
+              <div className="transform scale-[0.9] flex items-center justify-center">
                 <AnimatedEmoji code={activeEmojiCode} />
               </div>
             )}
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-zinc-200 tracking-tight">
+            <span className="text-base font-semibold text-zinc-100 tracking-tight">
               {info?.name ?? "Vex"}
             </span>
             
@@ -72,7 +72,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute left-0 text-[11px] text-zinc-400 font-medium lowercase"
+                  className="absolute left-0 text-xs text-zinc-400 font-medium lowercase"
                 >
                   {status ?? "offline"}
                 </motion.span>
