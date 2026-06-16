@@ -50,7 +50,7 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
     <div className="flex flex-col h-full bg-transparent">
       {/* Top Action (DeepSeek style "New Chat") */}
       <div className="px-3 pt-4 pb-2">
-        <AlertDialog aria-describedby={undefined}>
+        <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
               variant="ghost"
@@ -64,7 +64,6 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
           </AlertDialogTrigger>
 
           <AlertDialogContent
-            aria-describedby={undefined}
             className="border-none bg-zinc-900/60 backdrop-blur-xl text-zinc-100 shadow-2xl rounded-2xl p-6"
           >
             <AlertDialogHeader>
