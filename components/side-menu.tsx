@@ -70,6 +70,7 @@ const SideMenu = () => {
 
       <SheetContent
         side="left"
+        aria-describedby={undefined}
         className="w-full max-w-xs rounded-r-xl border-r border-white/10 bg-[#0d0d0d] p-0 text-white"
       >
         <SheetHeader className="px-6 py-5 border-b border-white/10">
