@@ -216,13 +216,15 @@ const Home: React.FC = () => {
       <main
         ref={contentRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto px-3 py-4 space-y-4 bg-background pb-40 pt-20"
+        className="flex-1 overflow-y-auto px-3 pt-20"
       >
-        {renderedMessages}
-        {isProcessing && <TypingIndicator />}
+        <div className="max-w-3xl mx-auto w-full space-y-4 pb-6">
+          {renderedMessages}
+          {isProcessing && <TypingIndicator />}
+        </div>
       </main>
 
-      <footer className="absolute bottom-0 left-0 w-full bg-background/80 backdrop-blur-3xl pt-2 pb-6 px-4 md:pb-8">
+      <footer className="w-full bg-background  pb-6 px-4 md:pb-8 shrink-0">
         <div className="flex flex-col w-full max-w-3xl mx-auto rounded-3xl bg-[#1a1a1a] border border-white/10 p-2 md:p-3 shadow-2xl">
           
           <Input
