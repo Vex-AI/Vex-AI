@@ -25,6 +25,7 @@ import EmptyState from "@/components/empty-state";
 
 const Home: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const messages = useLiveQuery(() => db.messages.toArray(), []);
   const vexInfo = useLiveQuery(() => db.vexInfo.toArray(), []);
 
@@ -35,12 +36,17 @@ const Home: React.FC = () => {
 
   const handleSendMessage = useCallback(() => {
     const msg = text.trim();
-    if (!msg) return;
+    if (!msg || isProcessing) return;
 
     setText("");
     sendMessage(msg, false);
     sendVexMessage(msg);
-  }, [text, sendVexMessage]);
+    
+    // Maintain input focus
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 30);
+  }, [text, sendVexMessage, isProcessing]);
 
   const handleKeyUp = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -169,12 +175,12 @@ const Home: React.FC = () => {
         <div className="flex w-full items-center gap-2 p-3 max-w-3xl mx-auto">
           <div className="flex h-10 flex-1 items-center rounded-full bg-neutral-900/40 px-4 shadow-sm backdrop-blur-xl transition">
             <Input
+              ref={inputRef}
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder={t("write_message")}
               className="h-full flex-1 bg-transparent border-none p-0 text-base placeholder:text-neutral-500 shadow-none focus-visible:outline-none focus-visible:ring-0"
               onKeyUp={handleKeyUp}
-              disabled={isProcessing}
             />
 
             {isProcessing && (
