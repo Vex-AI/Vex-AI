@@ -169,7 +169,7 @@ export async function analyzer(
   }
 
   // Apply psychological state to modify the response
-  response = await VexPsyche.applyPsycheToResponse(response);
+  response = await VexPsyche.applyPsycheToResponse(response, message);
 
   return response;
 }

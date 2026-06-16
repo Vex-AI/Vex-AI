@@ -4,6 +4,9 @@ import { analyzeSentiment } from "./SentimentAnalyzer";
 import { applyStimulus, decayEmotions, timeDecay, emotionToEmoji } from "./EmotionEngine";
 import { calculateMood, trimHistory, getMoodEmoji } from "./MoodEngine";
 import { generateRandomPersonality, evolvePersonality } from "./PersonalityEngine";
+import { updateRelationship } from "./RelationshipEngine";
+import { recordIfSignificant, recallRelevantMemory } from "./MemoryEngine";
+import { checkTrauma, checkTrigger } from "./TraumaDetector";
 import { modifyResponse } from "./ResponseModifier";
 import {
   DEFAULT_EMOTIONS,
@@ -94,7 +97,7 @@ export async function processMessage(userMessage: string): Promise<void> {
   state.mood = calculateMood(state.emotions, state.emotionHistory);
 
   // 7. Update relationship based on sentiment
-  updateRelationship(state, sentiment.valence);
+  state.relationship = updateRelationship(state.relationship, sentiment.valence);
 
   // 8. Evolve personality (only every ~50 interactions)
   state.totalInteractions++;
@@ -104,10 +107,14 @@ export async function processMessage(userMessage: string): Promise<void> {
     state.totalInteractions
   );
 
-  // 9. Update timestamps
+  // 9. Process Phase 2: Memories and Traumas
+  await recordIfSignificant(userMessage, sentiment);
+  await checkTrauma(userMessage, sentiment.categories);
+
+  // 10. Update timestamps
   state.lastInteraction = Date.now();
 
-  // 10. Persist
+  // 11. Persist
   cachedState = state;
   try {
     await db.psycheState.put(state);
@@ -119,9 +126,20 @@ export async function processMessage(userMessage: string): Promise<void> {
 /**
  * Modify a response based on Vex's current psychological state.
  */
-export async function applyPsycheToResponse(originalResponse: string): Promise<string> {
+export async function applyPsycheToResponse(
+  originalResponse: string,
+  userMessage: string
+): Promise<string> {
   const state = await initialize();
-  return modifyResponse(originalResponse, state);
+  const sentiment = await analyzeSentiment(userMessage);
+
+  // Check if this message triggered a trauma
+  const traumaContext = await checkTrigger(userMessage);
+  
+  // Check if we should recall a memory
+  const memoryContext = await recallRelevantMemory(sentiment.categories);
+
+  return modifyResponse(originalResponse, state, memoryContext, traumaContext);
 }
 
 /**
@@ -150,18 +168,3 @@ export async function getState(): Promise<VexPsycheState> {
   return initialize();
 }
 
-// ─── Internal helpers ───────────────────────────
-
-function updateRelationship(state: VexPsycheState, valence: number): void {
-  const delta = valence * 3; // small incremental changes
-  const r = state.relationship;
-
-  r.affection = clamp(r.affection + delta * 0.8);
-  r.respect = clamp(r.respect + delta * 0.5);
-  r.trust = clamp(r.trust + delta * 0.6);
-  r.attachment = clamp(r.attachment + Math.abs(delta) * 0.1); // any interaction increases attachment slightly
-}
-
-function clamp(value: number, min = 0, max = 100): number {
-  return Math.max(min, Math.min(max, value));
-}

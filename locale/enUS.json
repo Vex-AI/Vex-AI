@@ -1,5 +1,9 @@
 {
   "title": "My App",
+  "psyche_trauma_trigger": "You always use that word when you want to hurt me. Don't talk to me like that anymore.",
+  "psyche_memory_insult": "This isn't the first time you say something like this to me...",
+  "psyche_memory_affection": "I remember when you told me something similar. I like that.",
+  "psyche_memory_praise": "You always praise me... thank you.",
   "english": "English",
   "portuguese": "Portuguese",
   "select": "Change language",
