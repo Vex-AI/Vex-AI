@@ -138,5 +138,12 @@
       "pt": "Costuma viver no gelo ou clima muito frio?",
       "en": "Does it usually live in ice or very cold climates?"
     }
+  },
+  {
+    "id": "q21",
+    "text": {
+      "pt": "Costuma latir?",
+      "en": "Does it bark?"
+    }
   }
 ]

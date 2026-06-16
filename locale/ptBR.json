@@ -267,7 +267,8 @@
       "q17": ["Tem chifres ou cornos?", "Possui chifres?", "Ele tem chifres ou cornos?"],
       "q18": ["É um animal de fazenda?", "Costuma ser criado em fazendas?", "É um animal típico de fazenda?"],
       "q19": ["É um animal típico de savana ou safari?", "Vive na savana?", "É comumente encontrado em safaris ou savanas?"],
-      "q20": ["Costuma viver no gelo ou clima muito frio?", "Vive em climas extremamente frios?", "O habitat dele é no gelo ou neve?"]
+      "q20": ["Costuma viver no gelo ou clima muito frio?", "Vive em climas extremamente frios?", "O habitat dele é no gelo ou neve?"],
+      "q21": ["Costuma latir?", "Ele produz sons de latido?", "Emite latidos?"]
     }
   }
 }
