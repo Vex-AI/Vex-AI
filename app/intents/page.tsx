@@ -12,7 +12,7 @@ import IntentItem from "@/components/intent-item";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import Header from "@/components/header";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -25,7 +25,7 @@ import {
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 
-import { Trash2, PlusCircle, ArrowLeft, Bot } from "lucide-react";
+import { Trash2, PlusCircle, Bot } from "lucide-react";
 import { IIntent } from "@/types";
 
 export default function IntentPage() {
@@ -212,60 +212,47 @@ export default function IntentPage() {
 
   return (
     <main className="flex flex-col h-full bg-[#0d0d0d] text-white relative overflow-hidden">
-      {/* TOP BAR */}
-      <div className="absolute top-0 left-0 right-0 z-40 bg-[#0d0d0d] border-b border-white/5">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-          <button
-            onClick={() => go("/home")}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 md:hidden"
-          >
-            <ArrowLeft className="w-5 h-5 text-neutral-300" />
-          </button>
+      <Header title={t("intent_page.title")}>
+        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" className="hidden sm:flex gap-2 rounded-xl border-red-500/20 bg-red-500/5 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all">
+              <Trash2 className="w-4 h-4" />
+              {t("intent_page.delete_all")}
+            </Button>
+          </AlertDialogTrigger>
 
-          <h1 className="text-xl sm:text-2xl font-bold flex-1 truncate text-white/90">
-            {t("intent_page.title")}
-          </h1>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" size="icon" className="sm:hidden rounded-xl border-red-500/20 bg-red-500/5 text-red-400 hover:bg-red-500/20">
+              <Trash2 className="w-5 h-5" />
+            </Button>
+          </AlertDialogTrigger>
 
-          <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline" className="hidden sm:flex gap-2 rounded-xl border-red-500/20 bg-red-500/5 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all">
-                <Trash2 className="w-4 h-4" />
+          <AlertDialogContent className="bg-[#1a1a1a] border-white/10 text-white rounded-3xl">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-xl font-bold">
+                {t("intent_page.confirmation")}
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-sm text-neutral-400 mt-2">
+                {t("intent_page.are_you_sure_delete_all_intents")}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="mt-6 gap-3 sm:gap-0">
+              <AlertDialogCancel className="rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-white sm:w-auto h-12">
+                {t("cancel")}
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDeleteAll}
+                className="rounded-xl bg-red-500 hover:bg-red-600 text-white sm:w-auto h-12 border-none shadow-none"
+              >
                 {t("intent_page.delete_all")}
-              </Button>
-            </AlertDialogTrigger>
-
-            <AlertDialogTrigger asChild>
-              <Button variant="outline" size="icon" className="sm:hidden rounded-xl border-red-500/20 bg-red-500/5 text-red-400 hover:bg-red-500/20">
-                <Trash2 className="w-5 h-5" />
-              </Button>
-            </AlertDialogTrigger>
-
-            <AlertDialogContent className="bg-[#1a1a1a] border-white/10 text-white rounded-3xl">
-              <AlertDialogHeader>
-                <AlertDialogTitle className="text-xl font-bold">
-                  {t("intent_page.confirmation")}
-                </AlertDialogTitle>
-                <AlertDialogDescription className="text-sm text-neutral-400 mt-2">
-                  {t("intent_page.are_you_sure_delete_all_intents")}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-
-              <AlertDialogFooter className="mt-4 gap-2">
-                <AlertDialogCancel className="bg-white/5 border-white/10 hover:bg-white/10 text-neutral-300 rounded-xl m-0">{t("cancel")}</AlertDialogCancel>
-                <AlertDialogAction
-                  className="bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.3)] m-0"
-                  onClick={handleDeleteAll}
-                >
-                  {t("clear")}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </div>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </Header>
 
       {/* CONTENT */}
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 pt-24 pb-32 scrollbar-none">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 pt-8 pb-32 scrollbar-none">
         <div className="max-w-4xl mx-auto w-full">
           {/* ADD INTENT */}
           <section className="relative bg-[#0a0a0a] border border-white/5 rounded-3xl p-6 md:p-8 mb-10 overflow-hidden group">

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Key, Check, ShieldCheck, Cpu } from "lucide-react";
+import { Key, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
@@ -35,22 +35,12 @@ export default function SettingsPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0d0d0d] text-white">
-      <div className="px-6 pt-6">
-        <Header />
-      </div>
+      <Header 
+        title={t("settings")} 
+        description={t("settings_desc")}
+      />
 
       <main className="flex-1 max-w-md w-full mx-auto p-6 space-y-8 mt-4">
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-2"
-        >
-          <div className="inline-flex items-center justify-center p-3 bg-white/5 rounded-2xl border border-white/10 mb-4">
-            <Cpu className="w-6 h-6 text-emerald-400" />
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white/90">{t("settings")}</h1>
-          <p className="text-sm text-neutral-400 leading-relaxed">{t("settings_desc")}</p>
-        </motion.div>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

@@ -1,26 +1,45 @@
-import { ChevronLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 
-const Header = ({ message }: { message?: string }) => {
+interface HeaderProps {
+  title?: string;
+  description?: string;
+  children?: React.ReactNode;
+}
+
+const Header = ({ title, description, children }: HeaderProps) => {
   const navigate = useNavigate();
   const go = (path: string) => navigate(path, { replace: true });
   const { t } = useTranslation();
-  if (!message) message = t("back");
+  
+  const displayTitle = title || t("back");
+
   return (
-    <div className="flex items-center gap-3 md:hidden">
+    <header className="flex items-center gap-4 px-4 py-5 border-b border-white/5 sticky top-0 bg-[#0d0d0d]/80 backdrop-blur-md z-30">
       <Button
         variant="ghost"
         size="icon"
         onClick={() => go("/home")}
-        className="text-neutral-300 hover:text-white"
+        className="md:hidden text-neutral-300 hover:text-white"
       >
-        <ChevronLeft className="size-5" />
+        <ArrowLeft className="w-5 h-5" />
       </Button>
 
-      <h1 className="text-lg font-semibold">{message}</h1>
-    </div>
+      <div className="flex-1 min-w-0">
+        <h1 className="text-xl font-bold tracking-tight truncate">{displayTitle}</h1>
+        {description && (
+          <p className="text-xs text-neutral-400 mt-0.5 truncate">{description}</p>
+        )}
+      </div>
+
+      {children && (
+        <div className="flex items-center gap-2 shrink-0">
+          {children}
+        </div>
+      )}
+    </header>
   );
 };
 

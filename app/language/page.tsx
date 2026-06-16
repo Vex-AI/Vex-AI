@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Loader2, Check, Languages, Globe2 } from "lucide-react";
+import { Loader2, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { loadIntentsForLanguage } from "@/lib/IntentManager";
@@ -50,24 +50,12 @@ export default function LanguageSelector() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0d0d0d] text-white">
-      <div className="px-6 pt-6">
-        <Header />
-      </div>
+      <Header 
+        title={t("select")} 
+        description="Escolha o idioma principal para a inteligência da Vex e para o aplicativo."
+      />
 
       <main className="flex-1 max-w-md w-full mx-auto p-6 space-y-8 mt-4">
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-2"
-        >
-          <div className="inline-flex items-center justify-center p-3 bg-white/5 rounded-2xl border border-white/10 mb-4">
-            <Globe2 className="w-6 h-6 text-indigo-400" />
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white/90">{t("select")}</h1>
-          <p className="text-sm text-neutral-400 leading-relaxed">
-            Escolha o idioma principal para a inteligência da Vex e para o aplicativo.
-          </p>
-        </motion.div>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

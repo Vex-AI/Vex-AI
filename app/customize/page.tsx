@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useTranslation } from "react-i18next";
 import { ChromePicker } from "react-color";
 import { toast } from "sonner";
-import { Save, Trash2, Paintbrush, Layers, Palette, RefreshCcw } from "lucide-react";
+import { Save, Trash2, Layers, Palette, RefreshCcw } from "lucide-react";
 import { motion } from "framer-motion";
 import Preview from "@/components/preview";
 import Header from "@/components/header";
@@ -63,23 +63,13 @@ export default function Customize() {
 
   return (
     <div className="flex flex-col h-full relative overflow-hidden bg-[#0d0d0d] text-white">
-      <div className="px-6 pt-6">
-        <Header />
-      </div>
+      <Header 
+        title={t("customization") || "Customização"} 
+        description={t("customization_desc") || "Ajuste o visual das bolhas de chat para você e para a Vex."} 
+      />
 
       <main className="flex-1 overflow-y-auto scrollbar-none p-4 pb-20">
         <div className="max-w-xl mx-auto space-y-8">
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-2 mt-4"
-        >
-          <div className="inline-flex items-center justify-center p-3 bg-white/5 rounded-2xl border border-white/10 mb-4">
-            <Paintbrush className="w-6 h-6 text-indigo-400" />
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white/90">{t("customization")}</h1>
-          <p className="text-sm text-neutral-400 leading-relaxed">{t("customization_desc")}</p>
-        </motion.div>
 
         {/* Preview Container */}
         <motion.div 
