@@ -211,9 +211,9 @@ export default function IntentPage() {
   const memoIntents = useMemo(() => intents ?? [], [intents]);
 
   return (
-    <main className="min-h-screen bg-[#0d0d0d] text-white">
+    <main className="flex flex-col h-full bg-[#0d0d0d] text-white relative overflow-hidden">
       {/* TOP BAR */}
-      <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/40 border-b border-white/5">
+      <div className="absolute top-0 left-0 right-0 z-40 bg-[#0d0d0d] border-b border-white/5">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
           <button
             onClick={() => go("/home")}
@@ -265,9 +265,10 @@ export default function IntentPage() {
       </div>
 
       {/* CONTENT */}
-      <div className="max-w-4xl mx-auto px-4 pt-28 pb-24">
-        {/* ADD INTENT */}
-        <section className="relative bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 mb-10 overflow-hidden group">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 pt-24 pb-32 scrollbar-none">
+        <div className="max-w-4xl mx-auto w-full">
+          {/* ADD INTENT */}
+          <section className="relative bg-[#0a0a0a] border border-white/5 rounded-3xl p-6 md:p-8 mb-10 overflow-hidden group">
           <h2 className="text-xl font-bold mb-6 text-white/90 relative z-10 flex items-center gap-3">
             <div className="p-2 bg-indigo-500/20 rounded-xl">
               <PlusCircle className="w-5 h-5 text-indigo-400" />
@@ -282,7 +283,7 @@ export default function IntentPage() {
                 value={intentName}
                 onChange={(e) => setIntentName(e.target.value)}
                 placeholder={t("intent_page.intent_name_placeholder")}
-                className="bg-black/40 border-white/10 text-white focus-visible:ring-indigo-500/50 rounded-xl h-12"
+                className="bg-[#131313] border border-white/5 text-white focus-visible:ring-0 focus-visible:border-white/10 rounded-xl h-12"
               />
             </div>
 
@@ -292,7 +293,7 @@ export default function IntentPage() {
                 value={initialPhrase}
                 onChange={(e) => setInitialPhrase(e.target.value)}
                 placeholder={t("intent_page.initial_phrase_placeholder")}
-                className="bg-black/40 border-white/10 text-white focus-visible:ring-indigo-500/50 rounded-xl h-12"
+                className="bg-[#131313] border border-white/5 text-white focus-visible:ring-0 focus-visible:border-white/10 rounded-xl h-12"
               />
             </div>
 
@@ -302,14 +303,14 @@ export default function IntentPage() {
                 value={initialResponse}
                 onChange={(e) => setInitialResponse(e.target.value)}
                 placeholder={t("intent_page.initial_response_placeholder")}
-                className="bg-black/40 border-white/10 text-white focus-visible:ring-indigo-500/50 rounded-xl h-12"
+                className="bg-[#131313] border border-white/5 text-white focus-visible:ring-0 focus-visible:border-white/10 rounded-xl h-12"
               />
             </div>
           </div>
 
           <Button
             onClick={handleAddIntent}
-            className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white mt-6 rounded-xl h-12 px-8 transition-all relative z-10"
+            className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white mt-6 rounded-xl h-12 px-8 transition-colors relative z-10 shadow-none border-none"
           >
             <PlusCircle className="w-4 h-4 mr-2" />
             {t("intent_page.add_intent")}
@@ -335,6 +336,7 @@ export default function IntentPage() {
             </div>
           )}
         </section>
+        </div>
       </div>
 
       {/* MODAIS */}
