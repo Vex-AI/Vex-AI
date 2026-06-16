@@ -83,7 +83,7 @@ const SideMenu = () => {
           </SheetTitle>
         </SheetHeader>
 
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full overflow-y-auto pb-6">
           <div className="px-4 py-5">
             <p className="mb-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">
               {t("navigation")}
