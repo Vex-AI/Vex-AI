@@ -56,6 +56,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider defaultTheme="dark" storageKey="app-theme">
     <RouterProvider router={router} />
-    <Toaster richColors />
+    <Toaster richColors theme="dark" />
   </ThemeProvider>
 );
