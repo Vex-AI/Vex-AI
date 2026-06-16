@@ -18,6 +18,7 @@ import LanguageSelector from "@/app/language/page";
 import Customize from "@/app/customize/page";
 import ConsentPage from "@/app/consent/page";
 import StreakPage from "@/app/streak/page";
+import StatsPage from "@/app/stats/page";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import ChatLoading from "@/components/chat-loading";
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
       { path: "/customize", element: <Customize /> },
       { path: "/consent", element: <ConsentPage /> },
       { path: "/streak", element: <StreakPage /> },
+      { path: "/stats", element: <StatsPage /> },
       { path: "/teste", element: <ChatLoading /> },
     ],
   },

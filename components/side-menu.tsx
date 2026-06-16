@@ -11,6 +11,7 @@ import {
   Languages,
   Trash2,
   Menu,
+  Activity,
 } from "lucide-react";
 
 import { db } from "@/lib/vexDB";
@@ -45,6 +46,7 @@ const menuItems = [
   { labelKey: "home", path: "/home", icon: Home },
   { labelKey: "vexLearning", path: "/intents", icon: Sparkles },
   { labelKey: "vexProfile", path: "/profile", icon: User },
+  { labelKey: "stats", path: "/stats", icon: Activity },
   { labelKey: "customization", path: "/customize", icon: Paintbrush },
   { labelKey: "select", path: "/language", icon: Languages },
 ];
