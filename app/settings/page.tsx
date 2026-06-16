@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Key, Check } from "lucide-react";
+import { Key, Check, ShieldCheck, Cpu } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,7 @@ export default function SettingsPage() {
   const { t } = useTranslation();
   const [apiKey, setApiKey] = useState("");
   const [saved, setSaved] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("geminiApiKey");
@@ -32,41 +34,82 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 space-y-10">
-      <Header />
-      <div className="space-y-1">
-        <h1 className="text-xl font-semibold">{t("settings")}</h1>
-        <p className="text-sm text-muted-foreground">{t("settings_desc")}</p>
+    <div className="flex flex-col min-h-screen bg-[#0d0d0d] text-white">
+      <div className="px-6 pt-6">
+        <Header />
       </div>
 
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium flex items-center gap-2">
-            <Key className="w-4 h-4 text-emerald-500" />
-            {t("gemini_api_key")}
-          </label>
-          <p className="text-xs text-muted-foreground">
-            {t("gemini_api_key_desc")}
-          </p>
-          <Input 
-            type="password" 
-            placeholder="AIzaSy..." 
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-          />
-        </div>
+      <main className="flex-1 max-w-md w-full mx-auto p-6 space-y-8 mt-4">
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-2"
+        >
+          <div className="inline-flex items-center justify-center p-3 bg-white/5 rounded-2xl border border-white/10 mb-4">
+            <Cpu className="w-6 h-6 text-emerald-400" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-white/90">{t("settings")}</h1>
+          <p className="text-sm text-neutral-400 leading-relaxed">{t("settings_desc")}</p>
+        </motion.div>
 
-        <Button onClick={handleSave} className="w-full" variant={saved ? "secondary" : "default"}>
-          {saved ? (
-            <>
-              <Check className="w-4 h-4 mr-2" />
-              {t("key_saved")}
-            </>
-          ) : (
-            t("save_key")
-          )}
-        </Button>
-      </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="space-y-6"
+        >
+          {/* API Key Card */}
+          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 relative overflow-hidden group transition-all duration-500 hover:bg-white/[0.05]">
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            <div className="space-y-4 relative z-10">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-emerald-500/10 rounded-lg">
+                  <Key className="w-4 h-4 text-emerald-400" />
+                </div>
+                <h3 className="text-sm font-semibold text-white/90">{t("gemini_api_key")}</h3>
+              </div>
+              
+              <p className="text-xs text-neutral-400">
+                {t("gemini_api_key_desc")}
+              </p>
+              
+              <div className={`relative transition-all duration-300 rounded-xl overflow-hidden border ${isFocused ? 'border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'border-white/10'}`}>
+                <Input 
+                  type="password" 
+                  placeholder="AIzaSy..." 
+                  value={apiKey}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  className="bg-black/40 border-0 focus-visible:ring-0 text-white/90 placeholder:text-neutral-600 px-4 py-6"
+                />
+              </div>
+
+              <div className="pt-2">
+                <Button 
+                  onClick={handleSave} 
+                  className={`w-full h-12 rounded-xl font-medium transition-all duration-300 ${saved ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]' : 'bg-white text-black hover:bg-white/90'}`}
+                >
+                  {saved ? (
+                    <motion.div 
+                      initial={{ scale: 0.5, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className="flex items-center"
+                    >
+                      <ShieldCheck className="w-5 h-5 mr-2" />
+                      {t("key_saved")}
+                    </motion.div>
+                  ) : (
+                    t("save_key")
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+      </main>
     </div>
   );
 }
