@@ -62,7 +62,8 @@
     "tailwindcss": "^4.1.17",
     "uuid": "^10.0.0",
     "vite-plugin-pages": "^0.33.1",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@capacitor/cli": "^7.4.4",

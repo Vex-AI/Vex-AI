@@ -1,10 +1,15 @@
-
 import { motion, AnimatePresence } from "framer-motion"
 import SideMenu from "./side-menu"
 import { memo } from "react";
+import { useEmotionStore } from "@/store/useEmotionStore";
+import AnimatedEmoji from "./animated-emoji";
 
 
 const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: string }, status?: string })=> {
+  const currentEmotion = useEmotionStore((state) => state.currentEmotion);
+  const isTyping = useEmotionStore((state) => state.isTyping);
+
+  const activeEmojiCode = isTyping ? "1f914" : currentEmotion; // 1f914 = thinking face
 
   return (
     <header
@@ -19,14 +24,13 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
         
         {/* Perfil */}
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full overflow-hidden bg-neutral-900">
+          <div className="h-10 w-10 rounded-full overflow-hidden bg-neutral-900/60 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-inner">
             {!info ? (
               <div className="w-full h-full animate-pulse bg-neutral-800" />
             ) : (
-              <img
-                src={info.profileImage ?? "/Vex_320.png"}
-                className="w-full h-full object-cover"
-              />
+              <div className="transform scale-110 transition-transform duration-300 flex items-center justify-center">
+                <AnimatedEmoji code={activeEmojiCode} />
+              </div>
             )}
           </div>
 

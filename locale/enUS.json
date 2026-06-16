@@ -170,5 +170,12 @@
     "permissionGranted": "Notification permission granted.",
     "permissionDenied": "Notification permission denied.",
     "permissionRejected": "Notification permission was rejected."
+  },
+  "emotions": {
+    "happy": ["happy", "glad", "awesome", "great", "thanks", "good", "thank you", "excellent", "excited", "happy!", "nice"],
+    "sad": ["sad", "sorry", "bad", "cry", "upset", "unhappy", "depressed", "sadness"],
+    "angry": ["angry", "hate", "mad", "annoyed", "furious", "irritated", "shut up"],
+    "thinking": ["what", "how", "why", "who", "surprise", "wonder", "really", "think", "maybe", "question"],
+    "loving": ["love", "like", "cute", "heart", "beautiful", "dear", "lovely", "love you"]
   }
 }

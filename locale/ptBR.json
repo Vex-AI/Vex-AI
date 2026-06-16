@@ -166,5 +166,12 @@
     "permissionGranted": "Permissão para notificações concedida.",
     "permissionDenied": "Permissão para notificações negada.",
     "permissionRejected": "A permissão para notificações foi recusada."
+  },
+  "emotions": {
+    "happy": ["feliz", "legal", "oba", "bom", "obrigado", "boa", "excelente", "maravilha", "agradeço", "feliz!", "oba!"],
+    "sad": ["triste", "pena", "chateado", "ruim", "chorar", "lamento", "mal", "tristeza"],
+    "angry": ["bravo", "raiva", "ódio", "irritado", "furioso", "chateado", "cale a boca"],
+    "thinking": ["que", "como", "porque", "surpresa", "será", "pensando", "talvez", "duvida", "pergunta"],
+    "loving": ["amor", "gostar", "adorar", "querida", "linda", "fofa", "coração", "te amo"]
   }
 }
