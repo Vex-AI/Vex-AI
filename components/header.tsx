@@ -9,12 +9,12 @@ const Header = ({ message }: { message?: string }) => {
   const { t } = useTranslation();
   if (!message) message = t("back");
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 md:hidden">
       <Button
         variant="ghost"
         size="icon"
         onClick={() => go("/home")}
-        className="text-neutral-300 hover:text-white md:hidden"
+        className="text-neutral-300 hover:text-white"
       >
         <ChevronLeft className="size-5" />
       </Button>
