@@ -56,8 +56,8 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
               variant="ghost"
               className="w-full justify-start gap-3 rounded-full bg-white/5 hover:bg-white/10 px-4 py-6 text-[15px] font-medium text-zinc-200 transition-colors"
             >
-              <div className="flex items-center justify-center w-5 h-5 rounded-full border border-zinc-400">
-                <span className="text-zinc-400 text-sm leading-none -mt-0.5">+</span>
+              <div className="flex items-center justify-center w-5 h-5">
+                <Trash2 className="w-4 h-4 text-zinc-400" />
               </div>
               {t("clearChat")}
             </Button>
