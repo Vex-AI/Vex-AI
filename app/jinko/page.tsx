@@ -178,7 +178,7 @@ export default function JinkoPage() {
   return (
     <div className="w-full h-full overflow-y-auto bg-[#0a0a0a] text-zinc-100 animate-in fade-in p-6">
       <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6 pl-14 lg:pl-0">
           <div className="text-left">
             <h2 className="text-4xl font-semibold text-red-300/90">
               {lang === "pt" ? "Banco de Animais" : "Animals Database"}
@@ -352,7 +352,7 @@ export default function JinkoPage() {
         {activeTab === "table" && (
           <div className="bg-[#111111] border border-white/5 rounded-2xl overflow-hidden shadow-sm flex flex-col">
             <div className="overflow-x-auto w-full max-w-full text-left">
-              <table className="w-full border-collapse text-sm text-left">
+              <table className="w-full min-w-max border-collapse text-sm text-left">
                 <thead>
                   <tr className="bg-[#0a0a0a] border-b border-white/5">
                     <th
@@ -386,10 +386,11 @@ export default function JinkoPage() {
                     {sortedQuestions.map((q) => (
                       <th
                         key={q.id}
+                        title={translateProp(q.text)}
                         className="px-3 py-4 text-center font-semibold text-zinc-500 min-w-[55px] uppercase relative group cursor-help hover:bg-white/5 transition-all"
                       >
                         {q.id}
-                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 hidden group-hover:block bg-zinc-900 text-zinc-100 text-[10px] leading-normal p-2 rounded-lg shadow-lg z-30 font-normal normal-case pointer-events-none text-left border border-white/10">
+                        <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 hidden group-hover:block bg-zinc-900 text-zinc-100 text-[10px] leading-normal p-2 rounded-lg shadow-lg z-50 font-normal normal-case pointer-events-none text-left border border-white/10">
                           <span className="font-bold block text-red-400/80 uppercase mb-0.5">{q.id}:</span>
                           {translateProp(q.text)}
                         </span>
