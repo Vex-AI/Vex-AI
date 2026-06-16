@@ -97,12 +97,12 @@ export default memo(function PhraseModal({
               placeholder={t("intent_page.type_new_variation")}
               value={newPhrase}
               onChange={(e) => setNewPhrase(e.target.value)}
-              className="bg-black/40 border-white/10 text-white focus-visible:ring-emerald-500/50 rounded-xl h-12 flex-1"
+              className="bg-[#131313] border border-white/5 text-white focus-visible:ring-0 focus-visible:border-white/10 rounded-xl h-12 flex-1"
             />
 
             <Button
               onClick={onAddPhrase}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl h-12 px-6"
+              className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl h-12 px-6 transition-colors shadow-none border-none"
             >
               <PlusCircle className="size-5 mr-2" />
               {t("intent_page.add_btn")}
