@@ -16,7 +16,6 @@ import { useChangelogStore } from "@/store/changelogStore";
 import { db } from "@/lib/vexDB";
 import GeminiToggle from "./gemini-toggle";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import {
   AlertDialog,

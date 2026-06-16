@@ -176,14 +176,14 @@ export default function JinkoPage() {
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto bg-background text-foreground animate-in fade-in p-6">
+    <div className="w-full h-full overflow-y-auto bg-[#0a0a0a] text-zinc-100 animate-in fade-in p-6">
       <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div className="text-left">
-            <h2 className="text-4xl font-semibold text-primary">
+            <h2 className="text-4xl font-semibold text-red-300/90">
               {lang === "pt" ? "Banco de Animais" : "Animals Database"}
             </h2>
-            <p className="text-muted-foreground text-sm mt-1">
+            <p className="text-zinc-400 text-sm mt-1">
               {lang === "pt"
                 ? "Explore os animais catalogados e veja as respostas que o Jinko conhece."
                 : "Explore cataloged animals and view known Jinko answers."}
@@ -191,37 +191,37 @@ export default function JinkoPage() {
           </div>
         </div>
 
-        <div className="flex border-b border-border mb-2">
+        <div className="flex border-b border-white/10 mb-2">
           <button
             onClick={() => setActiveTab("table")}
             className={`px-6 py-3 font-semibold text-sm transition-all relative ${
-              activeTab === "table" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              activeTab === "table" ? "text-red-300/90" : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
             {lang === "pt" ? "Tabela de Animais" : "Animals Table"}
             {activeTab === "table" && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-400/80"></div>
             )}
           </button>
           <button
             onClick={() => setActiveTab("simulator")}
             className={`px-6 py-3 font-semibold text-sm transition-all relative flex items-center gap-2 ${
-              activeTab === "simulator" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              activeTab === "simulator" ? "text-red-300/90" : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
             <span className="inline-flex w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             {lang === "pt" ? "Simulador em Tempo Real (Debug)" : "Real-time Simulator (Debug)"}
             {activeTab === "simulator" && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-400/80"></div>
             )}
           </button>
         </div>
 
         {activeTab === "table" && (
-          <div className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-5 shadow-sm">
+          <div className="bg-[#111111] border border-white/5 rounded-2xl p-5 flex flex-col gap-5 shadow-sm">
             <div className="flex flex-col xl:flex-row gap-4">
               <div className="relative flex-1">
-                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/60">
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="18"
@@ -242,7 +242,7 @@ export default function JinkoPage() {
                   placeholder={lang === "pt" ? "Buscar animal por nome..." : "Search animal by name..."}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-11 pr-4 py-2.5 bg-background border border-border rounded-xl focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground placeholder-muted-foreground/50 transition-all text-sm"
+                  className="w-full pl-11 pr-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400/50 focus:border-red-400/50 text-zinc-100 placeholder-zinc-600 transition-all text-sm"
                 />
               </div>
 
@@ -251,8 +251,8 @@ export default function JinkoPage() {
                   onClick={() => setSelectedCategory("all")}
                   className={`px-4 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
                     selectedCategory === "all"
-                      ? "bg-primary text-background border-primary"
-                      : "border-border bg-background text-muted-foreground hover:text-foreground hover:border-border"
+                      ? "bg-red-900/40 text-red-200 border-red-500/30"
+                      : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
                   {lang === "pt" ? "Todos" : "All"} ({animalsData.length})
@@ -261,8 +261,8 @@ export default function JinkoPage() {
                   onClick={() => setSelectedCategory("mammal")}
                   className={`px-4 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
                     selectedCategory === "mammal"
-                      ? "bg-blue-600 text-white border-blue-600"
-                      : "border-border bg-background text-muted-foreground hover:text-foreground hover:border-border"
+                      ? "bg-blue-900/40 text-blue-200 border-blue-500/30"
+                      : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
                   {lang === "pt" ? "Mamíferos" : "Mammals"}
@@ -271,8 +271,8 @@ export default function JinkoPage() {
                   onClick={() => setSelectedCategory("bird")}
                   className={`px-4 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
                     selectedCategory === "bird"
-                      ? "bg-amber-600 text-white border-amber-600"
-                      : "border-border bg-background text-muted-foreground hover:text-foreground hover:border-border"
+                      ? "bg-amber-900/40 text-amber-200 border-amber-500/30"
+                      : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
                   {lang === "pt" ? "Aves" : "Birds"}
@@ -281,8 +281,8 @@ export default function JinkoPage() {
                   onClick={() => setSelectedCategory("reptile")}
                   className={`px-4 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
                     selectedCategory === "reptile"
-                      ? "bg-emerald-600 text-white border-emerald-600"
-                      : "border-border bg-background text-muted-foreground hover:text-foreground hover:border-border"
+                      ? "bg-emerald-900/40 text-emerald-200 border-emerald-500/30"
+                      : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
                   {lang === "pt" ? "Répteis/Anfíbios" : "Reptiles/Amph."}
@@ -291,8 +291,8 @@ export default function JinkoPage() {
                   onClick={() => setSelectedCategory("insect")}
                   className={`px-4 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
                     selectedCategory === "insect"
-                      ? "bg-purple-600 text-white border-purple-600"
-                      : "border-border bg-background text-muted-foreground hover:text-foreground hover:border-border"
+                      ? "bg-purple-900/40 text-purple-200 border-purple-500/30"
+                      : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
                   {lang === "pt" ? "Insetos/Aracnídeos" : "Insects"}
@@ -301,8 +301,8 @@ export default function JinkoPage() {
                   onClick={() => setSelectedCategory("other")}
                   className={`px-4 py-2 text-xs font-medium rounded-lg border transition-all duration-200 ${
                     selectedCategory === "other"
-                      ? "bg-zinc-600 text-white border-zinc-600"
-                      : "border-border bg-background text-muted-foreground hover:text-foreground hover:border-border"
+                      ? "bg-zinc-800 text-zinc-200 border-zinc-600"
+                      : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
                   {lang === "pt" ? "Outros" : "Others"}
@@ -310,10 +310,10 @@ export default function JinkoPage() {
               </div>
             </div>
 
-            <div className="border-t border-border pt-4">
+            <div className="border-t border-white/5 pt-4">
               <button
                 onClick={() => setShowLegend(!showLegend)}
-                className="flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-all duration-200"
+                className="flex items-center gap-2 text-xs font-semibold text-zinc-500 hover:text-zinc-300 transition-all duration-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -333,14 +333,14 @@ export default function JinkoPage() {
               </button>
 
               {showLegend && (
-                <div className="columns-1 md:columns-2 lg:columns-3 gap-x-8 gap-y-1 mt-4 text-xs bg-background p-5 rounded-xl border border-border">
+                <div className="columns-1 md:columns-2 lg:columns-3 gap-x-8 gap-y-1 mt-4 text-xs bg-[#0a0a0a] p-5 rounded-xl border border-white/5">
                   {sortedQuestions.map((q) => (
                     <div
                       key={q.id}
-                      className="break-inside-avoid flex gap-2 py-1.5 border-b border-border/40 last:border-b-0"
+                      className="break-inside-avoid flex gap-2 py-1.5 border-b border-white/5 last:border-b-0"
                     >
-                      <span className="font-bold text-primary min-w-[28px] uppercase">{q.id}:</span>
-                      <span className="text-muted-foreground">{translateProp(q.text)}</span>
+                      <span className="font-bold text-red-400/80 min-w-[28px] uppercase">{q.id}:</span>
+                      <span className="text-zinc-400">{translateProp(q.text)}</span>
                     </div>
                   ))}
                 </div>
@@ -350,35 +350,35 @@ export default function JinkoPage() {
         )}
 
         {activeTab === "table" && (
-          <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm flex flex-col">
+          <div className="bg-[#111111] border border-white/5 rounded-2xl overflow-hidden shadow-sm flex flex-col">
             <div className="overflow-x-auto w-full max-w-full text-left">
               <table className="w-full border-collapse text-sm text-left">
                 <thead>
-                  <tr className="bg-background/45 border-b border-border">
+                  <tr className="bg-[#0a0a0a] border-b border-white/5">
                     <th
                       onClick={() => handleSort("name")}
-                      className="sticky left-0 bg-card md:bg-background/70 backdrop-blur-sm px-5 py-4 font-semibold text-foreground border-r border-border cursor-pointer select-none min-w-[150px] z-20 hover:text-primary transition-all"
+                      className="sticky left-0 bg-[#0a0a0a] px-5 py-4 font-semibold text-zinc-100 border-r border-white/5 cursor-pointer select-none min-w-[150px] z-20 hover:text-red-400 transition-all"
                     >
                       <div className="flex items-center gap-1.5 text-left">
                         {lang === "pt" ? "Animal" : "Animal"}
                         {sortField === "name" && (
-                          <span className="text-xs text-primary">{sortOrder === "asc" ? "▲" : "▼"}</span>
+                          <span className="text-xs text-red-500/80">{sortOrder === "asc" ? "▲" : "▼"}</span>
                         )}
                       </div>
                     </th>
 
-                    <th className="px-4 py-4 font-semibold text-muted-foreground min-w-[120px] text-left">
+                    <th className="px-4 py-4 font-semibold text-zinc-500 min-w-[120px] text-left">
                       {lang === "pt" ? "Grupo" : "Group"}
                     </th>
 
                     <th
                       onClick={() => handleSort("playCount")}
-                      className="px-4 py-4 font-semibold text-muted-foreground cursor-pointer select-none min-w-[110px] hover:text-primary transition-all text-left"
+                      className="px-4 py-4 font-semibold text-zinc-500 cursor-pointer select-none min-w-[110px] hover:text-red-400 transition-all text-left"
                     >
                       <div className="flex items-center gap-1.5 text-left">
                         {lang === "pt" ? "Jogadas" : "Plays"}
                         {sortField === "playCount" && (
-                          <span className="text-xs text-primary">{sortOrder === "asc" ? "▲" : "▼"}</span>
+                          <span className="text-xs text-red-500/80">{sortOrder === "asc" ? "▲" : "▼"}</span>
                         )}
                       </div>
                     </th>
@@ -386,11 +386,11 @@ export default function JinkoPage() {
                     {sortedQuestions.map((q) => (
                       <th
                         key={q.id}
-                        className="px-3 py-4 text-center font-semibold text-muted-foreground min-w-[55px] uppercase relative group cursor-help hover:bg-background/80 transition-all"
+                        className="px-3 py-4 text-center font-semibold text-zinc-500 min-w-[55px] uppercase relative group cursor-help hover:bg-white/5 transition-all"
                       >
                         {q.id}
-                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 hidden group-hover:block bg-zinc-900 text-white text-[10px] leading-normal p-2 rounded-lg shadow-lg z-30 font-normal normal-case pointer-events-none text-left">
-                          <span className="font-bold block text-primary uppercase mb-0.5">{q.id}:</span>
+                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 hidden group-hover:block bg-zinc-900 text-zinc-100 text-[10px] leading-normal p-2 rounded-lg shadow-lg z-30 font-normal normal-case pointer-events-none text-left border border-white/10">
+                          <span className="font-bold block text-red-400/80 uppercase mb-0.5">{q.id}:</span>
                           {translateProp(q.text)}
                         </span>
                       </th>
@@ -402,7 +402,7 @@ export default function JinkoPage() {
                     <tr>
                       <td
                         colSpan={sortedQuestions.length + 3}
-                        className="text-center py-10 text-muted-foreground text-sm"
+                        className="text-center py-10 text-zinc-600 text-sm"
                       >
                         {lang === "pt" ? "Nenhum animal encontrado." : "No animals found."}
                       </td>
@@ -413,9 +413,9 @@ export default function JinkoPage() {
                       return (
                         <tr
                           key={animal.id}
-                          className="border-b border-border/60 hover:bg-background/20 last:border-b-0 transition-all text-left"
+                          className="border-b border-white/5 hover:bg-[#1a1a1a] last:border-b-0 transition-all text-left"
                         >
-                          <td className="sticky left-0 bg-card font-semibold text-foreground border-r border-border px-5 py-3.5 z-10 min-w-[150px] shadow-[4px_0_8px_-4px_rgba(0,0,0,0.05)] text-left">
+                          <td className="sticky left-0 bg-[#111111] font-semibold text-zinc-200 border-r border-white/5 px-5 py-3.5 z-10 min-w-[150px] shadow-[4px_0_8px_-4px_rgba(0,0,0,0.1)] text-left group-hover:bg-[#1a1a1a]">
                             {translateProp(animal.name)}
                           </td>
 
@@ -429,7 +429,7 @@ export default function JinkoPage() {
                             </span>
                           </td>
 
-                          <td className="px-4 py-3.5 text-muted-foreground font-medium text-left">
+                          <td className="px-4 py-3.5 text-zinc-500 font-medium text-left">
                             {animal.playCount}
                           </td>
 
@@ -451,13 +451,13 @@ export default function JinkoPage() {
         {activeTab === "simulator" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start text-left pb-10">
             <div className="lg:col-span-7 flex flex-col gap-4">
-              <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 shadow-sm">
                 <div className="flex justify-between items-center mb-6">
                   <div>
-                    <h3 className="text-xl font-semibold text-foreground">
+                    <h3 className="text-xl font-semibold text-zinc-100">
                       {lang === "pt" ? "Entradas do Simulador" : "Simulator Inputs"}
                     </h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">
+                    <p className="text-xs text-zinc-500 mt-0.5">
                       {lang === "pt"
                         ? "Defina o peso de cada característica para ver a Leaderboard mudando."
                         : "Set the weight of each trait to see the Leaderboard change."}
@@ -465,7 +465,7 @@ export default function JinkoPage() {
                   </div>
                   <button
                     onClick={() => setSimAnswers({})}
-                    className="px-4 py-2 border border-border hover:bg-background hover:text-primary rounded-lg text-xs font-semibold text-muted-foreground transition-all flex items-center gap-1.5"
+                    className="px-4 py-2 border border-white/10 hover:bg-white/5 hover:text-red-300 rounded-lg text-xs font-semibold text-zinc-400 transition-all flex items-center gap-1.5"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -493,24 +493,24 @@ export default function JinkoPage() {
                     return (
                       <div
                         key={q.id}
-                        className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 p-3.5 bg-background/50 border border-border/40 rounded-xl transition-all hover:border-border"
+                        className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 p-3.5 bg-[#0a0a0a] border border-white/5 rounded-xl transition-all hover:border-white/20"
                       >
                         <div className="text-left">
-                          <span className="font-bold text-xs text-primary uppercase block tracking-wider mb-0.5">
+                          <span className="font-bold text-xs text-red-400/80 uppercase block tracking-wider mb-0.5">
                             {q.id}
                           </span>
-                          <span className="text-sm font-medium text-foreground">
+                          <span className="text-sm font-medium text-zinc-300">
                             {translateProp(q.text)}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-1 bg-background p-1 border border-border/60 rounded-lg self-start xl:self-auto shadow-inner">
+                        <div className="flex items-center gap-1 bg-[#111111] p-1 border border-white/5 rounded-lg self-start xl:self-auto shadow-inner">
                           <button
                             onClick={() => setSimAnswers({ ...simAnswers, [q.id]: 1 })}
                             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                               currentVal === 1
-                                ? "bg-emerald-500 text-white shadow-sm"
-                                : "text-muted-foreground hover:text-foreground hover:bg-card"
+                                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 shadow-sm"
+                                : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"
                             }`}
                           >
                             {lang === "pt" ? "Sim" : "Yes"}
@@ -519,8 +519,8 @@ export default function JinkoPage() {
                             onClick={() => setSimAnswers({ ...simAnswers, [q.id]: 0.5 })}
                             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                               currentVal === 0.5
-                                ? "bg-amber-500 text-white shadow-sm"
-                                : "text-muted-foreground hover:text-foreground hover:bg-card"
+                                ? "bg-amber-500/20 text-amber-400 border border-amber-500/20 shadow-sm"
+                                : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"
                             }`}
                           >
                             {lang === "pt" ? "Talvez" : "Maybe"}
@@ -529,8 +529,8 @@ export default function JinkoPage() {
                             onClick={() => setSimAnswers({ ...simAnswers, [q.id]: 0 })}
                             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                               currentVal === 0
-                                ? "bg-zinc-600 text-white shadow-sm"
-                                : "text-muted-foreground hover:text-foreground hover:bg-card"
+                                ? "bg-zinc-700/50 text-zinc-300 border border-zinc-600/50 shadow-sm"
+                                : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"
                             }`}
                           >
                             {lang === "pt" ? "N/A" : "N/A"}
@@ -539,8 +539,8 @@ export default function JinkoPage() {
                             onClick={() => setSimAnswers({ ...simAnswers, [q.id]: -1 })}
                             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                               currentVal === -1
-                                ? "bg-rose-500 text-white shadow-sm"
-                                : "text-muted-foreground hover:text-foreground hover:bg-card"
+                                ? "bg-rose-500/20 text-rose-400 border border-rose-500/20 shadow-sm"
+                                : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"
                             }`}
                           >
                             {lang === "pt" ? "Não" : "No"}
@@ -554,12 +554,12 @@ export default function JinkoPage() {
             </div>
 
             <div className="lg:col-span-5 lg:sticky lg:top-6 flex flex-col gap-4">
-              <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col">
-                <div className="border-b border-border pb-4 mb-4 text-left">
-                  <h3 className="text-xl font-semibold text-primary">
+              <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 shadow-sm flex flex-col">
+                <div className="border-b border-white/5 pb-4 mb-4 text-left">
+                  <h3 className="text-xl font-semibold text-red-300/90">
                     {lang === "pt" ? "Top Candidatos" : "Top Candidates"}
                   </h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                  <p className="text-xs text-zinc-500 mt-0.5">
                     {lang === "pt" ? "Classificação em tempo real" : "Real-time ranking"}
                   </p>
                 </div>
@@ -585,8 +585,8 @@ export default function JinkoPage() {
                         key={animal.id}
                         className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 ${
                           rank === 1
-                            ? "bg-primary/5 border-primary/30 shadow-md shadow-primary/5"
-                            : "bg-background/40 border-border/50"
+                            ? "bg-red-500/5 border-red-500/20 shadow-md shadow-red-500/5"
+                            : "bg-[#0a0a0a] border-white/5"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -601,7 +601,7 @@ export default function JinkoPage() {
                           <div className="text-left">
                             <span
                               className={`font-semibold block ${
-                                rank === 1 ? "text-primary text-base" : "text-foreground text-sm"
+                                rank === 1 ? "text-red-300/90 text-base" : "text-zinc-200 text-sm"
                               }`}
                             >
                               {translateProp(animal.name)}
@@ -620,15 +620,15 @@ export default function JinkoPage() {
                           <span
                             className={`text-sm font-bold tracking-tight ${
                               score > 0
-                                ? "text-emerald-500"
+                                ? "text-emerald-400"
                                 : score < 0
-                                ? "text-rose-500"
-                                : "text-muted-foreground/60"
+                                ? "text-rose-400"
+                                : "text-zinc-600"
                             }`}
                           >
                             {score > 0 ? `+${score.toFixed(1)}` : score.toFixed(1)} pts
                           </span>
-                          <span className="text-[10px] text-muted-foreground/65 mt-0.5 font-sans">
+                          <span className="text-[10px] text-zinc-500 mt-0.5 font-sans">
                             {animal.playCount} {lang === "pt" ? "jogadas" : "plays"}
                           </span>
                         </div>
