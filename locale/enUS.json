@@ -142,7 +142,8 @@
   "intent_name_placeholder": "Type an intent name",
   "intent_page": {
     "delete_all": "Delete all",
-    "title": "AI — Intent Panel",
+    "title": "Intent Panel",
+    "description": "Teach new phrases, contexts, and responses to Vex.",
 
     "write_intent_name": "Write the intent name",
     "write_training_phrase": "Write a training phrase",

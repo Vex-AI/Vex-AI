@@ -212,7 +212,10 @@ export default function IntentPage() {
 
   return (
     <main className="flex flex-col h-full bg-[#0d0d0d] text-white relative overflow-hidden">
-      <Header title={t("intent_page.title")}>
+      <Header 
+        title={t("intent_page.title")}
+        description={t("intent_page.description")}
+      >
         <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
           <AlertDialogTrigger asChild>
             <Button variant="outline" className="hidden sm:flex gap-2 rounded-xl border-red-500/20 bg-red-500/5 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all">

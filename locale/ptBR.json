@@ -139,7 +139,8 @@
   "descPlaceholder": "Descrição do item",
   "intent_page": {
     "delete_all": "Deletar tudo",
-    "title": "IA — Painel de Intenções",
+    "title": "Painel de Intenções",
+    "description": "Ensine novas frases, contextos e respostas para a Vex.",
 
     "write_intent_name": "Escreva o nome da intenção",
     "write_training_phrase": "Escreva uma frase de treinamento",
