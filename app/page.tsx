@@ -17,11 +17,12 @@ import DateSeparator from "@/components/date-separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { App } from "@capacitor/app";
-import { Loader2, ArrowUp, Paperclip, Sparkles, Globe2 } from "lucide-react";
+import { Loader2, ArrowUp } from "lucide-react";
 import ChatHeader from "@/components/chat-header";
 import { loadIntentsForLanguage } from "@/lib/IntentManager";
 import { changeLanguage } from "i18next";
 import EmptyState from "@/components/empty-state";
+import { GeminiPillToggle } from "@/components/gemini-pill-toggle";
 
 const Home: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -238,27 +239,13 @@ const Home: React.FC = () => {
           
           <div className="flex items-center justify-between mt-1 px-1">
              <div className="flex items-center gap-2">
-                <Button variant="ghost" className="h-8 rounded-full bg-[#2a2a2a] hover:bg-white/10 text-zinc-300 text-xs px-3 gap-1.5 cursor-default hidden sm:flex transition-colors">
-                  <Sparkles className="size-3 text-indigo-400" />
-                  DeepThink
-                </Button>
-                <Button variant="ghost" className="h-8 rounded-full border border-white/10 hover:bg-white/10 text-zinc-400 text-xs px-3 gap-1.5 cursor-default hidden sm:flex transition-colors">
-                  <Globe2 className="size-3" />
-                  Search
-                </Button>
+                <GeminiPillToggle />
              </div>
 
              <div className="flex items-center gap-1 sm:gap-2">
                 {isProcessing && (
                   <Loader2 className="h-5 w-5 animate-spin text-neutral-500 mr-2" />
                 )}
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8 rounded-full text-zinc-400 hover:text-white"
-                >
-                  <Paperclip className="h-4 w-4" />
-                </Button>
                 <Button
                   size="icon"
                   onClick={handleSendMessage}
