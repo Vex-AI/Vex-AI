@@ -39,7 +39,6 @@ class JinkoGameManager {
     const lower = reply.toLowerCase();
     let weight = 0;
 
-    // NLP simples dinâmico por idioma
     if (new RegExp(i18next.t("jinko.regex_no"), "i").test(lower)) {
       weight = -1;
       if (new RegExp(i18next.t("jinko.regex_maybe_no"), "i").test(lower)) weight = -0.5;
