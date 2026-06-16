@@ -22,6 +22,7 @@ import StreakPage from "@/app/streak/page";
 import StatsPage from "@/app/stats/page";
 import SettingsPage from "@/app/settings/page";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ChangelogModal } from "@/components/changelog-modal";
 
 import ChatLoading from "@/components/chat-loading";
 
@@ -32,6 +33,7 @@ const Layout = () => {
       <div className="flex-1 min-w-0 relative h-full">
         <Outlet />
       </div>
+      <ChangelogModal />
     </div>
   );
 };
