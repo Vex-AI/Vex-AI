@@ -9,7 +9,9 @@ import {
   Trash2,
   Activity,
   Settings,
+  Newspaper,
 } from "lucide-react";
+import { useChangelogStore } from "@/store/changelogStore";
 import { db } from "@/lib/vexDB";
 import GeminiToggle from "./gemini-toggle";
 import { Button } from "@/components/ui/button";
@@ -38,6 +40,7 @@ export const menuItems = [
 export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { openChangelog } = useChangelogStore();
 
   const go = (path: string) => {
     navigate(path, { replace: true });
@@ -127,6 +130,18 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
             </Label>
             <GeminiToggle />
           </div>
+
+          <Button
+            variant="ghost"
+            onClick={() => {
+              openChangelog();
+              onNavigate?.();
+            }}
+            className="w-full justify-start gap-3 rounded-lg bg-transparent px-3 py-5 text-[15px] font-medium text-zinc-300 hover:bg-white/5 hover:text-zinc-100 transition-colors mt-1"
+          >
+            <Newspaper className="size-4 text-zinc-400" />
+            <span className="truncate">{t("view_changelog", "Notas da Versão")}</span>
+          </Button>
         </div>
       </div>
 
