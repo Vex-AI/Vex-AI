@@ -96,12 +96,47 @@ const Home: React.FC = () => {
   }, []);
 
   // --------------------------------------------------
-  // AUTO-SCROLL
+  // AUTO-SCROLL E PERSISTÊNCIA DE POSIÇÃO
   // --------------------------------------------------
+  const lastMessageCountRef = useRef(0);
+  const isRestoringScrollRef = useRef(false);
 
   useEffect(() => {
-    if (messages && contentRef.current) scrollToBottom(contentRef.current);
-  }, [messages]);
+    if (!messages || !contentRef.current) return;
+
+    if (lastMessageCountRef.current === 0) {
+      // Primeira carga: tenta restaurar o scroll salvo
+      const savedScroll = sessionStorage.getItem("chatScrollTop");
+      if (savedScroll !== null) {
+        isRestoringScrollRef.current = true;
+        contentRef.current.scrollTop = Number(savedScroll);
+        setTimeout(() => {
+          isRestoringScrollRef.current = false;
+        }, 50);
+      } else {
+        scrollToBottom(contentRef.current, "auto");
+      }
+    } else if (messages.length > lastMessageCountRef.current) {
+      // Nova mensagem chegou
+      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 300;
+      
+      const lastMsg = messages[messages.length - 1];
+      const isFromUser = !lastMsg.isVex;
+
+      // Só rola pra baixo automaticamente se o usuário enviou, se estiver perto do fim, ou se a IA estiver processando
+      if (isNearBottom || isFromUser || isProcessing) {
+        scrollToBottom(contentRef.current, "smooth");
+      }
+    }
+
+    lastMessageCountRef.current = messages.length;
+  }, [messages, isProcessing]);
+
+  const handleScroll = useCallback(() => {
+    if (!contentRef.current || isRestoringScrollRef.current) return;
+    sessionStorage.setItem("chatScrollTop", contentRef.current.scrollTop.toString());
+  }, []);
 
   // --------------------------------------------------
   // MEMO DOS DADOS
@@ -165,6 +200,7 @@ const Home: React.FC = () => {
 
       <main
         ref={contentRef}
+        onScroll={handleScroll}
         className="flex-1 overflow-y-auto px-3 py-4 space-y-4 bg-background pb-20 pt-20"
       >
         {renderedMessages}
