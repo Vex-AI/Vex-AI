@@ -51,7 +51,7 @@ export const GeminiPillToggle = () => {
       variant="ghost" 
       onClick={handleToggle}
       className={cn(
-        "h-8 rounded-full text-xs px-3 gap-1.5 transition-all hidden sm:flex",
+        "h-8 rounded-full text-xs px-3 gap-1.5 transition-all flex",
         isEnabled 
           ? "bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border border-indigo-500/30" 
           : "bg-transparent hover:bg-white/10 text-zinc-400 hover:text-zinc-300 border border-white/5"
