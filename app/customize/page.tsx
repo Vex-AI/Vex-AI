@@ -75,10 +75,10 @@ export default function Customize() {
           className="space-y-2 mt-4"
         >
           <div className="inline-flex items-center justify-center p-3 bg-white/5 rounded-2xl border border-white/10 mb-4">
-            <Paintbrush className="w-6 h-6 text-pink-400" />
+            <Paintbrush className="w-6 h-6 text-indigo-400" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white/90">Customização</h1>
-          <p className="text-sm text-neutral-400 leading-relaxed">Ajuste o visual das bolhas de chat para você e para a Vex.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-white/90">{t("customization")}</h1>
+          <p className="text-sm text-neutral-400 leading-relaxed">{t("customization_desc")}</p>
         </motion.div>
 
         {/* Preview Container */}
@@ -122,7 +122,7 @@ export default function Customize() {
               setKey((p) => (p === "vexStyle" ? "userStyle" : "vexStyle"))
             }
             id="change-style"
-            className="data-[state=checked]:bg-pink-500 data-[state=unchecked]:bg-blue-500"
+            className="data-[state=checked]:bg-indigo-500 data-[state=unchecked]:bg-neutral-600"
           />
         </motion.div>
 
@@ -211,7 +211,7 @@ export default function Customize() {
         >
           <Button
             onClick={save}
-            className="h-14 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-medium transition-colors shadow-none border-none"
+            className="h-14 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium transition-colors shadow-none border-none"
           >
             <Save className="w-5 h-5 mr-2" /> {t("save_styles")}
           </Button>

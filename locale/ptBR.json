@@ -68,6 +68,7 @@
   "delete_styles": "Apagar estilos",
   "warningDB": "Aviso: Os dados registrados aqui não são treinados na IA, então  faça treinamento usando a tela de treinamento. Entenda também que depois do treino não tem como apagar o que já foi ensinado.",
   "customization": "Customização",
+  "customization_desc": "Ajuste o visual das bolhas de chat para você e para a Vex.",
   "vexProfile": "Perfil da Vex",
   "clearChat": "Limpar chat",
   "trainning": "Treinamento",

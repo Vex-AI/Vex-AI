@@ -69,6 +69,7 @@
   "delete_styles": "Delete styles",
   "warningDB": "Warning: The data recorded here is not trained on the AI, so do training using the training screen. Also understand that after training there is no way to erase what has already been taught.",
   "customization": "Customization",
+  "customization_desc": "Adjust the visual style of the chat bubbles for you and Vex.",
   "vexProfile": "Vex profile",
   "clearChat": "Clear chat",
   "trainning": "Trainning",
