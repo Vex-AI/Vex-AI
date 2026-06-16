@@ -42,7 +42,6 @@ const INTENSIFIERS: Record<string, number> = {
   very: 1.5,
   really: 1.5,
   extremely: 2.0,
-  super: 1.5,
   so: 1.3,
   totally: 1.5,
 };
