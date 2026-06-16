@@ -268,9 +268,6 @@ export default function IntentPage() {
       <div className="max-w-4xl mx-auto px-4 pt-28 pb-24">
         {/* ADD INTENT */}
         <section className="relative bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 mb-10 overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 pointer-events-none" />
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] -mr-40 -mt-40 pointer-events-none" />
-
           <h2 className="text-xl font-bold mb-6 text-white/90 relative z-10 flex items-center gap-3">
             <div className="p-2 bg-indigo-500/20 rounded-xl">
               <PlusCircle className="w-5 h-5 text-indigo-400" />
