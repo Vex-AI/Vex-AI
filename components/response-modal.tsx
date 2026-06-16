@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogFooter,
   DialogClose,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
@@ -50,10 +51,10 @@ function ResponseModalBase({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-        aria-describedby={undefined}
-        className="bg-[#1a1a1a] text-white border-white/10 rounded-3xl max-w-lg p-6 shadow-2xl"
-      >
+      <DialogContent className="bg-[#1a1a1a] text-white border-white/10 rounded-3xl max-w-lg p-6 shadow-2xl">
+        <DialogDescription className="sr-only">
+          Modal para gerenciar as respostas da intenção.
+        </DialogDescription>
         <DialogHeader className="mb-4">
           <DialogTitle className="text-xl font-bold flex items-center gap-3">
             <div className="p-2 bg-purple-500/20 rounded-xl">

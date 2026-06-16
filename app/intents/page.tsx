@@ -22,6 +22,7 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
+  AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 
 import { Trash2, PlusCircle, ArrowLeft, Bot } from "lucide-react";
@@ -239,17 +240,14 @@ export default function IntentPage() {
               </Button>
             </AlertDialogTrigger>
 
-            <AlertDialogContent
-              className="bg-[#1a1a1a] border-white/10 text-white rounded-3xl"
-              aria-describedby={undefined}
-            >
+            <AlertDialogContent className="bg-[#1a1a1a] border-white/10 text-white rounded-3xl">
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-xl font-bold">
                   {t("intent_page.confirmation")}
                 </AlertDialogTitle>
-                <p className="text-sm text-neutral-400 mt-2">
+                <AlertDialogDescription className="text-sm text-neutral-400 mt-2">
                   {t("intent_page.are_you_sure_delete_all_intents")}
-                </p>
+                </AlertDialogDescription>
               </AlertDialogHeader>
 
               <AlertDialogFooter className="mt-4 gap-2">
