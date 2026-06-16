@@ -86,7 +86,7 @@ export default function Customize() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="relative p-6 rounded-3xl bg-neutral-900 border border-neutral-800 overflow-hidden flex flex-col items-center justify-center min-h-[160px]"
+          className="sticky top-4 z-20 p-6 rounded-3xl bg-neutral-900 border border-neutral-800 overflow-hidden flex flex-col items-center justify-center min-h-[160px] shadow-2xl"
         >
           <Preview
             style={{
