@@ -34,33 +34,37 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
     <header
       className="
         fixed top-0 left-0 w-full z-40
-        backdrop-blur-xl
-        bg-black/20 supports-[backdrop-filter]:bg-black/20
+        backdrop-blur-xl bg-background/80
         border-b border-white/5
       "
     >
-      <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-3xl mx-auto px-2 py-2 flex items-center justify-between">
         
-        {/* Perfil */}
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full overflow-hidden bg-neutral-900/60 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-inner">
+        {/* Menu na Esquerda */}
+        <SideMenu />
+        
+        {/* Perfil (Centro) no estilo pílula moderna */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-white/5 transition-colors cursor-default">
+          <div className="h-6 w-6 rounded-full overflow-hidden bg-indigo-500/20 flex items-center justify-center shadow-inner">
             {!info ? (
               <div className="w-full h-full animate-pulse bg-neutral-800" />
             ) : !useDynamicAvatar ? (
               <img src={info.profileImage || "/Vex_320.png"} className="w-full h-full object-cover" />
             ) : (
-              <div className="transform scale-110 transition-transform duration-300 flex items-center justify-center">
+              <div className="transform scale-[0.8] flex items-center justify-center">
                 <AnimatedEmoji code={activeEmojiCode} />
               </div>
             )}
           </div>
 
-          <div className="flex flex-col leading-tight">
-            <span className="text-base font-semibold">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-zinc-200 tracking-tight">
               {info?.name ?? "Vex"}
             </span>
-
-            <div className="relative h-5">
+            
+            <div className="w-1 h-1 rounded-full bg-zinc-600" />
+            
+            <div className="relative h-4 w-16 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={status ?? "empty"}
@@ -68,7 +72,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute text-sm text-neutral-300"
+                  className="absolute left-0 text-[11px] text-zinc-400 font-medium lowercase"
                 >
                   {status ?? "offline"}
                 </motion.span>
@@ -77,8 +81,9 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
           </div>
         </div>
 
-        {/* Aqui entra o menu REAL — SideMenu já contém o Sheet + Trigger */}
-        <SideMenu />
+        {/* Espaço reservado na direita para manter o centro alinhado */}
+        <div className="w-10"></div>
+        
       </div>
     </header>
   )
