@@ -158,18 +158,20 @@
     "intent_name_placeholder": "Ex: saudacao, despedida",
     "initial_phrase_placeholder": "Ex: olá, tudo bem?",
     "initial_response_placeholder": "Ex: Olá! Como posso ajudar?",
-
     "add_intent": "Adicionar Intenção",
     "retrain_ai": "Retreinar IA",
     "delete_all_intents": "Apagar Todas Intenções",
-
     "no_intents_found": "Nenhuma intenção encontrada.",
-
+    "user_says": "O que o usuário diz",
+    "vex_responds": "O que a Vex responde",
+    "no_phrases_added": "Nenhuma frase cadastrada.",
+    "no_responses_added": "Nenhuma resposta cadastrada.",
+    "add_phrase_btn": "Adicionar Frase",
+    "add_response_btn": "Adicionar Resposta",
     "go_back": "Voltar",
     "open_menu": "Abrir menu",
     "close_menu": "Fechar menu"
   },
-
   "are_you_sure_title": "Você tem certeza?",
   "are_you_sure_clear_chat": "Tem certeza que deseja apagar todo o histórico? Essa ação é irreversível.",
 

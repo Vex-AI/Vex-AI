@@ -165,8 +165,13 @@
     "add_intent": "Add Intent",
     "retrain_ai": "Retrain AI",
     "delete_all_intents": "Delete All Intents",
-
     "no_intents_found": "No intents found.",
+    "user_says": "What the user says",
+    "vex_responds": "What Vex responds",
+    "no_phrases_added": "No phrases added.",
+    "no_responses_added": "No responses added.",
+    "add_phrase_btn": "Add Phrase",
+    "add_response_btn": "Add Response",
 
     "go_back": "Go back",
     "open_menu": "Open menu",

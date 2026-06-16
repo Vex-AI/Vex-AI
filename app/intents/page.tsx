@@ -24,7 +24,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
-import { Trash2, PlusCircle, ArrowLeft } from "lucide-react";
+import { Trash2, PlusCircle, ArrowLeft, Bot } from "lucide-react";
 import { IIntent } from "@/types";
 
 export default function IntentPage() {
@@ -210,41 +210,41 @@ export default function IntentPage() {
   const memoIntents = useMemo(() => intents ?? [], [intents]);
 
   return (
-    <main className="min-h-screen bg-neutral-950 text-white">
+    <main className="min-h-screen bg-[#0d0d0d] text-white">
       {/* TOP BAR */}
-      <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/5">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
+      <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/40 border-b border-white/5">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
           <button
             onClick={() => go("/home")}
-            className="p-2 rounded-md hover:bg-white/10"
+            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5"
           >
-            <ArrowLeft className="size-5" />
+            <ArrowLeft className="w-5 h-5 text-neutral-300" />
           </button>
 
-          <h1 className="text-base sm:text-lg font-semibold flex-1 truncate">
+          <h1 className="text-xl sm:text-2xl font-bold flex-1 truncate text-white/90">
             {t("intent_page.title")}
           </h1>
 
           <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="hidden sm:flex gap-2">
-                <Trash2 className="size-4" />
+              <Button variant="outline" className="hidden sm:flex gap-2 rounded-xl border-red-500/20 bg-red-500/5 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all">
+                <Trash2 className="w-4 h-4" />
                 {t("intent_page.delete_all")}
               </Button>
             </AlertDialogTrigger>
 
             <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="sm:hidden p-2">
-                <Trash2 className="size-5" />
+              <Button variant="outline" size="icon" className="sm:hidden rounded-xl border-red-500/20 bg-red-500/5 text-red-400 hover:bg-red-500/20">
+                <Trash2 className="w-5 h-5" />
               </Button>
             </AlertDialogTrigger>
 
             <AlertDialogContent
-              className="bg-[#090b0c]"
+              className="bg-[#1a1a1a] border-white/10 text-white rounded-3xl"
               aria-describedby={undefined}
             >
               <AlertDialogHeader>
-                <AlertDialogTitle>
+                <AlertDialogTitle className="text-xl font-bold">
                   {t("intent_page.confirmation")}
                 </AlertDialogTitle>
                 <p className="text-sm text-neutral-400 mt-2">
@@ -252,10 +252,10 @@ export default function IntentPage() {
                 </p>
               </AlertDialogHeader>
 
-              <AlertDialogFooter>
-                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+              <AlertDialogFooter className="mt-4 gap-2">
+                <AlertDialogCancel className="bg-white/5 border-white/10 hover:bg-white/10 text-neutral-300 rounded-xl m-0">{t("cancel")}</AlertDialogCancel>
                 <AlertDialogAction
-                  className="bg-red-600"
+                  className="bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.3)] m-0"
                   onClick={handleDeleteAll}
                 >
                   {t("clear")}
@@ -267,49 +267,62 @@ export default function IntentPage() {
       </div>
 
       {/* CONTENT */}
-      <div className="max-w-3xl mx-auto px-4 pt-[72px] pb-20">
+      <div className="max-w-4xl mx-auto px-4 pt-28 pb-24">
         {/* ADD INTENT */}
-        <section className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5 mb-6 shadow-lg">
-          <h2 className="text-xl font-semibold mb-4">
+        <section className="relative bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 mb-10 overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] -mr-40 -mt-40 pointer-events-none" />
+
+          <h2 className="text-xl font-bold mb-6 text-white/90 relative z-10 flex items-center gap-3">
+            <div className="p-2 bg-indigo-500/20 rounded-xl">
+              <PlusCircle className="w-5 h-5 text-indigo-400" />
+            </div>
             {t("intent_page.add_new_intent_title")}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <Input
-              value={intentName}
-              onChange={(e) => setIntentName(e.target.value)}
-              placeholder={t("intent_page.intent_name_placeholder")}
-              className="bg-neutral-800 border-neutral-700 text-white"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+            <div className="space-y-2">
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">Nome</label>
+              <Input
+                value={intentName}
+                onChange={(e) => setIntentName(e.target.value)}
+                placeholder={t("intent_page.intent_name_placeholder")}
+                className="bg-black/40 border-white/10 text-white focus-visible:ring-indigo-500/50 rounded-xl h-12"
+              />
+            </div>
 
-            <Input
-              value={initialPhrase}
-              onChange={(e) => setInitialPhrase(e.target.value)}
-              placeholder={t("intent_page.initial_phrase_placeholder")}
-              className="bg-neutral-800 border-neutral-700 text-white"
-            />
+            <div className="space-y-2">
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">Frase Inicial</label>
+              <Input
+                value={initialPhrase}
+                onChange={(e) => setInitialPhrase(e.target.value)}
+                placeholder={t("intent_page.initial_phrase_placeholder")}
+                className="bg-black/40 border-white/10 text-white focus-visible:ring-indigo-500/50 rounded-xl h-12"
+              />
+            </div>
 
-            <Input
-              value={initialResponse}
-              onChange={(e) => setInitialResponse(e.target.value)}
-              placeholder={t("intent_page.initial_response_placeholder")}
-              className="bg-neutral-800 border-neutral-700 text-white"
-            />
+            <div className="space-y-2">
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">Resposta Inicial</label>
+              <Input
+                value={initialResponse}
+                onChange={(e) => setInitialResponse(e.target.value)}
+                placeholder={t("intent_page.initial_response_placeholder")}
+                className="bg-black/40 border-white/10 text-white focus-visible:ring-indigo-500/50 rounded-xl h-12"
+              />
+            </div>
           </div>
 
           <Button
             onClick={handleAddIntent}
-            className="bg-purple-600 hover:bg-purple-700 mt-4"
+            className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white mt-6 rounded-xl h-12 px-8 shadow-[0_0_15px_rgba(99,102,241,0.3)] transition-all hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] relative z-10"
           >
-            <PlusCircle className="size-4 mr-2" />
+            <PlusCircle className="w-4 h-4 mr-2" />
             {t("intent_page.add_intent")}
           </Button>
         </section>
 
-        <Separator />
-
         {/* INTENT LIST */}
-        <section className="mt-6 space-y-4">
+        <section className="space-y-6">
           {memoIntents.length ? (
             memoIntents.map((intent) => {
               const handlers = getHandlersForIntent(intent.id!);
@@ -318,8 +331,12 @@ export default function IntentPage() {
               );
             })
           ) : (
-            <div className="py-12 text-center text-neutral-400">
-              {t("intent_page.no_intents_found")}
+            <div className="py-20 text-center flex flex-col items-center">
+              <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                <Bot className="w-10 h-10 text-neutral-600" />
+              </div>
+              <p className="text-neutral-500 text-lg">{t("intent_page.no_intents_found")}</p>
+              <p className="text-neutral-600 text-sm mt-2 max-w-sm mx-auto">Adicione intents acima para ensinar novos comportamentos à Vex.</p>
             </div>
           )}
         </section>
