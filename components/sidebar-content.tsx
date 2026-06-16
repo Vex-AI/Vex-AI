@@ -30,11 +30,9 @@ import {
 export const menuItems = [
   { labelKey: "home", path: "/home", icon: Home },
   { labelKey: "vexLearning", path: "/intents", icon: Sparkles },
-  { labelKey: "vexProfile", path: "/profile", icon: User },
-  { labelKey: "stats", path: "/stats", icon: Activity },
   { labelKey: "customization", path: "/customize", icon: Paintbrush },
+  { labelKey: "stats", path: "/stats", icon: Activity },
   { labelKey: "select", path: "/language", icon: Languages },
-  { labelKey: "settings", path: "/settings", icon: Settings },
 ];
 
 export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
@@ -49,44 +47,18 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
   const handleClearChat = async () => db.messages.clear();
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto pb-6">
-      <div className="px-4 py-5">
-        <p className="mb-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">
-          {t("navigation")}
-        </p>
-
-        <div className="flex flex-col gap-1">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <Button
-                key={item.path}
-                variant="ghost"
-                onClick={() => go(item.path)}
-                className="w-full justify-start gap-3 rounded-lg bg-transparent px-3 py-3 text-base font-medium text-white/90 hover:bg-white/10 hover:text-white transition-colors"
-              >
-                <Icon className="size-5" />
-                {t(item.labelKey)}
-              </Button>
-            );
-          })}
-        </div>
-      </div>
-
-      <Separator className="bg-white/10" />
-
-      <div className="px-4 py-5">
-        <p className="mb-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">
-          {t("actions")}
-        </p>
-
+    <div className="flex flex-col h-full bg-transparent">
+      {/* Top Action (DeepSeek style "New Chat") */}
+      <div className="px-3 pt-4 pb-2">
         <AlertDialog aria-describedby={undefined}>
           <AlertDialogTrigger asChild>
             <Button
               variant="ghost"
-              className="w-full justify-start gap-3 rounded-lg px-3 py-3 text-base font-medium text-red-400 hover:bg-red-400/10 hover:text-red-300 transition-colors"
+              className="w-full justify-start gap-3 rounded-full bg-white/5 hover:bg-white/10 px-4 py-6 text-[15px] font-medium text-zinc-200 transition-colors"
             >
-              <Trash2 className="size-5" />
+              <div className="flex items-center justify-center w-5 h-5 rounded-full border border-zinc-400">
+                <span className="text-zinc-400 text-sm leading-none -mt-0.5">+</span>
+              </div>
               {t("clearChat")}
             </Button>
           </AlertDialogTrigger>
@@ -104,12 +76,12 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="mt-4">
-              <AlertDialogCancel className="bg-zinc-800/40 text-zinc-200 hover:bg-zinc-800/70 rounded-xl transition-colors">
+              <AlertDialogCancel className="bg-zinc-800/40 text-zinc-200 hover:bg-zinc-800/70 rounded-xl transition-colors border-none">
                 {t("cancel")}
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleClearChat}
-                className="bg-red-500 text-white hover:bg-red-600 rounded-xl transition-colors"
+                className="bg-red-500 text-white hover:bg-red-600 rounded-xl transition-colors border-none"
               >
                 {t("clear")}
               </AlertDialogAction>
@@ -118,17 +90,70 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
         </AlertDialog>
       </div>
 
-      <Separator className="bg-white/10" />
+      {/* Navigation List */}
+      <div className="flex-1 overflow-y-auto px-3 py-2 scrollbar-none">
+        <div className="mb-2 px-2 mt-4">
+          <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+            {t("navigation")}
+          </span>
+        </div>
 
-      <div className="px-4 py-5">
-        <p className="mb-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">
-          {t("config")}
-        </p>
-        <div className="flex items-center justify-between rounded-lg px-3 py-3 hover:bg-white/10 transition-colors">
-          <Label className="text-base cursor-pointer">
-            {t("enable_gemini")}
-          </Label>
-          <GeminiToggle />
+        <div className="flex flex-col gap-0.5">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Button
+                key={item.path}
+                variant="ghost"
+                onClick={() => go(item.path)}
+                className="w-full justify-start gap-3 rounded-lg bg-transparent px-3 py-5 text-[15px] font-medium text-zinc-300 hover:bg-white/5 hover:text-zinc-100 transition-colors"
+              >
+                <Icon className="size-4 text-zinc-400" />
+                <span className="truncate">{t(item.labelKey)}</span>
+              </Button>
+            );
+          })}
+        </div>
+
+        <div className="mb-2 px-2 mt-8">
+          <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+            {t("config")}
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-0.5">
+          <div className="flex items-center justify-between rounded-lg px-3 py-3 hover:bg-white/5 transition-colors">
+            <Label className="text-[15px] font-medium text-zinc-300 cursor-pointer">
+              {t("enable_gemini")}
+            </Label>
+            <GeminiToggle />
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Profile/Settings Row (DeepSeek style) */}
+      <div className="px-3 py-4 mt-auto">
+        <div 
+          onClick={() => go("/profile")}
+          className="flex items-center justify-between rounded-xl px-2 py-2 hover:bg-white/5 transition-colors cursor-pointer group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/20">
+               <User className="size-4 text-indigo-400" />
+            </div>
+            <span className="text-[15px] font-medium text-zinc-200">
+              {t("vexProfile")}
+            </span>
+          </div>
+          <div 
+            onClick={(e) => {
+              e.stopPropagation();
+              go("/settings");
+            }}
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            <Settings className="size-4" />
+          </div>
         </div>
       </div>
     </div>
