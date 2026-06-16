@@ -9,7 +9,8 @@ export function modifyResponse(
   originalResponse: string,
   psyche: VexPsycheState,
   memoryContext: string | null,
-  traumaContext: string | null
+  traumaContext: string | null,
+  internalOverride: string | null
 ): string {
   const { emotions, mood, personality, relationship } = psyche;
   const relLevel = getRelationshipLevel(relationship);
@@ -21,6 +22,12 @@ export function modifyResponse(
       return `${traumaContext} E não fale mais comigo assim.`;
     }
     return `${traumaContext} ... ${makeCold(originalResponse, emotions.anger)}`;
+  }
+
+  // === INTERNAL STATE OVERRIDE ===
+  // If extremely tired, stressed or bored, this dominates the interaction
+  if (internalOverride) {
+    return `${internalOverride} ${originalResponse}`;
   }
 
   // === MEMORY RECALL ===

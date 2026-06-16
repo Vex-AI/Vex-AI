@@ -7,6 +7,7 @@ import { generateRandomPersonality, evolvePersonality } from "./PersonalityEngin
 import { updateRelationship } from "./RelationshipEngine";
 import { recordIfSignificant, recallRelevantMemory } from "./MemoryEngine";
 import { checkTrauma, checkTrigger } from "./TraumaDetector";
+import { updateInternalState, checkInternalStateOverride } from "./InternalStateEngine";
 import { modifyResponse } from "./ResponseModifier";
 import {
   DEFAULT_EMOTIONS,
@@ -111,10 +112,19 @@ export async function processMessage(userMessage: string): Promise<void> {
   await recordIfSignificant(userMessage, sentiment);
   await checkTrauma(userMessage, sentiment.categories);
 
-  // 10. Update timestamps
+  // 10. Process Phase 3: Internal States
+  state.internalState = updateInternalState(
+    state.internalState,
+    state.emotions,
+    sentiment,
+    userMessage,
+    state.lastInteraction
+  );
+
+  // 11. Update timestamps
   state.lastInteraction = Date.now();
 
-  // 11. Persist
+  // 12. Persist
   cachedState = state;
   try {
     await db.psycheState.put(state);
@@ -139,7 +149,10 @@ export async function applyPsycheToResponse(
   // Check if we should recall a memory
   const memoryContext = await recallRelevantMemory(sentiment.categories);
 
-  return modifyResponse(originalResponse, state, memoryContext, traumaContext);
+  // Check Phase 3: internal state overriding the response
+  const internalOverride = checkInternalStateOverride(state.internalState);
+
+  return modifyResponse(originalResponse, state, memoryContext, traumaContext, internalOverride);
 }
 
 /**
