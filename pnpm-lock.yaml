@@ -1515,10 +1515,6 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  baseline-browser-mapping@2.8.28:
-    resolution: {integrity: sha512-gYjt7OIqdM0PcttNYP2aVrr2G0bMALkBaoehD4BuRGjAOtipg0b6wHg1yNL+s5zSnLZZrGHOw4IrND8CD+3oIQ==}
-    hasBin: true
-
   bayes@1.0.0:
     resolution: {integrity: sha512-dJkTHtGBbOLtrmcm37R44jelbgKalMPXLLmhNceEgeLRJLdDTU2DoEF7L+UqM3m36dve7/Vka4hgaacT7a8Jjw==}
     engines: {node: '>=0.8.0'}
@@ -4013,8 +4009,6 @@ snapshots:
 
   baseline-browser-mapping@2.10.37: {}
 
-  baseline-browser-mapping@2.8.28: {}
-
   bayes@1.0.0: {}
 
   big-integer@1.6.52: {}
@@ -4038,7 +4032,7 @@ snapshots:
 
   browserslist@4.28.0:
     dependencies:
-      baseline-browser-mapping: 2.8.28
+      baseline-browser-mapping: 2.10.37
       caniuse-lite: 1.0.30001754
       electron-to-chromium: 1.5.252
       node-releases: 2.0.27
