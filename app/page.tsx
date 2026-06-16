@@ -17,7 +17,7 @@ import DateSeparator from "@/components/date-separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { App } from "@capacitor/app";
-import { Loader2, Send } from "lucide-react";
+import { Loader2, ArrowUp, Paperclip, Sparkles, Globe2 } from "lucide-react";
 import ChatHeader from "@/components/chat-header";
 import { loadIntentsForLanguage } from "@/lib/IntentManager";
 import { changeLanguage } from "i18next";
@@ -222,31 +222,51 @@ const Home: React.FC = () => {
         {isProcessing && <TypingIndicator />}
       </main>
 
-      <footer className="fixed bottom-0 left-0 w-full backdrop-blur-xl bg-black/20">
-        <div className="flex w-full items-center gap-2 p-3 max-w-3xl mx-auto">
-          <div className="flex h-10 flex-1 items-center rounded-full bg-neutral-900/40 px-4 shadow-sm backdrop-blur-xl transition">
-            <Input
-              ref={inputRef}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder={t("write_message")}
-              className="h-full flex-1 bg-transparent border-none p-0 text-base placeholder:text-neutral-500 shadow-none focus-visible:outline-none focus-visible:ring-0"
-              onKeyUp={handleKeyUp}
-            />
+      <footer className="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-3xl pt-2 pb-6 px-4 md:pb-8">
+        <div className="flex flex-col w-full max-w-3xl mx-auto rounded-3xl bg-[#1a1a1a] border border-white/10 p-2 md:p-3 shadow-2xl">
+          
+          <Input
+            ref={inputRef}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder={t("write_message")}
+            className="w-full bg-transparent border-none px-3 py-2 h-12 text-[15px] text-zinc-100 placeholder:text-zinc-500 shadow-none focus-visible:outline-none focus-visible:ring-0"
+            onKeyUp={handleKeyUp}
+          />
+          
+          <div className="flex items-center justify-between mt-1 px-1">
+             <div className="flex items-center gap-2">
+                <Button variant="ghost" className="h-8 rounded-full bg-[#2a2a2a] hover:bg-white/10 text-zinc-300 text-xs px-3 gap-1.5 cursor-default hidden sm:flex transition-colors">
+                  <Sparkles className="size-3 text-indigo-400" />
+                  DeepThink
+                </Button>
+                <Button variant="ghost" className="h-8 rounded-full border border-white/10 hover:bg-white/10 text-zinc-400 text-xs px-3 gap-1.5 cursor-default hidden sm:flex transition-colors">
+                  <Globe2 className="size-3" />
+                  Search
+                </Button>
+             </div>
 
-            {isProcessing && (
-              <Loader2 className="h-5 w-5 animate-spin text-neutral-500" />
-            )}
+             <div className="flex items-center gap-1 sm:gap-2">
+                {isProcessing && (
+                  <Loader2 className="h-5 w-5 animate-spin text-neutral-500 mr-2" />
+                )}
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-8 w-8 rounded-full text-zinc-400 hover:text-white"
+                >
+                  <Paperclip className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="icon"
+                  onClick={handleSendMessage}
+                  disabled={isProcessing || text.trim() === ""}
+                  className="h-8 w-8 rounded-full bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50 transition-colors"
+                >
+                  <ArrowUp className="h-4 w-4" />
+                </Button>
+             </div>
           </div>
-
-          <Button
-            size="icon"
-            onClick={handleSendMessage}
-            disabled={isProcessing || text.trim() === ""}
-            className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-xl"
-          >
-            <Send className="h-4 w-4" />
-          </Button>
         </div>
       </footer>
     </div>

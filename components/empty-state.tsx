@@ -1,23 +1,33 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle } from "lucide-react";
+import { Bot, Zap, Brain } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const EmptyState = () => {
-  return (
-    <div className="flex h-full items-center justify-center">
-      <Card className="w-full max-w-sm border-dashed">
-        <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-            <MessageCircle className="h-6 w-6 text-muted-foreground" />
-          </div>
+  const { t } = useTranslation();
 
-          <div className="space-y-1">
-            <p className="text-sm font-medium">Nada por aqui ainda</p>
-            <p className="text-xs text-muted-foreground">
-              Comece a conversa enviando a primeira mensagem.
-            </p>
+  return (
+    <div className="flex h-[70vh] flex-col items-center justify-center px-4">
+      <div className="flex flex-col items-center mb-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center justify-center w-10 h-10 bg-indigo-500 rounded-xl text-white shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+            <Bot className="w-6 h-6" />
           </div>
-        </CardContent>
-      </Card>
+          <h1 className="text-xl md:text-2xl font-semibold text-zinc-100 tracking-tight">
+            Start chatting with Vex
+          </h1>
+        </div>
+
+        {/* Decorativo: Toggle estilo DeepSeek */}
+        <div className="flex items-center bg-[#1a1a1a] rounded-full p-1 border border-white/10">
+          <div className="flex items-center gap-2 px-5 py-2 rounded-full bg-[#2a2a2a] text-sm font-medium text-zinc-100 shadow-sm cursor-default transition-all">
+            <Zap className="size-4 text-indigo-400 fill-indigo-400" />
+            Instant
+          </div>
+          <div className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium text-zinc-400 hover:text-white cursor-pointer transition-colors">
+            <Brain className="size-4" />
+            Expert
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
