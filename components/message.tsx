@@ -128,9 +128,9 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
           </div>
         </ContextMenuTrigger>
 
-        <ContextMenuContent>
+        <ContextMenuContent className="bg-zinc-950 border border-zinc-800 rounded-md shadow-md p-1 min-w-40 z-50">
           <ContextMenuItem
-            className="text-destructive focus:text-destructive"
+            className="text-red-500 hover:bg-zinc-900 focus:bg-zinc-900 focus:text-red-500 cursor-pointer flex items-center px-2 py-1.5 rounded-sm"
             onSelect={() => setIsDeleteAlertOpen(true)}
           >
             <Trash2 className="mr-2 h-4 w-4" />
@@ -139,17 +139,17 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
         </ContextMenuContent>
       </ContextMenu>
 
-      <AlertDialogContent aria-describedby={undefined}>
+      <AlertDialogContent aria-describedby={undefined} className="bg-zinc-950 border border-zinc-800 text-zinc-100 rounded-xl p-6 sm:max-w-lg z-50">
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("deleteConfirmation.title")}</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogTitle className="text-xl font-semibold">{t("deleteConfirmation.title")}</AlertDialogTitle>
+          <AlertDialogDescription className="text-zinc-400 mt-2">
             {t("deleteConfirmation.message")}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-          <Button variant="destructive" onClick={handleDelete}>
+        <AlertDialogFooter className="mt-6 flex justify-end gap-3">
+          <AlertDialogCancel className="bg-transparent border border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors">{t("cancel")}</AlertDialogCancel>
+          <Button variant="destructive" onClick={handleDelete} className="bg-red-600 hover:bg-red-700 text-white">
             {t("deleteMessage")}
           </Button>
         </AlertDialogFooter>

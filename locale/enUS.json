@@ -100,11 +100,15 @@
   "deleteAllSynons": "Delet all synons",
   "deleteAllSynonsClick": "Click me again",
   "deleteALlSynonsSucess": "All synons delete sucess",
-  "deleteAllSynonsFail": "Error on delete all synons",
+  "deleteAllSynonsFail": "Error deleting all synonyms",
   "importing": "Importing...",
   "exporting": "Exporting...",
-
-  "vexLearning": "Teach the AI",
+  "jinko_db": "Jinko DB",
+  "deleteConfirmation": {
+    "title": "Delete message?",
+    "message": "Are you sure you want to permanently delete this message? This action cannot be undone."
+  },
+  "vexLearning": "Vex Intents",
   "typeThing": "Write anything",
   "learnWarningTitle": "I trained Vex, but she doesn't respond properly",
   "learnWarning": "If Vex hasn't learned much, it may be necessary to deactivate the Bayes algorithm (in the side menu) or teach her more things in :",

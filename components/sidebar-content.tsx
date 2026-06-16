@@ -10,6 +10,7 @@ import {
   Activity,
   Settings,
   Newspaper,
+  Database,
 } from "lucide-react";
 import { useChangelogStore } from "@/store/changelogStore";
 import { db } from "@/lib/vexDB";
@@ -32,6 +33,7 @@ import {
 export const menuItems = [
   { labelKey: "home", path: "/home", icon: Home },
   { labelKey: "vexLearning", path: "/intents", icon: Sparkles },
+  { labelKey: "jinko_db", path: "/jinko", icon: Database },
   { labelKey: "customization", path: "/customize", icon: Paintbrush },
   { labelKey: "stats", path: "/stats", icon: Activity },
   { labelKey: "select", path: "/language", icon: Languages },

@@ -21,6 +21,7 @@ import ConsentPage from "@/app/consent/page";
 import StreakPage from "@/app/streak/page";
 import StatsPage from "@/app/stats/page";
 import SettingsPage from "@/app/settings/page";
+import JinkoPage from "@/app/jinko/page";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ChangelogModal } from "@/components/changelog-modal";
 
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       { path: "/streak", element: <StreakPage /> },
       { path: "/stats", element: <StatsPage /> },
       { path: "/settings", element: <SettingsPage /> },
+      { path: "/jinko", element: <JinkoPage /> },
       { path: "/teste", element: <ChatLoading /> },
     ],
   },
