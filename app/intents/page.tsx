@@ -217,7 +217,7 @@ export default function IntentPage() {
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
           <button
             onClick={() => go("/home")}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5"
+            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 md:hidden"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-300" />
           </button>
