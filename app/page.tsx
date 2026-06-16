@@ -107,7 +107,14 @@ const Home: React.FC = () => {
     if (lastMessageCountRef.current === 0) {
       // Primeira carga: tenta restaurar o scroll salvo
       const savedScroll = sessionStorage.getItem("chatScrollTop");
-      if (savedScroll !== null) {
+      const wasAtBottom = sessionStorage.getItem("chatWasAtBottom") === "true";
+
+      if (wasAtBottom) {
+        // Se estava no final da conversa, força rolar até o fim após a renderização
+        requestAnimationFrame(() => {
+          if (contentRef.current) scrollToBottom(contentRef.current, "auto");
+        });
+      } else if (savedScroll !== null) {
         isRestoringScrollRef.current = true;
         contentRef.current.scrollTop = Number(savedScroll);
         setTimeout(() => {
@@ -126,7 +133,9 @@ const Home: React.FC = () => {
 
       // Só rola pra baixo automaticamente se o usuário enviou, se estiver perto do fim, ou se a IA estiver processando
       if (isNearBottom || isFromUser || isProcessing) {
-        scrollToBottom(contentRef.current, "smooth");
+        requestAnimationFrame(() => {
+          if (contentRef.current) scrollToBottom(contentRef.current, "smooth");
+        });
       }
     }
 
@@ -135,7 +144,13 @@ const Home: React.FC = () => {
 
   const handleScroll = useCallback(() => {
     if (!contentRef.current || isRestoringScrollRef.current) return;
-    sessionStorage.setItem("chatScrollTop", contentRef.current.scrollTop.toString());
+    const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+    
+    sessionStorage.setItem("chatScrollTop", scrollTop.toString());
+    
+    // Salva se o usuário estava bem pertinho do fim do scroll (margem de 50px)
+    const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
+    sessionStorage.setItem("chatWasAtBottom", isAtBottom.toString());
   }, []);
 
   // --------------------------------------------------
@@ -201,7 +216,7 @@ const Home: React.FC = () => {
       <main
         ref={contentRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto px-3 py-4 space-y-4 bg-background pb-20 pt-20"
+        className="flex-1 overflow-y-auto px-3 py-4 space-y-4 bg-background pb-40 pt-20"
       >
         {renderedMessages}
         {isProcessing && <TypingIndicator />}
