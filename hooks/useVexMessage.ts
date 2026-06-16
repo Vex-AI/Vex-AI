@@ -36,18 +36,29 @@ export const useVexMessage = () => {
       const minDelay = new Promise((resolve) => setTimeout(resolve, 1500));
 
       const processJinkoOrAnalyzer = async () => {
-        const isJinkoIntent = new RegExp(i18next.t("jinko.intent_regex"), "i").test(userMessage);
+        let currentState = jinkoState;
 
-        if (jinkoState === "finished") {
+        if (currentState === "finished") {
+          const playAgainRegex = new RegExp(i18next.t("jinko.play_again_regex"), "i");
+          const intentRegex = new RegExp(i18next.t("jinko.intent_regex"), "i");
+          
+          if (playAgainRegex.test(userMessage) || intentRegex.test(userMessage)) {
+            setJinkoState("playing");
+            return jinkoManager.startGame();
+          }
+          
           resetJinko();
+          currentState = "inactive";
         }
 
-        if (jinkoState === "inactive" && isJinkoIntent) {
+        const isJinkoIntent = new RegExp(i18next.t("jinko.intent_regex"), "i").test(userMessage);
+
+        if (currentState === "inactive" && isJinkoIntent) {
           setJinkoState("confirming");
           return i18next.t("jinko.confirm_game");
         }
 
-        if (jinkoState === "confirming") {
+        if (currentState === "confirming") {
           if (new RegExp(i18next.t("jinko.regex_confirm_yes"), "i").test(userMessage)) {
             setJinkoState("playing");
             return jinkoManager.startGame();
@@ -57,7 +68,7 @@ export const useVexMessage = () => {
           }
         }
 
-        if (jinkoState === "playing") {
+        if (currentState === "playing") {
           const { reply, isVictory } = jinkoManager.processUserReply(userMessage);
           if (isVictory) {
             setJinkoState("finished");

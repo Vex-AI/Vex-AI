@@ -238,6 +238,7 @@
     "didnt_get_that": "Não entendi muito bem. Você pode responder com Sim, Não, Talvez ou Não sei? 🤔",
     "victory": "Já sei! Você está pensando em um(a) **{{name}}**! {{emoji}} Acertei?! 🎉",
     "intent_regex": "(adivinhar.*animais|jogar.*animais|akinator|adivinhar um animal)",
+    "play_again_regex": "(de novo|mais uma vez|outra vez|revanche|bora tentar de novo)",
     "confirm_game": "Você quer jogar o jogo de adivinhar animais? 🐾",
     "regex_confirm_yes": "\\b(sim|claro|vamos|bora|yep|isso|ss|s|bora lá|com certeza|pode ser|manda|siiim|y)\\b",
     "cancel_game": "Tudo bem! Deixamos para outra hora. 😊",

@@ -49,7 +49,7 @@ class JinkoGameManager {
       weight = 0;
     } else {
       // Fallback
-      return { reply: i18next.t("jinko.didnt_get_that"), isVictory: false };
+      return { reply: i18next.t("jinko.didnt_get_that") + `\n\n_(Debug: Peso não detectado)_`, isVictory: false };
     }
 
     this.engine.answerQuestion(this.currentQuestionId, weight);
@@ -64,12 +64,12 @@ class JinkoGameManager {
       const nameWithoutEmoji = typeof animalName === 'string' ? animalName.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim() : animalName;
 
       return { 
-        reply: i18next.t("jinko.victory", { name: nameWithoutEmoji, emoji: emoji }), 
+        reply: i18next.t("jinko.victory", { name: nameWithoutEmoji, emoji: emoji }) + `\n\n_(Debug: Peso interpretado para a última resposta: ${weight})_`, 
         isVictory: true 
       };
     }
 
-    return { reply: this.nextQuestion(), isVictory: false };
+    return { reply: this.nextQuestion() + `\n\n_(Debug: Peso interpretado para a resposta anterior: ${weight})_`, isVictory: false };
   }
 }
 
