@@ -39,17 +39,12 @@ body::-webkit-scrollbar,
 .message-other {
   margin-left: auto;
   align-self: flex-start;
-  border-top-right-radius: 0;
-  /*   background: rgba(66, 43, 177, 0.9); */
   background: rgb(22 111 108);
 }
 
 .message-vex {
-  /* background: rgba(220, 17, 47, 0.9); */
   background: rgb(111 22 28);
   align-self: flex-start;
-  margin-right: 10px;
-  border-top-left-radius: 0;
 }
 
 :root {

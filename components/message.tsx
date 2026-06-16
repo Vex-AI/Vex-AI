@@ -101,7 +101,7 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
         <ContextMenuTrigger asChild>
           <div
             className={cn(
-              "relative w-fit max-w-[85%] rounded-xl px-4 py-3 shadow-sm transition-all",
+              "relative w-fit max-w-[85%] rounded-[20px] px-5 py-3.5 shadow-sm transition-all",
               isVex
                 ? "mr-auto bg-muted message-vex"
                 : "ml-auto bg-primary text-primary-foreground message-other",
@@ -110,7 +110,7 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
             style={bubbleStyle}
           >
             <div style={textColor}>
-              <p className="whitespace-pre-wrap wrap-break-words">
+              <p className="whitespace-pre-wrap wrap-break-words leading-relaxed text-[15px]">
                 {processedContent.map((part, i) => (
                   <Fragment key={i}>{part}</Fragment>
                 ))}
