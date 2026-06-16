@@ -100,7 +100,7 @@ export default function IntentItem({
                 onClick={onAddPhrase}
               >
                 <PlusCircle className="mr-2 w-4 h-4" />
-                {t("intent_page.add_phrase_btn")}
+                {t("intent_page.manage_phrases")}
               </Button>
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function IntentItem({
                 onClick={onAddResponse}
               >
                 <PlusCircle className="mr-2 w-4 h-4" />
-                {t("intent_page.add_response_btn")}
+                {t("intent_page.manage_responses")}
               </Button>
             </div>
           </div>

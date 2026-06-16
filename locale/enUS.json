@@ -172,7 +172,16 @@
     "no_responses_added": "No responses added.",
     "add_phrase_btn": "Add Phrase",
     "add_response_btn": "Add Response",
-
+    "name_label": "Name",
+    "initial_phrase_label": "Initial Phrase",
+    "initial_response_label": "Initial Response",
+    "manage_phrases": "Manage Phrases",
+    "manage_responses": "Manage Responses",
+    "edit_phrases_title": "Edit Phrases",
+    "edit_responses_title": "Edit Responses",
+    "type_new_variation": "Type a new variation",
+    "add_btn": "Add",
+    "close_btn": "Close",
     "go_back": "Go back",
     "open_menu": "Open menu",
     "close_menu": "Close menu"

@@ -282,7 +282,7 @@ export default function IntentPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
             <div className="space-y-2">
-              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">Nome</label>
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">{t("intent_page.name_label")}</label>
               <Input
                 value={intentName}
                 onChange={(e) => setIntentName(e.target.value)}
@@ -292,7 +292,7 @@ export default function IntentPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">Frase Inicial</label>
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">{t("intent_page.initial_phrase_label")}</label>
               <Input
                 value={initialPhrase}
                 onChange={(e) => setInitialPhrase(e.target.value)}
@@ -302,7 +302,7 @@ export default function IntentPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">Resposta Inicial</label>
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">{t("intent_page.initial_response_label")}</label>
               <Input
                 value={initialResponse}
                 onChange={(e) => setInitialResponse(e.target.value)}
