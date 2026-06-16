@@ -2,6 +2,7 @@
 
 import { db } from "./vexDB";
 import i18n from "./translation";
+import * as VexPsyche from "./psyche/VexPsyche";
 import {
   GoogleGenerativeAI,
   HarmBlockThreshold,
@@ -148,19 +149,29 @@ export async function analyzer(
 
   await initializeAnalyzer();
 
+  // Process message through VexPsyche (sentiment analysis, emotions, mood)
+  await VexPsyche.processMessage(message);
+
   const isGeminiEnabled =
     localStorage.getItem("geminiEnabled") === "true" && geminiModel;
 
+  let response: string;
+
   if (isGeminiEnabled) {
     try {
-      return await getGeminiResponse(message);
+      response = await getGeminiResponse(message);
     } catch (error) {
       console.error("Error in Gemini, using local fallback.", error);
-      return await getLocalResponse(message);
+      response = await getLocalResponse(message);
     }
   } else {
-    return await getLocalResponse(message);
+    response = await getLocalResponse(message);
   }
+
+  // Apply psychological state to modify the response
+  response = await VexPsyche.applyPsycheToResponse(response);
+
+  return response;
 }
 
 // --- Response Functions ---

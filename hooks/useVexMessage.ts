@@ -2,13 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { analyzer } from "@/lib/analyzer";
 import { sendMessage } from "@/lib/utils";
 import { useEmotionStore } from "@/store/useEmotionStore";
-import { detectEmotion } from "@/lib/emotionDetector";
+import * as VexPsyche from "@/lib/psyche/VexPsyche";
 
 export type ProcessingStatus = "online" | "typing";
 
 export const useVexMessage = () => {
   const [status, setStatus] = useState<ProcessingStatus>("online");
   const setEmotion = useEmotionStore((state) => state.setEmotion);
+  const setMood = useEmotionStore((state) => state.setMood);
   const setTyping = useEmotionStore((state) => state.setTyping);
 
   const isMounted = useRef(true);
@@ -32,9 +33,12 @@ export const useVexMessage = () => {
       const [vexReply] = await Promise.all([analyzer(userMessage), minDelay]);
 
       if (isMounted.current) {
-        // Detect emotion of the response and update store
-        const emotion = detectEmotion(vexReply);
-        setEmotion(emotion);
+        // Get state from VexPsyche
+        const emotionEmoji = await VexPsyche.getEmoji();
+        const moodIndicator = await VexPsyche.getMoodIndicator();
+        
+        setEmotion(emotionEmoji);
+        setMood(moodIndicator.emoji);
         
         sendMessage(vexReply, true);
         setStatus("online");
@@ -43,7 +47,7 @@ export const useVexMessage = () => {
     } catch (error) {
       console.error("Ocorreu um erro ao processar a resposta de Vex:", error);
       if (isMounted.current) {
-        setEmotion("1f622"); // Sad emoji code if error occurs
+        setEmotion("1f622"); // Sad emoji on error
         sendMessage(
           "Desculpe, tive um problema para processar sua mensagem.",
           true
@@ -60,3 +64,4 @@ export const useVexMessage = () => {
     status,
   };
 };
+

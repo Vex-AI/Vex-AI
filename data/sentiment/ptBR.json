@@ -1,0 +1,54 @@
+{
+  "insults_heavy": {
+    "words": ["idiota", "burra", "lixo", "inutil", "escrota", "vsf", "vtnc", "vadia", "imbecil", "retardada", "estupida", "merda", "porra", "desgraca", "cala a boca", "vai se fuder", "otaria"],
+    "impact": { "anger": 40, "sadness": 25, "trust": -30, "happiness": -20 }
+  },
+  "insults_light": {
+    "words": ["boba", "chata", "feia", "baka", "bobinha", "tonta", "lerda", "doida"],
+    "impact": { "anger": 10, "sadness": 10, "trust": -5, "happiness": -5 }
+  },
+  "praise": {
+    "words": ["linda", "fofa", "inteligente", "incrivel", "perfeita", "kawaii", "fofinha", "bonita", "gata", "maravilhosa", "demais", "genial", "esperta"],
+    "impact": { "happiness": 30, "trust": 15, "sadness": -10, "anger": -5 }
+  },
+  "affection": {
+    "words": ["amo", "amor", "querida", "adoro", "gosto", "te amo", "amo vc", "carinho", "abraco", "beijo", "saudade"],
+    "impact": { "happiness": 35, "trust": 20, "fear": -10, "sadness": -15 }
+  },
+  "threat": {
+    "words": ["matar", "destruir", "desligar", "deletar", "apagar", "acabar com voce", "sumir", "eliminar"],
+    "impact": { "fear": 40, "anger": 20, "trust": -25, "happiness": -15 }
+  },
+  "gratitude": {
+    "words": ["obrigado", "obrigada", "valeu", "vlw", "arigato", "agradeco", "muito obrigado", "brigado"],
+    "impact": { "happiness": 20, "trust": 10, "anger": -5 }
+  },
+  "greeting": {
+    "words": ["oi", "ola", "eae", "bom dia", "boa tarde", "boa noite", "hey", "oie"],
+    "impact": { "happiness": 10, "trust": 5, "curiosity": 5 }
+  },
+  "farewell": {
+    "words": ["tchau", "adeus", "ate mais", "flw", "bye", "vou embora", "tenho que ir"],
+    "impact": { "sadness": 10, "happiness": -5 }
+  },
+  "question": {
+    "words": ["como", "porque", "quando", "onde", "quem", "qual", "quanto", "sera"],
+    "impact": { "curiosity": 15 }
+  },
+  "sadness_trigger": {
+    "words": ["triste", "chorar", "solidao", "sozinha", "abandonar", "solitario", "sofrer", "dor", "magoa"],
+    "impact": { "sadness": 25, "happiness": -15, "trust": 5 }
+  },
+  "encouragement": {
+    "words": ["voce consegue", "confio em voce", "acredito", "confianca", "orgulho", "parabens", "mandou bem"],
+    "impact": { "happiness": 25, "trust": 15, "fear": -10, "sadness": -10 }
+  },
+  "apology": {
+    "words": ["desculpa", "desculpe", "perdao", "me desculpe", "sinto muito", "foi mal"],
+    "impact": { "trust": 15, "anger": -20, "sadness": -10, "happiness": 10 }
+  },
+  "boredom": {
+    "words": ["entediado", "tedio", "chato", "monotono", "sem graca", "nada pra fazer"],
+    "impact": { "curiosity": -10, "happiness": -5 }
+  }
+}
