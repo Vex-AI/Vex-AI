@@ -10,6 +10,8 @@ import { Camera, Pencil, Trash2, Github, Youtube } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import Header from "@/components/header";
 
 export default function EditProfile() {
@@ -19,6 +21,17 @@ export default function EditProfile() {
   const [nameModal, setNameModal] = useState(false);
   const [imgModal, setImgModal] = useState(false);
   const [newName, setNewName] = useState("");
+  
+  // Dynamic avatar state
+  const [dynamicAvatar, setDynamicAvatar] = useState(() => {
+    const val = localStorage.getItem("dynamicAvatar");
+    return val !== "false"; // true by default
+  });
+
+  const toggleDynamicAvatar = (checked: boolean) => {
+    setDynamicAvatar(checked);
+    localStorage.setItem("dynamicAvatar", checked.toString());
+  };
 
   const saveName = useCallback(async () => {
     if (!newName.trim()) return;
@@ -80,6 +93,17 @@ export default function EditProfile() {
         <p className="text-xs text-muted-foreground text-center max-w-[240px]">
           {t("pick_image_message")}
         </p>
+
+        <div className="flex items-center gap-4 mt-2 bg-white/5 px-4 py-2 rounded-xl border border-white/5">
+          <Label htmlFor="dynamic-avatar" className="text-sm font-medium cursor-pointer">
+            {t("dynamic_avatar")}
+          </Label>
+          <Switch 
+            id="dynamic-avatar" 
+            checked={dynamicAvatar} 
+            onCheckedChange={toggleDynamicAvatar} 
+          />
+        </div>
       </div>
 
       {/* NAME */}

@@ -1,6 +1,6 @@
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion";
 import SideMenu from "./side-menu"
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { useEmotionStore } from "@/store/useEmotionStore";
 import AnimatedEmoji from "./animated-emoji";
 
@@ -8,6 +8,25 @@ import AnimatedEmoji from "./animated-emoji";
 const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: string }, status?: string })=> {
   const currentEmotion = useEmotionStore((state) => state.currentEmotion);
   const isTyping = useEmotionStore((state) => state.isTyping);
+  const [useDynamicAvatar, setUseDynamicAvatar] = useState(true);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUseDynamicAvatar(localStorage.getItem("dynamicAvatar") !== "false");
+    };
+    
+    handleStorageChange(); // initial check
+    
+    // Allow reactivity across tabs/events
+    window.addEventListener("storage", handleStorageChange);
+    // Custom event since same window localStorage set doesn't trigger "storage" event
+    const observer = setInterval(handleStorageChange, 1000); 
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(observer);
+    };
+  }, []);
 
   const activeEmojiCode = isTyping ? "1f914" : currentEmotion; // 1f914 = thinking face
 
@@ -27,6 +46,8 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
           <div className="h-10 w-10 rounded-full overflow-hidden bg-neutral-900/60 backdrop-blur-md flex items-center justify-center border border-white/10 shadow-inner">
             {!info ? (
               <div className="w-full h-full animate-pulse bg-neutral-800" />
+            ) : !useDynamicAvatar ? (
+              <img src={info.profileImage || "/Vex_320.png"} className="w-full h-full object-cover" />
             ) : (
               <div className="transform scale-110 transition-transform duration-300 flex items-center justify-center">
                 <AnimatedEmoji code={activeEmojiCode} />
