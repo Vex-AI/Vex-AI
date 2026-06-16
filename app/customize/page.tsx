@@ -62,12 +62,13 @@ export default function Customize() {
   }, [key]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0d0d0d] text-white overflow-x-hidden">
+    <div className="flex flex-col h-full relative overflow-hidden bg-[#0d0d0d] text-white">
       <div className="px-6 pt-6">
         <Header />
       </div>
 
-      <main className="flex-1 max-w-xl w-full mx-auto p-4 space-y-8 pb-20">
+      <main className="flex-1 overflow-y-auto scrollbar-none p-4 pb-20">
+        <div className="max-w-xl mx-auto space-y-8">
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -85,9 +86,8 @@ export default function Customize() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="relative p-6 rounded-3xl bg-white/[0.03] border border-white/10 overflow-hidden flex flex-col items-center justify-center min-h-[160px]"
+          className="relative p-6 rounded-3xl bg-neutral-900 border border-neutral-800 overflow-hidden flex flex-col items-center justify-center min-h-[160px]"
         >
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-pink-500/5 to-purple-500/5 pointer-events-none" />
           <Preview
             style={{
               ...style,
@@ -105,7 +105,7 @@ export default function Customize() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between"
+          className="p-5 rounded-2xl bg-[#0a0a0a] border border-white/5 flex items-center justify-between"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-blue-500/10 rounded-lg">
@@ -131,7 +131,7 @@ export default function Customize() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-6"
+          className="p-6 rounded-3xl bg-[#0a0a0a] border border-white/5 space-y-6"
         >
           <div className="flex items-center gap-2 mb-2">
             <Layers className="w-5 h-5 text-purple-400" />
@@ -211,7 +211,7 @@ export default function Customize() {
         >
           <Button
             onClick={save}
-            className="h-14 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-medium shadow-[0_0_15px_rgba(236,72,153,0.3)] transition-all hover:shadow-[0_0_25px_rgba(236,72,153,0.5)]"
+            className="h-14 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-medium transition-colors shadow-none border-none"
           >
             <Save className="w-5 h-5 mr-2" /> {t("save_styles")}
           </Button>
@@ -219,11 +219,12 @@ export default function Customize() {
           <Button 
             onClick={remove}
             variant="outline"
-            className="h-14 rounded-xl border-white/10 bg-white/5 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/50 transition-all text-neutral-300 font-medium"
+            className="h-14 rounded-xl border-white/10 bg-white/5 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/50 transition-colors text-neutral-300 font-medium"
           >
             <Trash2 className="w-5 h-5 mr-2" /> {t("delete_styles")}
           </Button>
         </motion.div>
+        </div>
       </main>
     </div>
   );

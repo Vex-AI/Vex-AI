@@ -14,7 +14,7 @@ const Header = ({ message }: { message?: string }) => {
         variant="ghost"
         size="icon"
         onClick={() => go("/home")}
-        className="text-neutral-300 hover:text-white"
+        className="text-neutral-300 hover:text-white md:hidden"
       >
         <ChevronLeft className="size-5" />
       </Button>
