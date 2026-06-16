@@ -1,24 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import { useTranslation } from "react-i18next";
-
-//import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, Languages, Globe2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { loadIntentsForLanguage } from "@/lib/IntentManager";
 import { mkToast } from "@/lib/utils";
 import Header from "@/components/header";
 
 const LANGS = [
-  { id: "enUS", label: "english" },
-  { id: "ptBR", label: "portuguese" },
+  { id: "enUS", label: "english", flag: "🇺🇸" },
+  { id: "ptBR", label: "portuguese", flag: "🇧🇷" },
 ];
 
 export default function LanguageSelector() {
-
   const {
     t,
     i18n: { language, changeLanguage },
@@ -38,7 +34,6 @@ export default function LanguageSelector() {
       await loadIntentsForLanguage(lang);
 
       mkToast(t("language_changed"));
-      //navigate("/home", { replace: true });
     } catch (err) {
       console.error(err);
       mkToast("Failed to switch language.");
@@ -54,42 +49,93 @@ export default function LanguageSelector() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 flex flex-col gap-4">
-      <Header />
+    <div className="flex flex-col min-h-screen bg-[#0d0d0d] text-white">
+      <div className="px-6 pt-6">
+        <Header />
+      </div>
 
-      <Card className="p-4 border border-border bg-card flex flex-col divide-y divide-border">
-        {isLoading ? (
-          <div className="flex flex-col items-center gap-3 py-6">
-            <Loader2 className="size-6 animate-spin text-primary" />
-            <p className="text-muted-foreground">{t("loading_model")}</p>
+      <main className="flex-1 max-w-md w-full mx-auto p-6 space-y-8 mt-4">
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-2"
+        >
+          <div className="inline-flex items-center justify-center p-3 bg-white/5 rounded-2xl border border-white/10 mb-4">
+            <Globe2 className="w-6 h-6 text-indigo-400" />
           </div>
-        ) : (
-          LANGS.map((lang) => (
-            <button
-              key={lang.id}
-              onClick={() => handleSelect(lang.id)}
-              className={`
-                group w-full flex items-center justify-between py-3 px-1 transition
-                text-left
-                ${
-                  language === lang.id
-                    ? "text-primary font-medium"
-                    : "text-muted-foreground hover:text-foreground"
-                }
-              `}
-            >
-              <span className="text-base">{t(lang.label)}</span>
+          <h1 className="text-2xl font-bold tracking-tight text-white/90">{t("select")}</h1>
+          <p className="text-sm text-neutral-400 leading-relaxed">
+            Escolha o idioma principal para a inteligência da Vex e para o aplicativo.
+          </p>
+        </motion.div>
 
-           
-              {language === lang.id ? (
-                <Check className="size-5 text-primary scale-100 opacity-100 transition-transform" />
-              ) : (
-                <Check className="size-5 opacity-0 scale-0 group-hover:opacity-20 group-hover:scale-75 transition" />
-              )}
-            </button>
-          ))
-        )}
-      </Card>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="relative p-2 rounded-3xl bg-white/[0.03] border border-white/10 overflow-hidden"
+        >
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-50" />
+          
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div 
+                key="loading"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="flex flex-col items-center justify-center py-12 gap-4"
+              >
+                <div className="relative">
+                  <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full" />
+                  <Loader2 className="w-10 h-10 animate-spin text-indigo-400 relative z-10" />
+                </div>
+                <p className="text-sm font-medium text-indigo-300 animate-pulse">{t("loading_model")}</p>
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="list"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col gap-2 p-2"
+              >
+                {LANGS.map((lang) => {
+                  const isActive = language === lang.id;
+                  
+                  return (
+                    <button
+                      key={lang.id}
+                      onClick={() => handleSelect(lang.id)}
+                      className={`
+                        relative group w-full flex items-center justify-between p-4 rounded-2xl transition-all duration-300
+                        ${isActive 
+                          ? "bg-indigo-500/10 border border-indigo-500/30 shadow-[0_0_15px_rgba(99,102,241,0.1)]" 
+                          : "bg-transparent border border-transparent hover:bg-white/5 hover:border-white/10"
+                        }
+                      `}
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="text-2xl">{lang.flag}</span>
+                        <span className={`text-base font-medium transition-colors ${isActive ? "text-indigo-300" : "text-white/80 group-hover:text-white"}`}>
+                          {t(lang.label)}
+                        </span>
+                      </div>
+
+                      <div className={`
+                        flex items-center justify-center w-6 h-6 rounded-full transition-all duration-300
+                        ${isActive ? "bg-indigo-500 text-white" : "bg-white/5 text-transparent"}
+                      `}>
+                        <Check className={`w-4 h-4 transition-transform duration-300 ${isActive ? "scale-100" : "scale-50 opacity-0 group-hover:opacity-50 group-hover:text-white/40"}`} />
+                      </div>
+                    </button>
+                  );
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </main>
     </div>
   );
 }
