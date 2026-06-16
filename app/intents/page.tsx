@@ -312,7 +312,7 @@ export default function IntentPage() {
 
           <Button
             onClick={handleAddIntent}
-            className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white mt-6 rounded-xl h-12 px-8 shadow-[0_0_15px_rgba(99,102,241,0.3)] transition-all hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] relative z-10"
+            className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white mt-6 rounded-xl h-12 px-8 transition-all relative z-10"
           >
             <PlusCircle className="w-4 h-4 mr-2" />
             {t("intent_page.add_intent")}

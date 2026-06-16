@@ -75,7 +75,7 @@ function ResponseModalBase({
 
             <Button
               onClick={onAddResponse}
-              className="bg-purple-500 hover:bg-purple-600 text-white rounded-xl h-12 px-6 shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+              className="bg-purple-500 hover:bg-purple-600 text-white rounded-xl h-12 px-6"
             >
               <PlusCircle className="size-5 mr-2" />
               {t("intent_page.add_btn")}

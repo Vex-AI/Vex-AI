@@ -102,7 +102,7 @@ export default memo(function PhraseModal({
 
             <Button
               onClick={onAddPhrase}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl h-12 px-6 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+              className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl h-12 px-6"
             >
               <PlusCircle className="size-5 mr-2" />
               {t("intent_page.add_btn")}
