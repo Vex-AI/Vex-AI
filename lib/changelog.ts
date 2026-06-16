@@ -24,7 +24,7 @@ export const changelogHistory: ChangelogRelease[] = [
       "Dynamic Mood Avatar: Added toggle in profile settings and chat header to show animated mood emojis.",
       "Settings Management: New page to configure Gemini API keys and oversee emotional state injections.",
       "Framer Motion Animations: All settings pages (Profile, Language, Customize, Intents) have been beautifully redesigned with smooth animations.",
-      "DeepSeek-Inspired Desktop Sidebar: Extracted sidebar navigation for a powerful, persistent desktop experience.",
+      "Modern Desktop Sidebar: Extracted sidebar navigation for a powerful, persistent desktop experience.",
       "Redesigned Chat Interface: Enhanced input bar, quick actions, pill-shaped profile header, and GeminiPillToggle.",
       "Intelligent Chat Auto-Scroll: Persistent chat scroll position and intelligent auto-scroll behavior.",
       "Unified Sticky Headers: Consistent, sticky top-bar layout integrated across all application sub-pages."
