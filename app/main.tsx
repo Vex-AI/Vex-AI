@@ -19,6 +19,7 @@ import Customize from "@/app/customize/page";
 import ConsentPage from "@/app/consent/page";
 import StreakPage from "@/app/streak/page";
 import StatsPage from "@/app/stats/page";
+import SettingsPage from "@/app/settings/page";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import ChatLoading from "@/components/chat-loading";
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
       { path: "/consent", element: <ConsentPage /> },
       { path: "/streak", element: <StreakPage /> },
       { path: "/stats", element: <StatsPage /> },
+      { path: "/settings", element: <SettingsPage /> },
       { path: "/teste", element: <ChatLoading /> },
     ],
   },

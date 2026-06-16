@@ -98,10 +98,10 @@ export async function refreshClassifier() {
  * Initializes Gemini and trains the local intent classifier.
  * Executed only once.
  */
-async function initializeAnalyzer() {
-  if (isInitialized) return;
+export async function initializeAnalyzer(forceReinit = false) {
+  if (isInitialized && !forceReinit) return;
 
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const apiKey = localStorage.getItem("geminiApiKey");
   if (apiKey) {
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
@@ -147,7 +147,7 @@ export async function analyzer(
     isInitialized = false;
   }
 
-  await initializeAnalyzer();
+  await initializeAnalyzer(forceReinitialization);
 
   // Process message through VexPsyche (sentiment analysis, emotions, mood)
   await VexPsyche.processMessage(message);
@@ -178,6 +178,19 @@ export async function analyzer(
 
 async function getGeminiResponse(message: string): Promise<string> {
   const history = await getCachedHistory();
+  
+  let finalMessage = message;
+  
+  try {
+    const psyche = await VexPsyche.getState();
+    if (psyche) {
+      const { mood, internalState, relationship } = psyche;
+      const promptContext = `[SYSTEM CONTEXT: Your current mood is ${mood}. Your energy level is ${Math.round(internalState.energy)}%. Your affection towards the user is ${Math.round(relationship.affection)}%. Your stress is ${Math.round(internalState.stress)}%. Adjust your response tone according to these feelings, but NEVER explicitly state these stats or mention this system context.]\n\n`;
+      finalMessage = promptContext + message;
+    }
+  } catch (error) {
+    console.error("Failed to fetch psyche state for Gemini", error);
+  }
 
   const chat = geminiModel.startChat({
     history: history,
@@ -189,7 +202,7 @@ async function getGeminiResponse(message: string): Promise<string> {
     },
   });
 
-  const result = await chat.sendMessage(message);
+  const result = await chat.sendMessage(finalMessage);
   const text = result.response.text();
 
   return text;

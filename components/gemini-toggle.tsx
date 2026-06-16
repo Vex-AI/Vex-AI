@@ -3,8 +3,11 @@
 
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const GeminiToggle = () => {
+  const navigate = useNavigate();
   const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
@@ -13,6 +16,20 @@ const GeminiToggle = () => {
   }, []);
 
   const handleToggle = (checked: boolean) => {
+    if (checked) {
+      const key = localStorage.getItem("geminiApiKey");
+      if (!key) {
+        toast.error("API Key not found", {
+          description: "Please configure your Gemini API Key in Settings first.",
+          action: {
+            label: "Settings",
+            onClick: () => navigate("/settings")
+          }
+        });
+        return; // Prevent turning on
+      }
+    }
+    
     setIsEnabled(checked);
     localStorage.setItem("geminiEnabled", checked.toString());
   };

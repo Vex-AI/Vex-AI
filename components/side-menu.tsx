@@ -12,6 +12,7 @@ import {
   Trash2,
   Menu,
   Activity,
+  Settings,
 } from "lucide-react";
 
 import { db } from "@/lib/vexDB";
@@ -49,6 +50,7 @@ const menuItems = [
   { labelKey: "stats", path: "/stats", icon: Activity },
   { labelKey: "customization", path: "/customize", icon: Paintbrush },
   { labelKey: "select", path: "/language", icon: Languages },
+  { labelKey: "settings", path: "/settings", icon: Settings },
 ];
 
 const SideMenu = () => {
