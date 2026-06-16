@@ -33,7 +33,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
   return (
     <header
       className="
-        fixed top-0 left-0 w-full z-40
+        absolute top-0 left-0 w-full z-40
         backdrop-blur-xl bg-background/80
         border-b border-white/5
       "

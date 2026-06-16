@@ -5,6 +5,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router";
+import { DesktopSidebar } from "@/components/desktop-sidebar";
 
 import { Toaster } from "sonner";
 
@@ -26,8 +27,11 @@ import ChatLoading from "@/components/chat-loading";
 
 const Layout = () => {
   return (
-    <div className="h-full w-full bg-background text-foreground">
-      <Outlet />
+    <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
+      <DesktopSidebar />
+      <div className="flex-1 min-w-0 relative h-full">
+        <Outlet />
+      </div>
     </div>
   );
 };

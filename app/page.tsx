@@ -210,7 +210,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex h-screen max-w-screen flex-col bg-background text-foreground">
+    <div className="flex h-full w-full flex-col bg-background text-foreground relative">
       <ChatHeader info={info} status={status} />
 
       <main
@@ -222,7 +222,7 @@ const Home: React.FC = () => {
         {isProcessing && <TypingIndicator />}
       </main>
 
-      <footer className="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-3xl pt-2 pb-6 px-4 md:pb-8">
+      <footer className="absolute bottom-0 left-0 w-full bg-background/80 backdrop-blur-3xl pt-2 pb-6 px-4 md:pb-8">
         <div className="flex flex-col w-full max-w-3xl mx-auto rounded-3xl bg-[#1a1a1a] border border-white/10 p-2 md:p-3 shadow-2xl">
           
           <Input
