@@ -12,6 +12,8 @@ import { scheduleRandomNotification } from "@/lib/notifications";
 import { generateDream } from "@/lib/psyche/DreamEngine";
 import { initialize as initPsyche } from "@/lib/psyche/VexPsyche";
 import { useAchievementStore } from "@/store/achievementStore";
+import { useLLMStore } from "@/store/llmStore";
+import { llmManager } from "@/lib/llm/LLMManager";
 
 import Message from "@/components/message";
 import TypingIndicator from "@/components/typing-indicator";
@@ -35,24 +37,40 @@ const Home: React.FC = () => {
 
   const { t } = useTranslation();
   const { sendVexMessage, isProcessing, status } = useVexMessage();
+  const { isAutonomousMode } = useLLMStore();
 
   const [text, setText] = useState("");
+  const [isLLMGenerating, setIsLLMGenerating] = useState(false);
 
-  const handleSendMessage = useCallback(() => {
+  const handleSendMessage = useCallback(async () => {
     const msg = text.trim();
-    if (!msg || isProcessing) return;
+    if (!msg || isProcessing || isLLMGenerating) return;
 
     setText("");
     sendMessage(msg, false);
-    sendVexMessage(msg);
+    
+    if (isAutonomousMode) {
+      setIsLLMGenerating(true);
+      try {
+        const reply = await llmManager.generateResponse(msg);
+        sendMessage(reply, true);
+      } catch (err) {
+        console.error("Local LLM failed:", err);
+      } finally {
+        setIsLLMGenerating(false);
+      }
+    } else {
+      sendVexMessage(msg);
+    }
+    
     setTimeout(() => inputRef.current?.focus(), 30);
-  }, [text, sendVexMessage, isProcessing]);
+  }, [text, sendVexMessage, isProcessing, isAutonomousMode, isLLMGenerating]);
 
   const handleKeyUp = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter" && !isProcessing) handleSendMessage();
+      if (e.key === "Enter" && !isProcessing && !isLLMGenerating) handleSendMessage();
     },
-    [handleSendMessage, isProcessing]
+    [handleSendMessage, isProcessing, isLLMGenerating]
   );
 
   useEffect(() => {
@@ -148,7 +166,7 @@ const Home: React.FC = () => {
     }
 
     lastMessageCountRef.current = messages.length;
-  }, [messages, isProcessing]);
+  }, [messages, isProcessing, isLLMGenerating]);
 
   const handleScroll = useCallback(() => {
     if (!contentRef.current || isRestoringScrollRef.current) return;
@@ -219,7 +237,7 @@ const Home: React.FC = () => {
       >
         <div className="max-w-3xl mx-auto w-full space-y-4 pb-6">
           {renderedMessages}
-          {isProcessing && <TypingIndicator />}
+          {(isProcessing || isLLMGenerating) && <TypingIndicator />}
         </div>
       </main>
 
@@ -241,13 +259,13 @@ const Home: React.FC = () => {
              </div>
 
              <div className="flex items-center gap-1 sm:gap-2">
-                {isProcessing && (
+                {(isProcessing || isLLMGenerating) && (
                   <Loader2 className="h-5 w-5 animate-spin text-neutral-500 mr-2" />
                 )}
                 <Button
                   size="icon"
                   onClick={handleSendMessage}
-                  disabled={isProcessing || text.trim() === ""}
+                  disabled={isProcessing || isLLMGenerating || text.trim() === ""}
                   className="h-8 w-8 rounded-full bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50 transition-colors"
                 >
                   <ArrowUp className="h-4 w-4" />
