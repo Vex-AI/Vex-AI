@@ -16,8 +16,12 @@ export interface ChangelogRelease {
 export const changelogHistory: ChangelogRelease[] = [
   {
     version: "1.6.0",
-    date: "2026-06-16",
+    date: "2026-06-17",
     features: [
+      "Introduced a new interactive animal guessing game system.",
+      "Implemented various UI design improvements and visual bug fixes across the interface.",
+      "Automated VexPsyche Test Suite: Implemented 16 rigorous unit tests to mathematically secure the SentimentAnalyzer, EmotionEngine, and InternalStateEngine algorithms.",
+      "Testing Infrastructure: Successfully integrated Vitest into the ecosystem for blazingly fast assertion checks.",
       "VexPsyche Engine: A comprehensive emotional and psychological engine replacing the legacy emotion detector.",
       "Internal State Engine: Manages energy, stress, boredom, emotional memory, trauma detection, and relationship mechanics.",
       "Psychological Stats Dashboard: View a complete real-time dashboard of Vex's internal states.",
@@ -30,6 +34,26 @@ export const changelogHistory: ChangelogRelease[] = [
       "Unified Sticky Headers: Consistent, sticky top-bar layout integrated across all application sub-pages."
     ],
     fixes: [
+      {
+        description: "Resolved critical layout blowout in the Jinko Simulator causing the Animals Table to aggressively push off-screen.",
+        level: "High"
+      },
+      {
+        description: "Fixed TypeScript compilation failure in legacy Jinko tests related to outdated bilingual string assertions.",
+        level: "Medium"
+      },
+      {
+        description: "Eliminated probabilistic test flakiness ('fator surpresa') from Jinko's decision engine in sterile test environments.",
+        level: "Low"
+      },
+      {
+        description: "Fixed missing JSX closing tags causing parser confusion between 'table' and 'simulator' tabs.",
+        level: "Medium"
+      },
+      {
+        description: "Secured localStorage access in SSR/Node environments to prevent crashes during test execution.",
+        level: "High"
+      },
       {
         description: "Resolved accessibility warnings by adding required DialogDescription to modals.",
         level: "High"
@@ -52,6 +76,7 @@ export const changelogHistory: ChangelogRelease[] = [
       }
     ],
     improvements: [
+      "Jinko Table Styling: Enforced grid-cols-1 safety constraints to prevent horizontal overflow on large datasets.",
       "Deep UI Cleanup: Systematically removed glow shadow effects and decorative gradients for a cleaner, modern look.",
       "Message Bubble Aesthetics: Refined border radius, padding, and typography across the chat.",
       "Chat Scroll Restoration: Improved behavior with increased bottom padding.",
