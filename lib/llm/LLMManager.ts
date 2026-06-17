@@ -1,6 +1,7 @@
 import { CreateWebWorkerMLCEngine, InitProgressReport, WebWorkerMLCEngine } from "@mlc-ai/web-llm";
 import { useLLMStore } from "@/store/llmStore";
 import { generateSystemPrompt } from "./PromptBuilder";
+import { toast } from "sonner";
 
 class LLMManager {
   private engine: WebWorkerMLCEngine | null = null;
@@ -29,9 +30,19 @@ class LLMManager {
       
       setEngineReady(true);
       console.log("[WebLLM] Engine initialized successfully.");
-    } catch (err) {
+    } catch (err: any) {
       console.error("[WebLLM] Failed to initialize engine:", err);
       useLLMStore.getState().setDownloadProgress(0, "Failed to load model.");
+      
+      const errorMessage = err?.message || String(err);
+      if (errorMessage.includes("compatible GPU") || errorMessage.includes("WebGPU")) {
+        toast.error("WebGPU não suportado", {
+          description: "Seu navegador não suporta WebGPU ou você precisa ativá-lo nas flags (chrome://flags/#enable-unsafe-webgpu).",
+          duration: 10000,
+        });
+      } else {
+        toast.error("Erro ao iniciar a IA", { description: errorMessage });
+      }
     } finally {
       this.isInitializing = false;
     }
