@@ -39,6 +39,22 @@ body::-webkit-scrollbar,
   display: none; /* Chrome, Safari e Opera */
 }
 
+.table-scrollbar::-webkit-scrollbar {
+  display: block !important;
+  height: 8px;
+}
+.table-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+.table-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+.table-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 .message-bubble {
   --background: rgb(161, 17, 17);
   --color: white;

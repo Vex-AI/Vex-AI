@@ -102,12 +102,14 @@ export default function JinkoPage() {
     const search = searchTerm.toLowerCase().trim();
     if (search) {
       result = result.filter((animal) =>
-        translateProp(animal.name).toLowerCase().includes(search)
+        translateProp(animal.name).toLowerCase().includes(search),
       );
     }
 
     if (selectedCategory !== "all") {
-      result = result.filter((animal) => getCategory(animal) === selectedCategory);
+      result = result.filter(
+        (animal) => getCategory(animal) === selectedCategory,
+      );
     }
 
     result.sort((a, b) => {
@@ -115,7 +117,10 @@ export default function JinkoPage() {
       if (sortField === "name") {
         const nameA = translateProp(a.name);
         const nameB = translateProp(b.name);
-        comparison = nameA.localeCompare(nameB, lang === "pt" ? "pt-BR" : "en-US");
+        comparison = nameA.localeCompare(
+          nameB,
+          lang === "pt" ? "pt-BR" : "en-US",
+        );
       } else {
         comparison = a.playCount - b.playCount;
       }
@@ -176,9 +181,10 @@ export default function JinkoPage() {
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto bg-[#0a0a0a] text-zinc-100 animate-in fade-in p-6">
+    <div className="w-full h-full overflow-y-auto overflow-x-hidden bg-[#0a0a0a] text-zinc-100 animate-in fade-in p-6">
       <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6 pl-14 lg:pl-0">
+         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6 pl-14 lg:pl-0">
+      
           <div className="text-left">
             <h2 className="text-4xl font-semibold text-red-300/90">
               {lang === "pt" ? "Banco de Animais" : "Animals Database"}
@@ -195,7 +201,9 @@ export default function JinkoPage() {
           <button
             onClick={() => setActiveTab("table")}
             className={`px-6 py-3 font-semibold text-sm transition-all relative ${
-              activeTab === "table" ? "text-red-300/90" : "text-zinc-500 hover:text-zinc-300"
+              activeTab === "table"
+                ? "text-red-300/90"
+                : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
             {lang === "pt" ? "Tabela de Animais" : "Animals Table"}
@@ -206,11 +214,15 @@ export default function JinkoPage() {
           <button
             onClick={() => setActiveTab("simulator")}
             className={`px-6 py-3 font-semibold text-sm transition-all relative flex items-center gap-2 ${
-              activeTab === "simulator" ? "text-red-300/90" : "text-zinc-500 hover:text-zinc-300"
+              activeTab === "simulator"
+                ? "text-red-300/90"
+                : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
             <span className="inline-flex w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            {lang === "pt" ? "Simulador em Tempo Real (Debug)" : "Real-time Simulator (Debug)"}
+            {lang === "pt"
+              ? "Simulador em Tempo Real (Debug)"
+              : "Real-time Simulator (Debug)"}
             {activeTab === "simulator" && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-400/80"></div>
             )}
@@ -239,7 +251,11 @@ export default function JinkoPage() {
                 </span>
                 <input
                   type="text"
-                  placeholder={lang === "pt" ? "Buscar animal por nome..." : "Search animal by name..."}
+                  placeholder={
+                    lang === "pt"
+                      ? "Buscar animal por nome..."
+                      : "Search animal by name..."
+                  }
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-11 pr-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-xl focus:outline-none focus:ring-1 focus:ring-red-400/50 focus:border-red-400/50 text-zinc-100 placeholder-zinc-600 transition-all text-sm"
@@ -329,7 +345,9 @@ export default function JinkoPage() {
                 >
                   <path d="m9 18 6-6-6-6" />
                 </svg>
-                {lang === "pt" ? "VER LEGENDA E PERGUNTAS (Q1 A Q21)" : "VIEW LEGEND AND QUESTIONS"}
+                {lang === "pt"
+                  ? "VER LEGENDA E PERGUNTAS (Q1 A Q21)"
+                  : "VIEW LEGEND AND QUESTIONS"}
               </button>
 
               {showLegend && (
@@ -339,8 +357,12 @@ export default function JinkoPage() {
                       key={q.id}
                       className="break-inside-avoid flex gap-2 py-1.5 border-b border-white/5 last:border-b-0"
                     >
-                      <span className="font-bold text-red-400/80 min-w-[28px] uppercase">{q.id}:</span>
-                      <span className="text-zinc-400">{translateProp(q.text)}</span>
+                      <span className="font-bold text-red-400/80 min-w-[28px] uppercase">
+                        {q.id}:
+                      </span>
+                      <span className="text-zinc-400">
+                        {translateProp(q.text)}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -350,101 +372,117 @@ export default function JinkoPage() {
         )}
 
         {activeTab === "table" && (
-          <div className="bg-[#111111] border border-white/5 rounded-2xl overflow-hidden shadow-sm flex flex-col">
-            <div className="overflow-x-auto w-full max-w-full text-left">
-              <table className="w-full min-w-max border-collapse text-sm text-left">
-                <thead>
-                  <tr className="bg-[#0a0a0a] border-b border-white/5">
-                    <th
-                      onClick={() => handleSort("name")}
-                      className="sticky left-0 bg-[#0a0a0a] px-5 py-4 font-semibold text-zinc-100 border-r border-white/5 cursor-pointer select-none min-w-[150px] z-20 hover:text-red-400 transition-all"
-                    >
-                      <div className="flex items-center gap-1.5 text-left">
-                        {lang === "pt" ? "Animal" : "Animal"}
-                        {sortField === "name" && (
-                          <span className="text-xs text-red-500/80">{sortOrder === "asc" ? "▲" : "▼"}</span>
-                        )}
-                      </div>
-                    </th>
-
-                    <th className="px-4 py-4 font-semibold text-zinc-500 min-w-[120px] text-left">
-                      {lang === "pt" ? "Grupo" : "Group"}
-                    </th>
-
-                    <th
-                      onClick={() => handleSort("playCount")}
-                      className="px-4 py-4 font-semibold text-zinc-500 cursor-pointer select-none min-w-[110px] hover:text-red-400 transition-all text-left"
-                    >
-                      <div className="flex items-center gap-1.5 text-left">
-                        {lang === "pt" ? "Jogadas" : "Plays"}
-                        {sortField === "playCount" && (
-                          <span className="text-xs text-red-500/80">{sortOrder === "asc" ? "▲" : "▼"}</span>
-                        )}
-                      </div>
-                    </th>
-
-                    {sortedQuestions.map((q) => (
+          <div className="grid grid-cols-1 w-full">
+            <div className="bg-[#111111] border border-white/5 rounded-2xl shadow-sm flex flex-col min-w-0 relative w-full overflow-hidden">
+              <div 
+                className="overflow-x-auto w-full pt-2 -scale-y-100 [&::-webkit-scrollbar]:!block [&::-webkit-scrollbar]:!h-2.5 [&::-webkit-scrollbar-track]:!bg-[#0a0a0a] [&::-webkit-scrollbar-track]:!rounded-full [&::-webkit-scrollbar-thumb]:!bg-white/20 hover:[&::-webkit-scrollbar-thumb]:!bg-white/30 [&::-webkit-scrollbar-thumb]:!rounded-full" 
+                style={{ scrollbarWidth: "auto" }}
+              >
+                <table className="w-full min-w-max border-collapse text-sm text-left -scale-y-100">
+                  <thead>
+                    <tr className="bg-[#0a0a0a] border-b border-white/5">
                       <th
-                        key={q.id}
-                        title={translateProp(q.text)}
-                        className="px-3 py-4 text-center font-semibold text-zinc-500 min-w-[55px] uppercase relative group cursor-help hover:bg-white/5 transition-all"
+                        onClick={() => handleSort("name")}
+                        className="sticky left-0 bg-[#0a0a0a] px-5 py-4 font-semibold text-zinc-100 border-r border-white/5 cursor-pointer select-none min-w-[150px] z-20 hover:text-red-400 transition-all"
                       >
-                        {q.id}
-                        <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 hidden group-hover:block bg-zinc-900 text-zinc-100 text-[10px] leading-normal p-2 rounded-lg shadow-lg z-50 font-normal normal-case pointer-events-none text-left border border-white/10">
-                          <span className="font-bold block text-red-400/80 uppercase mb-0.5">{q.id}:</span>
-                          {translateProp(q.text)}
-                        </span>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {processedAnimals.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={sortedQuestions.length + 3}
-                        className="text-center py-10 text-zinc-600 text-sm"
-                      >
-                        {lang === "pt" ? "Nenhum animal encontrado." : "No animals found."}
-                      </td>
-                    </tr>
-                  ) : (
-                    processedAnimals.map((animal) => {
-                      const category = getCategory(animal);
-                      return (
-                        <tr
-                          key={animal.id}
-                          className="border-b border-white/5 hover:bg-[#1a1a1a] last:border-b-0 transition-all text-left"
-                        >
-                          <td className="sticky left-0 bg-[#111111] font-semibold text-zinc-200 border-r border-white/5 px-5 py-3.5 z-10 min-w-[150px] shadow-[4px_0_8px_-4px_rgba(0,0,0,0.1)] text-left group-hover:bg-[#1a1a1a]">
-                            {translateProp(animal.name)}
-                          </td>
-
-                          <td className="px-4 py-3.5 text-left">
-                            <span
-                              className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium tracking-wide ${getCategoryColorClass(
-                                category
-                              )}`}
-                            >
-                              {getCategoryLabel(category)}
+                        <div className="flex items-center gap-1.5 text-left">
+                          {lang === "pt" ? "Animal" : "Animal"}
+                          {sortField === "name" && (
+                            <span className="text-xs text-red-500/80">
+                              {sortOrder === "asc" ? "▲" : "▼"}
                             </span>
-                          </td>
+                          )}
+                        </div>
+                      </th>
 
-                          <td className="px-4 py-3.5 text-zinc-500 font-medium text-left">
-                            {animal.playCount}
-                          </td>
+                      <th className="px-4 py-4 font-semibold text-zinc-500 min-w-[120px] text-left">
+                        {lang === "pt" ? "Grupo" : "Group"}
+                      </th>
 
-                          {sortedQuestions.map((q) => (
-                            <td key={q.id} className="px-3 py-3.5 text-center align-middle">
-                              {renderIndicator(animal.answers[q.id] ?? 0)}
+                      <th
+                        onClick={() => handleSort("playCount")}
+                        className="px-4 py-4 font-semibold text-zinc-500 cursor-pointer select-none min-w-[110px] hover:text-red-400 transition-all text-left"
+                      >
+                        <div className="flex items-center gap-1.5 text-left">
+                          {lang === "pt" ? "Jogadas" : "Plays"}
+                          {sortField === "playCount" && (
+                            <span className="text-xs text-red-500/80">
+                              {sortOrder === "asc" ? "▲" : "▼"}
+                            </span>
+                          )}
+                        </div>
+                      </th>
+
+                      {sortedQuestions.map((q) => (
+                        <th
+                          key={q.id}
+                          title={translateProp(q.text)}
+                          className="px-3 py-4 text-center font-semibold text-zinc-500 min-w-[55px] uppercase relative group cursor-help hover:bg-white/5 transition-all"
+                        >
+                          {q.id}
+                          <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 hidden group-hover:block bg-zinc-900 text-zinc-100 text-[10px] leading-normal p-2 rounded-lg shadow-lg z-50 font-normal normal-case pointer-events-none text-left border border-white/10">
+                            <span className="font-bold block text-red-400/80 uppercase mb-0.5">
+                              {q.id}:
+                            </span>
+                            {translateProp(q.text)}
+                          </span>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {processedAnimals.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan={sortedQuestions.length + 3}
+                          className="text-center py-10 text-zinc-600 text-sm"
+                        >
+                          {lang === "pt"
+                            ? "Nenhum animal encontrado."
+                            : "No animals found."}
+                        </td>
+                      </tr>
+                    ) : (
+                      processedAnimals.map((animal) => {
+                        const category = getCategory(animal);
+                        return (
+                          <tr
+                            key={animal.id}
+                            className="border-b border-white/5 hover:bg-[#1a1a1a] last:border-b-0 transition-all text-left"
+                          >
+                            <td className="sticky left-0 bg-[#111111] font-semibold text-zinc-200 border-r border-white/5 px-5 py-3.5 z-10 min-w-[150px] shadow-[4px_0_8px_-4px_rgba(0,0,0,0.1)] text-left group-hover:bg-[#1a1a1a]">
+                              {translateProp(animal.name)}
                             </td>
-                          ))}
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
+
+                            <td className="px-4 py-3.5 text-left">
+                              <span
+                                className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium tracking-wide ${getCategoryColorClass(
+                                  category,
+                                )}`}
+                              >
+                                {getCategoryLabel(category)}
+                              </span>
+                            </td>
+
+                            <td className="px-4 py-3.5 text-zinc-500 font-medium text-left">
+                              {animal.playCount}
+                            </td>
+
+                            {sortedQuestions.map((q) => (
+                              <td
+                                key={q.id}
+                                className="px-3 py-3.5 text-center align-middle"
+                              >
+                                {renderIndicator(animal.answers[q.id] ?? 0)}
+                              </td>
+                            ))}
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
@@ -456,7 +494,9 @@ export default function JinkoPage() {
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h3 className="text-xl font-semibold text-zinc-100">
-                      {lang === "pt" ? "Entradas do Simulador" : "Simulator Inputs"}
+                      {lang === "pt"
+                        ? "Entradas do Simulador"
+                        : "Simulator Inputs"}
                     </h3>
                     <p className="text-xs text-zinc-500 mt-0.5">
                       {lang === "pt"
@@ -507,7 +547,9 @@ export default function JinkoPage() {
 
                         <div className="flex items-center gap-1 bg-[#111111] p-1 border border-white/5 rounded-lg self-start xl:self-auto shadow-inner">
                           <button
-                            onClick={() => setSimAnswers({ ...simAnswers, [q.id]: 1 })}
+                            onClick={() =>
+                              setSimAnswers({ ...simAnswers, [q.id]: 1 })
+                            }
                             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                               currentVal === 1
                                 ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 shadow-sm"
@@ -517,7 +559,9 @@ export default function JinkoPage() {
                             {lang === "pt" ? "Sim" : "Yes"}
                           </button>
                           <button
-                            onClick={() => setSimAnswers({ ...simAnswers, [q.id]: 0.5 })}
+                            onClick={() =>
+                              setSimAnswers({ ...simAnswers, [q.id]: 0.5 })
+                            }
                             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                               currentVal === 0.5
                                 ? "bg-amber-500/20 text-amber-400 border border-amber-500/20 shadow-sm"
@@ -527,7 +571,9 @@ export default function JinkoPage() {
                             {lang === "pt" ? "Talvez" : "Maybe"}
                           </button>
                           <button
-                            onClick={() => setSimAnswers({ ...simAnswers, [q.id]: 0 })}
+                            onClick={() =>
+                              setSimAnswers({ ...simAnswers, [q.id]: 0 })
+                            }
                             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                               currentVal === 0
                                 ? "bg-zinc-700/50 text-zinc-300 border border-zinc-600/50 shadow-sm"
@@ -537,7 +583,9 @@ export default function JinkoPage() {
                             {lang === "pt" ? "N/A" : "N/A"}
                           </button>
                           <button
-                            onClick={() => setSimAnswers({ ...simAnswers, [q.id]: -1 })}
+                            onClick={() =>
+                              setSimAnswers({ ...simAnswers, [q.id]: -1 })
+                            }
                             className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                               currentVal === -1
                                 ? "bg-rose-500/20 text-rose-400 border border-rose-500/20 shadow-sm"
@@ -561,7 +609,9 @@ export default function JinkoPage() {
                     {lang === "pt" ? "Top Candidatos" : "Top Candidates"}
                   </h3>
                   <p className="text-xs text-zinc-500 mt-0.5">
-                    {lang === "pt" ? "Classificação em tempo real" : "Real-time ranking"}
+                    {lang === "pt"
+                      ? "Classificação em tempo real"
+                      : "Real-time ranking"}
                   </p>
                 </div>
 
@@ -593,7 +643,7 @@ export default function JinkoPage() {
                         <div className="flex items-center gap-3">
                           <span
                             className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-semibold select-none ${getRankBadgeClass(
-                              rank
+                              rank,
                             )}`}
                           >
                             {rank}º
@@ -602,14 +652,16 @@ export default function JinkoPage() {
                           <div className="text-left">
                             <span
                               className={`font-semibold block ${
-                                rank === 1 ? "text-red-300/90 text-base" : "text-zinc-200 text-sm"
+                                rank === 1
+                                  ? "text-red-300/90 text-base"
+                                  : "text-zinc-200 text-sm"
                               }`}
                             >
                               {translateProp(animal.name)}
                             </span>
                             <span
                               className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-medium tracking-wide mt-0.5 ${getCategoryColorClass(
-                                category
+                                category,
                               )}`}
                             >
                               {getCategoryLabel(category)}
@@ -623,14 +675,18 @@ export default function JinkoPage() {
                               score > 0
                                 ? "text-emerald-400"
                                 : score < 0
-                                ? "text-rose-400"
-                                : "text-zinc-600"
+                                  ? "text-rose-400"
+                                  : "text-zinc-600"
                             }`}
                           >
-                            {score > 0 ? `+${score.toFixed(1)}` : score.toFixed(1)} pts
+                            {score > 0
+                              ? `+${score.toFixed(1)}`
+                              : score.toFixed(1)}{" "}
+                            pts
                           </span>
                           <span className="text-[10px] text-zinc-500 mt-0.5 font-sans">
-                            {animal.playCount} {lang === "pt" ? "jogadas" : "plays"}
+                            {animal.playCount}{" "}
+                            {lang === "pt" ? "jogadas" : "plays"}
                           </span>
                         </div>
                       </div>
