@@ -4,16 +4,16 @@ import { Animal, Question } from './types';
 
 describe('MagicEngine', () => {
   const mockQuestions: Question[] = [
-    { id: 'q1', text: 'É mamífero?' },
-    { id: 'q2', text: 'Tem asas?' },
-    { id: 'q3', text: 'Vive na água?' },
+    { id: 'q1', text: { pt: 'É mamífero?', en: 'Is mammal?' } },
+    { id: 'q2', text: { pt: 'Tem asas?', en: 'Has wings?' } },
+    { id: 'q3', text: { pt: 'Vive na água?', en: 'Lives in water?' } },
   ];
 
   const mockAnimals: Animal[] = [
-    { id: 'a1', name: 'Leão', playCount: 100, answers: { 'q1': 1, 'q2': -1, 'q3': -1 } },
-    { id: 'a2', name: 'Águia', playCount: 50, answers: { 'q1': -1, 'q2': 1, 'q3': -1 } },
-    { id: 'a3', name: 'Tubarão', playCount: 80, answers: { 'q1': -1, 'q2': -1, 'q3': 1 } },
-    { id: 'a4', name: 'Baleia', playCount: 90, answers: { 'q1': 1, 'q2': -1, 'q3': 1 } },
+    { id: 'a1', name: { pt: 'Leão', en: 'Lion' }, playCount: 100, answers: { 'q1': 1, 'q2': -1, 'q3': -1 } },
+    { id: 'a2', name: { pt: 'Águia', en: 'Eagle' }, playCount: 50, answers: { 'q1': -1, 'q2': 1, 'q3': -1 } },
+    { id: 'a3', name: { pt: 'Tubarão', en: 'Shark' }, playCount: 80, answers: { 'q1': -1, 'q2': -1, 'q3': 1 } },
+    { id: 'a4', name: { pt: 'Baleia', en: 'Whale' }, playCount: 90, answers: { 'q1': 1, 'q2': -1, 'q3': 1 } },
   ];
 
   let engine: MagicEngine;
@@ -35,23 +35,26 @@ describe('MagicEngine', () => {
   it('updates scores correctly when answering a question', () => {
     // Answer yes to q1 (É mamífero?)
     // a1 (Leão) and a4 (Baleia) should get +1
-    // a2 (Águia) and a3 (Tubarão) should get -1
+    // a1 (Leão) and a4 (Baleia) should get +3 (1 * 1 * 3)
+    // a2 (Águia) and a3 (Tubarão) should get -3 (1 * -1 * 3)
     engine.answerQuestion('q1', 1);
-    expect(engine.scores['a1']).toBe(1);
-    expect(engine.scores['a4']).toBe(1);
-    expect(engine.scores['a2']).toBe(-1);
-    expect(engine.scores['a3']).toBe(-1);
+    expect(engine.scores['a1']).toBe(3);
+    expect(engine.scores['a4']).toBe(3);
+    expect(engine.scores['a2']).toBe(-3);
+    expect(engine.scores['a3']).toBe(-3);
     
     expect(engine.askedQuestions).toContain('q1');
   });
 
   it('calculates the best question to ask', () => {
+    // Add fake questions to simulate mid-game, where randomness threshold is stricter (85% of best entropy)
+    // This prevents the engine from randomly selecting sub-optimal questions like q2 (which has 81% entropy).
+    engine.askedQuestions.push('fake1', 'fake2');
+    
     const bestQ = engine.getBestQuestion();
-    // At start, top 5 are all 4 animals.
-    // We want the question that splits them most evenly.
-    // q1: 2 yes (a1, a4), 2 no (a2, a3) -> perfect split!
-    // q2: 1 yes (a2), 3 no (a1, a3, a4)
-    // q3: 2 yes (a3, a4), 2 no (a1, a2) -> also perfect split
+    // q1: 2 yes (a1, a4), 2 no (a2, a3) -> perfect split! (100% entropy)
+    // q2: 1 yes (a2), 3 no (a1, a3, a4) -> 81% entropy (filtered out)
+    // q3: 2 yes (a3, a4), 2 no (a1, a2) -> perfect split! (100% entropy)
     expect(['q1', 'q3']).toContain(bestQ);
   });
 
@@ -74,6 +77,8 @@ describe('MagicEngine', () => {
     
     engine.scores['a1'] = 20;
     engine.scores['a4'] = 5;
+    // Add fake questions to pass the askedQuestions.length >= 3 requirement
+    engine.askedQuestions.push('fake_1', 'fake_2');
     const victory2 = engine.checkVictory();
     expect(victory2).toBeDefined();
     expect(victory2?.id).toBe('a1');
