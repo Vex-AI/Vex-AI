@@ -115,13 +115,15 @@ export default function AchievementsPage() {
               >
                 <div className="flex items-start gap-3">
                   <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-2xl grayscale opacity-30 border border-white/5 shrink-0">
-                    {badge.icon}
+                    ❓
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm text-neutral-500 truncate">{badge.name[lang]}</h3>
-                    <p className="text-xs text-neutral-600 mt-0.5 line-clamp-2">{badge.description[lang]}</p>
+                    <h3 className="font-semibold text-sm text-neutral-500 truncate">???</h3>
+                    <p className="text-xs text-neutral-600 mt-0.5 line-clamp-2">
+                      {lang === "ptBR" ? "[Conquista Oculta] Continue interagindo para descobrir." : "[Hidden Badge] Keep interacting to discover."}
+                    </p>
                     <p className="text-[10px] text-neutral-700 mt-1.5">
-                      {lang === "ptBR" ? "??? Bloqueado" : "??? Locked"}
+                      {lang === "ptBR" ? "Bloqueado" : "Locked"}
                     </p>
                   </div>
                 </div>

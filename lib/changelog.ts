@@ -18,6 +18,9 @@ export const changelogHistory: ChangelogRelease[] = [
     version: "1.6.0",
     date: "2026-06-17",
     features: [
+      "Offline Dream System (DreamEngine): Vex now has an autonomous offline life. If the app is closed for more than 6 hours, she will inject an organic dream message upon return, influenced by her latest psychological state.",
+      "Gamification & Achievements System: Introduced an interactive badge system with 8 initial unlockable trophies (e.g., Animal Master, Dead Battery, Chatterbox) tracked securely via Zustand persist.",
+      "Interactive Badges Gallery: A new `/achievements` dashboard to track unlocked and mysterious locked badges with beautiful dark mode UI.",
       "Introduced a new interactive animal guessing game system.",
       "Implemented various UI design improvements and visual bug fixes across the interface.",
       "Automated VexPsyche Test Suite: Implemented 16 rigorous unit tests to mathematically secure the SentimentAnalyzer, EmotionEngine, and InternalStateEngine algorithms.",
