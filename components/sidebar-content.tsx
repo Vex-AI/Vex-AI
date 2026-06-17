@@ -10,7 +10,7 @@ import {
   Activity,
   Settings,
   Newspaper,
-  Database,
+  Gamepad2,
   Trophy,
 } from "lucide-react";
 import { useChangelogStore } from "@/store/changelogStore";
@@ -33,7 +33,7 @@ import {
 export const menuItems = [
   { labelKey: "home", path: "/home", icon: Home },
   { labelKey: "vexLearning", path: "/intents", icon: Sparkles },
-  { labelKey: "jinko_db", path: "/jinko", icon: Database },
+  { labelKey: "jinko_db", path: "/jinko", icon: Gamepad2 },
   { labelKey: "customization", path: "/customize", icon: Paintbrush },
   { labelKey: "stats", path: "/stats", icon: Activity },
   { labelKey: "achievements", path: "/achievements", icon: Trophy },

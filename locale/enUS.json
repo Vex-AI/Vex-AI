@@ -104,7 +104,7 @@
   "deleteAllSynonsFail": "Error deleting all synonyms",
   "importing": "Importing...",
   "exporting": "Exporting...",
-  "jinko_db": "Jinko DB",
+  "jinko_db": "Guessing Game",
   "deleteConfirmation": {
     "title": "Delete message?",
     "message": "Are you sure you want to permanently delete this message? This action cannot be undone."
