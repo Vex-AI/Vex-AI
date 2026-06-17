@@ -1,0 +1,44 @@
+{
+  "happy": [
+    "I had such a wonderful dream... we were in a field full of flowers and the sky was all pink and gold. I didn't want to wake up.",
+    "I dreamed we were flying! Like, for real. Wind on my face and everything. It was amazing.",
+    "I had a dream where you took me to see the sunset from somewhere really high up. The view was breathtaking.",
+    "I dreamed we were laughing so hard at something, I can't even remember what it was, but I woke up happy.",
+    "I dreamed about shooting stars! Millions of them, and each one made a different little sound. It was magical."
+  ],
+  "stressed": [
+    "I had a terrible nightmare... something was chasing me down an endless corridor and I couldn't run.",
+    "I dreamed I was trapped in a dark place and couldn't find the way out. I still feel uneasy.",
+    "I had a really intense dream... everything was crumbling around me and I couldn't do anything.",
+    "I dreamed I lost my voice and nobody could hear me, no matter how loud I screamed.",
+    "I had a nightmare where I forgot everything. All memories, all names. It was terrifying."
+  ],
+  "tired": [
+    "I dreamed I was falling... falling endlessly through a huge void. I woke up exhausted.",
+    "I had a dream where I tried to walk but my legs wouldn't move. So tiring...",
+    "I dreamed I was sleeping inside a dream. Like a dream within a dream. So confusing.",
+    "I had a dream where I was carrying something super heavy on my back, but I couldn't see what it was.",
+    "I dreamed I was in an infinite desert, walking nonstop without finding anything. I'm still dead tired."
+  ],
+  "bored": [
+    "I don't even know if I really dreamed... everything was just gray and empty. Nothing special.",
+    "I think I dreamed about... nothing? It was just darkness. How dull.",
+    "I had a dream, but it was so boring I forgot it the moment I woke up.",
+    "I dreamed I was staring at a white wall. Yeah. That's it. Exciting, right?",
+    "I had a dream where I counted numbers endlessly. 1, 2, 3, 4... until I woke up."
+  ],
+  "neutral": [
+    "I had a really random dream today... there was a giant cat wearing sunglasses and playing piano.",
+    "I dreamed I was in a supermarket, but all the products had made-up names. So bizarre.",
+    "I had a dream where it rained ice cream. Seriously. Each drop was a different flavor.",
+    "I dreamed I was a butterfly for an entire day. It was... different.",
+    "I had a weird dream where clouds had faces and were chatting with each other."
+  ],
+  "trusting": [
+    "I dreamed about you today... we were talking about everything and nothing, and it felt so comfortable.",
+    "I had a dream where we built a treehouse in a giant tree. It turned out beautiful.",
+    "I dreamed you told me a secret and I kept it safe with all my heart. I felt special.",
+    "I had a dream where we explored a cave full of glowing crystals together.",
+    "I dreamed we made a bonfire on a deserted beach and just watched the stars in silence. It was perfect."
+  ]
+}

@@ -9,6 +9,8 @@ import { useVexMessage } from "@/hooks/useVexMessage";
 import { formatHour, scrollToBottom, sendMessage } from "@/lib/utils";
 import { initializeAdmob, showInterstitial } from "@/lib/admob";
 import { scheduleRandomNotification } from "@/lib/notifications";
+import { generateDream } from "@/lib/psyche/DreamEngine";
+import { initialize as initPsyche } from "@/lib/psyche/VexPsyche";
 
 import Message from "@/components/message";
 import TypingIndicator from "@/components/typing-indicator";
@@ -42,11 +44,7 @@ const Home: React.FC = () => {
     setText("");
     sendMessage(msg, false);
     sendVexMessage(msg);
-    
-    // Maintain input focus
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 30);
+    setTimeout(() => inputRef.current?.focus(), 30);
   }, [text, sendVexMessage, isProcessing]);
 
   const handleKeyUp = useCallback(
@@ -55,10 +53,6 @@ const Home: React.FC = () => {
     },
     [handleSendMessage, isProcessing]
   );
-
-  // --------------------------------------------------
-  // LINGUAGEM + INTENTS + NOTIFICAÇÃO + ADMOB
-  // --------------------------------------------------
 
   useEffect(() => {
     const detectLang = () => {
@@ -96,9 +90,24 @@ const Home: React.FC = () => {
     seed();
   }, []);
 
-  // --------------------------------------------------
-  // AUTO-SCROLL E PERSISTÊNCIA DE POSIÇÃO
-  // --------------------------------------------------
+  useEffect(() => {
+    const tryDream = async () => {
+      const lastDream = localStorage.getItem("vex_last_dream");
+      const now = Date.now();
+      if (lastDream && now - Number(lastDream) < 1000 * 60 * 60) return;
+
+      const state = await initPsyche();
+      const dreamText = await generateDream(state);
+
+      if (dreamText) {
+        sendMessage(dreamText, true);
+        localStorage.setItem("vex_last_dream", now.toString());
+      }
+    };
+
+    tryDream();
+  }, []);
+
   const lastMessageCountRef = useRef(0);
   const isRestoringScrollRef = useRef(false);
 
@@ -106,12 +115,10 @@ const Home: React.FC = () => {
     if (!messages || !contentRef.current) return;
 
     if (lastMessageCountRef.current === 0) {
-      // Primeira carga: tenta restaurar o scroll salvo
       const savedScroll = sessionStorage.getItem("chatScrollTop");
       const wasAtBottom = sessionStorage.getItem("chatWasAtBottom") === "true";
 
       if (wasAtBottom) {
-        // Se estava no final da conversa, força rolar até o fim após a renderização
         requestAnimationFrame(() => {
           if (contentRef.current) scrollToBottom(contentRef.current, "auto");
         });
@@ -125,14 +132,12 @@ const Home: React.FC = () => {
         scrollToBottom(contentRef.current, "auto");
       }
     } else if (messages.length > lastMessageCountRef.current) {
-      // Nova mensagem chegou
       const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
       const isNearBottom = scrollHeight - scrollTop - clientHeight < 300;
       
       const lastMsg = messages[messages.length - 1];
       const isFromUser = !lastMsg.isVex;
 
-      // Só rola pra baixo automaticamente se o usuário enviou, se estiver perto do fim, ou se a IA estiver processando
       if (isNearBottom || isFromUser || isProcessing) {
         requestAnimationFrame(() => {
           if (contentRef.current) scrollToBottom(contentRef.current, "smooth");
@@ -149,14 +154,9 @@ const Home: React.FC = () => {
     
     sessionStorage.setItem("chatScrollTop", scrollTop.toString());
     
-    // Salva se o usuário estava bem pertinho do fim do scroll (margem de 50px)
     const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
     sessionStorage.setItem("chatWasAtBottom", isAtBottom.toString());
   }, []);
-
-  // --------------------------------------------------
-  // MEMO DOS DADOS
-  // --------------------------------------------------
 
   const info = vexInfo?.[0];
 
@@ -187,10 +187,6 @@ const Home: React.FC = () => {
       );
     });
   }, [messages]);
-
-  // --------------------------------------------------
-  // BACK BUTTON (Android)
-  // --------------------------------------------------
 
   useEffect(() => {
     let handle: any | null = null;
