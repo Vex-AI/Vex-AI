@@ -26,7 +26,7 @@ i18n.use(initReactI18next).init({
   },
 });
 
-if (localStorage.getItem("language"))
+if (typeof localStorage !== "undefined" && localStorage.getItem("language"))
   i18n.changeLanguage(localStorage.getItem("language")??"enUS");
 
 export default i18n;
