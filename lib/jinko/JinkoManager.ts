@@ -3,6 +3,7 @@ import { Animal, Question } from "./engine/types";
 import animalsData from "./data/animals.json";
 import questionsData from "./data/questions.json";
 import i18next from "i18next";
+import { useAchievementStore } from "@/store/achievementStore";
 
 class JinkoGameManager {
   private engine: MagicEngine | null = null;
@@ -62,6 +63,10 @@ class JinkoGameManager {
       const emojiMatch = typeof animalName === 'string' ? animalName.match(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu) : null;
       const emoji = emojiMatch ? emojiMatch[0] : "🐾";
       const nameWithoutEmoji = typeof animalName === 'string' ? animalName.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim() : animalName;
+
+      try {
+        useAchievementStore.getState().incrementJinkoWins();
+      } catch { /* store might not be ready */ }
 
       return { 
         reply: i18next.t("jinko.victory", { name: nameWithoutEmoji, emoji: emoji }) + `\n\n_(Debug: Peso interpretado para a última resposta: ${weight})_`, 

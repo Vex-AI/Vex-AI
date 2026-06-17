@@ -11,6 +11,7 @@ import { initializeAdmob, showInterstitial } from "@/lib/admob";
 import { scheduleRandomNotification } from "@/lib/notifications";
 import { generateDream } from "@/lib/psyche/DreamEngine";
 import { initialize as initPsyche } from "@/lib/psyche/VexPsyche";
+import { useAchievementStore } from "@/store/achievementStore";
 
 import Message from "@/components/message";
 import TypingIndicator from "@/components/typing-indicator";
@@ -102,6 +103,7 @@ const Home: React.FC = () => {
       if (dreamText) {
         sendMessage(dreamText, true);
         localStorage.setItem("vex_last_dream", now.toString());
+        try { useAchievementStore.getState().unlockBadge("first_dream"); } catch {}
       }
     };
 

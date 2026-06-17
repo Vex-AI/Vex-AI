@@ -22,6 +22,7 @@ import StreakPage from "@/app/streak/page";
 import StatsPage from "@/app/stats/page";
 import SettingsPage from "@/app/settings/page";
 import JinkoPage from "@/app/jinko/page";
+import AchievementsPage from "@/app/achievements/page";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ChangelogModal } from "@/components/changelog-modal";
 
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
       { path: "/stats", element: <StatsPage /> },
       { path: "/settings", element: <SettingsPage /> },
       { path: "/jinko", element: <JinkoPage /> },
+      { path: "/achievements", element: <AchievementsPage /> },
       { path: "/teste", element: <ChatLoading /> },
     ],
   },

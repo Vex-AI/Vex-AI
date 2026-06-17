@@ -11,6 +11,7 @@ import {
   Settings,
   Newspaper,
   Database,
+  Trophy,
 } from "lucide-react";
 import { useChangelogStore } from "@/store/changelogStore";
 import { db } from "@/lib/vexDB";
@@ -35,6 +36,7 @@ export const menuItems = [
   { labelKey: "jinko_db", path: "/jinko", icon: Database },
   { labelKey: "customization", path: "/customize", icon: Paintbrush },
   { labelKey: "stats", path: "/stats", icon: Activity },
+  { labelKey: "achievements", path: "/achievements", icon: Trophy },
   { labelKey: "select", path: "/language", icon: Languages },
 ];
 

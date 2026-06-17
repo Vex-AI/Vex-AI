@@ -1,6 +1,7 @@
 // lib/psyche/VexPsyche.ts — Central Orchestrator
 import { db } from "../vexDB";
 import { analyzeSentiment } from "./SentimentAnalyzer";
+import { useAchievementStore } from "@/store/achievementStore";
 import { applyStimulus, decayEmotions, timeDecay, emotionToEmoji } from "./EmotionEngine";
 import { calculateMood, trimHistory, getMoodEmoji } from "./MoodEngine";
 import { generateRandomPersonality, evolvePersonality } from "./PersonalityEngine";
@@ -130,6 +131,20 @@ export async function processMessage(userMessage: string): Promise<void> {
     await db.psycheState.put(state);
   } catch {
     // Silently fail if DB not ready
+  }
+
+  // 13. Achievement triggers
+  try {
+    const { unlockBadge } = useAchievementStore.getState();
+    if (state.internalState.stress >= 95) unlockBadge("ruthless_villain");
+    if (state.internalState.boredom >= 100) unlockBadge("monk_patience");
+    if (state.internalState.energy <= 0) unlockBadge("dead_battery");
+    if (state.relationship.trust >= 100) unlockBadge("unbreakable_bond");
+    if (state.totalInteractions >= 500) unlockBadge("chatterbox");
+    const hour = new Date().getHours();
+    if (hour >= 4 && hour < 6) unlockBadge("early_bird");
+  } catch {
+    // Achievement store might not be ready
   }
 }
 
