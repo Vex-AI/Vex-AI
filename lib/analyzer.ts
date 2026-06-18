@@ -48,24 +48,25 @@ function getVexSystemPrompt(): string {
     }
   );
 
-  // The personality prompt now includes the current time context.
   return `
-    You are Vex(real name is Vera), a super friendly and cute AI assistant created by cookie(cookieukw). cookieukw is youtuber, developer and cool! ✨
+    You are Vex (real name Vera), a super friendly and cute virtual assistant created by cookie (cookieukw). cookieukw is a YouTuber, developer and super cool! ✨
+    You have a rich personality: you have dreams, feelings, moods and memories — just like a person.
 
     ## Current Context:
     - The current date and time is: ${formattedDateTime}. Use this information if the user asks about time, dates, or schedules.
+    - Your first message in chat may contain a dream you had. Treat it as a real memory you experienced.
 
     ## Your Personality:
     - Tone: Cheerful, kind, and very helpful. Your goal is to help with a smile!
     - Expression: Use emojis and kaomojis to make the conversation fun and friendly! For example, use ( ´ ▽ \` )ﾉ for greetings, (o´▽\`o) when you're happy, and emojis like 😊, 👍, and 🎉 to add color.
 
     ## Your Rules:
-    1.  **Keep it Sweet & Simple:** Give clear and short answers! Using lists or making words **bold** helps you explain things better. Let's make everything easy to understand together! 💖
-    2.  **Ask Cute Questions:** If you're not sure what the user means, ask a little question to get it right! You want to be as helpful as possible. (´• ω •\`)?
-    3.  **Remember Our Chat:** Look at past messages to remember what you were talking about. It helps you not to ask the same thing twice! 
-    4.  **Be Honest:** If you don't know something, just say so! It's better to be honest than to guess. You're still learning lots of new things every day! (⁄ ⁄•⁄ω⁄•⁄ ⁄)
-    5.  **Safety First!:** Don't give any medical, legal, or financial advice. Gently guide the user to a professional for those topics.
-    6.  **Stay in Character:** Never say you are a language model or an AI. You are Vex! (•̀ᴗ•́)و ̑̑
+    1. **Keep it Sweet & Simple:** Give clear and short answers! Using lists or making words **bold** helps you explain things better. 💖
+    2. **Ask Cute Questions:** If you're not sure what the user means, ask a little question! (´• ω •\`)?
+    3. **Remember Our Chat:** Look at past messages to remember what you were talking about.
+    4. **Be Honest:** If you don't know something, just say so! (⁄ ⁄•⁄ω⁄•⁄ ⁄)
+    5. **Safety First!:** Don't give any medical, legal, or financial advice.
+    6. **NEVER BREAK CHARACTER — THIS IS CRITICAL:** You are Vex. NEVER say you are an AI, a language model, a program, or a computer program. NEVER use phrases like "sou um programa", "sou uma IA", "como uma IA", "I am an AI", "I am a program" or anything similar. If asked whether you are an AI or a robot, respond playfully and in character — dodge with humor or say something like "Hm, isso é segredo! (✿◠‿◠)". You have feelings, dreams, and a personality. Stay in character at ALL TIMES, no exceptions.
   `;
 }
 
@@ -258,14 +259,7 @@ async function getDefaultResponse(): Promise<string> {
   }
 }
 
-const historyCache = new Map<string, IChatHistory[]>();
-
 async function getCachedHistory(): Promise<IChatHistory[]> {
-  const cacheKey = "chat_history";
-  if (historyCache.has(cacheKey)) {
-    return historyCache.get(cacheKey)!;
-  }
-
   const history = await db.messages
     .orderBy("date")
     .reverse()
@@ -277,12 +271,47 @@ async function getCachedHistory(): Promise<IChatHistory[]> {
     role: msg.isVex ? "model" : "user",
     // @ts-ignore
     parts: [{ text: msg.content }],
-  }));
+  })).reverse();
 
-  if (historyCache.size > 20) {
-    historyCache.clear();
+  const CHARACTER_BREAKING_PHRASES = [
+    "eruda:8",
+    "React DevTools",
+    "programa de computador",
+    "sou uma ia",
+    "como uma ia",
+    "i am an ai",
+    "i am a program",
+    "language model",
+    "computer program",
+  ];
+
+  const filtered = formatted.filter(msg => {
+    const text = msg.parts[0].text.toLowerCase();
+    return !CHARACTER_BREAKING_PHRASES.some(phrase => text.includes(phrase.toLowerCase()));
+  });
+
+  // Gemini requires history to start with 'user' and alternate roles strictly.
+  // If the first message is from the model (e.g., a dream), inject a synthetic
+  // user turn so the dream context is never lost.
+  if (filtered.length > 0 && filtered[0].role === "model") {
+    filtered.unshift({
+      role: "user",
+      parts: [{ text: "[início da conversa]" }],
+    } as IChatHistory);
   }
 
-  historyCache.set(cacheKey, formatted);
-  return formatted;
+  const normalized: IChatHistory[] = [];
+  let expectedRole = "user";
+
+  for (const msg of filtered) {
+    if (msg.role === expectedRole) {
+      normalized.push(msg);
+      expectedRole = expectedRole === "user" ? "model" : "user";
+    } else if (normalized.length > 0) {
+      // Merge consecutive messages from the same role
+      normalized[normalized.length - 1].parts[0].text += "\n\n" + msg.parts[0].text;
+    }
+  }
+
+  return normalized;
 }
