@@ -162,11 +162,17 @@ const Home: React.FC = () => {
 
   const info = vexInfo?.[0];
 
+  const handleSuggestion = useCallback((text: string) => {
+    if (isProcessing) return;
+    sendMessage(text, false);
+    sendVexMessage(text);
+  }, [sendVexMessage, isProcessing]);
+
   const renderedMessages = useMemo(() => {
-    if (!messages) return null;
-    if (messages.length === 0) {
-      return <EmptyState />;
+    if (!messages || messages.length === 0) {
+      return <EmptyState onSuggestion={handleSuggestion} />;
     }
+
     return messages.map((msg, i) => {
       const prev = messages[i - 1];
       const showDate =
@@ -188,7 +194,7 @@ const Home: React.FC = () => {
         </div>
       );
     });
-  }, [messages]);
+  }, [messages, handleSuggestion]);
 
   useEffect(() => {
     let handle: any | null = null;
