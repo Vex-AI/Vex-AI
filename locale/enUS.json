@@ -282,5 +282,11 @@
       "q20": ["Does it usually live in ice or very cold climates?", "Does it live in extremely cold climates?", "Is its habitat in ice or snow?"],
       "q21": ["Does it bark?", "Does it produce barking sounds?", "Is it known to bark?"]
     }
-  }
+  },
+  "chat_empty_greeting": "Heyy! I'm Vex ✨",
+  "chat_empty_subtitle": "Your virtual friend! Send me a message or pick a suggestion below (o´▽`o)",
+  "suggestion_dreams": "Tell me about your dreams",
+  "suggestion_mood": "How are you today?",
+  "suggestion_music": "Recommend me a song?",
+  "suggestion_surprise": "Surprise me with something cool!"
 }
