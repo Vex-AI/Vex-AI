@@ -26,6 +26,15 @@ import { loadIntentsForLanguage } from "@/lib/IntentManager";
 import { changeLanguage } from "i18next";
 import EmptyState from "@/components/empty-state";
 import { GeminiPillToggle } from "@/components/gemini-pill-toggle";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Home: React.FC = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -37,6 +46,7 @@ const Home: React.FC = () => {
   const { sendVexMessage, isProcessing, status } = useVexMessage();
 
   const [text, setText] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
 
   const handleSendMessage = useCallback(() => {
     const msg = text.trim();
@@ -203,7 +213,7 @@ const Home: React.FC = () => {
             isVex={msg.isVex}
             hour={formatHour(msg.hour)}
             date={msg.date}
-            onClose={() => msg.id && db.messages.delete(msg.id)}
+            onClose={() => msg.id != null && setPendingDeleteId(msg.id)}
           />
         </div>
       );
@@ -229,6 +239,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
+    <>
     <div className="flex h-full w-full flex-col bg-background text-foreground relative">
       <ChatHeader info={info} status={status} />
 
@@ -277,6 +288,37 @@ const Home: React.FC = () => {
         </div>
       </footer>
     </div>
+
+      {/* Single shared delete confirmation modal */}
+      <AlertDialog
+        open={pendingDeleteId !== null}
+        onOpenChange={(open) => { if (!open) setPendingDeleteId(null); }}
+      >
+        <AlertDialogContent className="bg-zinc-950 border border-zinc-800 text-zinc-100 rounded-xl p-6 sm:max-w-lg z-50">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-semibold">{t("deleteConfirmation.title")}</AlertDialogTitle>
+            <AlertDialogDescription className="text-zinc-400 mt-2">
+              {t("deleteConfirmation.message")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="mt-6 flex justify-end gap-3">
+            <AlertDialogCancel className="bg-transparent border border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors">
+              {t("cancel")}
+            </AlertDialogCancel>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (pendingDeleteId != null) db.messages.delete(pendingDeleteId);
+                setPendingDeleteId(null);
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {t("deleteMessage")}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 

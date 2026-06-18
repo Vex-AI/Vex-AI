@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, memo, useEffect, useState } from "react";
+import React, { Fragment, memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Trash2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -16,17 +16,6 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import AnimatedEmoji from "./animated-emoji";
@@ -69,16 +58,12 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
   const { t } = useTranslation();
   const [style, setStyle] = useState<Style | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
 
   useEffect(() => {
-    const load = () => {
-      const userStyle = localStorage.getItem("userStyle");
-      const vexStyle = localStorage.getItem("vexStyle");
-      return JSON.parse((isVex && vexStyle) || (!isVex && userStyle) || "null");
-    };
-
-    setStyle(load());
+    const userStyle = localStorage.getItem("userStyle");
+    const vexStyle = localStorage.getItem("vexStyle");
+    const raw = (isVex && vexStyle) || (!isVex && userStyle) || "null";
+    setStyle(JSON.parse(raw));
     setLoading(false);
   }, [isVex]);
 
@@ -100,80 +85,57 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
 
   const textColor = style ? { color: style.color } : undefined;
 
-  const handleDelete = () => {
-    onClose();
-    setIsDeleteAlertOpen(false);
-  };
-
   return (
-    <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
-      <ContextMenu>
-        <ContextMenuTrigger asChild>
-          <div
-            className={cn(
-              "relative w-fit max-w-[85%] rounded-[20px] px-5 py-3.5 shadow-sm transition-all",
-              isVex
-                ? "mr-auto bg-muted message-vex"
-                : "ml-auto bg-primary text-primary-foreground message-other",
-              style && "border"
-            )}
-            style={bubbleStyle}
-          >
-            <div style={textColor}>
-              <div className="whitespace-pre-wrap wrap-break-words leading-relaxed text-[15px] space-y-2">
-                <ReactMarkdown
-                  components={{
-                    p: ({ node, ...props }) => <p>{renderWithEmojis(props.children)}</p>,
-                    strong: ({ node, ...props }) => <strong className="font-bold">{renderWithEmojis(props.children)}</strong>,
-                    em: ({ node, ...props }) => <em className="italic">{renderWithEmojis(props.children)}</em>,
-                    del: ({ node, ...props }) => <del className="line-through">{renderWithEmojis(props.children)}</del>,
-                    code: ({ node, ...props }) => <code className="bg-black/30 rounded px-1 py-0.5">{renderWithEmojis(props.children)}</code>,
-                    a: ({ node, ...props }) => <a className="underline text-blue-400 hover:text-blue-300" {...props}>{renderWithEmojis(props.children)}</a>,
-                  }}
-                >
-                  {content}
-                </ReactMarkdown>
-              </div>
-
-              <small
-                className={cn(
-                  "mt-1 block text-right text-xs opacity-60",
-                  isVex ? "text-muted-foreground" : "text-primary-foreground"
-                )}
+    <ContextMenu>
+      <ContextMenuTrigger asChild>
+        <div
+          className={cn(
+            "relative w-fit max-w-[85%] rounded-[20px] px-5 py-3.5 shadow-sm transition-all",
+            isVex
+              ? "mr-auto bg-muted message-vex"
+              : "ml-auto bg-primary text-primary-foreground message-other",
+            style && "border"
+          )}
+          style={bubbleStyle}
+        >
+          <div style={textColor}>
+            <div className="whitespace-pre-wrap wrap-break-words leading-relaxed text-[15px] space-y-2">
+              <ReactMarkdown
+                components={{
+                  p: ({ node, ...props }) => <p>{renderWithEmojis(props.children)}</p>,
+                  strong: ({ node, ...props }) => <strong className="font-bold">{renderWithEmojis(props.children)}</strong>,
+                  em: ({ node, ...props }) => <em className="italic">{renderWithEmojis(props.children)}</em>,
+                  del: ({ node, ...props }) => <del className="line-through">{renderWithEmojis(props.children)}</del>,
+                  code: ({ node, ...props }) => <code className="bg-black/30 rounded px-1 py-0.5">{renderWithEmojis(props.children)}</code>,
+                  a: ({ node, ...props }) => <a className="underline text-blue-400 hover:text-blue-300" {...props}>{renderWithEmojis(props.children)}</a>,
+                }}
               >
-                {hour}
-              </small>
+                {content}
+              </ReactMarkdown>
             </div>
+
+            <small
+              className={cn(
+                "mt-1 block text-right text-xs opacity-60",
+                isVex ? "text-muted-foreground" : "text-primary-foreground"
+              )}
+            >
+              {hour}
+            </small>
           </div>
-        </ContextMenuTrigger>
+        </div>
+      </ContextMenuTrigger>
 
-        <ContextMenuContent className="bg-zinc-950 border border-zinc-800 rounded-md shadow-md p-1 min-w-40 z-50">
-          <ContextMenuItem
-            className="text-red-500 hover:bg-zinc-900 focus:bg-zinc-900 focus:text-red-500 cursor-pointer flex items-center px-2 py-1.5 rounded-sm"
-            onSelect={() => setIsDeleteAlertOpen(true)}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            {t("deleteMessage")}
-          </ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenu>
-
-      <AlertDialogContent aria-describedby={undefined} className="bg-zinc-950 border border-zinc-800 text-zinc-100 rounded-xl p-6 sm:max-w-lg z-50">
-        <AlertDialogHeader>
-          <AlertDialogTitle className="text-xl font-semibold">{t("deleteConfirmation.title")}</AlertDialogTitle>
-          <AlertDialogDescription className="text-zinc-400 mt-2">
-            {t("deleteConfirmation.message")}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <AlertDialogFooter className="mt-6 flex justify-end gap-3">
-          <AlertDialogCancel className="bg-transparent border border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors">{t("cancel")}</AlertDialogCancel>
-          <Button variant="destructive" onClick={handleDelete} className="bg-red-600 hover:bg-red-700 text-white">
-            {t("deleteMessage")}
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      <ContextMenuContent className="bg-zinc-950 border border-zinc-800 rounded-md shadow-md p-1 min-w-40 z-50">
+        <ContextMenuItem
+          className="text-red-500 hover:bg-zinc-900 focus:bg-zinc-900 focus:text-red-500 cursor-pointer flex items-center px-2 py-1.5 rounded-sm"
+          onSelect={onClose}
+        >
+          <Trash2 className="mr-2 h-4 w-4" />
+          {t("deleteMessage")}
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 };
 
