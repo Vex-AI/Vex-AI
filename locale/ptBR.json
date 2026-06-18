@@ -12,6 +12,7 @@
   "gemini_api_key": "Chave da API do Gemini",
   "gemini_api_key_desc": "Insira sua chave do Google AI Studio para ativar a Vex online.",
   "save_key": "Salvar Chave",
+  "key_saved": "Chave Salva",
   "dynamic_avatar": "Emoji Animado de Humor",
   "stats": "Estatísticas Psicológicas",
   "achievements": "Conquistas",
