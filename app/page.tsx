@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { db } from "@/lib/vexDB";
 import { useVexMessage } from "@/hooks/useVexMessage";
-import { formatHour, scrollToBottom, sendMessage } from "@/lib/utils";
+import { formatHour, sendMessage } from "@/lib/utils";
 import { initializeAdmob, showInterstitial } from "@/lib/admob";
 import { scheduleRandomNotification } from "@/lib/notifications";
 import { generateDream } from "@/lib/psyche/DreamEngine";
@@ -110,54 +110,68 @@ const Home: React.FC = () => {
     tryDream();
   }, []);
 
-  const lastMessageCountRef = useRef(0);
+  const isAtBottomRef = useRef(true);
   const isRestoringScrollRef = useRef(false);
+  const prevMessageCountRef = useRef(0);
 
+  // Scroll to bottom reliably after content actually renders/grows
+  const scrollToBottomSafe = useCallback((behavior: ScrollBehavior = "smooth") => {
+    const el = contentRef.current;
+    if (!el) return;
+    // Double rAF ensures the browser has painted the new content before scrolling
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.scrollTo({ top: el.scrollHeight, behavior });
+      });
+    });
+  }, []);
+
+  // Restore scroll position on first load
   useEffect(() => {
-    if (!messages || !contentRef.current) return;
+    const el = contentRef.current;
+    if (!el) return;
 
-    if (lastMessageCountRef.current === 0) {
-      const savedScroll = sessionStorage.getItem("chatScrollTop");
-      const wasAtBottom = sessionStorage.getItem("chatWasAtBottom") === "true";
+    const savedScroll = sessionStorage.getItem("chatScrollTop");
+    const wasAtBottom = sessionStorage.getItem("chatWasAtBottom") !== "false";
 
-      if (wasAtBottom) {
-        requestAnimationFrame(() => {
-          if (contentRef.current) scrollToBottom(contentRef.current, "auto");
-        });
-      } else if (savedScroll !== null) {
-        isRestoringScrollRef.current = true;
-        contentRef.current.scrollTop = Number(savedScroll);
-        setTimeout(() => {
-          isRestoringScrollRef.current = false;
-        }, 50);
-      } else {
-        scrollToBottom(contentRef.current, "auto");
-      }
-    } else if (messages.length > lastMessageCountRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
-      const isNearBottom = scrollHeight - scrollTop - clientHeight < 300;
-      
-      const lastMsg = messages[messages.length - 1];
+    if (wasAtBottom || savedScroll === null) {
+      scrollToBottomSafe("auto");
+    } else {
+      isRestoringScrollRef.current = true;
+      el.scrollTop = Number(savedScroll);
+      setTimeout(() => { isRestoringScrollRef.current = false; }, 100);
+    }
+  // Run only once on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Scroll when new messages arrive
+  useEffect(() => {
+    if (!messages) return;
+    const newCount = messages.length;
+    const prevCount = prevMessageCountRef.current;
+
+    if (newCount > prevCount) {
+      const lastMsg = messages[newCount - 1];
       const isFromUser = !lastMsg.isVex;
 
-      if (isNearBottom || isFromUser || isProcessing) {
-        requestAnimationFrame(() => {
-          if (contentRef.current) scrollToBottom(contentRef.current, "smooth");
-        });
+      // Always scroll for user messages; for Vex replies only if user was near bottom
+      if (isFromUser || isAtBottomRef.current) {
+        scrollToBottomSafe(isFromUser ? "auto" : "smooth");
       }
     }
 
-    lastMessageCountRef.current = messages.length;
-  }, [messages, isProcessing]);
+    prevMessageCountRef.current = newCount;
+  }, [messages, scrollToBottomSafe]);
 
   const handleScroll = useCallback(() => {
-    if (!contentRef.current || isRestoringScrollRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
-    
+    const el = contentRef.current;
+    if (!el || isRestoringScrollRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const distFromBottom = scrollHeight - scrollTop - clientHeight;
+    isAtBottomRef.current = distFromBottom < 80;
     sessionStorage.setItem("chatScrollTop", scrollTop.toString());
-    
-    const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
-    sessionStorage.setItem("chatWasAtBottom", isAtBottom.toString());
+    sessionStorage.setItem("chatWasAtBottom", String(isAtBottomRef.current));
   }, []);
 
   const info = vexInfo?.[0];
