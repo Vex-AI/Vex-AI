@@ -1,8 +1,9 @@
 "use client";
 
-import React, { Fragment, memo, useEffect, useMemo, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Trash2 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 import { MessageProps, Style } from "@/types";
 import { getCodePoint } from "@/lib/utils";
@@ -53,13 +54,22 @@ export function MessageSkeleton({ isVex }: { isVex: boolean }) {
   );
 }
 
+const renderWithEmojis = (children: React.ReactNode) => {
+  return React.Children.map(children, (child) => {
+    if (typeof child === "string") {
+      return processContent(child).map((part, i) => (
+        <Fragment key={i}>{part}</Fragment>
+      ));
+    }
+    return child;
+  });
+};
+
 const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
   const { t } = useTranslation();
   const [style, setStyle] = useState<Style | null>(null);
   const [loading, setLoading] = useState(true);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
-
-  const processedContent = useMemo(() => processContent(content), [content]);
 
   useEffect(() => {
     const load = () => {
@@ -110,11 +120,20 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
             style={bubbleStyle}
           >
             <div style={textColor}>
-              <p className="whitespace-pre-wrap wrap-break-words leading-relaxed text-[15px]">
-                {processedContent.map((part, i) => (
-                  <Fragment key={i}>{part}</Fragment>
-                ))}
-              </p>
+              <div className="whitespace-pre-wrap wrap-break-words leading-relaxed text-[15px] space-y-2">
+                <ReactMarkdown
+                  components={{
+                    p: ({ node, ...props }) => <p>{renderWithEmojis(props.children)}</p>,
+                    strong: ({ node, ...props }) => <strong className="font-bold">{renderWithEmojis(props.children)}</strong>,
+                    em: ({ node, ...props }) => <em className="italic">{renderWithEmojis(props.children)}</em>,
+                    del: ({ node, ...props }) => <del className="line-through">{renderWithEmojis(props.children)}</del>,
+                    code: ({ node, ...props }) => <code className="bg-black/30 rounded px-1 py-0.5">{renderWithEmojis(props.children)}</code>,
+                    a: ({ node, ...props }) => <a className="underline text-blue-400 hover:text-blue-300" {...props}>{renderWithEmojis(props.children)}</a>,
+                  }}
+                >
+                  {content}
+                </ReactMarkdown>
+              </div>
 
               <small
                 className={cn(
