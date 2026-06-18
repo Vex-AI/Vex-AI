@@ -106,7 +106,7 @@ export async function initializeAnalyzer(forceReinit = false) {
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
       geminiModel = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         systemInstruction: getVexSystemPrompt(),
         safetySettings: [
           {
