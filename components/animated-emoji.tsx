@@ -1,6 +1,6 @@
 const AnimatedEmoji = ({ code }: { code: string }) => {
   return (
-    <picture style={{ verticalAlign: "middle" }}>
+    <picture className="inline-block" style={{ verticalAlign: "middle" }}>
       <source
         srcSet={`https://fonts.gstatic.com/s/e/notoemoji/latest/${code}/512.webp`}
         type="image/webp"
@@ -10,6 +10,7 @@ const AnimatedEmoji = ({ code }: { code: string }) => {
         alt="emoji"
         width="32"
         height="32"
+        className="inline-block"
         style={{ verticalAlign: "middle" }}
       />
     </picture>
