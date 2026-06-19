@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Vex AI</h1>
-  <img src="./public/Vex_320.png" width="160" height="160">
+  <img src="./public/android/play_store_512.png" width="160" height="160">
   <br><br>
   <p>Welcome to the Vex AI project!</p>
 </div>
