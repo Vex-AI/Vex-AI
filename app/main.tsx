@@ -30,6 +30,8 @@ import { ChangelogModal } from "@/components/changelog-modal";
 
 import ChatLoading from "@/components/chat-loading";
 
+import { MessagesProvider } from "@/contexts/MessagesContext";
+
 const Layout = () => {
   useEffect(() => {
     let handle: any | null = null;
@@ -50,15 +52,17 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
-      <DesktopSidebar />
-      <div className="flex-1 min-w-0 relative h-full">
-        <Suspense fallback={<ChatLoading />}>
-          <Outlet />
-        </Suspense>
+    <MessagesProvider>
+      <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
+        <DesktopSidebar />
+        <div className="flex-1 min-w-0 relative h-full">
+          <Suspense fallback={<ChatLoading />}>
+            <Outlet />
+          </Suspense>
+        </div>
+        <ChangelogModal />
       </div>
-      <ChangelogModal />
-    </div>
+    </MessagesProvider>
   );
 };
 

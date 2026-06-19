@@ -64,7 +64,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
               {info?.name ?? "Vex"}
             </span>
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <div className="relative h-4 w-16 overflow-hidden">
+            <div className="relative h-5 w-24 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={status ?? "empty"}
@@ -72,7 +72,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute left-0 text-xs text-zinc-400 font-medium lowercase"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 text-xs text-zinc-400 font-medium lowercase whitespace-nowrap"
                 >
                   {t(status ?? "offline")}
                 </motion.span>
