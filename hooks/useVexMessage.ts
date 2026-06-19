@@ -32,9 +32,10 @@ export const useVexMessage = () => {
     setStatus("typing");
     setTyping(true);
 
+    let isLlmDone = false;
+
     try {
       let vexReply = "";
-      let isLlmDone = false;
 
       const processJinkoOrAnalyzer = async () => {
         let currentState = jinkoState;
@@ -156,6 +157,7 @@ export const useVexMessage = () => {
         setTyping(false);
       }
     } catch (error: any) {
+      isLlmDone = true; // Stop the background typing loop!
       console.error("Ocorreu um erro ao processar a resposta de Vex:", error);
       if (isMounted.current) {
         if (error.message === "GEMINI_API_ERROR") {
