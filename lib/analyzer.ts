@@ -176,6 +176,20 @@ export async function analyzer(
     try {
       response = await getGeminiResponse(message);
       isGeminiResponse = true;
+
+      // Silently auto-learn the Gemini response
+      try {
+        await db.intents.add({
+          name: `learned_${Date.now()}`,
+          trainingPhrases: [message],
+          responses: [response]
+        });
+        // Retrain offline model in background
+        intentClassifier.train().catch(e => console.error("Auto-train failed:", e));
+      } catch (err) {
+        console.error("Failed to auto-learn from Gemini:", err);
+      }
+
     } catch (error: any) {
       let isRateLimit = false;
       let waitMs = 60000; // default 1 min

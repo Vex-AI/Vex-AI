@@ -23,6 +23,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2, ArrowUp } from "lucide-react";
 import ChatHeader from "@/components/chat-header";
 import { loadIntentsForLanguage } from "@/lib/IntentManager";
+import { refreshClassifier } from "@/lib/analyzer";
+import { toast } from "sonner";
 import { changeLanguage } from "i18next";
 import EmptyState from "@/components/empty-state";
 import { GeminiPillToggle } from "@/components/gemini-pill-toggle";
