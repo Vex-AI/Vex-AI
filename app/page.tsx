@@ -111,7 +111,7 @@ const Home: React.FC = () => {
         await db.vexInfo.add({
           id: 1,
           name: "Vex",
-          profileImage: "/Vex_320.png",
+          profileImage: "/android/play_store_512.png",
         });
       }
 

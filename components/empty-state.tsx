@@ -21,7 +21,7 @@ const EmptyState = ({ onSuggestion }: EmptyStateProps) => {
       {/* Avatar */}
       <div className="relative mb-5">
         <img
-          src="/Vex_320.png"
+          src="/android/play_store_512.png"
           alt="Vex"
           className="w-24 h-24 rounded-full object-cover ring-2 ring-white/10 shadow-xl"
           draggable={false}

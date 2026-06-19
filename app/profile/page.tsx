@@ -57,7 +57,7 @@ export default function EditProfile() {
   const reset = async () => {
     await db.vexInfo.update(1, {
       name: "Vex",
-      profileImage: "/Vex_320.png",
+      profileImage: "/android/play_store_512.png",
     });
   };
 
@@ -82,7 +82,7 @@ export default function EditProfile() {
           <div className="relative group">
             <div className="absolute inset-0 bg-pink-500/20 rounded-full opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
             <img
-              src={vexInfo?.profileImage || "/Vex_320.png"}
+              src={vexInfo?.profileImage || "/android/play_store_512.png"}
               className="relative w-32 h-32 rounded-full object-cover border-4 border-[#0d0d0d] shadow-2xl transition-transform duration-500 group-hover:scale-105"
             />
             

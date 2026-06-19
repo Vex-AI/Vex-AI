@@ -129,7 +129,7 @@ export class vexDB extends Dexie {
       await tx.table("vexInfo").add({
         id: 1,
         name: "Vex",
-        profileImage: "/Vex_320.png",
+        profileImage: "/android/play_store_512.png",
       });
 
       const intentsToSeedModule = await import(

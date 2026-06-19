@@ -51,7 +51,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
             {!info ? (
               <div className="w-full h-full animate-pulse bg-neutral-800" />
             ) : !useDynamicAvatar ? (
-              <img src={info.profileImage || "/Vex_320.png"} className="w-full h-full object-cover" />
+              <img src={info.profileImage || "/android/play_store_512.png"} className="w-full h-full object-cover" />
             ) : (
               <div className="transform scale-[0.9] flex items-center justify-center">
                 <AnimatedEmoji code={activeEmojiCode} />
