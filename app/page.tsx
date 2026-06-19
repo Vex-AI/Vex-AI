@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useTranslation } from "react-i18next";
 
@@ -191,33 +192,67 @@ const Home: React.FC = () => {
     sendVexMessage(text);
   }, [sendVexMessage, isProcessing]);
 
+  const messagesArr = messages || [];
+
+  const virtualizer = useVirtualizer({
+    count: messagesArr.length,
+    getScrollElement: () => contentRef.current,
+    estimateSize: () => 100,
+    overscan: 10,
+  });
+
+  const virtualItems = virtualizer.getVirtualItems();
+
   const renderedMessages = useMemo(() => {
-    if (!messages || messages.length === 0) {
+    if (messagesArr.length === 0) {
       return <EmptyState onSuggestion={handleSuggestion} />;
     }
 
-    return messages.map((msg, i) => {
-      const prev = messages[i - 1];
-      const showDate =
-        prev &&
-        new Date(msg.date).toDateString() !==
-          new Date(prev.date).toDateString();
+    return (
+      <div
+        style={{
+          height: `${virtualizer.getTotalSize()}px`,
+          width: "100%",
+          position: "relative",
+        }}
+      >
+        {virtualItems.map((virtualRow) => {
+          const i = virtualRow.index;
+          const msg = messagesArr[i];
+          const prev = messagesArr[i - 1];
+          const showDate =
+            prev &&
+            new Date(msg.date).toDateString() !==
+              new Date(prev.date).toDateString();
 
-      return (
-        <div key={msg.id ?? `${msg.date}-${i}`}>
-          {showDate && <DateSeparator date={msg.date} />}
-
-          <Message
-            content={msg.content}
-            isVex={msg.isVex}
-            hour={formatHour(msg.hour)}
-            date={msg.date}
-            onClose={() => msg.id != null && setPendingDeleteId(msg.id)}
-          />
-        </div>
-      );
-    });
-  }, [messages, handleSuggestion]);
+          return (
+            <div
+              key={virtualRow.key}
+              data-index={virtualRow.index}
+              ref={virtualizer.measureElement}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${virtualRow.start}px)`,
+                paddingBottom: "16px",
+              }}
+            >
+              {showDate && <DateSeparator date={msg.date} />}
+              <Message
+                content={msg.content}
+                isVex={msg.isVex}
+                hour={formatHour(msg.hour)}
+                date={msg.date}
+                onClose={() => msg.id != null && setPendingDeleteId(msg.id)}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [messagesArr, virtualItems, virtualizer, handleSuggestion]);
 
 
 
@@ -231,9 +266,9 @@ const Home: React.FC = () => {
         onScroll={handleScroll}
         className="flex-1 overflow-y-auto px-3 pt-20"
       >
-        <div className="max-w-3xl mx-auto w-full space-y-4 pb-6">
+        <div className="max-w-3xl mx-auto w-full pb-6">
           {renderedMessages}
-          {isProcessing && <TypingIndicator />}
+          {isProcessing && <div className="mt-4"><TypingIndicator /></div>}
         </div>
       </main>
 

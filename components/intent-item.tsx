@@ -33,7 +33,7 @@ export default function IntentItem({
     >
       <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/5 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl pointer-events-none" />
       
-      <div className="relative bg-white/[0.03] border border-white/10 shadow-lg rounded-3xl p-5 sm:p-6 backdrop-blur-md overflow-hidden">
+      <div className="relative bg-white/[0.03] border border-white/10 shadow-lg rounded-3xl p-5 sm:p-6 overflow-hidden">
         
         {/* Header */}
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">

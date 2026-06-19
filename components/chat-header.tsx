@@ -34,7 +34,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
     <header
       className="
         absolute top-0 left-0 w-full z-40
-        backdrop-blur-xl bg-background/80
+        bg-background/95
         border-b border-white/5
       "
     >

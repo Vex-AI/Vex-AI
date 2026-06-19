@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { App } from "@capacitor/app";
 import {
   RouterProvider,
@@ -13,18 +13,18 @@ import { Toaster } from "sonner";
 
 import "@/index.css";
 
-import Home from "@/app/page";
-import EditProfile from "@/app/profile/page";
-import IntentPage from "@/app/intents/page";
-import Functions from "@/app/functions/page";
-import LanguageSelector from "@/app/language/page";
-import Customize from "@/app/customize/page";
-import ConsentPage from "@/app/consent/page";
-import StreakPage from "@/app/streak/page";
-import StatsPage from "@/app/stats/page";
-import SettingsPage from "@/app/settings/page";
-import JinkoPage from "@/app/jinko/page";
-import AchievementsPage from "@/app/achievements/page";
+const Home = lazy(() => import("@/app/page"));
+const EditProfile = lazy(() => import("@/app/profile/page"));
+const IntentPage = lazy(() => import("@/app/intents/page"));
+const Functions = lazy(() => import("@/app/functions/page"));
+const LanguageSelector = lazy(() => import("@/app/language/page"));
+const Customize = lazy(() => import("@/app/customize/page"));
+const ConsentPage = lazy(() => import("@/app/consent/page"));
+const StreakPage = lazy(() => import("@/app/streak/page"));
+const StatsPage = lazy(() => import("@/app/stats/page"));
+const SettingsPage = lazy(() => import("@/app/settings/page"));
+const JinkoPage = lazy(() => import("@/app/jinko/page"));
+const AchievementsPage = lazy(() => import("@/app/achievements/page"));
 import { ThemeProvider } from "@/components/theme-provider";
 import { ChangelogModal } from "@/components/changelog-modal";
 
@@ -53,7 +53,9 @@ const Layout = () => {
     <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
       <DesktopSidebar />
       <div className="flex-1 min-w-0 relative h-full">
-        <Outlet />
+        <Suspense fallback={<ChatLoading />}>
+          <Outlet />
+        </Suspense>
       </div>
       <ChangelogModal />
     </div>

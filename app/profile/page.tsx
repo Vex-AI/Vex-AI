@@ -80,7 +80,7 @@ export default function EditProfile() {
           <div className="absolute inset-0 bg-gradient-to-b from-pink-500/5 to-transparent pointer-events-none" />
           
           <div className="relative group">
-            <div className="absolute inset-0 bg-pink-500/20 blur-2xl rounded-full opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-pink-500/20 rounded-full opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
             <img
               src={vexInfo?.profileImage || "/Vex_320.png"}
               className="relative w-32 h-32 rounded-full object-cover border-4 border-[#0d0d0d] shadow-2xl transition-transform duration-500 group-hover:scale-105"

@@ -75,7 +75,7 @@ export default function LanguageSelector() {
                 className="flex flex-col items-center justify-center py-12 gap-4"
               >
                 <div className="relative">
-                  <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full" />
+                  <div className="absolute inset-0 bg-indigo-500/20 rounded-full" />
                   <Loader2 className="w-10 h-10 animate-spin text-indigo-400 relative z-10" />
                 </div>
                 <p className="text-sm font-medium text-indigo-300 animate-pulse">{t("loading_model")}</p>

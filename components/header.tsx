@@ -17,7 +17,7 @@ const Header = ({ title, description, children }: HeaderProps) => {
   const displayTitle = title || t("back");
 
   return (
-    <header className="flex items-center gap-4 px-4 py-5 border-b border-white/5 sticky top-0 bg-[#0d0d0d]/80 backdrop-blur-md z-30">
+    <header className="flex items-center gap-4 px-4 py-5 border-b border-white/5 sticky top-0 bg-[#0d0d0d]/95 z-30">
       <Button
         variant="ghost"
         size="icon"

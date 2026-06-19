@@ -28,7 +28,7 @@ export default function AchievementsPage() {
 
   return (
     <div className="flex flex-col h-screen bg-[#0d0d0d] text-white overflow-y-auto">
-      <header className="flex items-center gap-4 px-4 py-5 border-b border-white/10 sticky top-0 bg-[#0d0d0d]/80 backdrop-blur-md z-10">
+      <header className="flex items-center gap-4 px-4 py-5 border-b border-white/10 sticky top-0 bg-[#0d0d0d]/95 z-10">
         <Button variant="ghost" size="icon" className="md:hidden" onClick={() => navigate("/home", { replace: true })}>
           <ArrowLeft className="w-5 h-5" />
         </Button>

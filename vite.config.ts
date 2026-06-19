@@ -17,6 +17,8 @@ export default defineConfig({
   ],
   root: "./",
   build: {
+    target: "esnext",
+    minify: "terser",
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {

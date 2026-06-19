@@ -48,7 +48,7 @@ export const DesktopSidebar = () => {
             variant="ghost" 
             size="icon" 
             onClick={() => setIsCollapsed(false)}
-            className="text-zinc-400 hover:text-zinc-100 bg-[#0a0a0a]/50 backdrop-blur-md border border-white/5 shadow-lg h-9 w-9"
+            className="text-zinc-400 hover:text-zinc-100 bg-[#0a0a0a]/90 border border-white/5 shadow-lg h-9 w-9"
           >
             <PanelLeftOpen className="w-5 h-5" />
           </Button>

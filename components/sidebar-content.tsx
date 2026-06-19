@@ -70,7 +70,7 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
           </AlertDialogTrigger>
 
           <AlertDialogContent
-            className="border-none bg-zinc-900/60 backdrop-blur-xl text-zinc-100 shadow-2xl rounded-2xl p-6"
+            className="border-none bg-zinc-900/95 text-zinc-100 shadow-2xl rounded-2xl p-6"
           >
             <AlertDialogHeader>
               <AlertDialogTitle className="text-lg font-semibold text-zinc-100">
