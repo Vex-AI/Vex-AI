@@ -26,7 +26,7 @@ export default function EditProfile() {
   // Dynamic avatar state
   const [dynamicAvatar, setDynamicAvatar] = useState(() => {
     const val = localStorage.getItem("dynamicAvatar");
-    return val !== "false"; // true by default
+    return val === "true"; // false by default
   });
 
   const toggleDynamicAvatar = (checked: boolean) => {

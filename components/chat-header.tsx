@@ -8,11 +8,11 @@ import AnimatedEmoji from "./animated-emoji";
 const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: string }, status?: string })=> {
   const currentEmotion = useEmotionStore((state) => state.currentEmotion);
   const isTyping = useEmotionStore((state) => state.isTyping);
-  const [useDynamicAvatar, setUseDynamicAvatar] = useState(true);
+  const [useDynamicAvatar, setUseDynamicAvatar] = useState(false);
 
   useEffect(() => {
     const handleStorageChange = () => {
-      setUseDynamicAvatar(localStorage.getItem("dynamicAvatar") !== "false");
+      setUseDynamicAvatar(localStorage.getItem("dynamicAvatar") === "true");
     };
     
     handleStorageChange(); // initial check
