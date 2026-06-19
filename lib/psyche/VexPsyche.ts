@@ -153,7 +153,8 @@ export async function processMessage(userMessage: string): Promise<void> {
  */
 export async function applyPsycheToResponse(
   originalResponse: string,
-  userMessage: string
+  userMessage: string,
+  isGeminiResponse: boolean = false
 ): Promise<string> {
   const state = await initialize();
   const sentiment = await analyzeSentiment(userMessage);
@@ -191,7 +192,7 @@ export async function applyPsycheToResponse(
     }
   }
 
-  return modifyResponse(originalResponse, state, memoryContext, traumaContext, internalOverride);
+  return modifyResponse(originalResponse, state, memoryContext, traumaContext, internalOverride, isGeminiResponse);
 }
 
 /**

@@ -10,7 +10,8 @@ export function modifyResponse(
   psyche: VexPsycheState,
   memoryContext: string | null,
   traumaContext: string | null,
-  internalOverride: string | null
+  internalOverride: string | null,
+  isGeminiResponse: boolean = false
 ): string {
   const { emotions, mood, personality, relationship } = psyche;
   const relLevel = getRelationshipLevel(relationship);
@@ -22,6 +23,17 @@ export function modifyResponse(
       return `${traumaContext} E não fale mais comigo assim.`;
     }
     return `${traumaContext} ... ${makeCold(originalResponse, emotions.anger)}`;
+  }
+
+  // If Gemini generated the response, it already knows about Vex's internal state
+  // and relationship through the system prompt. We don't need to manually inject
+  // canned phrases like "Esse assunto está meio chato", or prefixes/suffixes.
+  // We only inject the hardcoded contexts.
+  if (isGeminiResponse) {
+    let finalResponse = originalResponse;
+    if (memoryContext) finalResponse = `${memoryContext} ${finalResponse}`;
+    if (traumaContext) finalResponse = `${traumaContext} ${finalResponse}`;
+    return finalResponse;
   }
 
   // === INTERNAL STATE OVERRIDE ===

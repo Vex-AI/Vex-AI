@@ -170,10 +170,12 @@ export async function analyzer(
     localStorage.getItem("geminiEnabled") === "true" && geminiModel;
 
   let response: string;
+  let isGeminiResponse = false;
 
   if (isGeminiEnabled) {
     try {
       response = await getGeminiResponse(message);
+      isGeminiResponse = true;
     } catch (error) {
       const strictModeStr = localStorage.getItem("geminiStrictError");
       const isStrictMode = strictModeStr === null ? true : strictModeStr === "true";
@@ -190,7 +192,7 @@ export async function analyzer(
   }
 
   // Apply psychological state to modify the response
-  response = await VexPsyche.applyPsycheToResponse(response, message);
+  response = await VexPsyche.applyPsycheToResponse(response, message, isGeminiResponse);
 
   // Sanitize kaomoji backticks that break markdown rendering (the "mancha preta" bug)
   response = response
