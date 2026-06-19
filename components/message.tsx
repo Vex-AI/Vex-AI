@@ -56,18 +56,12 @@ const renderWithEmojis = (children: React.ReactNode) => {
 
 const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
   const { t } = useTranslation();
-  const [style, setStyle] = useState<Style | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const userStyle = localStorage.getItem("userStyle");
-    const vexStyle = localStorage.getItem("vexStyle");
-    const raw = (isVex && vexStyle) || (!isVex && userStyle) || "null";
-    setStyle(JSON.parse(raw));
-    setLoading(false);
-  }, [isVex]);
-
-  if (loading) return <MessageSkeleton isVex={isVex} />;
+  
+  // Calculate style synchronously to avoid layout shifts (scroll teleportation)
+  const userStyle = typeof window !== 'undefined' ? localStorage.getItem("userStyle") : null;
+  const vexStyle = typeof window !== 'undefined' ? localStorage.getItem("vexStyle") : null;
+  const raw = (isVex && vexStyle) || (!isVex && userStyle) || "null";
+  const style: Style | null = JSON.parse(raw);
 
   const bubbleStyle = style
     ? {

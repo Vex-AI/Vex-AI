@@ -87,15 +87,21 @@ export const useVexMessage = () => {
         return reply;
       })();
 
+      let timeSpentTyping = 0;
+
       // Start organic typing animation loop while waiting for LLM
       const typingAnimationPromise = (async () => {
         let elapsed = 0;
+        let isCurrentlyTyping = true; // local flag since 'status' state might be stale in this closure
+        
         while (!isLlmDone) {
           await new Promise(r => setTimeout(r, 100));
           elapsed += 100;
+          if (isCurrentlyTyping) timeSpentTyping += 100;
           
           // Every ~2.5 seconds, 35% chance to stop typing (thinking/pausing)
           if (elapsed > 2500 && Math.random() < 0.35) {
+             isCurrentlyTyping = false;
              setStatus("online");
              setTyping(false);
              
@@ -109,6 +115,7 @@ export const useVexMessage = () => {
              
              // Resume typing if LLM still working
              if (!isLlmDone) {
+                 isCurrentlyTyping = true;
                  setStatus("typing");
                  setTyping(true);
              }
@@ -126,11 +133,14 @@ export const useVexMessage = () => {
       // Final typing burst based on actual human typing speed for the specific text
       const targetTypingTime = calculateOrganicTypingTime(vexReply);
       
-      // We already animated during LLM generation, but we do a final organic burst.
-      // This final burst ensures the delay scales with message size, maxed at 2.5s.
+      // Calculate how much MORE time we need to type to reach the human target.
+      // We clamp it so it's not absurdly long (max 6 seconds of final burst), but 
+      // guarantees a massive text takes a proper amount of time.
+      const remainingTypingTime = Math.max(800, targetTypingTime - timeSpentTyping);
+      const finalBurst = Math.min(remainingTypingTime, 6000); 
+      
       setStatus("typing");
       setTyping(true);
-      const finalBurst = Math.min(targetTypingTime * 0.6, 2500); 
       await new Promise(r => setTimeout(r, finalBurst));
 
       if (isMounted.current) {
