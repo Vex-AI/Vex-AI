@@ -15,23 +15,12 @@ export interface ChangelogRelease {
 
 export const changelogHistory: ChangelogRelease[] = [
   {
-    version: "1.6.1",
-    date: new Date().toISOString().split('T')[0],
-    features: [
-      "Gemini Learning System: Vex now auto-learns new intents silently in the background when processing successful Gemini API responses without freezing the UI.",
-      "NLP Engine Overhaul: Complete rewrite of the local offline TF-IDF engine. Introduced language-aware stemming, Bigram (n-grams) support, and Slang normalization maps.",
-      "Hybrid Intent Scoring: Replaced strict exact-match with a robust Hybrid scoring system combining Cosine Similarity and Keyword Overlap (Jaccard)."
-    ],
-    fixes: [],
-    improvements: [
-      "AdMob Interstitials: Implemented a 5-minute strict cooldown and reduced the spawn probability to 25% even after the cooldown expires, drastically reducing ad spam.",
-      "NLP Memory Optimization: Replaced O(n*m) Levenshtein matrix with O(min(n, m)) rolling array to prevent memory leaks on mobile devices."
-    ]
-  },
-  {
     version: "1.6.0",
     date: "2026-06-17",
     features: [
+      "Gemini Learning System: Vex now auto-learns new intents silently in the background when processing successful Gemini API responses without freezing the UI.",
+      "NLP Engine Overhaul: Complete rewrite of the local offline TF-IDF engine. Introduced language-aware stemming, Bigram (n-grams) support, and Slang normalization maps.",
+      "Hybrid Intent Scoring: Replaced strict exact-match with a robust Hybrid scoring system combining Cosine Similarity and Keyword Overlap (Jaccard).",
       "Offline Dream System (DreamEngine): Vex now has an autonomous offline life. If the app is closed for more than 6 hours, she will inject an organic dream message upon return, influenced by her latest psychological state.",
       "Gamification & Achievements System: Introduced an interactive badge system with 8 initial unlockable trophies (e.g., Animal Master, Dead Battery, Chatterbox) tracked securely via Zustand persist.",
       "Interactive Badges Gallery: A new `/achievements` dashboard to track unlocked and mysterious locked badges with beautiful dark mode UI.",
@@ -111,6 +100,8 @@ export const changelogHistory: ChangelogRelease[] = [
       }
     ],
     improvements: [
+      "AdMob Interstitials: Implemented a 5-minute strict cooldown and reduced the spawn probability to 25% even after the cooldown expires, drastically reducing ad spam.",
+      "NLP Memory Optimization: Replaced O(n*m) Levenshtein matrix with O(min(n, m)) rolling array to prevent memory leaks on mobile devices.",
       "Jinko Table Styling: Enforced grid-cols-1 safety constraints to prevent horizontal overflow on large datasets.",
       "Deep UI Cleanup: Systematically removed glow shadow effects and decorative gradients for a cleaner, modern look.",
       "Message Bubble Aesthetics: Refined border radius, padding, and typography across the chat.",
