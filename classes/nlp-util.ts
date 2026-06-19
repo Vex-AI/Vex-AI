@@ -13,6 +13,16 @@ const stopWords: Record<string, Set<string>> = {
     "have", "has", "had", "do", "does", "did", "to", "from", "up", "down", "in", "out", "on", "off",
     "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how",
     "like", "so", "um", "uh", "hey", "hi", "hello", "vex", "oh", "ah", "well"
+  ]),
+  ja: new Set([
+    "の", "に", "は", "を", "た", "が", "で", "て", "と", "し", "れ", "さ", "ある", "いる", "も", "する", "から",
+    "な", "こと", "として", "い", "や", "れる", "など", "なっ", "ない", "この", "ため", "その", "あっ", "よう",
+    "また", "もの", "という", "あり", "まで", "られ", "なる", "へ", "か", "だ", "これ", "によって", "により", "おり",
+    "より", "による", "ず", "なり", "られる", "において", "ば", "なかっ", "なく", "しかし", "について", "せ", "だっ",
+    "その後", "できる", "それ", "う", "ので", "なお", "のみ", "でき", "き", "つ", "における", "および", "いう", "さらに",
+    "でも", "ら", "たり", "その他", "に関する", "たち", "ます", "ん", "なら", "に対して", "特に", "せる", "及び",
+    "これら", "とき", "では", "にて", "ほか", "ながら", "うち", "そして", "とともに", "ただし", "かつて", "それぞれ", "または",
+    "お", "ず", "き", "vex", "あ", "え", "お", "ね", "よ", "わ", "です", "ます", "だよ", "だね"
   ])
 };
 
@@ -102,11 +112,18 @@ export function cleanAndTokenize(text: string, language?: string): string[] {
   const withoutAccents = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const lowercased = withoutAccents.toLowerCase();
   
-  const rawTokens = lowercased.match(/\b[a-z0-9]+\b/g) || [];
+  let rawTokens: string[] = [];
+  if (langKey === "ja") {
+    // Japanese tokenization: split by spaces, punctuation, or just character by character for Bi-grams
+    rawTokens = text.replace(/[\s\u3000,\.\?！。、]/g, "").split("");
+  } else {
+    // English/Portuguese: split by word characters
+    rawTokens = lowercased.match(/\p{L}+|\d+/gu) || [];
+  }
   
   const baseTokens = rawTokens
     .map(token => slangMap[token] || token) // Slang normalization
-    .filter((token) => !currentStopWords.has(token) && token.length > 1)
+    .filter((token) => !currentStopWords.has(token) && (langKey === "ja" || token.length > 1))
     .map((token) => stemWord(token, langKey));
 
   const finalTokens = generateNgrams(baseTokens);

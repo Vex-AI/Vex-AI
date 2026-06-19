@@ -29,6 +29,7 @@ function getVexSystemPrompt(): string {
   const normalizeLanguageTag = (lang: string): string => {
     if (lang === "enUS") return "en-US";
     if (lang === "ptBR") return "pt-BR";
+    if (lang === "ja") return "ja-JP";
     // Add other conversions if needed, otherwise return the original
     return lang;
   };

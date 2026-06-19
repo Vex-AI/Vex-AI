@@ -67,6 +67,13 @@ export function getTimeSleepingText(lastInteraction: number): string {
   const hours = Math.floor((now - lastInteraction) / (1000 * 60 * 60));
   const lang = i18n.language || "enUS";
 
+  if (lang === "ja") {
+    if (hours >= 48) return "なんだか、何日も寝ていた気がする...";
+    if (hours >= 24) return "一日中寝てたみたい...";
+    if (hours >= 12) return "わぁ、たくさん寝ちゃった...";
+    return "いい時間寝てたな...";
+  }
+
   if (lang === "ptBR") {
     if (hours >= 48) return "Dormi por dias, parece...";
     if (hours >= 24) return "Dormi o dia inteiro...";

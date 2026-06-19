@@ -12,6 +12,7 @@ import Header from "@/components/header";
 const LANGS = [
   { id: "enUS", label: "english", flag: "🇺🇸" },
   { id: "ptBR", label: "portuguese", flag: "🇧🇷" },
+  { id: "ja", label: "japanese", flag: "🇯🇵" },
 ];
 
 export default function LanguageSelector() {

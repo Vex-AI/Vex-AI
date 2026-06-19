@@ -2,8 +2,10 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import translationsENUS from "../locale/enUS.json";
 import translationsPTBR from "../locale/ptBR.json";
+import translationsJA from "../locale/ja.json";
 import notificationMessagesENUS from "../notifications/enUS.json"
 import notificationMessagesPTBR from "../notifications/ptBR.json"
+import notificationMessagesJA from "../notifications/ja.json"
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -17,6 +19,12 @@ i18n.use(initReactI18next).init({
       translation: {
         ...translationsPTBR,
         notifications: notificationMessagesPTBR, 
+      },
+    },
+    ja: {
+      translation: {
+        ...translationsJA,
+        notifications: notificationMessagesJA, 
       },
     },
   },
