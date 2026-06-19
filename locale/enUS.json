@@ -150,28 +150,20 @@
     "delete_all": "Delete all",
     "title": "Intent Panel",
     "description": "Teach new phrases, contexts, and responses to Vex.",
-
     "write_intent_name": "Write the intent name",
     "write_training_phrase": "Write a training phrase",
     "write_intent_response": "Write a response",
-
     "intent_already_exists": "This intent already exists",
     "intent_added_success": "Intent added successfully",
-
     "all_intents_deleted": "All intents deleted",
-
     "training_ai_start": "Starting retraining...",
     "training_ai_success": "Retraining completed",
-
     "confirmation": "Confirm?",
     "are_you_sure_delete_all_intents": "Are you sure you want to delete all intents? This action is irreversible.",
-
     "add_new_intent_title": "Add new intent(action)",
-
     "intent_name_placeholder": "Ex: greeting, farewell",
     "initial_phrase_placeholder": "Ex: hi, how are you?",
     "initial_response_placeholder": "Ex: Hello! How can I help?",
-
     "add_intent": "Add Intent",
     "retrain_ai": "Retrain AI",
     "delete_all_intents": "Delete All Intents",
@@ -196,11 +188,9 @@
     "open_menu": "Open menu",
     "close_menu": "Close menu"
   },
-
   "are_you_sure_title": "Are you sure?",
   "are_you_sure_clear_chat": "Are you sure you want to delete all history? This action is irreversible.",
   "clear": "Delete",
-
   "response_modal": {
     "title": "Edit Responses",
     "placeholder": "Type a new response",
@@ -217,11 +207,10 @@
   "actions": "Actions",
   "config": "Config",
   "enable_gemini": "Enable gemini",
-  "choose_profile":"Choose profile",
-  "bubble_style":"Bubble style",
-  "colors":"Color",
-  "backgroud_color":"Background color",
-  
+  "choose_profile": "Choose profile",
+  "bubble_style": "Bubble style",
+  "colors": "Color",
+  "backgroud_color": "Background color",
   "notification": {
     "title": "Notification Consent",
     "header": "We'd like to send you notifications!",
@@ -233,11 +222,60 @@
     "permissionRejected": "Notification permission was rejected."
   },
   "emotions": {
-    "happy": ["happy", "glad", "awesome", "great", "thanks", "good", "thank you", "excellent", "excited", "happy!", "nice"],
-    "sad": ["sad", "sorry", "bad", "cry", "upset", "unhappy", "depressed", "sadness"],
-    "angry": ["angry", "hate", "mad", "annoyed", "furious", "irritated", "shut up"],
-    "thinking": ["what", "how", "why", "who", "surprise", "wonder", "really", "think", "maybe", "question"],
-    "loving": ["love", "like", "cute", "heart", "beautiful", "dear", "lovely", "love you"]
+    "happy": [
+      "happy",
+      "glad",
+      "awesome",
+      "great",
+      "thanks",
+      "good",
+      "thank you",
+      "excellent",
+      "excited",
+      "happy!",
+      "nice"
+    ],
+    "sad": [
+      "sad",
+      "sorry",
+      "bad",
+      "cry",
+      "upset",
+      "unhappy",
+      "depressed",
+      "sadness"
+    ],
+    "angry": [
+      "angry",
+      "hate",
+      "mad",
+      "annoyed",
+      "furious",
+      "irritated",
+      "shut up"
+    ],
+    "thinking": [
+      "what",
+      "how",
+      "why",
+      "who",
+      "surprise",
+      "wonder",
+      "really",
+      "think",
+      "maybe",
+      "question"
+    ],
+    "loving": [
+      "love",
+      "like",
+      "cute",
+      "heart",
+      "beautiful",
+      "dear",
+      "lovely",
+      "love you"
+    ]
   },
   "about": "About / What's New",
   "changelog_desc": "See everything new in the latest version of the app.",
@@ -260,27 +298,111 @@
     "regex_maybe_yes": "\\b(maybe|probably|i think so)\\b",
     "regex_dont_know": "\\b(i don't know|not sure|no idea|depends)\\b",
     "questions": {
-      "q1": ["Is it a mammal?", "Is this animal a mammal?", "Can it be classified as a mammal?"],
-      "q2": ["Is it a bird?", "Is this animal a bird?", "Can it be classified as a bird?"],
-      "q3": ["Is it a reptile or amphibian?", "Is this animal a reptile or amphibian?", "Can it be classified as a reptile or amphibian?"],
-      "q4": ["Is it an insect or arachnid?", "Is this animal an insect or arachnid?", "Can it be classified as an insect or arachnid?"],
-      "q5": ["Can it fly?", "Does this animal have the ability to fly?", "Is it capable of flying?"],
-      "q6": ["Does it live mostly in water?", "Is its primary habitat the water?", "Does it spend most of its time in water?"],
-      "q7": ["Is it a common pet?", "Is it commonly kept as a pet?", "Is it considered a pet?"],
-      "q8": ["Is it a predator (carnivore)?", "Is it a carnivorous animal?", "Is its diet strictly carnivorous?"],
-      "q9": ["Is it larger than an adult human?", "Does its size exceed that of an adult human?", "Is it physically larger than an adult person?"],
-      "q10": ["Does it have four legs?", "Does it possess four legs?", "Is it a four-legged animal?"],
-      "q11": ["Does it have a visible tail?", "Does it possess a visible tail?", "Does it have a tail?"],
-      "q12": ["Does it produce dangerous venom?", "Is it a venomous animal?", "Does it possess any dangerous venom?"],
-      "q13": ["Does it have fur or hair?", "Does its body have fur?", "Does it possess fur?"],
-      "q14": ["Does it have feathers?", "Does it possess feathers?", "Does its body have feathers?"],
-      "q15": ["Does it lay eggs?", "Does this animal lay eggs?", "Are they born from eggs?"],
-      "q16": ["Does it live in the forest or jungle?", "Does it live in jungles or forests?", "Is its natural habitat the forest?"],
-      "q17": ["Does it have horns?", "Does it possess horns?", "Does it have horns on its head?"],
-      "q18": ["Is it a farm animal?", "Is it usually raised on farms?", "Is it a typical farm animal?"],
-      "q19": ["Is it a typical savanna or safari animal?", "Does it live in the savanna?", "Is it commonly found in safaris or savannas?"],
-      "q20": ["Does it usually live in ice or very cold climates?", "Does it live in extremely cold climates?", "Is its habitat in ice or snow?"],
-      "q21": ["Does it bark?", "Does it produce barking sounds?", "Is it known to bark?"]
+      "q1": [
+        "Is it a mammal?",
+        "Is this animal a mammal?",
+        "Can it be classified as a mammal?"
+      ],
+      "q2": [
+        "Is it a bird?",
+        "Is this animal a bird?",
+        "Can it be classified as a bird?"
+      ],
+      "q3": [
+        "Is it a reptile or amphibian?",
+        "Is this animal a reptile or amphibian?",
+        "Can it be classified as a reptile or amphibian?"
+      ],
+      "q4": [
+        "Is it an insect or arachnid?",
+        "Is this animal an insect or arachnid?",
+        "Can it be classified as an insect or arachnid?"
+      ],
+      "q5": [
+        "Can it fly?",
+        "Does this animal have the ability to fly?",
+        "Is it capable of flying?"
+      ],
+      "q6": [
+        "Does it live mostly in water?",
+        "Is its primary habitat the water?",
+        "Does it spend most of its time in water?"
+      ],
+      "q7": [
+        "Is it a common pet?",
+        "Is it commonly kept as a pet?",
+        "Is it considered a pet?"
+      ],
+      "q8": [
+        "Is it a predator (carnivore)?",
+        "Is it a carnivorous animal?",
+        "Is its diet strictly carnivorous?"
+      ],
+      "q9": [
+        "Is it larger than an adult human?",
+        "Does its size exceed that of an adult human?",
+        "Is it physically larger than an adult person?"
+      ],
+      "q10": [
+        "Does it have four legs?",
+        "Does it possess four legs?",
+        "Is it a four-legged animal?"
+      ],
+      "q11": [
+        "Does it have a visible tail?",
+        "Does it possess a visible tail?",
+        "Does it have a tail?"
+      ],
+      "q12": [
+        "Does it produce dangerous venom?",
+        "Is it a venomous animal?",
+        "Does it possess any dangerous venom?"
+      ],
+      "q13": [
+        "Does it have fur or hair?",
+        "Does its body have fur?",
+        "Does it possess fur?"
+      ],
+      "q14": [
+        "Does it have feathers?",
+        "Does it possess feathers?",
+        "Does its body have feathers?"
+      ],
+      "q15": [
+        "Does it lay eggs?",
+        "Does this animal lay eggs?",
+        "Are they born from eggs?"
+      ],
+      "q16": [
+        "Does it live in the forest or jungle?",
+        "Does it live in jungles or forests?",
+        "Is its natural habitat the forest?"
+      ],
+      "q17": [
+        "Does it have horns?",
+        "Does it possess horns?",
+        "Does it have horns on its head?"
+      ],
+      "q18": [
+        "Is it a farm animal?",
+        "Is it usually raised on farms?",
+        "Is it a typical farm animal?"
+      ],
+      "q19": [
+        "Is it a typical savanna or safari animal?",
+        "Does it live in the savanna?",
+        "Is it commonly found in safaris or savannas?"
+      ],
+      "q20": [
+        "Does it usually live in ice or very cold climates?",
+        "Does it live in extremely cold climates?",
+        "Is its habitat in ice or snow?"
+      ],
+      "q21": [
+        "Does it bark?",
+        "Does it produce barking sounds?",
+        "Is it known to bark?"
+      ]
     }
   },
   "typing": "typing...",
@@ -291,5 +413,20 @@
   "suggestion_dreams": "Tell me about your dreams",
   "suggestion_mood": "How are you today?",
   "suggestion_music": "Recommend me a song?",
-  "suggestion_surprise": "Surprise me with something cool!"
+  "suggestion_surprise": "Surprise me with something cool!",
+  "advanced_gemini_settings": "Advanced Gemini Settings",
+  "advanced_gemini_desc": "Adjust generation parameters and safety filters for the model.",
+  "temperature": "Temperature",
+  "temperature_desc": "Controls creativity. Higher values make responses more varied.",
+  "top_k": "Top K",
+  "top_p": "Top P",
+  "safety_settings": "Safety Filters",
+  "harassment": "Harassment",
+  "hate_speech": "Hate Speech",
+  "sexually_explicit": "Sexually Explicit",
+  "dangerous_content": "Dangerous Content",
+  "block_none": "Block None",
+  "block_only_high": "Block Only High",
+  "block_medium_and_above": "Block Medium and Above",
+  "block_low_and_above": "Block Low and Above"
 }
