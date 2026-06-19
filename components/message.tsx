@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, memo, useEffect, useState } from "react";
+import React, { Fragment, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Trash2, RefreshCcw } from "lucide-react";
 import ReactMarkdown from "react-markdown";

@@ -13,6 +13,10 @@ const config: CapacitorConfig = {
     EdgeToEdge: {
       backgroundColor: "#0b0d14",
     },
+    Keyboard: {
+      resize: "body",
+      resizeOnFullScreen: true,
+    },
   },
   android: {
     buildOptions: {
