@@ -62,13 +62,14 @@ export default function EditProfile() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0d0d0d] text-white overflow-x-hidden">
+    <div className="flex flex-col h-screen bg-[#0d0d0d] text-white overflow-hidden">
       <Header 
         title={t("vex_profile")} 
         description={t("vex_profile_text")}
       />
 
-      <main className="flex-1 max-w-md w-full mx-auto p-6 space-y-8 mt-4 pb-20">
+      <div className="flex-1 w-full overflow-y-auto scroll-smooth">
+        <main className="max-w-md w-full mx-auto p-6 space-y-8 mt-4 pb-20">
 
         {/* AVATAR SECTION */}
         <motion.div 
@@ -224,6 +225,7 @@ export default function EditProfile() {
           </DialogContent>
         </Dialog>
       </main>
+      </div>
     </div>
   );
 }

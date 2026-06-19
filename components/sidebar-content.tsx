@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useChangelogStore } from "@/store/changelogStore";
 import { db } from "@/lib/vexDB";
+import { useLiveQuery } from "dexie-react-hooks";
 import GeminiToggle from "./gemini-toggle";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -44,6 +45,7 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { openChangelog } = useChangelogStore();
+  const vexInfo = useLiveQuery(() => db.vexInfo.get(1), []);
 
   const go = (path: string) => {
     navigate(path, { replace: true });
@@ -155,8 +157,12 @@ export const SidebarContent = ({ onNavigate }: { onNavigate?: () => void }) => {
           className="flex items-center justify-between rounded-xl px-2 py-2 hover:bg-white/5 transition-colors cursor-pointer group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/20">
-               <User className="size-4 text-indigo-400" />
+            <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/20 overflow-hidden">
+               {vexInfo?.profileImage ? (
+                 <img src={vexInfo.profileImage} className="w-full h-full object-cover" alt="Vex Profile" />
+               ) : (
+                 <User className="size-4 text-indigo-400" />
+               )}
             </div>
             <span className="text-[15px] font-medium text-zinc-200">
               {t("vexProfile")}
