@@ -49,7 +49,7 @@ export default function LanguageSelector() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0d0d0d] text-white">
+    <div className="flex flex-col h-full bg-[#0d0d0d] text-white">
       <Header 
         title={t("select")} 
         description="Escolha o idioma principal para a inteligência da Vex e para o aplicativo."

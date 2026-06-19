@@ -62,7 +62,7 @@ export default function EditProfile() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#0d0d0d] text-white overflow-hidden">
+    <div className="flex flex-col h-full bg-[#0d0d0d] text-white overflow-hidden">
       <Header 
         title={t("vex_profile")} 
         description={t("vex_profile_text")}

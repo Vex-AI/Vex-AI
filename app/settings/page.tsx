@@ -144,7 +144,7 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-[#0d0d0d] text-white overflow-hidden relative">
+    <div className="flex flex-col h-full bg-[#0d0d0d] text-white overflow-hidden relative">
       <Header 
         title={t("settings")} 
         description={t("settings_desc")}

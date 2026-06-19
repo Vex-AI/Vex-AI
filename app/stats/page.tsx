@@ -45,14 +45,14 @@ export default function Stats() {
   }, []);
 
   if (!psyche) {
-    return <div className="flex items-center justify-center h-screen bg-[#0d0d0d] text-white">Loading...</div>;
+    return <div className="flex items-center justify-center h-full bg-[#0d0d0d] text-white">Loading...</div>;
   }
 
   const { internalState, emotions, mood, relationship, personality } = psyche;
   const moodEmoji = getMoodEmoji(mood);
 
   return (
-    <div className="flex flex-col h-screen bg-[#0d0d0d] text-white overflow-y-auto">
+    <div className="flex flex-col h-full bg-[#0d0d0d] text-white overflow-y-auto">
       <header className="flex items-center gap-4 px-4 py-5 border-b border-white/10 sticky top-0 bg-[#0d0d0d]/95 z-10">
         <Button variant="ghost" size="icon" className="md:hidden" onClick={() => navigate("/home", { replace: true })}>
           <ArrowLeft className="w-5 h-5" />
