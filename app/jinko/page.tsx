@@ -5,7 +5,7 @@ import animalsData from "@/lib/jinko/data/animals.json";
 import questionsData from "@/lib/jinko/data/questions.json";
 
 export default function JinkoPage() {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const [lang, setLang] = useState<"pt" | "en">("pt");
 
   useEffect(() => {

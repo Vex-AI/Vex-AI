@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
+
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/vexDB";
 
@@ -30,7 +30,7 @@ import { IIntent } from "@/types";
 
 export default function IntentPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
 
   const [intentName, setIntentName] = useState("");
   const [initialPhrase, setInitialPhrase] = useState("");
@@ -54,12 +54,7 @@ export default function IntentPage() {
   // LiveQuery isolado do resto
   const intents = useLiveQuery(() => db.intents.toArray(), []);
 
-  const go = useCallback(
-    (path: string) => {
-      navigate(path, { replace: true });
-    },
-    [navigate]
-  );
+
 
   const pushToast = useCallback((msg: string, duration = 2000) => {
     setToast({ message: msg, duration });

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+
 import { SidebarContent } from "./sidebar-content";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const DesktopSidebar = () => {
-  const { t } = useTranslation();
+
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (

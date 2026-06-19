@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { useTranslation } from "react-i18next";
+
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { ArrowLeft, Trophy, Lock } from "lucide-react";
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useAchievementStore } from "@/store/achievementStore";
 
 export default function AchievementsPage() {
-  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { badges } = useAchievementStore();
 
