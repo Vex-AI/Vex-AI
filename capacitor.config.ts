@@ -1,4 +1,5 @@
 import type { CapacitorConfig } from "@capacitor/cli";
+import { KeyboardResize } from "@capacitor/keyboard";
 
 const config: CapacitorConfig = {
   appId: "com.cookieukw.vex",
@@ -14,7 +15,7 @@ const config: CapacitorConfig = {
       backgroundColor: "#0b0d14",
     },
     Keyboard: {
-      resize: "body",
+      resize: KeyboardResize.None,
       resizeOnFullScreen: true,
     },
   },
