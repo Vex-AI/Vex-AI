@@ -34,7 +34,9 @@ export const changelogHistory: ChangelogRelease[] = [
       "Modern Desktop Sidebar: Extracted sidebar navigation for a powerful, persistent desktop experience.",
       "Redesigned Chat Interface: Enhanced input bar, quick actions, pill-shaped profile header, and GeminiPillToggle.",
       "Intelligent Chat Auto-Scroll: Persistent chat scroll position and intelligent auto-scroll behavior.",
-      "Unified Sticky Headers: Consistent, sticky top-bar layout integrated across all application sub-pages."
+      "Unified Sticky Headers: Consistent, sticky top-bar layout integrated across all application sub-pages.",
+      "Advanced Gemini Settings: Added intuitive sliders for Temperature, Top K, Top P, and dynamic safety configuration directly from the settings page.",
+      "Organic Psychological Prompting: Vex's internal mood and emotional states are now dynamically injected into the Gemini Prompt API, profoundly altering her personality and behavior per message."
     ],
     fixes: [
       {
@@ -76,6 +78,22 @@ export const changelogHistory: ChangelogRelease[] = [
       {
         description: "Replaced ambiguous plus icon with a Trash2 icon in the clear chat button.",
         level: "Low"
+      },
+      {
+        description: "Resolved Chat Scroll Jump: Eliminated visual layout jumping on chat mount using React useLayoutEffect and virtualizer alignment.",
+        level: "High"
+      },
+      {
+        description: "Global Messages Persistence: Hooked messages query to a root level MessagesContext to completely eliminate Dexie database reloading during route navigation.",
+        level: "High"
+      },
+      {
+        description: "Chat Status Layout: Prevented long localized text (e.g. 'digitando...') from getting cut-off or wrapped in the chat header.",
+        level: "Medium"
+      },
+      {
+        description: "Animated Emoji Fallbacks: Implemented seamless Native Emoji fallback with fixed dimensions for when Google Noto Animated fails (404), fixing layout shifts.",
+        level: "Medium"
       }
     ],
     improvements: [
@@ -85,7 +103,8 @@ export const changelogHistory: ChangelogRelease[] = [
       "Chat Scroll Restoration: Improved behavior with increased bottom padding.",
       "Redesigned Modals: Complete redesign of Phrase and Response modals with internationalized labels.",
       "Translation Consistency: Heavily updated localization strings across settings and dynamic pages.",
-      "Focus Management: Added baseline-browser-mapping and implemented input focus management."
+      "Focus Management: Added baseline-browser-mapping and implemented input focus management.",
+      "Settings Layout: Adopted full screen relative wrapper to fix scrolling issues and containerized the sticky save button to prevent UI overlaps."
     ]
   }
 ];
