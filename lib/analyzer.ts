@@ -177,16 +177,48 @@ export async function analyzer(
       response = await getGeminiResponse(message);
       isGeminiResponse = true;
     } catch (error: any) {
+      let isRateLimit = false;
+      let waitMs = 60000; // default 1 min
+
+      // Attempt to parse if error is a stringified JSON
+      let errorObj = error;
+      if (typeof error === 'string') {
+        try { errorObj = JSON.parse(error); } catch (e) {}
+      } else if (error?.message && error.message.startsWith('{')) {
+        try { errorObj = JSON.parse(error.message); } catch (e) {}
+      }
+
+      // Check the exact JSON structure provided by the user
+      if (
+        errorObj?.error?.code === 429 || 
+        errorObj?.code === 429 || 
+        errorObj?.status === 429 || 
+        errorObj?.error?.status === "RESOURCE_EXHAUSTED"
+      ) {
+        isRateLimit = true;
+        
+        // Try to get retryDelay from details array
+        const details = errorObj?.error?.details || errorObj?.details;
+        if (Array.isArray(details)) {
+          const retryInfo = details.find((d: any) => d.retryDelay);
+          if (retryInfo && typeof retryInfo.retryDelay === 'string') {
+            const parsed = parseFloat(retryInfo.retryDelay); // "34s" -> 34
+            if (!isNaN(parsed)) waitMs = parsed * 1000;
+          }
+        }
+      }
+
+      // Fallback text matching (if SDK wrapped it in a string)
       const errStr = String(error?.message || error);
-      
-      // Handle Rate Limit specifically
-      if (errStr.includes("429") || errStr.includes("exceeded") || errStr.includes("RESOURCE_EXHAUSTED")) {
-        // Look for something like "34.4425s" or "34s"
+      if (!isRateLimit && (errStr.includes("429") || errStr.includes("exceeded") || errStr.includes("RESOURCE_EXHAUSTED"))) {
+        isRateLimit = true;
         const delayMatch = errStr.match(/(\d+(?:\.\d+)?)\s*s/);
-        let waitMs = 60000; // default 1 min
         if (delayMatch) {
           waitMs = parseFloat(delayMatch[1]) * 1000;
         }
+      }
+
+      if (isRateLimit) {
         localStorage.setItem("geminiRateLimitUnlockTime", String(Date.now() + waitMs));
         throw new Error("GEMINI_RATE_LIMIT");
       }
