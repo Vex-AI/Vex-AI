@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Vex AI</h1>
-  <img src="./public/android/play_store_512.png" width="160" height="160">
+  <img src="./public/web/icon-512.png" width="160" height="160">
   <br><br>
   <p>Welcome to the Vex AI project!</p>
 </div>
@@ -21,7 +21,9 @@
       
   <img
   src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg"
-  width="50%">
+  width="30%">
+      <br><br>
+      <img src="./public/play-store/play_store_feature_graphic.png" width="80%" alt="Vex Play Store Banner">
       </a>
   </div>
 </ul>
