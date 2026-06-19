@@ -94,14 +94,20 @@ export function formatDate(timestamp: number): string {
   return formatDateString(messageDate);
 }
 
-export function sendMessage(content: string, isVex: boolean) {
+export async function sendMessage(content: string, isVex: boolean, isError?: boolean) {
   const newMessage: IMessage = {
     content,
     isVex,
     hour: new Date().toLocaleTimeString(),
     date: Date.now(),
   };
-  db.messages.add(newMessage);
+  
+  if (isError) {
+    newMessage.isError = true;
+  }
+  
+  const id = await db.messages.add(newMessage);
+  return id;
 }
 
 export function randomReply(replies: string[]): string {

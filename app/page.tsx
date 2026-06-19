@@ -220,6 +220,17 @@ const Home: React.FC = () => {
     [sendVexMessage, isProcessing],
   );
 
+  const handleRetry = useCallback(
+    async (errorMsgId: number, index: number) => {
+      const userMsg = messagesArr[index - 1];
+      if (userMsg && !userMsg.isVex) {
+        await db.messages.delete(errorMsgId);
+        sendVexMessage(userMsg.content);
+      }
+    },
+    [messagesArr, sendVexMessage]
+  );
+
   const virtualItems = virtualizer.getVirtualItems();
 
   const renderedMessages = useMemo(() => {
@@ -272,6 +283,8 @@ const Home: React.FC = () => {
                 isVex={msg.isVex}
                 hour={formatHour(msg.hour)}
                 date={msg.date}
+                isError={msg.isError}
+                onRetry={() => msg.id != null && handleRetry(msg.id, i)}
                 onClose={() => msg.id != null && setPendingDeleteId(msg.id)}
               />
             </div>

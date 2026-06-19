@@ -433,5 +433,9 @@
   "settings_saved": "Settings Saved!",
   "top_k_desc": "Limits vocabulary to the top K most likely words. Lower values make responses more predictable.",
   "top_p_desc": "Filters words based on cumulative probability (P). Lower values reduce rare word choices.",
-  "safety_settings_desc": "Manages the level of censorship the API will apply to incoming and outgoing text."
+  "safety_settings_desc": "Manages the level of censorship the API will apply to incoming and outgoing text.",
+  "strict_gemini_mode": "Strict Gemini Mode",
+  "strict_gemini_mode_desc": "Shows an API error bubble with a retry button instead of silently falling back to the local intent algorithm.",
+  "retry": "Try again",
+  "geminiErrorVexMsg": "Oh no, there was a little connection hiccup in my brain with Gemini! 😵‍💫 Can we try that again?"
 }

@@ -2,7 +2,7 @@
 
 import React, { Fragment, memo, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Trash2 } from "lucide-react";
+import { Trash2, RefreshCcw } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 import { MessageProps, Style } from "@/types";
@@ -54,7 +54,7 @@ const renderWithEmojis = (children: React.ReactNode) => {
   });
 };
 
-const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
+const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose, isError, onRetry }) => {
   const { t } = useTranslation();
   
   // Calculate style synchronously to avoid layout shifts (scroll teleportation)
@@ -116,6 +116,21 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose }) => {
             >
               {hour}
             </small>
+            
+            {isError && (
+              <div className="mt-3 flex justify-center w-full">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRetry?.();
+                  }}
+                  className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-rose-200 bg-rose-500/20 hover:bg-rose-500/30 rounded-full transition-colors"
+                >
+                  <RefreshCcw className="w-3.5 h-3.5" />
+                  {t("retry", "Tentar novamente")}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </ContextMenuTrigger>

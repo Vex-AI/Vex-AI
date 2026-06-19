@@ -155,14 +155,23 @@ export const useVexMessage = () => {
         setStatus("online");
         setTyping(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Ocorreu um erro ao processar a resposta de Vex:", error);
       if (isMounted.current) {
-        setEmotion("1f622"); // Sad emoji on error
-        sendMessage(
-          "Desculpe, tive um problema para processar sua mensagem.",
-          true
-        );
+        if (error.message === "GEMINI_API_ERROR") {
+          setEmotion("1f635_200d_1f4ab"); // Dizzy face
+          sendMessage(
+            i18next.t("geminiErrorVexMsg", "Nossa, deu um probleminha de conexão na minha cabeça com o Gemini! 😵‍💫 Tenta de novo?"),
+            true,
+            true
+          );
+        } else {
+          setEmotion("1f622"); // Sad emoji on error
+          sendMessage(
+            "Desculpe, tive um problema para processar sua mensagem.",
+            true
+          );
+        }
         setStatus("online");
         setTyping(false);
       }

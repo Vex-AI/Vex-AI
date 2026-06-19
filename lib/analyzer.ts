@@ -171,8 +171,15 @@ export async function analyzer(
     try {
       response = await getGeminiResponse(message);
     } catch (error) {
-      console.error("Error in Gemini, using local fallback.", error);
-      response = await getLocalResponse(message);
+      const strictModeStr = localStorage.getItem("geminiStrictError");
+      const isStrictMode = strictModeStr === null ? true : strictModeStr === "true";
+      
+      if (isStrictMode) {
+        throw new Error("GEMINI_API_ERROR");
+      } else {
+        console.error("Error in Gemini, using local fallback.", error);
+        response = await getLocalResponse(message);
+      }
     }
   } else {
     response = await getLocalResponse(message);

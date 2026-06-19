@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import Header from "@/components/header";
 import { initializeAnalyzer } from "@/lib/analyzer";
 
@@ -64,6 +65,7 @@ export default function SettingsPage() {
   const [hateSpeech, setHateSpeech] = useState("BLOCK_NONE");
   const [sexuallyExplicit, setSexuallyExplicit] = useState("BLOCK_NONE");
   const [dangerousContent, setDangerousContent] = useState("BLOCK_NONE");
+  const [strictError, setStrictError] = useState(true);
 
   useEffect(() => {
     const storedKey = localStorage.getItem("geminiApiKey");
@@ -89,6 +91,9 @@ export default function SettingsPage() {
 
     const storedDangerous = localStorage.getItem("geminiDangerousContent");
     if (storedDangerous) setDangerousContent(storedDangerous);
+
+    const storedStrict = localStorage.getItem("geminiStrictError");
+    if (storedStrict !== null) setStrictError(storedStrict === "true");
   }, []);
 
   const handleSave = async () => {
@@ -100,6 +105,7 @@ export default function SettingsPage() {
     localStorage.setItem("geminiHateSpeech", hateSpeech);
     localStorage.setItem("geminiSexuallyExplicit", sexuallyExplicit);
     localStorage.setItem("geminiDangerousContent", dangerousContent);
+    localStorage.setItem("geminiStrictError", strictError.toString());
 
     setSaved(true);
     
@@ -172,6 +178,18 @@ export default function SettingsPage() {
               </div>
 
               <div className="space-y-6">
+                {/* Strict Error Mode */}
+                <div className="flex flex-row items-center justify-between bg-black/20 p-4 rounded-xl border border-white/5">
+                  <div className="space-y-0.5">
+                    <h4 className="text-xs font-semibold text-neutral-300">{t("strict_gemini_mode", "Modo Estrito Gemini")}</h4>
+                    <p className="text-[10px] text-neutral-500 leading-relaxed max-w-[85%]">{t("strict_gemini_mode_desc", "Mostra erro na API com opção de tentar novamente em vez de usar resposta de segurança local.")}</p>
+                  </div>
+                  <Switch
+                    checked={strictError}
+                    onCheckedChange={setStrictError}
+                  />
+                </div>
+
                 {/* Temperature */}
                 <div className="space-y-3 bg-black/20 p-4 rounded-xl border border-white/5">
                   <div className="flex justify-between items-center text-xs">
