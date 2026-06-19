@@ -427,5 +427,8 @@
   "block_medium_and_above": "Bloquear médio e alto risco",
   "block_low_and_above": "Bloquear todos os riscos (Restrito)",
   "save_settings": "Salvar Configurações",
-  "settings_saved": "Configurações Salvas!"
+  "settings_saved": "Configurações Salvas!",
+  "top_k_desc": "Limita o vocabulário às K palavras mais prováveis. Valores menores deixam as respostas mais previsíveis.",
+  "top_p_desc": "Filtra palavras com base na probabilidade acumulada (P). Valores menores reduzem opções raras.",
+  "safety_settings_desc": "Gerencia o nível de censura que a API aplicará aos textos recebidos e gerados."
 }

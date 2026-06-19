@@ -199,6 +199,7 @@ export default function SettingsPage() {
                     onChange={(e) => setTopK(parseInt(e.target.value))}
                     className="w-full accent-emerald-500 h-1.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer"
                   />
+                  <p className="text-[10px] text-neutral-500 leading-relaxed">{t("top_k_desc")}</p>
                 </div>
 
                 {/* Top P */}
@@ -213,11 +214,15 @@ export default function SettingsPage() {
                     onChange={(e) => setTopP(parseFloat(e.target.value))}
                     className="w-full accent-emerald-500 h-1.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer"
                   />
+                  <p className="text-[10px] text-neutral-500 leading-relaxed">{t("top_p_desc")}</p>
                 </div>
 
                 {/* Safety Settings */}
                 <div className="pt-6 border-t border-white/10 space-y-4">
-                  <h4 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">{t("safety_settings")}</h4>
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">{t("safety_settings")}</h4>
+                    <p className="text-[10px] text-neutral-500 leading-relaxed">{t("safety_settings_desc")}</p>
+                  </div>
                   
                   {[
                     { label: t("harassment"), value: harassment, setter: setHarassment, zIndex: 40 },

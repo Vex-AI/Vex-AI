@@ -430,5 +430,8 @@
   "block_medium_and_above": "Block medium & high risk",
   "block_low_and_above": "Block all risks (Strict)",
   "save_settings": "Save Settings",
-  "settings_saved": "Settings Saved!"
+  "settings_saved": "Settings Saved!",
+  "top_k_desc": "Limits vocabulary to the top K most likely words. Lower values make responses more predictable.",
+  "top_p_desc": "Filters words based on cumulative probability (P). Lower values reduce rare word choices.",
+  "safety_settings_desc": "Manages the level of censorship the API will apply to incoming and outgoing text."
 }
