@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { App } from "@capacitor/app";
-import { Keyboard } from "@capacitor/keyboard";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -34,17 +33,13 @@ import ChatLoading from "@/components/chat-loading";
 import { MessagesProvider } from "@/contexts/MessagesContext";
 
 const Layout = () => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
   useEffect(() => {
     let handle: any | null = null;
-    let kbShowHandle: any | null = null;
-    let kbHideHandle: any | null = null;
 
     // Listen to native back button
     App.addListener("backButton", () => {
       const currentPath = window.location.pathname;
-      if (currentPath === "/" || currentPath.startsWith("/enUS") || currentPath.startsWith("/ptBR")) {
+      if (currentPath === "/" || currentPath === "/home" || currentPath.startsWith("/enUS") || currentPath.startsWith("/ptBR")) {
         App.exitApp();
       } else {
         window.history.back();
@@ -53,30 +48,14 @@ const Layout = () => {
       handle = h;
     });
 
-    // Listen to Keyboard to manually push layout
-    if (typeof window !== "undefined" && (window as any).Capacitor?.isNative) {
-      Keyboard.addListener("keyboardWillShow", (info) => {
-        setKeyboardHeight(info.keyboardHeight);
-      }).then(h => kbShowHandle = h);
-
-      Keyboard.addListener("keyboardWillHide", () => {
-        setKeyboardHeight(0);
-      }).then(h => kbHideHandle = h);
-    }
-
     return () => {
       handle?.remove();
-      kbShowHandle?.remove();
-      kbHideHandle?.remove();
     };
   }, []);
 
   return (
     <MessagesProvider>
-      <div 
-        className="flex h-screen w-screen overflow-hidden bg-background text-foreground transition-[padding] duration-150 ease-out"
-        style={{ paddingBottom: `${keyboardHeight}px` }}
-      >
+      <div className="flex h-[100dvh] w-screen overflow-hidden bg-background text-foreground">
         <DesktopSidebar />
         <div className="flex-1 min-w-0 relative h-full">
           <Suspense fallback={<ChatLoading />}>

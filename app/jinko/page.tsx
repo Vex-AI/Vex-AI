@@ -190,7 +190,7 @@ export default function JinkoPage() {
       
           <div className="text-left flex items-center gap-3">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/home", { replace: true })}
               className="p-2 hover:bg-white/10 rounded-full transition-colors text-zinc-400 hover:text-zinc-100 md:hidden"
             >
               <ArrowLeft size={24} />
