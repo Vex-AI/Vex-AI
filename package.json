@@ -25,7 +25,6 @@
     "@capacitor/keyboard": "^8.0.5",
     "@capacitor/local-notifications": "^8.2.0",
     "@capacitor/status-bar": "^8.0.2",
-    "@capawesome/capacitor-android-edge-to-edge-support": "^7.2.3",
     "@google/generative-ai": "^0.24.1",
     "@radix-ui/react-alert-dialog": "^1.1.17",
     "@radix-ui/react-avatar": "^1.2.0",

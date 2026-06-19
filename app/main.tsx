@@ -55,7 +55,15 @@ const Layout = () => {
 
   return (
     <MessagesProvider>
-      <div className="flex h-[100dvh] w-screen overflow-hidden bg-background text-foreground">
+      <div
+        className="flex h-[100dvh] w-screen overflow-hidden bg-background text-foreground"
+        style={{
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+        }}
+      >
         <DesktopSidebar />
         <div className="flex-1 min-w-0 relative h-full">
           <Suspense fallback={<ChatLoading />}>
