@@ -425,8 +425,10 @@
   "hate_speech": "Hate Speech",
   "sexually_explicit": "Sexually Explicit",
   "dangerous_content": "Dangerous Content",
-  "block_none": "Block None",
-  "block_only_high": "Block Only High",
-  "block_medium_and_above": "Block Medium and Above",
-  "block_low_and_above": "Block Low and Above"
+  "block_none": "Allow everything (No restrictions)",
+  "block_only_high": "Block high risk only",
+  "block_medium_and_above": "Block medium & high risk",
+  "block_low_and_above": "Block all risks (Strict)",
+  "save_settings": "Save Settings",
+  "settings_saved": "Settings Saved!"
 }

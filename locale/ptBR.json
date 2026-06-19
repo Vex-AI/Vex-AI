@@ -422,8 +422,10 @@
   "hate_speech": "Discurso de Ódio",
   "sexually_explicit": "Conteúdo Explícito",
   "dangerous_content": "Conteúdo Perigoso",
-  "block_none": "Não bloquear nada",
-  "block_only_high": "Bloquear apenas Alto",
-  "block_medium_and_above": "Bloquear Médio e Alto",
-  "block_low_and_above": "Bloquear Baixo e Acima"
+  "block_none": "Permitir tudo (Sem restrições)",
+  "block_only_high": "Bloquear apenas alto risco",
+  "block_medium_and_above": "Bloquear médio e alto risco",
+  "block_low_and_above": "Bloquear todos os riscos (Restrito)",
+  "save_settings": "Salvar Configurações",
+  "settings_saved": "Configurações Salvas!"
 }

@@ -106,21 +106,30 @@ export async function initializeAnalyzer(forceReinit = false) {
   if (apiKey) {
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
+      const harassmentStr = localStorage.getItem("geminiHarassment") as HarmBlockThreshold || HarmBlockThreshold.BLOCK_NONE;
+      const hateSpeechStr = localStorage.getItem("geminiHateSpeech") as HarmBlockThreshold || HarmBlockThreshold.BLOCK_NONE;
+      const explicitStr = localStorage.getItem("geminiSexuallyExplicit") as HarmBlockThreshold || HarmBlockThreshold.BLOCK_NONE;
+      const dangerousStr = localStorage.getItem("geminiDangerousContent") as HarmBlockThreshold || HarmBlockThreshold.BLOCK_NONE;
+
       geminiModel = genAI.getGenerativeModel({
         model: "gemini-2.5-flash",
         systemInstruction: getVexSystemPrompt(),
         safetySettings: [
           {
             category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
+            threshold: harassmentStr,
           },
           {
             category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
+            threshold: hateSpeechStr,
           },
           {
             category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
+            threshold: explicitStr,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+            threshold: dangerousStr,
           },
         ],
       });
@@ -193,13 +202,22 @@ async function getGeminiResponse(message: string): Promise<string> {
     console.error("Failed to fetch psyche state for Gemini", error);
   }
 
+  const tempStr = localStorage.getItem("geminiTemperature");
+  const temperature = tempStr ? parseFloat(tempStr) : 0.8;
+
+  const topKStr = localStorage.getItem("geminiTopK");
+  const topK = topKStr ? parseInt(topKStr) : 40;
+
+  const topPStr = localStorage.getItem("geminiTopP");
+  const topP = topPStr ? parseFloat(topPStr) : 0.95;
+
   const chat = geminiModel.startChat({
     history: history,
     generationConfig: {
-      temperature: 0.8,
+      temperature: temperature,
       maxOutputTokens: 2048,
-      topK: 40,
-      topP: 0.95,
+      topK: topK,
+      topP: topP,
     },
   });
 
