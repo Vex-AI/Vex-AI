@@ -6,20 +6,27 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Trophy, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAchievementStore } from "@/store/achievementStore";
+import { useTranslation } from "react-i18next";
 
 export default function AchievementsPage() {
 
   const navigate = useNavigate();
   const { badges } = useAchievementStore();
+  const { t, i18n } = useTranslation();
 
-  const lang = (localStorage.getItem("language") === "ptBR" ? "ptBR" : "enUS") as "ptBR" | "enUS";
+  const lang = (i18n.language || "enUS") as "ptBR" | "enUS" | "ja";
 
   const unlocked = badges.filter((b) => b.unlockedAt);
   const locked = badges.filter((b) => !b.unlockedAt);
 
   const formatDate = (ts: number) => {
     const d = new Date(ts);
-    return d.toLocaleDateString(lang === "ptBR" ? "pt-BR" : "en-US", {
+    const localeMap: Record<string, string> = {
+      "ptBR": "pt-BR",
+      "enUS": "en-US",
+      "ja": "ja-JP"
+    };
+    return d.toLocaleDateString(localeMap[lang] || "en-US", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -35,10 +42,10 @@ export default function AchievementsPage() {
         <div>
           <h1 className="text-xl font-bold tracking-tight flex items-center gap-2">
             <Trophy className="w-5 h-5 text-amber-400" />
-            {lang === "ptBR" ? "Conquistas" : "Achievements"}
+            {t("achievements")}
           </h1>
           <p className="text-xs text-neutral-400">
-            {unlocked.length}/{badges.length} {lang === "ptBR" ? "desbloqueadas" : "unlocked"}
+            {unlocked.length}/{badges.length} {t("unlocked")}
           </p>
         </div>
       </header>
@@ -58,7 +65,7 @@ export default function AchievementsPage() {
                 {unlocked.length}<span className="text-base text-neutral-500">/{badges.length}</span>
               </div>
               <p className="text-xs text-neutral-400 mt-0.5">
-                {lang === "ptBR" ? "Emblemas conquistados" : "Badges earned"}
+                {t("badges_earned")}
               </p>
             </div>
           </div>
@@ -68,7 +75,7 @@ export default function AchievementsPage() {
           <div>
             <h2 className="text-sm font-semibold text-white/90 mb-3 uppercase tracking-wider flex items-center gap-2">
               <Trophy className="w-4 h-4 text-amber-400" />
-              {lang === "ptBR" ? "Desbloqueados" : "Unlocked"}
+              {t("unlocked")}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {unlocked.map((badge, i) => (
@@ -101,7 +108,7 @@ export default function AchievementsPage() {
         <div>
           <h2 className="text-sm font-semibold text-white/90 mb-3 uppercase tracking-wider flex items-center gap-2">
             <Lock className="w-4 h-4 text-neutral-500" />
-            {lang === "ptBR" ? "Bloqueados" : "Locked"}
+            {t("locked")}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {locked.map((badge, i) => (
@@ -119,10 +126,10 @@ export default function AchievementsPage() {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-sm text-neutral-500 truncate">???</h3>
                     <p className="text-xs text-neutral-600 mt-0.5 line-clamp-2">
-                      {lang === "ptBR" ? "[Conquista Oculta] Continue interagindo para descobrir." : "[Hidden Badge] Keep interacting to discover."}
+                      {t("hidden_badge_desc")}
                     </p>
                     <p className="text-[10px] text-neutral-700 mt-1.5">
-                      {lang === "ptBR" ? "Bloqueado" : "Locked"}
+                      {t("locked")}
                     </p>
                   </div>
                 </div>

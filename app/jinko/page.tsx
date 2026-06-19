@@ -7,17 +7,16 @@ import { useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 
 export default function JinkoPage() {
-  const { i18n } = useTranslation();
-  const [lang, setLang] = useState<"pt" | "en">("pt");
+  const { t, i18n } = useTranslation();
+  const [lang, setLang] = useState<"pt" | "en" | "ja">("pt");
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLang(i18n.language.startsWith("en") ? "en" : "pt");
+    setLang(i18n.language.startsWith("en") ? "en" : i18n.language.startsWith("ja") ? "ja" : "pt");
   }, [i18n.language]);
-
-  const translateProp = (prop: any) => {
+const translateProp = (prop: any) => {
     if (!prop) return "";
-    return prop[lang] || prop.pt || "";
+    return prop[lang] || prop.en || prop.pt || "";
   };
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -72,15 +71,15 @@ export default function JinkoPage() {
   const getCategoryLabel = (category: string) => {
     switch (category) {
       case "mammal":
-        return lang === "pt" ? "Mamífero" : "Mammal";
+        return t("jinko_mammal");
       case "bird":
-        return lang === "pt" ? "Ave" : "Bird";
+        return t("jinko_bird");
       case "reptile":
-        return lang === "pt" ? "Réptil/Anfíbio" : "Reptile/Amphibian";
+        return t("jinko_reptile");
       case "insect":
-        return lang === "pt" ? "Inseto/Aracnídeo" : "Insect/Arachnid";
+        return t("jinko_insect");
       default:
-        return lang === "pt" ? "Outros" : "Others";
+        return t("jinko_others");
     }
   };
 
@@ -122,7 +121,7 @@ export default function JinkoPage() {
         const nameB = translateProp(b.name);
         comparison = nameA.localeCompare(
           nameB,
-          lang === "pt" ? "pt-BR" : "en-US",
+          i18n.language,
         );
       } else {
         comparison = a.playCount - b.playCount;
@@ -197,12 +196,10 @@ export default function JinkoPage() {
             </button>
             <div>
               <h2 className="text-4xl font-semibold text-red-300/90">
-                {lang === "pt" ? "Banco de Animais" : "Animals Database"}
+                {t("jinko_db_title")}
               </h2>
               <p className="text-zinc-400 text-sm mt-1">
-                {lang === "pt"
-                  ? "Explore os animais catalogados e veja as respostas que o Jinko conhece."
-                  : "Explore cataloged animals and view known Jinko answers."}
+                {t("jinko_db_desc")}
               </p>
             </div>
           </div>
@@ -217,7 +214,7 @@ export default function JinkoPage() {
                 : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
-            {lang === "pt" ? "Tabela de Animais" : "Animals Table"}
+            {t("jinko_table")}
             {activeTab === "table" && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-400/80"></div>
             )}
@@ -231,9 +228,7 @@ export default function JinkoPage() {
             }`}
           >
             <span className="inline-flex w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            {lang === "pt"
-              ? "Simulador em Tempo Real (Debug)"
-              : "Real-time Simulator (Debug)"}
+            {t("jinko_sim")}
             {activeTab === "simulator" && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-400/80"></div>
             )}
@@ -263,9 +258,7 @@ export default function JinkoPage() {
                 <input
                   type="text"
                   placeholder={
-                    lang === "pt"
-                      ? "Buscar animal por nome..."
-                      : "Search animal by name..."
+                    t("jinko_search")
                   }
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -282,7 +275,7 @@ export default function JinkoPage() {
                       : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
-                  {lang === "pt" ? "Todos" : "All"} ({animalsData.length})
+                  {t("jinko_all")} ({animalsData.length})
                 </button>
                 <button
                   onClick={() => setSelectedCategory("mammal")}
@@ -292,7 +285,7 @@ export default function JinkoPage() {
                       : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
-                  {lang === "pt" ? "Mamíferos" : "Mammals"}
+                  {t("jinko_mammals")}
                 </button>
                 <button
                   onClick={() => setSelectedCategory("bird")}
@@ -302,7 +295,7 @@ export default function JinkoPage() {
                       : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
-                  {lang === "pt" ? "Aves" : "Birds"}
+                  {t("jinko_birds")}
                 </button>
                 <button
                   onClick={() => setSelectedCategory("reptile")}
@@ -312,7 +305,7 @@ export default function JinkoPage() {
                       : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
-                  {lang === "pt" ? "Répteis/Anfíbios" : "Reptiles/Amph."}
+                  {t("jinko_reptiles")}
                 </button>
                 <button
                   onClick={() => setSelectedCategory("insect")}
@@ -322,7 +315,7 @@ export default function JinkoPage() {
                       : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
-                  {lang === "pt" ? "Insetos/Aracnídeos" : "Insects"}
+                  {t("jinko_insects")}
                 </button>
                 <button
                   onClick={() => setSelectedCategory("other")}
@@ -332,7 +325,7 @@ export default function JinkoPage() {
                       : "border-white/10 bg-[#0a0a0a] text-zinc-400 hover:text-zinc-100 hover:border-white/20"
                   }`}
                 >
-                  {lang === "pt" ? "Outros" : "Others"}
+                  {t("jinko_others")}
                 </button>
               </div>
             </div>
@@ -356,9 +349,7 @@ export default function JinkoPage() {
                 >
                   <path d="m9 18 6-6-6-6" />
                 </svg>
-                {lang === "pt"
-                  ? "VER LEGENDA E PERGUNTAS (Q1 A Q21)"
-                  : "VIEW LEGEND AND QUESTIONS"}
+                {t("jinko_view_legend")}
               </button>
 
               {showLegend && (
@@ -397,7 +388,7 @@ export default function JinkoPage() {
                         className="sticky left-0 bg-[#0a0a0a] px-5 py-4 font-semibold text-zinc-100 border-r border-white/5 cursor-pointer select-none min-w-[150px] z-20 hover:text-red-400 transition-all"
                       >
                         <div className="flex items-center gap-1.5 text-left">
-                          {lang === "pt" ? "Animal" : "Animal"}
+                          {t("jinko_animal")}
                           {sortField === "name" && (
                             <span className="text-xs text-red-500/80">
                               {sortOrder === "asc" ? "▲" : "▼"}
@@ -407,7 +398,7 @@ export default function JinkoPage() {
                       </th>
 
                       <th className="px-4 py-4 font-semibold text-zinc-500 min-w-[120px] text-left">
-                        {lang === "pt" ? "Grupo" : "Group"}
+                        {t("jinko_group")}
                       </th>
 
                       <th
@@ -415,7 +406,7 @@ export default function JinkoPage() {
                         className="px-4 py-4 font-semibold text-zinc-500 cursor-pointer select-none min-w-[110px] hover:text-red-400 transition-all text-left"
                       >
                         <div className="flex items-center gap-1.5 text-left">
-                          {lang === "pt" ? "Jogadas" : "Plays"}
+                          {t("jinko_plays")}
                           {sortField === "playCount" && (
                             <span className="text-xs text-red-500/80">
                               {sortOrder === "asc" ? "▲" : "▼"}
@@ -448,9 +439,7 @@ export default function JinkoPage() {
                           colSpan={sortedQuestions.length + 3}
                           className="text-center py-10 text-zinc-600 text-sm"
                         >
-                          {lang === "pt"
-                            ? "Nenhum animal encontrado."
-                            : "No animals found."}
+                          {t("jinko_not_found")}
                         </td>
                       </tr>
                     ) : (
@@ -505,14 +494,10 @@ export default function JinkoPage() {
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h3 className="text-xl font-semibold text-zinc-100">
-                      {lang === "pt"
-                        ? "Entradas do Simulador"
-                        : "Simulator Inputs"}
+                      {t("jinko_sim_inputs")}
                     </h3>
                     <p className="text-xs text-zinc-500 mt-0.5">
-                      {lang === "pt"
-                        ? "Defina o peso de cada característica para ver a Leaderboard mudando."
-                        : "Set the weight of each trait to see the Leaderboard change."}
+                      {t("jinko_sim_desc")}
                     </p>
                   </div>
                   <button
@@ -535,7 +520,7 @@ export default function JinkoPage() {
                       <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
                       <path d="M8 21H3v-5" />
                     </svg>
-                    {lang === "pt" ? "Limpar" : "Clear"}
+                    {t("jinko_clear")}
                   </button>
                 </div>
 
@@ -567,7 +552,7 @@ export default function JinkoPage() {
                                 : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"
                             }`}
                           >
-                            {lang === "pt" ? "Sim" : "Yes"}
+                            {t("jinko_yes")}
                           </button>
                           <button
                             onClick={() =>
@@ -579,7 +564,7 @@ export default function JinkoPage() {
                                 : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"
                             }`}
                           >
-                            {lang === "pt" ? "Talvez" : "Maybe"}
+                            {t("jinko_maybe")}
                           </button>
                           <button
                             onClick={() =>
@@ -591,7 +576,7 @@ export default function JinkoPage() {
                                 : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"
                             }`}
                           >
-                            {lang === "pt" ? "N/A" : "N/A"}
+                            {t("jinko_na")}
                           </button>
                           <button
                             onClick={() =>
@@ -603,7 +588,7 @@ export default function JinkoPage() {
                                 : "text-zinc-500 hover:text-zinc-200 hover:bg-white/5"
                             }`}
                           >
-                            {lang === "pt" ? "Não" : "No"}
+                            {t("jinko_no")}
                           </button>
                         </div>
                       </div>
@@ -617,12 +602,10 @@ export default function JinkoPage() {
               <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 shadow-sm flex flex-col">
                 <div className="border-b border-white/5 pb-4 mb-4 text-left">
                   <h3 className="text-xl font-semibold text-red-300/90">
-                    {lang === "pt" ? "Top Candidatos" : "Top Candidates"}
+                    {t("jinko_top_cand")}
                   </h3>
                   <p className="text-xs text-zinc-500 mt-0.5">
-                    {lang === "pt"
-                      ? "Classificação em tempo real"
-                      : "Real-time ranking"}
+                    {t("jinko_rt_ranking")}
                   </p>
                 </div>
 
@@ -697,7 +680,7 @@ export default function JinkoPage() {
                           </span>
                           <span className="text-[10px] text-zinc-500 mt-0.5 font-sans">
                             {animal.playCount}{" "}
-                            {lang === "pt" ? "jogadas" : "plays"}
+                            {t("jinko_plays_lower")}
                           </span>
                         </div>
                       </div>

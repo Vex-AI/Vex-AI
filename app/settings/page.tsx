@@ -11,15 +11,14 @@ import { Switch } from "@/components/ui/switch";
 import Header from "@/components/header";
 import { initializeAnalyzer } from "@/lib/analyzer";
 
-const CustomSelect = ({ value, options, onChange }: { value: string, options: { value: string, label: string }[], onChange: (v: string) => void }) => {
-  const [open, setOpen] = useState(false);
+const CustomSelect = ({ value, options, onChange, open, onToggle }: { value: string, options: { value: string, label: string }[], onChange: (v: string) => void, open: boolean, onToggle: () => void }) => {
   const selectedLabel = options.find(o => o.value === value)?.label;
 
   // Fechar ao clicar fora não é estritamente necessário aqui se o scroll desabilitar, mas vamos focar na beleza visual
   return (
     <div className="relative">
       <div 
-        onClick={() => setOpen(!open)}
+        onClick={onToggle}
         className="bg-black/60 border border-white/10 rounded-xl p-3.5 text-xs text-white/90 flex justify-between items-center cursor-pointer hover:border-emerald-500/50 hover:bg-white/[0.02] transition-all duration-300"
       >
         <span className="font-medium tracking-wide">{selectedLabel}</span>
@@ -38,7 +37,7 @@ const CustomSelect = ({ value, options, onChange }: { value: string, options: { 
               {options.map(opt => (
                 <div 
                   key={opt.value}
-                  onClick={() => { onChange(opt.value); setOpen(false); }}
+                  onClick={() => { onChange(opt.value); onToggle(); }}
                   className={`px-4 py-3 text-xs cursor-pointer transition-colors duration-200 flex items-center ${value === opt.value ? 'text-emerald-400 bg-emerald-500/10 font-semibold' : 'text-neutral-300 hover:text-white hover:bg-white/5'}`}
                 >
                   {opt.label}
@@ -67,6 +66,7 @@ export default function SettingsPage() {
   const [dangerousContent, setDangerousContent] = useState("BLOCK_NONE");
   const [strictError, setStrictError] = useState(true);
   const [rateLimitTimeRemaining, setRateLimitTimeRemaining] = useState<number | null>(null);
+  const [openSelect, setOpenSelect] = useState<string | null>(null);
 
   useEffect(() => {
     const storedKey = localStorage.getItem("geminiApiKey");
@@ -283,17 +283,19 @@ export default function SettingsPage() {
                   </div>
                   
                   {[
-                    { label: t("harassment"), value: harassment, setter: setHarassment, zIndex: 40 },
-                    { label: t("hate_speech"), value: hateSpeech, setter: setHateSpeech, zIndex: 30 },
-                    { label: t("sexually_explicit"), value: sexuallyExplicit, setter: setSexuallyExplicit, zIndex: 20 },
-                    { label: t("dangerous_content"), value: dangerousContent, setter: setDangerousContent, zIndex: 10 }
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex flex-col gap-2 relative" style={{ zIndex: item.zIndex }}>
+                    { id: "harassment", label: t("harassment"), value: harassment, setter: setHarassment, zIndex: 40 },
+                    { id: "hate_speech", label: t("hate_speech"), value: hateSpeech, setter: setHateSpeech, zIndex: 30 },
+                    { id: "sexually_explicit", label: t("sexually_explicit"), value: sexuallyExplicit, setter: setSexuallyExplicit, zIndex: 20 },
+                    { id: "dangerous_content", label: t("dangerous_content"), value: dangerousContent, setter: setDangerousContent, zIndex: 10 }
+                  ].map((item) => (
+                    <div key={item.id} className="flex flex-col gap-2 relative" style={{ zIndex: item.zIndex }}>
                       <span className="text-[11px] font-medium text-neutral-400 ml-1">{item.label}</span>
                       <CustomSelect 
                         value={item.value} 
-                        onChange={item.setter} 
+                        onChange={(v) => { item.setter(v); setOpenSelect(null); }} 
                         options={blockOptions} 
+                        open={openSelect === item.id}
+                        onToggle={() => setOpenSelect(openSelect === item.id ? null : item.id)}
                       />
                     </div>
                   ))}
