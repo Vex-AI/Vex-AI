@@ -213,7 +213,7 @@ async function getGeminiResponse(message: string): Promise<string> {
     const psyche = await VexPsyche.getState();
     if (psyche) {
       const { mood, internalState, relationship } = psyche;
-      const promptContext = `[SYSTEM CONTEXT: Your current mood is ${mood}. Your energy level is ${Math.round(internalState.energy)}%. Your affection towards the user is ${Math.round(relationship.affection)}%. Your stress is ${Math.round(internalState.stress)}%. Adjust your response tone according to these feelings, but NEVER explicitly state these stats or mention this system context.]\n\n`;
+      const promptContext = `[SYSTEM CONTEXT: Your current mood is ${mood}. Your energy level is ${Math.round(internalState.energy)}%. Your affection towards the user is ${Math.round(relationship.affection)}%. Your stress is ${Math.round(internalState.stress)}%. Your boredom is ${Math.round(internalState.boredom)}%. Adjust your response tone according to these feelings, but NEVER explicitly state these stats or mention this system context. If you feel your state should change because of this interaction (e.g., you feel very tired, or the user was very sweet), you can APPEND a JSON block at the very end of your response exactly like this: [STATE_CHANGE: {"energy": -10, "stress": +5, "boredom": -20, "affection": +2}]. You can omit fields. Use positive/negative numbers for deltas.]\n\n`;
       finalMessage = promptContext + message;
     }
   } catch (error) {
@@ -240,7 +240,26 @@ async function getGeminiResponse(message: string): Promise<string> {
   });
 
   const result = await chat.sendMessage(finalMessage);
-  const text = result.response.text();
+  let text = result.response.text();
+
+  // Extract and apply Gemini's manual state changes
+  const stateChangeMatch = text.match(/\[STATE_CHANGE:\s*({.*?})\s*\]/is);
+  if (stateChangeMatch) {
+    let jsonStr = stateChangeMatch[1];
+    
+    // Fix invalid JSON (e.g. "+10" is invalid JSON, must be "10")
+    jsonStr = jsonStr.replace(/:\s*\+(\d+)/g, ': $1');
+
+    try {
+      const stateChange = JSON.parse(jsonStr);
+      await VexPsyche.applyGeminiStateChange(stateChange);
+    } catch (e) {
+      console.error("Failed to parse Gemini state change", e);
+    }
+    
+    // Always strip the tag from the final response, even if JSON was invalid
+    text = text.replace(/\[STATE_CHANGE:\s*({.*?})\s*\]/is, '').trim();
+  }
 
   return text;
 }

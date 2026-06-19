@@ -221,3 +221,67 @@ export async function getState(): Promise<VexPsycheState> {
   return initialize();
 }
 
+/**
+ * Apply manual state changes requested by the Gemini LLM.
+ */
+export async function applyGeminiStateChange(changes: Record<string, number>): Promise<void> {
+  const state = await initialize();
+  let stateChanged = false;
+
+  if (typeof changes.energy === "number") {
+    state.internalState.energy = Math.max(0, Math.min(100, state.internalState.energy + changes.energy));
+    stateChanged = true;
+  }
+  if (typeof changes.stress === "number") {
+    state.internalState.stress = Math.max(0, Math.min(100, state.internalState.stress + changes.stress));
+    stateChanged = true;
+  }
+  if (typeof changes.boredom === "number") {
+    state.internalState.boredom = Math.max(0, Math.min(100, state.internalState.boredom + changes.boredom));
+    stateChanged = true;
+  }
+  if (typeof changes.motivation === "number") {
+    state.internalState.motivation = Math.max(0, Math.min(100, state.internalState.motivation + changes.motivation));
+    stateChanged = true;
+  }
+  if (typeof changes.affection === "number") {
+    state.relationship.affection = Math.max(0, Math.min(100, state.relationship.affection + changes.affection));
+    stateChanged = true;
+  }
+  if (typeof changes.trust === "number") {
+    state.relationship.trust = Math.max(0, Math.min(100, state.relationship.trust + changes.trust));
+    stateChanged = true;
+  }
+  if (typeof changes.respect === "number") {
+    state.relationship.respect = Math.max(0, Math.min(100, state.relationship.respect + changes.respect));
+    stateChanged = true;
+  }
+  if (typeof changes.happiness === "number") {
+    state.emotions.happiness = Math.max(0, Math.min(100, state.emotions.happiness + changes.happiness));
+    stateChanged = true;
+  }
+  if (typeof changes.sadness === "number") {
+    state.emotions.sadness = Math.max(0, Math.min(100, state.emotions.sadness + changes.sadness));
+    stateChanged = true;
+  }
+  if (typeof changes.anger === "number") {
+    state.emotions.anger = Math.max(0, Math.min(100, state.emotions.anger + changes.anger));
+    stateChanged = true;
+  }
+  if (typeof changes.fear === "number") {
+    state.emotions.fear = Math.max(0, Math.min(100, state.emotions.fear + changes.fear));
+    stateChanged = true;
+  }
+  if (typeof changes.curiosity === "number") {
+    state.emotions.curiosity = Math.max(0, Math.min(100, state.emotions.curiosity + changes.curiosity));
+    stateChanged = true;
+  }
+
+  if (stateChanged) {
+    cachedState = state;
+    try {
+      await db.psycheState.put(state);
+    } catch {}
+  }
+}
+
