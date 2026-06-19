@@ -167,6 +167,30 @@ export async function applyPsycheToResponse(
   // Check Phase 3: internal state overriding the response
   const internalOverride = checkInternalStateOverride(state.internalState);
 
+  // Relieve the negative state if she expressed it (venting mechanism)
+  // This prevents her from continuously complaining on every message
+  if (internalOverride) {
+    let stateChanged = false;
+    if (state.internalState.energy < 15) {
+      state.internalState.energy += 40;
+      stateChanged = true;
+    }
+    if (state.internalState.stress > 85) {
+      state.internalState.stress -= 40;
+      stateChanged = true;
+    }
+    if (state.internalState.boredom > 85) {
+      state.internalState.boredom -= 40;
+      stateChanged = true;
+    }
+    
+    if (stateChanged) {
+      try {
+        await db.psycheState.put(state);
+      } catch {}
+    }
+  }
+
   return modifyResponse(originalResponse, state, memoryContext, traumaContext, internalOverride);
 }
 
