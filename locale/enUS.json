@@ -283,6 +283,9 @@
       "q21": ["Does it bark?", "Does it produce barking sounds?", "Is it known to bark?"]
     }
   },
+  "typing": "typing...",
+  "online": "online",
+  "offline": "offline",
   "chat_empty_greeting": "Heyy! I'm Vex ✨",
   "chat_empty_subtitle": "Your virtual friend! Send me a message or pick a suggestion below (o´▽`o)",
   "suggestion_dreams": "Tell me about your dreams",

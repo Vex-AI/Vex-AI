@@ -278,6 +278,9 @@
       "q21": ["Costuma latir?", "Ele produz sons de latido?", "Emite latidos?"]
     }
   },
+  "typing": "digitando...",
+  "online": "online",
+  "offline": "offline",
   "chat_empty_greeting": "Oiie! Eu sou a Vex ✨",
   "chat_empty_subtitle": "Sua amiga virtual! Me manda uma mensagem ou escolhe uma sugestão abaixo (o´▽`o)",
   "suggestion_dreams": "Conte-me sobre seus sonhos",

@@ -4,8 +4,10 @@ import { memo, useEffect, useState } from "react";
 import { useEmotionStore } from "@/store/useEmotionStore";
 import AnimatedEmoji from "./animated-emoji";
 
+import { useTranslation } from "react-i18next";
 
 const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: string }, status?: string })=> {
+  const { t } = useTranslation();
   const currentEmotion = useEmotionStore((state) => state.currentEmotion);
   const isTyping = useEmotionStore((state) => state.isTyping);
   const [useDynamicAvatar, setUseDynamicAvatar] = useState(false);
@@ -72,7 +74,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
                   transition={{ duration: 0.15 }}
                   className="absolute left-0 text-xs text-zinc-400 font-medium lowercase"
                 >
-                  {status ?? "offline"}
+                  {t(status ?? "offline")}
                 </motion.span>
               </AnimatePresence>
             </div>
