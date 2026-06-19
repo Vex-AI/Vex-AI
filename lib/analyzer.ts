@@ -197,7 +197,7 @@ async function getGeminiResponse(message: string): Promise<string> {
     history: history,
     generationConfig: {
       temperature: 0.8,
-      maxOutputTokens: 500,
+      maxOutputTokens: 2048,
       topK: 40,
       topP: 0.95,
     },
