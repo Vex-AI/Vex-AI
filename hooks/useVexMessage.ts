@@ -6,6 +6,7 @@ import * as VexPsyche from "@/lib/psyche/VexPsyche";
 import { useJinkoStore } from "@/store/jinkoStore";
 import { jinkoManager } from "@/lib/jinko/JinkoManager";
 import i18next from "i18next";
+import { calculateOrganicTypingTime } from "@/lib/typing-simulator";
 
 export type ProcessingStatus = "online" | "typing";
 
@@ -33,7 +34,7 @@ export const useVexMessage = () => {
 
     try {
       let vexReply = "";
-      const minDelay = new Promise((resolve) => setTimeout(resolve, 1500));
+      let isLlmDone = false;
 
       const processJinkoOrAnalyzer = async () => {
         let currentState = jinkoState;
@@ -79,7 +80,58 @@ export const useVexMessage = () => {
         return await analyzer(userMessage);
       };
 
-      [vexReply] = await Promise.all([processJinkoOrAnalyzer(), minDelay]);
+      // Start the LLM request
+      const llmPromise = (async () => {
+        const reply = await processJinkoOrAnalyzer();
+        isLlmDone = true;
+        return reply;
+      })();
+
+      // Start organic typing animation loop while waiting for LLM
+      const typingAnimationPromise = (async () => {
+        let elapsed = 0;
+        while (!isLlmDone) {
+          await new Promise(r => setTimeout(r, 100));
+          elapsed += 100;
+          
+          // Every ~2.5 seconds, 35% chance to stop typing (thinking/pausing)
+          if (elapsed > 2500 && Math.random() < 0.35) {
+             setStatus("online");
+             setTyping(false);
+             
+             // Pause duration between 800ms and 2000ms
+             const pauseMs = 800 + Math.random() * 1200;
+             for(let p = 0; p < pauseMs; p += 100) {
+                 if (isLlmDone) break;
+                 await new Promise(r => setTimeout(r, 100));
+             }
+             elapsed = 0;
+             
+             // Resume typing if LLM still working
+             if (!isLlmDone) {
+                 setStatus("typing");
+                 setTyping(true);
+             }
+          }
+        }
+      })();
+
+      // Wait for LLM to finish
+      vexReply = await llmPromise;
+      
+      // Ensure loop exits
+      isLlmDone = true;
+      await typingAnimationPromise;
+
+      // Final typing burst based on actual human typing speed for the specific text
+      const targetTypingTime = calculateOrganicTypingTime(vexReply);
+      
+      // We already animated during LLM generation, but we do a final organic burst.
+      // This final burst ensures the delay scales with message size, maxed at 2.5s.
+      setStatus("typing");
+      setTyping(true);
+      const finalBurst = Math.min(targetTypingTime * 0.6, 2500); 
+      await new Promise(r => setTimeout(r, finalBurst));
 
       if (isMounted.current) {
         // Get state from VexPsyche

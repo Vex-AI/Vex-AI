@@ -1,0 +1,16 @@
+export const calculateOrganicTypingTime = (text: string): number => {
+  const chars = text.length;
+  const cps = 4.5 + Math.random() * 3.5;
+  
+  const typoPause = Math.random() < 0.35 ? 200 + Math.random() * 1200 : 0;
+  
+  const punctuationPause = (text.match(/[.,!?;:]/g)?.length || 0) * (40 + Math.random() * 80);
+  
+  let time = (chars / cps) * 1000 + typoPause + punctuationPause;
+  
+  time *= 0.9 + Math.random() * 0.3;
+  
+  return Math.min(Math.max(800, time), 6500);
+};
+
+export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
