@@ -150,7 +150,8 @@ export async function initializeAnalyzer(forceReinit = false) {
 
 export async function analyzer(
   message: string,
-  forceReinitialization = false
+  forceReinitialization = false,
+  isRetry = false
 ): Promise<string> {
 
   if (forceReinitialization) {
@@ -160,7 +161,10 @@ export async function analyzer(
   await initializeAnalyzer(forceReinitialization);
 
   // Process message through VexPsyche (sentiment analysis, emotions, mood)
-  await VexPsyche.processMessage(message);
+  // Skip if it's a retry to prevent compounding exhaustion/boredom
+  if (!isRetry) {
+    await VexPsyche.processMessage(message);
+  }
 
   const isGeminiEnabled =
     localStorage.getItem("geminiEnabled") === "true" && geminiModel;
@@ -187,6 +191,11 @@ export async function analyzer(
 
   // Apply psychological state to modify the response
   response = await VexPsyche.applyPsycheToResponse(response, message);
+
+  // Sanitize kaomoji backticks that break markdown rendering (the "mancha preta" bug)
+  response = response
+      .replace(/(\(|´|｡|•|ω|▽|ʃ|♡|ƪ|；|;|-|_|･|\^)\`/g, '$1´')
+      .replace(/\`(\)|´|｡|•|ω|▽|ʃ|♡|ƪ|；|;|-|_|･|\^)/g, '´$1');
 
   return response;
 }

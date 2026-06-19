@@ -26,7 +26,7 @@ export const useVexMessage = () => {
     };
   }, []);
 
-  const sendVexMessage = async (userMessage: string) => {
+  const sendVexMessage = async (userMessage: string, isRetry: boolean = false) => {
     if (!userMessage.trim()) return;
 
     setStatus("typing");
@@ -77,7 +77,7 @@ export const useVexMessage = () => {
           return reply;
         }
 
-        return await analyzer(userMessage);
+        return await analyzer(userMessage, false, isRetry);
       };
 
       // Start the LLM request

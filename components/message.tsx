@@ -6,7 +6,7 @@ import { Trash2, RefreshCcw } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 import { MessageProps, Style } from "@/types";
-import { getCodePoint } from "@/lib/utils";
+import { getCodePoint, sanitizeMarkdownKaomojis } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 import {
@@ -104,7 +104,7 @@ const Message: React.FC<MessageProps> = ({ content, isVex, hour, onClose, isErro
                   a: ({ node, ...props }) => <a className="underline text-blue-400 hover:text-blue-300" {...props}>{renderWithEmojis(props.children)}</a>,
                 }}
               >
-                {content}
+                {sanitizeMarkdownKaomojis(content)}
               </ReactMarkdown>
             </div>
 

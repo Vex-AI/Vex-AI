@@ -160,3 +160,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function sanitizeMarkdownKaomojis(text: string) {
+  if (!text) return text;
+  return text
+    .replace(/([´｡•ω▽ʃ♡ƪ；･\^Д∀◕дᴗっ])\`/g, '$1´')
+    .replace(/\`([´｡•ω▽ʃ♡ƪ；･\^Д∀◕дᴗっ])/g, '´$1');
+}
+

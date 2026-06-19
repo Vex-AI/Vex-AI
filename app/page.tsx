@@ -225,7 +225,7 @@ const Home: React.FC = () => {
       const userMsg = messagesArr[index - 1];
       if (userMsg && !userMsg.isVex) {
         await db.messages.delete(errorMsgId);
-        sendVexMessage(userMsg.content);
+        sendVexMessage(userMsg.content, true);
       }
     },
     [messagesArr, sendVexMessage]
