@@ -61,9 +61,7 @@ const ChatHeader=({ info, status }: { info?: { name?: string; profileImage?: str
             <span className="text-base font-semibold text-zinc-100 tracking-tight">
               {info?.name ?? "Vex"}
             </span>
-            
-            <div className="w-1 h-1 rounded-full bg-zinc-600" />
-            
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             <div className="relative h-4 w-16 overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.span
