@@ -32,14 +32,14 @@ describe('DreamEngine', () => {
       expect(checkShouldDream(threeHoursAgo)).toBe(false);
     });
 
-    it('returns true if 6+ hours have passed', () => {
-      const eightHoursAgo = Date.now() - 8 * 60 * 60 * 1000;
-      expect(checkShouldDream(eightHoursAgo)).toBe(true);
+    it('returns true if 12+ hours have passed', () => {
+      const fourteenHoursAgo = Date.now() - 14 * 60 * 60 * 1000;
+      expect(checkShouldDream(fourteenHoursAgo)).toBe(true);
     });
 
-    it('returns true at exactly 6 hours', () => {
-      const sixHoursAgo = Date.now() - 6 * 60 * 60 * 1000;
-      expect(checkShouldDream(sixHoursAgo)).toBe(true);
+    it('returns true at exactly 12 hours', () => {
+      const twelveHoursAgo = Date.now() - 12 * 60 * 60 * 1000;
+      expect(checkShouldDream(twelveHoursAgo)).toBe(true);
     });
 
     it('returns false for very recent interaction', () => {

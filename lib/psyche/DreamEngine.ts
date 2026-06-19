@@ -6,7 +6,7 @@ export type DreamCategory = "happy" | "stressed" | "tired" | "bored" | "neutral"
 
 type DreamData = Record<DreamCategory, string[]>;
 
-const DREAM_THRESHOLD_HOURS = 6;
+const DREAM_THRESHOLD_HOURS = 12;
 
 /**
  * Check if enough time has passed for Vex to have "dreamed".

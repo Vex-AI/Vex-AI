@@ -127,7 +127,7 @@ const Home: React.FC = () => {
     const tryDream = async () => {
       const lastDream = localStorage.getItem("vex_last_dream");
       const now = Date.now();
-      if (lastDream && now - Number(lastDream) < 1000 * 60 * 60) return;
+      if (lastDream && now - Number(lastDream) < 1000 * 60 * 60 * 12) return;
 
       const state = await initPsyche();
       const dreamText = await generateDream(state);
