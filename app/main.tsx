@@ -1,4 +1,6 @@
 import { createRoot } from "react-dom/client";
+import { useEffect } from "react";
+import { App } from "@capacitor/app";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -29,6 +31,24 @@ import { ChangelogModal } from "@/components/changelog-modal";
 import ChatLoading from "@/components/chat-loading";
 
 const Layout = () => {
+  useEffect(() => {
+    let handle: any | null = null;
+
+    App.addListener("backButton", ({ canGoBack }) => {
+      if (canGoBack) {
+        window.history.back();
+      } else {
+        App.exitApp();
+      }
+    }).then((h) => {
+      handle = h;
+    });
+
+    return () => {
+      handle?.remove();
+    };
+  }, []);
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
       <DesktopSidebar />

@@ -19,7 +19,6 @@ import DateSeparator from "@/components/date-separator";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { App } from "@capacitor/app";
 import { Loader2, ArrowUp } from "lucide-react";
 import ChatHeader from "@/components/chat-header";
 import { loadIntentsForLanguage } from "@/lib/IntentManager";
@@ -220,23 +219,7 @@ const Home: React.FC = () => {
     });
   }, [messages, handleSuggestion]);
 
-  useEffect(() => {
-    let handle: any | null = null;
 
-    App.addListener("backButton", ({ canGoBack }) => {
-      if (canGoBack) {
-        window.history.back();
-      } else {
-        App.exitApp();
-      }
-    }).then((h) => {
-      handle = h;
-    });
-
-    return () => {
-      handle?.remove();
-    };
-  }, []);
 
   return (
     <>
