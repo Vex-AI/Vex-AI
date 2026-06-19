@@ -18,13 +18,10 @@
   </li>
   <div align="center">
       <a href="https://play.google.com/store/apps/details?id=com.cookieukw.vex">
-      
-  <img
-  src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg"
-  width="30%">
+        <img src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg" width="30%" alt="Get it on Google Play">
+      </a>
       <br><br>
       <img src="./public/play-store/play_store_feature_graphic.png" width="80%" alt="Vex Play Store Banner">
-      </a>
   </div>
 </ul>
 
