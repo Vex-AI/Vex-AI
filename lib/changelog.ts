@@ -24,7 +24,7 @@ export const changelogHistory: ChangelogRelease[] = [
     ],
     fixes: [],
     improvements: [
-      "AdMob Interstitials: Implemented a 15-minute strict cooldown and reduced the spawn probability to 25% even after the cooldown expires, drastically reducing ad spam.",
+      "AdMob Interstitials: Implemented a 5-minute strict cooldown and reduced the spawn probability to 25% even after the cooldown expires, drastically reducing ad spam.",
       "NLP Memory Optimization: Replaced O(n*m) Levenshtein matrix with O(min(n, m)) rolling array to prevent memory leaks on mobile devices."
     ]
   },

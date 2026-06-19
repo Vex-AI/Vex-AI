@@ -39,8 +39,8 @@ export async function initializeAdmob(): Promise<void> {
 export async function showInterstitial(): Promise<void> {
   const lastAd = localStorage.getItem("lastAdTime");
   const now = Date.now();
-  // 15 minutes cooldown
-  if (lastAd && now - Number(lastAd) < 15 * 60 * 1000) {
+  // 5 minutes cooldown
+  if (lastAd && now - Number(lastAd) < 5 * 60 * 1000) {
     return;
   }
   
