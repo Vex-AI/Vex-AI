@@ -119,148 +119,148 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-[#0d0d0d] text-white overflow-hidden">
+    <div className="flex flex-col h-screen bg-[#0d0d0d] text-white overflow-hidden relative">
       <Header 
         title={t("settings")} 
         description={t("settings_desc")}
       />
 
-      <main className="flex-1 max-w-md w-full mx-auto p-6 space-y-8 mt-4 pb-20 overflow-y-auto">
+      <div className="flex-1 w-full overflow-y-auto scroll-smooth">
+        <main className="max-w-md w-full mx-auto p-6 space-y-8 mt-4 pb-8">
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="space-y-6"
-        >
-          {/* API Key Card */}
-          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 relative overflow-hidden group transition-all duration-500 hover:bg-white/[0.05]">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            <div className="space-y-4 relative z-10">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-emerald-500/10 rounded-lg">
-                  <Key className="w-4 h-4 text-emerald-400" />
-                </div>
-                <h3 className="text-sm font-semibold text-white/90">{t("gemini_api_key")}</h3>
-              </div>
-              
-              <p className="text-xs text-neutral-400">
-                {t("gemini_api_key_desc")}
-              </p>
-              
-              <div className={`relative transition-all duration-300 rounded-xl overflow-hidden border ${isFocused ? 'border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'border-white/10'}`}>
-                <Input 
-                  type="password" 
-                  placeholder="AIzaSy..." 
-                  value={apiKey}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  className="bg-black/40 border-0 focus-visible:ring-0 text-white/90 placeholder:text-neutral-600 px-4 py-6"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Advanced Gemini Settings */}
-          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-6 relative overflow-visible">
-            <div className="space-y-1">
-              <h3 className="text-sm font-semibold text-white/90">{t("advanced_gemini_settings")}</h3>
-              <p className="text-xs text-neutral-400">{t("advanced_gemini_desc")}</p>
-            </div>
-
-            <div className="space-y-6">
-              {/* Temperature */}
-              <div className="space-y-3 bg-black/20 p-4 rounded-xl border border-white/5">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="font-medium text-neutral-300">{t("temperature")}</span>
-                  <span className="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-md font-mono">{temperature.toFixed(2)}</span>
-                </div>
-                <input 
-                  type="range" min="0" max="2" step="0.1" 
-                  value={temperature} 
-                  onChange={(e) => setTemperature(parseFloat(e.target.value))}
-                  className="w-full accent-emerald-500 h-1.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer"
-                />
-                <p className="text-[10px] text-neutral-500 leading-relaxed">{t("temperature_desc")}</p>
-              </div>
-
-              {/* Top K */}
-              <div className="space-y-3 bg-black/20 p-4 rounded-xl border border-white/5">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="font-medium text-neutral-300">{t("top_k")}</span>
-                  <span className="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-md font-mono">{topK}</span>
-                </div>
-                <input 
-                  type="range" min="1" max="100" step="1" 
-                  value={topK} 
-                  onChange={(e) => setTopK(parseInt(e.target.value))}
-                  className="w-full accent-emerald-500 h-1.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer"
-                />
-              </div>
-
-              {/* Top P */}
-              <div className="space-y-3 bg-black/20 p-4 rounded-xl border border-white/5">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="font-medium text-neutral-300">{t("top_p")}</span>
-                  <span className="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-md font-mono">{topP.toFixed(2)}</span>
-                </div>
-                <input 
-                  type="range" min="0" max="1" step="0.05" 
-                  value={topP} 
-                  onChange={(e) => setTopP(parseFloat(e.target.value))}
-                  className="w-full accent-emerald-500 h-1.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer"
-                />
-              </div>
-
-              {/* Safety Settings */}
-              <div className="pt-6 border-t border-white/10 space-y-4">
-                <h4 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">{t("safety_settings")}</h4>
-                
-                {[
-                  { label: t("harassment"), value: harassment, setter: setHarassment, zIndex: 40 },
-                  { label: t("hate_speech"), value: hateSpeech, setter: setHateSpeech, zIndex: 30 },
-                  { label: t("sexually_explicit"), value: sexuallyExplicit, setter: setSexuallyExplicit, zIndex: 20 },
-                  { label: t("dangerous_content"), value: dangerousContent, setter: setDangerousContent, zIndex: 10 }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex flex-col gap-2 relative" style={{ zIndex: item.zIndex }}>
-                    <span className="text-[11px] font-medium text-neutral-400 ml-1">{item.label}</span>
-                    <CustomSelect 
-                      value={item.value} 
-                      onChange={item.setter} 
-                      options={blockOptions} 
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </motion.div>
-      </main>
-
-      {/* Floating Save Button */}
-      <div className="fixed bottom-0 left-0 w-full p-4 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/90 to-transparent z-50">
-        <div className="max-w-md mx-auto">
-          <Button 
-            onClick={handleSave} 
-            className={`w-full h-14 rounded-2xl font-semibold text-sm transition-all duration-300 ${saved ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-[0_0_30px_rgba(16,185,129,0.3)] scale-[0.98]' : 'bg-white text-black hover:bg-white/90 shadow-2xl'}`}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="space-y-6"
           >
-            {saved ? (
-              <motion.div 
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="flex items-center"
-              >
-                <ShieldCheck className="w-5 h-5 mr-2" />
-                {t("settings_saved")}
-              </motion.div>
-            ) : (
-              t("save_settings")
-            )}
-          </Button>
-        </div>
+            {/* API Key Card */}
+            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 relative overflow-hidden group transition-all duration-500 hover:bg-white/[0.05]">
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="space-y-4 relative z-10">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 bg-emerald-500/10 rounded-lg">
+                    <Key className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-white/90">{t("gemini_api_key")}</h3>
+                </div>
+                
+                <p className="text-xs text-neutral-400">
+                  {t("gemini_api_key_desc")}
+                </p>
+                
+                <div className={`relative transition-all duration-300 rounded-xl overflow-hidden border ${isFocused ? 'border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'border-white/10'}`}>
+                  <Input 
+                    type="password" 
+                    placeholder="AIzaSy..." 
+                    value={apiKey}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    className="bg-black/40 border-0 focus-visible:ring-0 text-white/90 placeholder:text-neutral-600 px-4 py-6"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Advanced Gemini Settings */}
+            <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-6 relative overflow-visible">
+              <div className="space-y-1">
+                <h3 className="text-sm font-semibold text-white/90">{t("advanced_gemini_settings")}</h3>
+                <p className="text-xs text-neutral-400">{t("advanced_gemini_desc")}</p>
+              </div>
+
+              <div className="space-y-6">
+                {/* Temperature */}
+                <div className="space-y-3 bg-black/20 p-4 rounded-xl border border-white/5">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-medium text-neutral-300">{t("temperature")}</span>
+                    <span className="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-md font-mono">{temperature.toFixed(2)}</span>
+                  </div>
+                  <input 
+                    type="range" min="0" max="2" step="0.1" 
+                    value={temperature} 
+                    onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                    className="w-full accent-emerald-500 h-1.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <p className="text-[10px] text-neutral-500 leading-relaxed">{t("temperature_desc")}</p>
+                </div>
+
+                {/* Top K */}
+                <div className="space-y-3 bg-black/20 p-4 rounded-xl border border-white/5">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-medium text-neutral-300">{t("top_k")}</span>
+                    <span className="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-md font-mono">{topK}</span>
+                  </div>
+                  <input 
+                    type="range" min="1" max="100" step="1" 
+                    value={topK} 
+                    onChange={(e) => setTopK(parseInt(e.target.value))}
+                    className="w-full accent-emerald-500 h-1.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+
+                {/* Top P */}
+                <div className="space-y-3 bg-black/20 p-4 rounded-xl border border-white/5">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-medium text-neutral-300">{t("top_p")}</span>
+                    <span className="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-md font-mono">{topP.toFixed(2)}</span>
+                  </div>
+                  <input 
+                    type="range" min="0" max="1" step="0.05" 
+                    value={topP} 
+                    onChange={(e) => setTopP(parseFloat(e.target.value))}
+                    className="w-full accent-emerald-500 h-1.5 bg-neutral-800 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+
+                {/* Safety Settings */}
+                <div className="pt-6 border-t border-white/10 space-y-4">
+                  <h4 className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">{t("safety_settings")}</h4>
+                  
+                  {[
+                    { label: t("harassment"), value: harassment, setter: setHarassment, zIndex: 40 },
+                    { label: t("hate_speech"), value: hateSpeech, setter: setHateSpeech, zIndex: 30 },
+                    { label: t("sexually_explicit"), value: sexuallyExplicit, setter: setSexuallyExplicit, zIndex: 20 },
+                    { label: t("dangerous_content"), value: dangerousContent, setter: setDangerousContent, zIndex: 10 }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex flex-col gap-2 relative" style={{ zIndex: item.zIndex }}>
+                      <span className="text-[11px] font-medium text-neutral-400 ml-1">{item.label}</span>
+                      <CustomSelect 
+                        value={item.value} 
+                        onChange={item.setter} 
+                        options={blockOptions} 
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+          </motion.div>
+
+          {/* Sticky Save Button - respects the container width */}
+          <div className="sticky bottom-6 pt-6 z-50">
+            <Button 
+              onClick={handleSave} 
+              className={`w-full h-14 rounded-2xl font-semibold text-sm transition-all duration-300 ${saved ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-[0_0_30px_rgba(16,185,129,0.3)] scale-[0.98]' : 'bg-white text-black hover:bg-white/90 shadow-2xl'}`}
+            >
+              {saved ? (
+                <motion.div 
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="flex items-center"
+                >
+                  <ShieldCheck className="w-5 h-5 mr-2" />
+                  {t("settings_saved")}
+                </motion.div>
+              ) : (
+                t("save_settings")
+              )}
+            </Button>
+          </div>
+        </main>
       </div>
 
     </div>
