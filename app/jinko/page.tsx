@@ -3,10 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Animal } from "@/lib/jinko/engine/types";
 import animalsData from "@/lib/jinko/data/animals.json";
 import questionsData from "@/lib/jinko/data/questions.json";
+import { useNavigate } from "react-router";
+import { ArrowLeft } from "lucide-react";
 
 export default function JinkoPage() {
   const { i18n } = useTranslation();
   const [lang, setLang] = useState<"pt" | "en">("pt");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLang(i18n.language.startsWith("en") ? "en" : "pt");
@@ -183,17 +186,25 @@ export default function JinkoPage() {
   return (
     <div className="w-full h-full overflow-y-auto overflow-x-hidden bg-[#0a0a0a] text-zinc-100 animate-in fade-in p-6">
       <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
-         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6 pl-14 lg:pl-0">
+         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
       
-          <div className="text-left">
-            <h2 className="text-4xl font-semibold text-red-300/90">
-              {lang === "pt" ? "Banco de Animais" : "Animals Database"}
-            </h2>
-            <p className="text-zinc-400 text-sm mt-1">
-              {lang === "pt"
-                ? "Explore os animais catalogados e veja as respostas que o Jinko conhece."
-                : "Explore cataloged animals and view known Jinko answers."}
-            </p>
+          <div className="text-left flex items-center gap-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors text-zinc-400 hover:text-zinc-100 md:hidden"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <div>
+              <h2 className="text-4xl font-semibold text-red-300/90">
+                {lang === "pt" ? "Banco de Animais" : "Animals Database"}
+              </h2>
+              <p className="text-zinc-400 text-sm mt-1">
+                {lang === "pt"
+                  ? "Explore os animais catalogados e veja as respostas que o Jinko conhece."
+                  : "Explore cataloged animals and view known Jinko answers."}
+              </p>
+            </div>
           </div>
         </div>
 

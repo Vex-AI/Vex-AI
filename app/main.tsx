@@ -36,11 +36,12 @@ const Layout = () => {
   useEffect(() => {
     let handle: any | null = null;
 
-    App.addListener("backButton", ({ canGoBack }) => {
-      if (canGoBack) {
-        window.history.back();
-      } else {
+    App.addListener("backButton", () => {
+      const currentPath = window.location.pathname;
+      if (currentPath === "/" || currentPath.startsWith("/enUS") || currentPath.startsWith("/ptBR")) {
         App.exitApp();
+      } else {
+        window.history.back();
       }
     }).then((h) => {
       handle = h;
