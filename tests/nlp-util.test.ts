@@ -27,12 +27,15 @@ describe('NLP Utilities (nlp-util.ts)', () => {
   describe('Tokenization & Cleaning (cleanAndTokenize)', () => {
     it('removes accents and converts to lowercase', () => {
       const tokens = nlp.cleanAndTokenize('AÇÃO Coração!');
+      console.log('Original: "AÇÃO Coração!" -> Tokens:', tokens);
       expect(tokens).toContain('acao');
       expect(tokens).toContain('coracao');
     });
 
     it('filters out ptBR stop words', () => {
-      const tokens = nlp.cleanAndTokenize('eu gosto de jogar bola na rua com o meu cachorro');
+      const phrase = 'eu gosto de jogar bola na rua com o meu cachorro';
+      const tokens = nlp.cleanAndTokenize(phrase);
+      console.log(`Stopwords: "${phrase}" -> Tokens:`, tokens);
       // "de", "na", "com", "o", "meu" should be filtered out
       expect(tokens).not.toContain('de');
       expect(tokens).not.toContain('na');
@@ -43,7 +46,9 @@ describe('NLP Utilities (nlp-util.ts)', () => {
     });
 
     it('applies slang normalization', () => {
-      const tokens = nlp.cleanAndTokenize('vc tbm acha q ta blz kd vc');
+      const phrase = 'vc tbm acha q ta blz kd vc';
+      const tokens = nlp.cleanAndTokenize(phrase);
+      console.log(`Gírias: "${phrase}" -> Tokens:`, tokens);
       // vc -> voce
       // tbm -> tambem
       // q -> que (will be removed as stop word)
@@ -58,7 +63,9 @@ describe('NLP Utilities (nlp-util.ts)', () => {
     });
 
     it('removes punctuation and kaomojis', () => {
-      const tokens = nlp.cleanAndTokenize('olá! tudo bem? (´• ω •`) ¯\\_(ツ)_/¯');
+      const phrase = 'olá! tudo bem? (´• ω •`) ¯\\_(ツ)_/¯';
+      const tokens = nlp.cleanAndTokenize(phrase);
+      console.log(`Kaomojis Limpos: "${phrase}" -> Tokens:`, tokens);
       expect(tokens).toContain('tudo');
       expect(tokens).toContain('bem');
       expect(tokens).not.toContain('´•');
@@ -67,7 +74,9 @@ describe('NLP Utilities (nlp-util.ts)', () => {
     });
 
     it('generates n-grams (bigrams)', () => {
-      const tokens = nlp.cleanAndTokenize('abrir conta banco');
+      const phrase = 'abrir conta banco';
+      const tokens = nlp.cleanAndTokenize(phrase);
+      console.log(`N-grams: "${phrase}" -> Tokens:`, tokens);
       expect(tokens).toContain('abrir_conta');
       expect(tokens).toContain('conta_banco');
     });
@@ -76,6 +85,8 @@ describe('NLP Utilities (nlp-util.ts)', () => {
   describe('Stemmer', () => {
     it('stems Portuguese gerunds correctly', () => {
       // ando -> ar, endo -> er, indo -> ir
+      console.log('Stemmer PT-BR Gerúndio: "jogando" ->', nlp.cleanAndTokenize('jogando'));
+      console.log('Stemmer PT-BR Gerúndio: "correndo" ->', nlp.cleanAndTokenize('correndo'));
       expect(nlp.cleanAndTokenize('jogando')).toContain('jogar');
       expect(nlp.cleanAndTokenize('correndo')).toContain('correr');
       expect(nlp.cleanAndTokenize('sorrindo')).toContain('sorrir');
@@ -97,11 +108,19 @@ describe('NLP Utilities (nlp-util.ts)', () => {
 
   describe('Levenshtein Distance', () => {
     it('calculates the exact distance between two strings', () => {
-      expect(nlp.levenshtein('gatinho', 'gatinho')).toBe(0);
-      expect(nlp.levenshtein('gato', 'gatoo')).toBe(1); // 1 insertion
-      expect(nlp.levenshtein('gato', 'gata')).toBe(1); // 1 substitution
-      expect(nlp.levenshtein('gato', 'ga')).toBe(2); // 2 deletions
-      expect(nlp.levenshtein('kitten', 'sitting')).toBe(3); // classic example
+      const tests = [
+        {a: 'gatinho', b: 'gatinho', expected: 0},
+        {a: 'gato', b: 'gatoo', expected: 1}, // 1 insertion
+        {a: 'gato', b: 'gata', expected: 1}, // 1 substitution
+        {a: 'gato', b: 'ga', expected: 2}, // 2 deletions
+        {a: 'kitten', b: 'sitting', expected: 3} // classic example
+      ];
+      
+      for (const t of tests) {
+        const dist = nlp.levenshtein(t.a, t.b);
+        console.log(`Levenshtein Distance: "${t.a}" vs "${t.b}" = ${dist}`);
+        expect(dist).toBe(t.expected);
+      }
     });
   });
 
@@ -128,7 +147,9 @@ describe('NLP Utilities (nlp-util.ts)', () => {
       // Dot product: 1*1 = 1.
       // Magnitude product: sqrt(2) * 1 = 1.414
       // Similarity: 1 / 1.414 = 0.707
-      expect(nlp.cosineSimilarity(vecA, vecB, magA, magB)).toBeCloseTo(0.7071, 4);
+      const sim = nlp.cosineSimilarity(vecA, vecB, magA, magB);
+      console.log(`Cosine Similarity: vecA(a=1,b=1) vs vecB(a=1) = ${sim.toFixed(4)}`);
+      expect(sim).toBeCloseTo(0.7071, 4);
     });
   });
 

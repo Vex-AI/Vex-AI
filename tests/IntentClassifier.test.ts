@@ -49,7 +49,9 @@ describe('IntentClassifier', () => {
     await classifier.train();
     
     // Exact match or close typo
-    const prediction = classifier.predict('ola vex');
+    const phrase = 'ola vex';
+    const prediction = classifier.predict(phrase);
+    console.log(`Intent Prediction (Exact/Fast-Path): "${phrase}" ->`, prediction);
     expect(prediction).not.toBeNull();
     expect(prediction?.intent).toBe('saudacao');
     expect(prediction?.confidence).toBeGreaterThan(0.8);
@@ -60,8 +62,10 @@ describe('IntentClassifier', () => {
     
     // Not an exact phrase, but uses keywords "tudo" and "bem"
     // "ola", "tudo", "bem" are tokens
-    const prediction = classifier.predict('vex, queria saber se está tudo bem com vc');
+    const phrase = 'vex, queria saber se está tudo bem com vc';
+    const prediction = classifier.predict(phrase);
     
+    console.log(`Intent Prediction (Hybrid Score): "${phrase}" ->`, prediction);
     expect(prediction).not.toBeNull();
     expect(prediction?.intent).toBe('saudacao');
     // Hybrid score should push it above threshold
@@ -71,8 +75,10 @@ describe('IntentClassifier', () => {
     await classifier.train();
     
     // Completely unrelated phrase
-    const prediction = classifier.predict('paralelepipedo amarelo flutuante voador marte marte marte', 0.5);
+    const phrase = 'paralelepipedo amarelo flutuante voador marte marte marte';
+    const prediction = classifier.predict(phrase, 0.5);
     
+    console.log(`Intent Prediction (Below Threshold): "${phrase}" ->`, prediction);
     expect(prediction).toBeNull();
   });
 });
