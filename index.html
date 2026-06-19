@@ -46,7 +46,20 @@
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <style>
+        .vex-initial-loader {
+          position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background-color: #0d0d0d; color: #fff;
+        }
+        .vex-spinner {
+          width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #10b981; border-radius: 50%; animation: vex-spin 1s linear infinite;
+        }
+        @keyframes vex-spin { to { transform: rotate(360deg); } }
+      </style>
+      <div class="vex-initial-loader">
+        <div class="vex-spinner"></div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 

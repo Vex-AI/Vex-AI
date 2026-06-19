@@ -157,6 +157,5 @@ body::-webkit-scrollbar,
 
 
 [data-state="open"] ~ .fixed.inset-0 {
-  background: rgb(0 0 0 / 0.4) !important;
-  backdrop-filter: blur(6px);
+  background: rgb(0 0 0 / 0.7) !important;
 }
