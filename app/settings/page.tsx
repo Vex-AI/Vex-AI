@@ -66,6 +66,7 @@ export default function SettingsPage() {
   const [sexuallyExplicit, setSexuallyExplicit] = useState("BLOCK_NONE");
   const [dangerousContent, setDangerousContent] = useState("BLOCK_NONE");
   const [strictError, setStrictError] = useState(true);
+  const [rateLimitTimeRemaining, setRateLimitTimeRemaining] = useState<number | null>(null);
 
   useEffect(() => {
     const storedKey = localStorage.getItem("geminiApiKey");
@@ -94,6 +95,24 @@ export default function SettingsPage() {
 
     const storedStrict = localStorage.getItem("geminiStrictError");
     if (storedStrict !== null) setStrictError(storedStrict === "true");
+
+    const interval = setInterval(() => {
+      const unlockTimeStr = localStorage.getItem("geminiRateLimitUnlockTime");
+      if (unlockTimeStr) {
+        const unlockTime = parseInt(unlockTimeStr);
+        const remaining = unlockTime - Date.now();
+        if (remaining > 0) {
+          setRateLimitTimeRemaining(Math.ceil(remaining / 1000));
+        } else {
+          setRateLimitTimeRemaining(null);
+          localStorage.removeItem("geminiRateLimitUnlockTime");
+        }
+      } else {
+        setRateLimitTimeRemaining(null);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleSave = async () => {
@@ -140,6 +159,27 @@ export default function SettingsPage() {
             transition={{ delay: 0.1 }}
             className="space-y-6"
           >
+            {/* Rate Limit Warning Banner */}
+            <AnimatePresence>
+              {rateLimitTimeRemaining !== null && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-200 mb-6">
+                    <div className="flex items-center gap-2 mb-1">
+                      <ShieldCheck className="w-4 h-4 text-red-400" />
+                      <span className="text-sm font-semibold text-red-400">{t("geminiRateLimitSettingsWarning")}</span>
+                    </div>
+                    <div className="text-xs font-mono text-red-300 ml-6">
+                      {rateLimitTimeRemaining}s
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
             {/* API Key Card */}
             <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 relative overflow-hidden group transition-all duration-500 hover:bg-white/[0.05]">
               <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

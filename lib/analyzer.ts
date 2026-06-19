@@ -176,7 +176,21 @@ export async function analyzer(
     try {
       response = await getGeminiResponse(message);
       isGeminiResponse = true;
-    } catch (error) {
+    } catch (error: any) {
+      const errStr = String(error?.message || error);
+      
+      // Handle Rate Limit specifically
+      if (errStr.includes("429") || errStr.includes("exceeded") || errStr.includes("RESOURCE_EXHAUSTED")) {
+        // Look for something like "34.4425s" or "34s"
+        const delayMatch = errStr.match(/(\d+(?:\.\d+)?)\s*s/);
+        let waitMs = 60000; // default 1 min
+        if (delayMatch) {
+          waitMs = parseFloat(delayMatch[1]) * 1000;
+        }
+        localStorage.setItem("geminiRateLimitUnlockTime", String(Date.now() + waitMs));
+        throw new Error("GEMINI_RATE_LIMIT");
+      }
+
       const strictModeStr = localStorage.getItem("geminiStrictError");
       const isStrictMode = strictModeStr === null ? true : strictModeStr === "true";
       

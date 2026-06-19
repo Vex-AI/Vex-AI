@@ -434,5 +434,7 @@
   "strict_gemini_mode": "Modo Estrito Gemini",
   "strict_gemini_mode_desc": "Mostra um erro da API com um botão de tentar novamente, em vez de usar a resposta de segurança local.",
   "retry": "Tentar novamente",
-  "geminiErrorVexMsg": "Nossa, deu um probleminha de conexão na minha cabeça com o Gemini! 😵‍💫 Tenta de novo?"
+  "geminiErrorVexMsg": "Nossa, deu um probleminha de conexão na minha cabeça com o Gemini! 😵‍💫 Tenta de novo?",
+  "geminiRateLimitVexMsg": "Aww... minha cabecinha de Gemini cansou! Atingimos o limite da API. Precisamos esperar um pouquinho! (´• ω •`)",
+  "geminiRateLimitSettingsWarning": "Limite da API (429) excedido! Você atingiu sua cota do plano gratuito do Gemini. Tente novamente em:"
 }

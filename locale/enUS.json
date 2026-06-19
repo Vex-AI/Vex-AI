@@ -437,5 +437,7 @@
   "strict_gemini_mode": "Strict Gemini Mode",
   "strict_gemini_mode_desc": "Shows an API error bubble with a retry button instead of silently falling back to the local intent algorithm.",
   "retry": "Try again",
-  "geminiErrorVexMsg": "Oh no, there was a little connection hiccup in my brain with Gemini! 😵‍💫 Can we try that again?"
+  "geminiErrorVexMsg": "Oh no, there was a little connection hiccup in my brain with Gemini! 😵‍💫 Can we try that again?",
+  "geminiRateLimitVexMsg": "Aww... my Gemini brain got a bit tired! We hit the API limit. We need to wait a little bit! (´• ω •`)",
+  "geminiRateLimitSettingsWarning": "API Limit (429) exceeded! You've reached your Gemini free tier quota. Try again in:"
 }

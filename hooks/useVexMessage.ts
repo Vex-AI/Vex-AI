@@ -160,7 +160,14 @@ export const useVexMessage = () => {
       isLlmDone = true; // Stop the background typing loop!
       console.error("Ocorreu um erro ao processar a resposta de Vex:", error);
       if (isMounted.current) {
-        if (error.message === "GEMINI_API_ERROR") {
+        if (error.message === "GEMINI_RATE_LIMIT") {
+          setEmotion("1f62b"); // Tired face
+          sendMessage(
+            i18next.t("geminiRateLimitVexMsg", "Aww... minha cabecinha de Gemini cansou! Atingimos o limite da API. Precisamos esperar um pouquinho! (´• ω •`)"),
+            true,
+            true // Allow retry? Actually, maybe we shouldn't show the generic retry button if we know it's blocked by time. Wait, let's keep it so they can retry when time passes.
+          );
+        } else if (error.message === "GEMINI_API_ERROR") {
           setEmotion("1f635_200d_1f4ab"); // Dizzy face
           sendMessage(
             i18next.t("geminiErrorVexMsg", "Nossa, deu um probleminha de conexão na minha cabeça com o Gemini! 😵‍💫 Tenta de novo?"),
