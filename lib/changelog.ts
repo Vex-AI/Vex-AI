@@ -18,6 +18,7 @@ export const changelogHistory: ChangelogRelease[] = [
     version: "1.6.0",
     date: "2026-06-17",
     features: [
+      "Full Japanese Language Support: The entire application, including the UI, notifications, dreams, and the Jinko database, is now 100% natively translated and localized in Japanese.",
       "Gemini Learning System: Vex now auto-learns new intents silently in the background when processing successful Gemini API responses without freezing the UI.",
       "NLP Engine Overhaul: Complete rewrite of the local offline TF-IDF engine. Introduced language-aware stemming, Bigram (n-grams) support, and Slang normalization maps.",
       "Hybrid Intent Scoring: Replaced strict exact-match with a robust Hybrid scoring system combining Cosine Similarity and Keyword Overlap (Jaccard).",
@@ -42,6 +43,18 @@ export const changelogHistory: ChangelogRelease[] = [
       "Organic Psychological Prompting: Vex's internal mood and emotional states are now dynamically injected into the Gemini Prompt API, profoundly altering her personality and behavior per message."
     ],
     fixes: [
+      {
+        description: "Fixed a layout blowing bug on Android 14/15 where opening the virtual keyboard would cause it to overlap the screen content instead of resizing it.",
+        level: "High"
+      },
+      {
+        description: "Improved Gemini Safety Settings UX: The security filter dropdowns now behave as an accordion, closing automatically when another is opened to prevent massive UI overlapping on mobile.",
+        level: "Medium"
+      },
+      {
+        description: "Refactored the Jinko Animal Database and Simulator to dynamically respond to language changes instead of relying on hardcoded static strings.",
+        level: "Medium"
+      },
       {
         description: "Resolved critical layout blowout in the Jinko Simulator causing the Animals Table to aggressively push off-screen.",
         level: "High"
