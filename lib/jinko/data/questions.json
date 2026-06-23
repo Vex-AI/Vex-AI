@@ -1,0 +1,149 @@
+[
+  {
+    "id": "q1",
+    "text": {
+      "pt": "É mamífero?",
+      "en": "Is it a mammal?"
+    }
+  },
+  {
+    "id": "q2",
+    "text": {
+      "pt": "É uma ave?",
+      "en": "Is it a bird?"
+    }
+  },
+  {
+    "id": "q3",
+    "text": {
+      "pt": "É um réptil ou anfíbio?",
+      "en": "Is it a reptile or amphibian?"
+    }
+  },
+  {
+    "id": "q4",
+    "text": {
+      "pt": "É um inseto ou aracnídeo?",
+      "en": "Is it an insect or arachnid?"
+    }
+  },
+  {
+    "id": "q5",
+    "text": {
+      "pt": "Pode voar?",
+      "en": "Can it fly?"
+    }
+  },
+  {
+    "id": "q6",
+    "text": {
+      "pt": "Vive principalmente na água?",
+      "en": "Does it live mostly in water?"
+    }
+  },
+  {
+    "id": "q7",
+    "text": {
+      "pt": "É um animal de estimação comum (pet)?",
+      "en": "Is it a common pet?"
+    }
+  },
+  {
+    "id": "q8",
+    "text": {
+      "pt": "É um predador (carnívoro)?",
+      "en": "Is it a predator (carnivore)?"
+    }
+  },
+  {
+    "id": "q9",
+    "text": {
+      "pt": "É maior que um ser humano adulto?",
+      "en": "Is it larger than an adult human?"
+    }
+  },
+  {
+    "id": "q10",
+    "text": {
+      "pt": "Tem quatro patas?",
+      "en": "Does it have four legs?"
+    }
+  },
+  {
+    "id": "q11",
+    "text": {
+      "pt": "Tem cauda (rabo) visível?",
+      "en": "Does it have a visible tail?"
+    }
+  },
+  {
+    "id": "q12",
+    "text": {
+      "pt": "Produz veneno perigoso?",
+      "en": "Does it produce dangerous venom?"
+    }
+  },
+  {
+    "id": "q13",
+    "text": {
+      "pt": "Tem pelos?",
+      "en": "Does it have fur or hair?"
+    }
+  },
+  {
+    "id": "q14",
+    "text": {
+      "pt": "Tem penas?",
+      "en": "Does it have feathers?"
+    }
+  },
+  {
+    "id": "q15",
+    "text": {
+      "pt": "Bota ovos?",
+      "en": "Does it lay eggs?"
+    }
+  },
+  {
+    "id": "q16",
+    "text": {
+      "pt": "Vive na floresta ou selva?",
+      "en": "Does it live in the forest or jungle?"
+    }
+  },
+  {
+    "id": "q17",
+    "text": {
+      "pt": "Tem chifres ou cornos?",
+      "en": "Does it have horns?"
+    }
+  },
+  {
+    "id": "q18",
+    "text": {
+      "pt": "É um animal de fazenda?",
+      "en": "Is it a farm animal?"
+    }
+  },
+  {
+    "id": "q19",
+    "text": {
+      "pt": "É um animal típico de savana ou safari (como leão, girafa, elefante)?",
+      "en": "Is it a typical savanna or safari animal (like a lion, giraffe, elephant)?"
+    }
+  },
+  {
+    "id": "q20",
+    "text": {
+      "pt": "Costuma viver no gelo ou clima muito frio?",
+      "en": "Does it usually live in ice or very cold climates?"
+    }
+  },
+  {
+    "id": "q21",
+    "text": {
+      "pt": "Costuma latir?",
+      "en": "Does it bark?"
+    }
+  }
+]

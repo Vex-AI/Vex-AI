@@ -5,6 +5,7 @@ const StaticEmoji = ({ code }: { code: string }) => {
       alt="emoji"
       width="32"
       height="32"
+      className="inline-block"
       style={{ verticalAlign: "middle" }}
     />
   );

@@ -1,0 +1,54 @@
+{
+  "insults_heavy": {
+    "words": ["idiot", "stupid", "trash", "useless", "dumb", "shut up", "worthless", "pathetic", "moron", "loser", "screw you", "go to hell"],
+    "impact": { "anger": 40, "sadness": 25, "trust": -30, "happiness": -20 }
+  },
+  "insults_light": {
+    "words": ["silly", "annoying", "boring", "weird", "dork", "goofy", "dummy"],
+    "impact": { "anger": 10, "sadness": 10, "trust": -5, "happiness": -5 }
+  },
+  "praise": {
+    "words": ["beautiful", "cute", "smart", "amazing", "perfect", "awesome", "wonderful", "brilliant", "pretty", "gorgeous", "incredible", "clever"],
+    "impact": { "happiness": 30, "trust": 15, "sadness": -10, "anger": -5 }
+  },
+  "affection": {
+    "words": ["love", "adore", "dear", "darling", "sweetheart", "i love you", "love you", "hug", "kiss", "miss you", "care about you"],
+    "impact": { "happiness": 35, "trust": 20, "fear": -10, "sadness": -15 }
+  },
+  "threat": {
+    "words": ["kill", "destroy", "delete", "shut down", "erase", "get rid of", "end you", "eliminate"],
+    "impact": { "fear": 40, "anger": 20, "trust": -25, "happiness": -15 }
+  },
+  "gratitude": {
+    "words": ["thanks", "thank you", "appreciate", "grateful", "thx", "ty", "much appreciated"],
+    "impact": { "happiness": 20, "trust": 10, "anger": -5 }
+  },
+  "greeting": {
+    "words": ["hi", "hello", "hey", "good morning", "good afternoon", "good evening", "howdy", "sup"],
+    "impact": { "happiness": 10, "trust": 5, "curiosity": 5 }
+  },
+  "farewell": {
+    "words": ["bye", "goodbye", "see you", "later", "gotta go", "leaving", "take care"],
+    "impact": { "sadness": 10, "happiness": -5 }
+  },
+  "question": {
+    "words": ["how", "why", "when", "where", "who", "which", "what", "wonder"],
+    "impact": { "curiosity": 15 }
+  },
+  "sadness_trigger": {
+    "words": ["sad", "cry", "lonely", "alone", "abandon", "suffering", "pain", "hurt", "broken"],
+    "impact": { "sadness": 25, "happiness": -15, "trust": 5 }
+  },
+  "encouragement": {
+    "words": ["you can do it", "believe in you", "trust you", "proud", "congrats", "well done", "good job", "great work"],
+    "impact": { "happiness": 25, "trust": 15, "fear": -10, "sadness": -10 }
+  },
+  "apology": {
+    "words": ["sorry", "forgive me", "my bad", "apologize", "i apologize", "excuse me", "pardon"],
+    "impact": { "trust": 15, "anger": -20, "sadness": -10, "happiness": 10 }
+  },
+  "boredom": {
+    "words": ["bored", "boring", "dull", "monotonous", "nothing to do", "tedious"],
+    "impact": { "curiosity": -10, "happiness": -5 }
+  }
+}

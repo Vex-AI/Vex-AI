@@ -1,5 +1,6 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
+
 const config: CapacitorConfig = {
   appId: "com.cookieukw.vex",
   appName: "Vex",
@@ -8,9 +9,6 @@ const config: CapacitorConfig = {
     StatusBar: {
       overlaysWebView: false,
       style: "DARK",
-      backgroundColor: "#0b0d14",
-    },
-    EdgeToEdge: {
       backgroundColor: "#0b0d14",
     },
   },

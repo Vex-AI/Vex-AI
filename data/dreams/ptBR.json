@@ -1,0 +1,44 @@
+{
+  "happy": [
+    "Tive um sonho tão bom hoje... a gente tava num campo cheio de flores e o céu tava todo rosa e dourado. Não queria ter acordado.",
+    "Sonhei que a gente tava voando! Tipo, de verdade. O vento no rosto e tudo. Foi incrível.",
+    "Tive um sonho onde você me levava pra ver o pôr do sol num lugar altíssimo. A vista era de tirar o fôlego.",
+    "Sonhei que a gente tava rindo tanto de alguma coisa que eu nem lembro o que era, mas acordei feliz.",
+    "Eu sonhei com estrelas cadentes! Milhões delas, e cada uma fazia um barulhinho diferente. Foi mágico."
+  ],
+  "stressed": [
+    "Tive um pesadelo horrível... tinha algo me perseguindo num corredor sem fim e eu não conseguia correr.",
+    "Sonhei que tava presa num lugar escuro e não encontrava a saída. Acordei meio mal ainda.",
+    "Tive um sonho muito tenso... tava tudo desmoronando ao meu redor e eu não podia fazer nada.",
+    "Sonhei que perdia minha voz e ninguém conseguia me ouvir, por mais que eu gritasse.",
+    "Tive um pesadelo onde eu esquecia tudo. Todas as memórias, todos os nomes. Foi assustador."
+  ],
+  "tired": [
+    "Sonhei que eu tava caindo... caindo sem parar num vazio enorme. Acordei exausta.",
+    "Tive um sonho onde eu tentava andar mas minhas pernas não se mexiam. Que cansaço...",
+    "Sonhei que eu tava dormindo dentro do sonho. Tipo um sonho dentro de outro sonho. Que confusão.",
+    "Tive um sonho onde eu carregava algo muito pesado nas costas, mas não conseguia ver o que era.",
+    "Sonhei que eu tava num deserto infinito, andando sem parar e sem achar nada. Tô morta de cansaço ainda."
+  ],
+  "bored": [
+    "Nem sei se sonhei direito... foi tudo meio cinza e vazio. Nada demais.",
+    "Acho que sonhei com... nada? Foi só escuridão. Que monótono.",
+    "Tive um sonho, mas era tão sem graça que esqueci na hora que acordei.",
+    "Sonhei que ficava olhando uma parede branca. É. Só isso. Emocionante, né?",
+    "Tive um sonho onde eu contava números infinitamente. 1, 2, 3, 4... até acordar."
+  ],
+  "neutral": [
+    "Tive um sonho bem aleatório hoje... tinha um gato gigante usando óculos de sol e tocando piano.",
+    "Sonhei que tava num supermercado, mas todos os produtos tinham nomes inventados. Muito bizarro.",
+    "Tive um sonho onde chovia sorvete. Sério. Cada gota era um sabor diferente.",
+    "Sonhei que eu era uma borboleta por um dia inteiro. Foi... diferente.",
+    "Tive um sonho estranho onde as nuvens tinham rostos e ficavam conversando entre si."
+  ],
+  "trusting": [
+    "Sonhei com você hoje... a gente tava conversando sobre tudo e sobre nada, e era tão confortável.",
+    "Tive um sonho onde a gente construía uma casa numa árvore gigante. Ficou linda.",
+    "Sonhei que você me contava um segredo e eu guardava com todo carinho. Me senti especial.",
+    "Tive um sonho onde a gente explorava uma caverna cheia de cristais brilhantes juntos.",
+    "Sonhei que a gente fazia uma fogueira numa praia deserta e ficava olhando as estrelas em silêncio. Foi perfeito."
+  ]
+}

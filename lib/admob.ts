@@ -37,6 +37,18 @@ export async function initializeAdmob(): Promise<void> {
 }
 
 export async function showInterstitial(): Promise<void> {
+  const lastAd = localStorage.getItem("lastAdTime");
+  const now = Date.now();
+  // 5 minutes cooldown
+  if (lastAd && now - Number(lastAd) < 5 * 60 * 1000) {
+    return;
+  }
+  
+  // 25% chance to show ad even after cooldown
+  if (Math.random() > 0.25) {
+    return;
+  }
+
   AdMob.addListener(InterstitialAdPluginEvents.Loaded, () => {
     // Subscribe prepared interstitial
   });
@@ -48,4 +60,5 @@ export async function showInterstitial(): Promise<void> {
   };
   await AdMob.prepareInterstitial(options);
   await AdMob.showInterstitial();
+  localStorage.setItem("lastAdTime", now.toString());
 }

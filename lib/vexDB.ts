@@ -7,6 +7,7 @@ import {
   ISynon,
   IClassifier,
 } from "@/types";
+import type { VexPsycheState, EmotionalMemory, Trauma } from "@/types/psyche";
 import Dexie, { Table, Transaction } from "dexie";
 
 export class vexDB extends Dexie {
@@ -15,6 +16,9 @@ export class vexDB extends Dexie {
   streaks!: Table<IStreak>;
   intents!: Table<IIntent>;
   unclassified!: Table<IUnclassifiedMessage>;
+  psycheState!: Table<VexPsycheState>;
+  emotionalMemories!: Table<EmotionalMemory>;
+  traumas!: Table<Trauma>;
   backup_v5!: Table<{
     id?: number;
     table: string;
@@ -92,6 +96,26 @@ export class vexDB extends Dexie {
       unclassified: "++id, timestamp",
     });
 
+    this.version(7).stores({
+      messages: "++id, content, isVex, hour, date",
+      vexInfo: "id, name, profileImage",
+      streaks: "currentStreak, lastAccessed",
+      intents: "++id, name",
+      unclassified: "++id, timestamp",
+      psycheState: "id",
+    });
+
+    this.version(8).stores({
+      messages: "++id, content, isVex, hour, date",
+      vexInfo: "id, name, profileImage",
+      streaks: "currentStreak, lastAccessed",
+      intents: "++id, name",
+      unclassified: "++id, timestamp",
+      psycheState: "id",
+      emotionalMemories: "++id, emotionType, date",
+      traumas: "++id, triggerWord, lastOccurrence",
+    });
+
     // this.on("populate", this.populateDatabase);
   }
 
@@ -105,7 +129,7 @@ export class vexDB extends Dexie {
       await tx.table("vexInfo").add({
         id: 1,
         name: "Vex",
-        profileImage: "/Vex_320.png",
+        profileImage: "/android/play_store_512.png",
       });
 
       const intentsToSeedModule = await import(

@@ -23,7 +23,7 @@
     />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content"
     />
 
     <meta
@@ -46,7 +46,145 @@
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <style>
+        /* Reset & Base */
+        html, body { margin: 0; padding: 0; background-color: #0d0d0d; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #fff; overflow: hidden; }
+        
+        .skel-app { display: flex; flex-direction: column; height: 100vh; width: 100vw; position: relative; }
+        
+        @keyframes skel-pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        .skel-animate-pulse { animation: skel-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+        /* Header */
+        .skel-header {
+          position: absolute; top: 0; left: 0; width: 100%; z-index: 40;
+          background-color: rgba(13, 13, 13, 0.95);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .skel-header-inner {
+          max-width: 48rem; margin: 0 auto; padding: 8px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .skel-menu-btn {
+          width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; opacity: 0.5;
+        }
+        .skel-pill {
+          display: flex; align-items: center; gap: 12px; padding: 6px 12px; border-radius: 12px;
+        }
+        .skel-pill-avatar {
+          width: 32px; height: 32px; border-radius: 50%; background-color: rgba(99, 102, 241, 0.2);
+        }
+        .skel-pill-text { display: flex; align-items: center; gap: 8px; }
+        .skel-pill-name { width: 36px; height: 16px; border-radius: 4px; background-color: rgba(255,255,255,0.1); }
+        .skel-pill-dot { width: 6px; height: 6px; border-radius: 50%; background-color: #10b981; }
+        .skel-pill-status { width: 40px; height: 12px; border-radius: 4px; background-color: rgba(255,255,255,0.05); }
+
+        /* Main (Messages) */
+        .skel-main {
+          flex: 1; padding: 80px 12px 24px 12px; display: flex; flex-direction: column; gap: 24px; box-sizing: border-box; overflow-y: hidden;
+        }
+        .skel-messages-container {
+          max-width: 48rem; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 24px;
+        }
+        .skel-msg { display: flex; width: 100%; }
+        .skel-msg-vex { justify-content: flex-start; }
+        .skel-msg-user { justify-content: flex-end; }
+        
+        .skel-bubble {
+          border-radius: 20px; padding: 14px 20px; display: flex; flex-direction: column; gap: 8px;
+        }
+        .skel-msg-vex .skel-bubble {
+          background-color: rgba(255,255,255,0.05);
+          width: 60%;
+        }
+        .skel-msg-user .skel-bubble {
+          background-color: #fafafa;
+          width: 40%;
+        }
+        
+        .skel-text-line { height: 14px; border-radius: 4px; background-color: rgba(255,255,255,0.1); }
+        .skel-msg-user .skel-text-line { background-color: rgba(0,0,0,0.1); }
+
+        /* Footer */
+        .skel-footer {
+          width: 100%; padding: 0 16px 24px 16px; background-color: #0d0d0d; box-sizing: border-box; flex-shrink: 0;
+        }
+        @media (min-width: 768px) {
+          .skel-footer { padding-bottom: 32px; }
+        }
+        .skel-input-pill {
+          max-width: 48rem; margin: 0 auto; border-radius: 24px; background-color: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); padding: 8px; display: flex; align-items: center; gap: 8px;
+        }
+        @media (min-width: 768px) {
+          .skel-input-pill { padding: 12px; }
+        }
+        .skel-input-btn {
+          width: 36px; height: 36px; border-radius: 50%; background-color: rgba(255,255,255,0.05); flex-shrink: 0;
+        }
+        .skel-input-bar {
+          flex: 1; height: 16px; border-radius: 8px; background-color: rgba(255,255,255,0.03);
+        }
+      </style>
+
+      <div class="skel-app">
+        <!-- Header -->
+        <div class="skel-header">
+          <div class="skel-header-inner">
+            <div class="skel-menu-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #fff;"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </div>
+            
+            <div class="skel-pill">
+              <div class="skel-pill-avatar skel-animate-pulse"></div>
+              <div class="skel-pill-text skel-animate-pulse">
+                <div class="skel-pill-name"></div>
+                <div class="skel-pill-dot"></div>
+                <div class="skel-pill-status"></div>
+              </div>
+            </div>
+
+            <div style="width: 40px;"></div>
+          </div>
+        </div>
+        
+        <!-- Main -->
+        <div class="skel-main">
+          <div class="skel-messages-container skel-animate-pulse">
+            <div class="skel-msg skel-msg-vex">
+              <div class="skel-bubble">
+                <div class="skel-text-line" style="width: 100%;"></div>
+                <div class="skel-text-line" style="width: 80%;"></div>
+              </div>
+            </div>
+            
+            <div class="skel-msg skel-msg-user">
+              <div class="skel-bubble">
+                <div class="skel-text-line" style="width: 100%;"></div>
+              </div>
+            </div>
+            
+            <div class="skel-msg skel-msg-vex">
+              <div class="skel-bubble">
+                <div class="skel-text-line" style="width: 90%;"></div>
+                <div class="skel-text-line" style="width: 60%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="skel-footer">
+          <div class="skel-input-pill skel-animate-pulse">
+            <div class="skel-input-btn"></div>
+            <div class="skel-input-bar"></div>
+            <div class="skel-input-btn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 

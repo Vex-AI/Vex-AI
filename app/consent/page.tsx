@@ -30,7 +30,7 @@ const ConsentPage: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-background">
+    <div className="flex h-full w-full flex-col bg-background">
       <header className="flex h-16 items-center justify-center border-b px-4">
         <h1 className="text-xl font-bold">{t("notification.title")}</h1>
       </header>

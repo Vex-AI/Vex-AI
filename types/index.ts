@@ -4,6 +4,7 @@ export interface IMessage {
   hour: string;
   date: number;
   id?: number;
+  isError?: boolean;
 }
 export interface IVexInfo {
   id: number;
@@ -71,6 +72,8 @@ export interface MessageProps {
   hour: string;
   date: number;
   onClose: () => void;
+  isError?: boolean;
+  onRetry?: () => void;
 }
 
 export interface IntentItemProps {

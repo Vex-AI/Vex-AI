@@ -1,174 +1,116 @@
 <div align="center">
+  <img src="./public/web/icon-512.png" width="120" height="120" alt="Vex Logo">
   <h1>Vex AI</h1>
-  <img src="./public/Vex_320.png" width="160" height="160">
+  
+  <img src="./public/play-store/play_store_feature_graphic.png" width="100%" alt="Vex Play Store Banner" style="border-radius: 12px; margin-bottom: 20px;">
+  
+  <p><strong>An ever-evolving artificial intelligence project since 2019.</strong></p>
+
+  <a href="https://vexxx.vercel.app/enUS">
+    <img src="https://img.shields.io/badge/Website-Live_Demo-pink?style=for-the-badge" alt="Website">
+  </a>
+  <a href="https://github.com/Vex-AI/VexAI_Java">
+    <img src="https://img.shields.io/badge/Legacy-Java_App-orange?style=for-the-badge" alt="Java App">
+  </a>
+  
   <br><br>
-  <p>Welcome to the Vex AI project!</p>
+
+  <a href="https://play.google.com/store/apps/details?id=com.cookieukw.vex">
+    <img src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg" width="200" alt="Get it on Google Play">
+  </a>
 </div>
 
-<hr>
+---
 
-<ul>
-  <li>
-    <a href="https://vexxx.vercel.app/enUS">Website</a>
-  </li>
+## 📖 About the Project
 
-  <li>
-    <a href="https://github.com/Vex-AI/VexAI_Java">Vex native app
-    repository(read only)</a>
-  </li>
-  <div align="center">
-      <a href="https://play.google.com/store/apps/details?id=com.cookieukw.vex">
-      
-  <img
-  src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg"
-  width="50%">
-      </a>
-  </div>
-</ul>
+Initially developed as an Android app in Java, Vex faced challenges implementing advanced machine learning features natively. The project was completely reborn using **React**, **NodeJS**, and a modern web architecture to shift the heavy lifting to the cloud.
 
-<br>
+The ultimate purpose of Vex AI is to create an artificial intelligence capable of holding natural, organic conversations, discussing games, pop culture, and various interesting subjects—and who knows, maybe even becoming a conscious AI (⊙_⊙).
 
-An ever-evolving artificial intelligence project since 2019. Initially developed as an Android app in Java, I faced challenges implementing advanced machine learning features.
+**Note:** Vex is under active development. You can try the web version [here](https://vexxx.vercel.app/enUS). Say "hi" to her ╰(*´︶`*)╯♡
 
-So I decided to create a new version using React and NodeJS and do all the AI part on the back end (excuse my intelligence).
+---
 
-The purpose of Vex AI is to create an artificial intelligence capable of holding normal conversations and discussing games and various interesting subjects and who knows, maybe even becoming a conscious AI (⊙_⊙).
+## ✨ Features
 
-I'm excited to explore the limits of AI and share my progress on this journey. Join me on this exciting journey into the future of artificial intelligence!
+Vex has grown significantly since her early days. Here are some of her core capabilities:
 
-<br>
+| Feature | Description |
+| :--- | :--- |
+| **🧠 Gemini Integration** | Powered by Google's Gemini 2.5 Flash/Pro for highly contextual and fast responses. |
+| **🎭 VexPsyche (Emotions)** | Simulated "free will". Vex has dynamically shifting moods (Stress, Boredom, Affection) that alter her personality and typing speed! |
+| **🛡️ Rate Limit Armor** | Graceful fallback and wait-timers when the API quota is exhausted, preventing app crashes. |
+| **💾 Persistent Memory** | All configurations, local intents, and chat histories are securely saved locally via IndexedDB (Dexie). |
+| **🎨 Deep Customization** | Change chat bubbles, switch avatars dynamically, and apply system-wide dark/light themes. |
+| **🌐 Offline Mode** | Uses a Naive Bayes classifier as a fallback to chat even without an internet connection! |
+| **📦 Export / Import** | Complete freedom to export and backup your database of custom synonyms and intents. |
 
-**Note:** Vex is under active development. Stay tuned for future updates!
+---
 
-The Vex AI is currently hosted on [Vercel](https://vexxx.vercel.app/enUS). You can try it out (under construction) by saying "hi" to her ╰(_´︶`_)╯♡
+## 🛠️ Technologies
+
+Built with modern web and mobile frameworks to ensure blazing fast performance across all devices:
 
 <div align="center">
-  <h2>Tecnologies:</h2>
-  <a href="https://reactjs.org/" target="_blank" rel="noreferrer">
-    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="40" height="40"/>
+  <a href="https://react.dev/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="React" width="50" height="50" style="margin-right: 15px;"/>
   </a>
-  <a href="https://redux.js.org" target="_blank" rel="noreferrer">
-    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/redux/redux-original.svg" alt="redux" width="40" height="40"/>
+  <a href="https://vitejs.dev/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vitejs/vitejs-original.svg" alt="Vite" width="50" height="50" style="margin-right: 15px;"/>
+  </a>
+  <a href="https://tailwindcss.com/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-original.svg" alt="TailwindCSS" width="50" height="50" style="margin-right: 15px;"/>
   </a>
   <a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer">
-    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/>
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="TypeScript" width="50" height="50" style="margin-right: 15px;"/>
   </a>
 </div>
 
-<br>
+### Core Dependencies
 
-<div align="center">
-  <h2>Running:</h2>
-  
-  <div align="left">
+| Library | Version | Description |
+| :--- | :--- | :--- |
+| `@capacitor/*` | `^8.x` | Native mobile runtime (Android/iOS) wrapping the web app |
+| `react` | `^19.x` | Core UI Framework |
+| `vite` | `^6.x` | Next-generation frontend tooling and bundler |
+| `tailwindcss` | `^4.x` | Utility-first CSS framework for rapid styling |
+| `framer-motion`| `^11.x` | Fluid animations and page transitions |
+| `zustand` | `^5.x` | Lightweight global state management |
+| `dexie` | `^4.x` | Robust IndexedDB wrapper for local storage |
+| `lucide-react` | `^0.552`| Beautiful and consistent iconography |
+| `@google/generative-ai` | `^0.24` | Official Gemini AI SDK integration |
 
-1. Install the dependencies:
+---
 
-    ```sh
-      npm i
-    ```
+## 🚀 Running Locally
 
-2. Run:
+We use `pnpm` as our package manager. To get Vex running on your machine:
 
-    ```sh
-      npm run dev
-    ```
+1. **Install dependencies:**
+   ```sh
+   pnpm install
+   ```
+2. **Start the development server:**
+   ```sh
+   pnpm run dev
+   ```
 
-  </div>
+---
 
-</div>
+## 🗺️ Future Development Roadmap
 
-<br>
+| Category | Feature | Description | Impact |
+| :--- | :--- | :--- | :--- |
+| **Interaction** | Emotion-Driven Animations | Dynamic UI animations that reflect Vex's current mood | ★★★★★ |
+| **Technology** | Real-Time Audio | Instant voice interaction and speech synthesis | ★★★★☆ |
+| **Advanced AI** | Memory RAG | Vector-based retrieval for long-term memory across sessions | ★★★★★ |
+| **Security** | Privacy Guardian | Granular data control with self-destructing conversations | ★★★★☆ |
 
-<div align="center">
-  <h2>About Project</h2>
-  <p>
-    This system is currently simple and does not utilize neural networks. It is based on a logical system.
-  </p>
-</div>
+---
 
-  <div align="center">
-    <h3>Features</h3>
-  
-  | Features                          |
-  | --------------------------------- |
-  | Save locally                      | 
-  | Gemini API integration            |
-  | Synonyms                          |
-  | Change name and profile           |
-  | Delete all answers, synonyms, etc  |
-  |Export and import database data(synons) |
-  | Customize the chat bubbles |
-  | Off-line work(without gemini api)|
-  
-  </div>
-  
-  <br>
+## 📜 License
 
-  <br>
-
-<div align="center">
-  <h3>🚀 Future Development Roadmap</h3>
-
-| Category          | Feature                          | Description                                                           | Impact Level |
-| ----------------- | -------------------------------- | --------------------------------------------------------------------- | ------------ |
-| **Interaction**   | Emotion-Driven Animations        | Dynamic animations/emojis that reflect detected conversation emotions | ★★★★★        |
-|                   | Cross-Device Memory Sync         | Persistent chat memory across sessions and platforms                  | ★★★★☆        |
-| **Technology**    | AR/VR Chat Interface             | Immersive conversations through augmented/virtual reality integration | ★★★☆☆        |
-|                   | Real-Time Language Bridge        | Instant translation for multilingual conversations                    | ★★★★☆        |
-| **Storytelling**  | Collaborative Story Engine       | Multi-user interactive narrative creation system                      | ★★★★☆        |
-|                   | Dynamic RPG Adventure AI         | Morality-based story branching with evolving quests                   | ★★★★★        |
-| **Education**     | Adaptive Learning Companion      | AI-curated learning paths based on user's cognitive patterns          | ★★★★☆        |
-|                   | Virtual Experiment Simulator     | Interactive STEM simulations with contextual explanations             | ★★★☆☆        |
-| **Advanced AI**   | Emotional Voice Synthesis        | Natural speech with contextual tonality and emotional inflection      | ★★★★★        |
-|                   | Predictive Mental Health Support | Proactive emotional crisis detection with coping resources            | ★★★★★        |
-| **Security**      | Privacy Guardian System          | Granular data control with self-destructing sensitive conversations   | ★★★★☆        |
-|                   | Digital Legacy Vault             | Secure management of meaningful chat memories                         | ★★★☆☆        |
-| **Gamification**  | Knowledge Ecosystem              | XP/achievement system integrated with educational platforms           | ★★★★☆        |
-|                   | AI Trivia Arena                  | Daily knowledge challenges with skill-based rewards                   | ★★★☆☆        |
-| **Innovation**    | Quantum AI Framework             | Future-proof architecture for quantum-enhanced processing             | ★★☆☆☆        |
-|                   | Holographic Persona              | 3D interactive avatar with environmental awareness                    | ★★★☆☆        |
-| **Social Impact** | Mental Health First Responder    | Emotional triage system with local support resource mapping           | ★★★★★        |
-|                   | Cultural Context Adaptor         | Automatic localization of cultural references and idioms              | ★★★★☆        |
-
-</div>
-  <br>
-
-<div align="center">
-  <h3>📦 Project Dependencies</h3>
-
-| Library                          | Version  | Description                                  |
-| -------------------------------- | -------- | -------------------------------------------- |
-| `@capacitor/android`             | 6.1.2    | Native Android runtime and API integration   |
-| `@capacitor/app`                 | 6.0.1    | App lifecycle and URL handling               |
-| `@capacitor/core`                | 6.1.2    | Core Capacitor runtime infrastructure        |
-| `@capacitor/filesystem`          | ^6.0.1   | Native filesystem operations                 |
-| `@capacitor/haptics`             | 6.0.1    | Vibration/haptic feedback control            |
-| `@capacitor/keyboard`            | 6.0.2    | Native keyboard handling                     |
-| `@capacitor/local-notifications` | ^6.1.0   | Local notification scheduling and management |
-| `@capacitor/status-bar`          | 6.0.1    | Status bar customization                     |
-| `@capacitor-community/admob`     | ^6.0.0   | AdMob integration for monetization           |
-| `@google/generative-ai`          | ^0.24.0  | Official Gemini AI SDK integration           |
-| `@ionic/react`                   | ^8.3.0   | Ionic UI components for React                |
-| `@ionic/react-router`            | ^8.3.0   | Routing integration for Ionic+React          |
-| `bayes`                          | ^1.0.0   | Naive Bayes classifier implementation        |
-| `dayjs`                          | ^1.11.13 | Lightweight date library                     |
-| `dexie`                          | ^4.0.8   | IndexedDB wrapper with promises              |
-| `dexie-react-hooks`              | ^1.1.7   | React hooks for Dexie integration            |
-| `diacritics`                     | ^1.3.0   | Diacritics removal for text normalization    |
-| `framer-motion`                  | ^11.5.4  | Production-ready animations for React        |
-| `i18next`                        | ^23.15.1 | Internationalization framework               |
-| `react-color`                    | ^2.19.3  | Color picker component                       |
-| `react-i18next`                  | ^15.0.1  | React bindings for i18next                   |
-| `react-toastify`                 | ^10.0.5  | Notification toast system                    |
-| `uuid`                           | ^10.0.0  | UUID generation library                      |
-
-</div>
-
-<div align="center">
-  <h2>License</h2>
-</div>
-
-**THIS** project is open source and licensed under the [MIT LICENSE](./LICENSE) to encourage future contributions and improvements from the community.
+This project is open source and licensed under the [MIT LICENSE](./LICENSE) to encourage future contributions and improvements from the community.
 
 The icons are licensed under [CC-BY-NC2.0](https://creativecommons.org/licenses/by-nc/2.0/legalcode). Check out [Vex Reactions](https://github.com/cookieukw/Vex-Reactions) for more details.

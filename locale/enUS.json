@@ -1,7 +1,51 @@
 {
   "title": "My App",
+  "psyche_trauma_trigger": "You always use that word when you want to hurt me. Don't talk to me like that anymore.",
+  "psyche_memory_insult": "This isn't the first time you say something like this to me...",
+  "psyche_memory_affection": "I remember when you told me something similar. I like that.",
+  "psyche_memory_praise": "You always praise me... thank you.",
+  "psyche_state_tired": "I'm a bit out of energy to talk much right now...",
+  "psyche_state_stressed": "I need some time, I'm getting stressed with this.",
+  "psyche_state_bored": "This topic is getting a bit boring... don't you think?",
+  "settings": "Settings",
+  "settings_desc": "Advanced settings and API configuration.",
+  "gemini_api_key": "Gemini API Key",
+  "gemini_api_key_desc": "Enter your Google AI Studio key to activate Vex online.",
+  "save_key": "Save Key",
+  "key_saved": "Key Saved",
+  "dynamic_avatar": "Dynamic Mood Emoji",
+  "stats": "Psychological Stats",
+  "achievements": "Achievements",
+  "unlocked": "unlocked",
+  "badges_earned": "Badges earned",
+  "locked": "Locked",
+  "hidden_badge_desc": "[Hidden Badge] Keep interacting to discover.",
+  "psyche_dashboard": "Mood Dashboard",
+  "stats_current_mood": "Current Mood",
+  "stats_battery": "Battery",
+  "stats_internal_states": "Internal States",
+  "stats_stress": "Stress",
+  "stats_boredom": "Boredom",
+  "stats_motivation": "Motivation",
+  "stats_immediate_emotions": "Immediate Emotions",
+  "stats_happiness": "Happiness",
+  "stats_sadness": "Sadness",
+  "stats_anger": "Anger",
+  "stats_fear": "Fear",
+  "stats_trust": "Trust",
+  "stats_curiosity": "Curiosity",
+  "stats_relationship": "Relationship",
+  "stats_affection": "Affection",
+  "stats_respect": "Respect",
+  "stats_attachment": "Attachment",
+  "stats_personality": "Personality (Base)",
+  "stats_empathy": "Empathy",
+  "stats_patience": "Patience",
+  "stats_sociability": "Sociability",
+  "stats_confidence": "Confidence (Trait)",
   "english": "English",
   "portuguese": "Portuguese",
+  "japanese": "Japanese",
   "select": "Change language",
   "write_message": "Write a message",
   "write_word": "Write a word",
@@ -29,9 +73,12 @@
   "text_color": "Text color",
   "ripple_color": "Ripple color",
   "save_styles": "Save styles",
+  "saved_success": "Styles saved successfully!",
   "delete_styles": "Delete styles",
+  "deleted_success": "Styles restored to default!",
   "warningDB": "Warning: The data recorded here is not trained on the AI, so do training using the training screen. Also understand that after training there is no way to erase what has already been taught.",
   "customization": "Customization",
+  "customization_desc": "Adjust the visual style of the chat bubbles for you and Vex.",
   "vexProfile": "Vex profile",
   "clearChat": "Clear chat",
   "trainning": "Trainning",
@@ -60,11 +107,15 @@
   "deleteAllSynons": "Delet all synons",
   "deleteAllSynonsClick": "Click me again",
   "deleteALlSynonsSucess": "All synons delete sucess",
-  "deleteAllSynonsFail": "Error on delete all synons",
+  "deleteAllSynonsFail": "Error deleting all synonyms",
   "importing": "Importing...",
   "exporting": "Exporting...",
-
-  "vexLearning": "Teach the AI",
+  "jinko_db": "Guessing Game",
+  "deleteConfirmation": {
+    "title": "Delete message?",
+    "message": "Are you sure you want to permanently delete this message? This action cannot be undone."
+  },
+  "vexLearning": "Vex Intents",
   "typeThing": "Write anything",
   "learnWarningTitle": "I trained Vex, but she doesn't respond properly",
   "learnWarning": "If Vex hasn't learned much, it may be necessary to deactivate the Bayes algorithm (in the side menu) or teach her more things in :",
@@ -102,44 +153,49 @@
   "intent_name_placeholder": "Type an intent name",
   "intent_page": {
     "delete_all": "Delete all",
-    "title": "AI — Intent Panel",
-
+    "title": "Intent Panel",
+    "description": "Teach new phrases, contexts, and responses to Vex.",
     "write_intent_name": "Write the intent name",
     "write_training_phrase": "Write a training phrase",
     "write_intent_response": "Write a response",
-
     "intent_already_exists": "This intent already exists",
     "intent_added_success": "Intent added successfully",
-
     "all_intents_deleted": "All intents deleted",
-
     "training_ai_start": "Starting retraining...",
     "training_ai_success": "Retraining completed",
-
     "confirmation": "Confirm?",
     "are_you_sure_delete_all_intents": "Are you sure you want to delete all intents? This action is irreversible.",
-
     "add_new_intent_title": "Add new intent(action)",
-
     "intent_name_placeholder": "Ex: greeting, farewell",
     "initial_phrase_placeholder": "Ex: hi, how are you?",
     "initial_response_placeholder": "Ex: Hello! How can I help?",
-
     "add_intent": "Add Intent",
     "retrain_ai": "Retrain AI",
     "delete_all_intents": "Delete All Intents",
-
     "no_intents_found": "No intents found.",
-
+    "user_says": "What the user says",
+    "vex_responds": "What Vex responds",
+    "no_phrases_added": "No phrases added.",
+    "no_responses_added": "No responses added.",
+    "add_phrase_btn": "Add Phrase",
+    "add_response_btn": "Add Response",
+    "name_label": "Name",
+    "initial_phrase_label": "Initial Phrase",
+    "initial_response_label": "Initial Response",
+    "manage_phrases": "Manage Phrases",
+    "manage_responses": "Manage Responses",
+    "edit_phrases_title": "Edit Phrases",
+    "edit_responses_title": "Edit Responses",
+    "type_new_variation": "Type a new variation",
+    "add_btn": "Add",
+    "close_btn": "Close",
     "go_back": "Go back",
     "open_menu": "Open menu",
     "close_menu": "Close menu"
   },
-
   "are_you_sure_title": "Are you sure?",
   "are_you_sure_clear_chat": "Are you sure you want to delete all history? This action is irreversible.",
   "clear": "Delete",
-
   "response_modal": {
     "title": "Edit Responses",
     "placeholder": "Type a new response",
@@ -156,11 +212,10 @@
   "actions": "Actions",
   "config": "Config",
   "enable_gemini": "Enable gemini",
-  "choose_profile":"Choose profile",
-  "bubble_style":"Bubble style",
-  "colors":"Color",
-  "backgroud_color":"Background color",
-  
+  "choose_profile": "Choose profile",
+  "bubble_style": "Bubble style",
+  "colors": "Color",
+  "backgroud_color": "Background color",
   "notification": {
     "title": "Notification Consent",
     "header": "We'd like to send you notifications!",
@@ -170,5 +225,255 @@
     "permissionGranted": "Notification permission granted.",
     "permissionDenied": "Notification permission denied.",
     "permissionRejected": "Notification permission was rejected."
-  }
+  },
+  "emotions": {
+    "happy": [
+      "happy",
+      "glad",
+      "awesome",
+      "great",
+      "thanks",
+      "good",
+      "thank you",
+      "excellent",
+      "excited",
+      "happy!",
+      "nice"
+    ],
+    "sad": [
+      "sad",
+      "sorry",
+      "bad",
+      "cry",
+      "upset",
+      "unhappy",
+      "depressed",
+      "sadness"
+    ],
+    "angry": [
+      "angry",
+      "hate",
+      "mad",
+      "annoyed",
+      "furious",
+      "irritated",
+      "shut up"
+    ],
+    "thinking": [
+      "what",
+      "how",
+      "why",
+      "who",
+      "surprise",
+      "wonder",
+      "really",
+      "think",
+      "maybe",
+      "question"
+    ],
+    "loving": [
+      "love",
+      "like",
+      "cute",
+      "heart",
+      "beautiful",
+      "dear",
+      "lovely",
+      "love you"
+    ]
+  },
+  "about": "About / What's New",
+  "changelog_desc": "See everything new in the latest version of the app.",
+  "view_changelog": "View Changelog",
+  "jinko": {
+    "engine_error": "There was an error in the Jinko engine.",
+    "out_of_ideas": "Hmm... I'm out of ideas! You beat me! What animal was it? 🏳️",
+    "not_sure_what_to_ask": "I'm not sure what to ask right now... 😕",
+    "game_not_started": "The game was not started correctly.",
+    "didnt_get_that": "I didn't quite get that. Can you answer with Yes, No, Maybe, or I don't know? 🤔",
+    "victory": "I know! You are thinking of a **{{name}}**! {{emoji}} Am I right?! 🎉",
+    "intent_regex": "(guess.*animal|play.*animal|guess the animal|akinator)",
+    "play_again_regex": "(again|one more time|another round|play more|rematch)",
+    "confirm_game": "Do you want to play the animal guessing game? 🐾",
+    "regex_confirm_yes": "\\b(yes|sure|ok|yep|absolutely|yeah|play|let's|yea|y|go)\\b",
+    "cancel_game": "Alright! We'll leave it for another time. 😊",
+    "regex_no": "\\b(no|never|nope|not at all|nah|n|nay)\\b",
+    "regex_maybe_no": "\\b(probably not|maybe not|i don't think so)\\b",
+    "regex_yes": "\\b(yes|sure|absolutely|yeah|yep|yea|y|exactly|correct|indeed)\\b",
+    "regex_maybe_yes": "\\b(maybe|probably|i think so)\\b",
+    "regex_dont_know": "\\b(i don't know|not sure|no idea|depends)\\b",
+    "questions": {
+      "q1": [
+        "Is it a mammal?",
+        "Is this animal a mammal?",
+        "Can it be classified as a mammal?"
+      ],
+      "q2": [
+        "Is it a bird?",
+        "Is this animal a bird?",
+        "Can it be classified as a bird?"
+      ],
+      "q3": [
+        "Is it a reptile or amphibian?",
+        "Is this animal a reptile or amphibian?",
+        "Can it be classified as a reptile or amphibian?"
+      ],
+      "q4": [
+        "Is it an insect or arachnid?",
+        "Is this animal an insect or arachnid?",
+        "Can it be classified as an insect or arachnid?"
+      ],
+      "q5": [
+        "Can it fly?",
+        "Does this animal have the ability to fly?",
+        "Is it capable of flying?"
+      ],
+      "q6": [
+        "Does it live mostly in water?",
+        "Is its primary habitat the water?",
+        "Does it spend most of its time in water?"
+      ],
+      "q7": [
+        "Is it a common pet?",
+        "Is it commonly kept as a pet?",
+        "Is it considered a pet?"
+      ],
+      "q8": [
+        "Is it a predator (carnivore)?",
+        "Is it a carnivorous animal?",
+        "Is its diet strictly carnivorous?"
+      ],
+      "q9": [
+        "Is it larger than an adult human?",
+        "Does its size exceed that of an adult human?",
+        "Is it physically larger than an adult person?"
+      ],
+      "q10": [
+        "Does it have four legs?",
+        "Does it possess four legs?",
+        "Is it a four-legged animal?"
+      ],
+      "q11": [
+        "Does it have a visible tail?",
+        "Does it possess a visible tail?",
+        "Does it have a tail?"
+      ],
+      "q12": [
+        "Does it produce dangerous venom?",
+        "Is it a venomous animal?",
+        "Does it possess any dangerous venom?"
+      ],
+      "q13": [
+        "Does it have fur or hair?",
+        "Does its body have fur?",
+        "Does it possess fur?"
+      ],
+      "q14": [
+        "Does it have feathers?",
+        "Does it possess feathers?",
+        "Does its body have feathers?"
+      ],
+      "q15": [
+        "Does it lay eggs?",
+        "Does this animal lay eggs?",
+        "Are they born from eggs?"
+      ],
+      "q16": [
+        "Does it live in the forest or jungle?",
+        "Does it live in jungles or forests?",
+        "Is its natural habitat the forest?"
+      ],
+      "q17": [
+        "Does it have horns?",
+        "Does it possess horns?",
+        "Does it have horns on its head?"
+      ],
+      "q18": [
+        "Is it a farm animal?",
+        "Is it usually raised on farms?",
+        "Is it a typical farm animal?"
+      ],
+      "q19": [
+        "Is it a typical savanna or safari animal?",
+        "Does it live in the savanna?",
+        "Is it commonly found in safaris or savannas?"
+      ],
+      "q20": [
+        "Does it usually live in ice or very cold climates?",
+        "Does it live in extremely cold climates?",
+        "Is its habitat in ice or snow?"
+      ],
+      "q21": [
+        "Does it bark?",
+        "Does it produce barking sounds?",
+        "Is it known to bark?"
+      ]
+    }
+  },
+  "typing": "typing...",
+  "online": "online",
+  "offline": "offline",
+  "chat_empty_greeting": "Heyy! I'm Vex ✨",
+  "chat_empty_subtitle": "Your virtual friend! Send me a message or pick a suggestion below (o´▽`o)",
+  "suggestion_dreams": "Tell me about your dreams",
+  "suggestion_mood": "How are you today?",
+  "suggestion_music": "Recommend me a song?",
+  "suggestion_surprise": "Surprise me with something cool!",
+  "advanced_gemini_settings": "Advanced Gemini Settings",
+  "advanced_gemini_desc": "Adjust generation parameters and safety filters for the model.",
+  "temperature": "Temperature",
+  "temperature_desc": "Controls creativity. Higher values make responses more varied.",
+  "top_k": "Top K",
+  "top_p": "Top P",
+  "safety_settings": "Safety Filters",
+  "harassment": "Harassment",
+  "hate_speech": "Hate Speech",
+  "sexually_explicit": "Sexually Explicit",
+  "dangerous_content": "Dangerous Content",
+  "block_none": "Allow everything (No restrictions)",
+  "block_only_high": "Block high risk only",
+  "block_medium_and_above": "Block medium & high risk",
+  "block_low_and_above": "Block all risks (Strict)",
+  "save_settings": "Save Settings",
+  "settings_saved": "Settings Saved!",
+  "top_k_desc": "Limits vocabulary to the top K most likely words. Lower values make responses more predictable.",
+  "top_p_desc": "Filters words based on cumulative probability (P). Lower values reduce rare word choices.",
+  "safety_settings_desc": "Manages the level of censorship the API will apply to incoming and outgoing text.",
+  "strict_gemini_mode": "Strict Gemini Mode",
+  "strict_gemini_mode_desc": "Shows an API error bubble with a retry button instead of silently falling back to the local intent algorithm.",
+  "retry": "Try again",
+  "geminiErrorVexMsg": "Oh no, there was a little connection hiccup in my brain with Gemini! 😵‍💫 Can we try that again?",
+  "geminiRateLimitVexMsg": "Aww... my Gemini brain got a bit tired! We hit the API limit. We need to wait a little bit! (´• ω •`)",
+  "geminiRateLimitSettingsWarning": "API Limit (429) exceeded! You've reached your Gemini free tier quota. Try again in:",
+  "jinko_mammal": "Mammal",
+  "jinko_bird": "Bird",
+  "jinko_reptile": "Reptile/Amphibian",
+  "jinko_insect": "Insect/Arachnid",
+  "jinko_others": "Others",
+  "jinko_db_title": "Animals Database",
+  "jinko_db_desc": "Explore cataloged animals and view known Jinko answers.",
+  "jinko_table": "Animals Table",
+  "jinko_sim": "Real-time Simulator (Debug)",
+  "jinko_search": "Search animal by name...",
+  "jinko_all": "All",
+  "jinko_mammals": "Mammals",
+  "jinko_birds": "Birds",
+  "jinko_reptiles": "Reptiles/Amph.",
+  "jinko_insects": "Insects",
+  "jinko_animal": "Animal",
+  "jinko_group": "Group",
+  "jinko_plays": "Plays",
+  "jinko_not_found": "No animals found.",
+  "jinko_legend": "Legend",
+  "jinko_clear": "Clear",
+  "jinko_yes": "Yes",
+  "jinko_maybe": "Maybe",
+  "jinko_no": "No",
+  "jinko_top_cand": "Top Candidates",
+  "jinko_plays_lower": "plays",
+  "jinko_na": "N/A",
+  "jinko_view_legend": "VIEW LEGEND AND QUESTIONS",
+  "jinko_sim_inputs": "Simulator Inputs",
+  "jinko_sim_desc": "Set the weight of each trait to see the Leaderboard change.",
+  "jinko_rt_ranking": "Real-time ranking"
 }

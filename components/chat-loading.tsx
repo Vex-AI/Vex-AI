@@ -4,7 +4,7 @@ const ChatLoading = () => {
   return (
     <div className="flex h-screen max-w-screen flex-col bg-background text-foreground">
       {/* Header Skeleton */}
-      <header className="fixed top-0 z-50 flex w-full items-center gap-3 border-b border-white/5 bg-background/80 px-4 py-3 backdrop-blur-xl transition-all">
+      <header className="fixed top-0 z-50 flex w-full items-center gap-3 border-b border-white/5 bg-background/95 px-4 py-3 transition-all">
         <Skeleton className="h-10 w-10 rounded-full" /> {/* Avatar */}
         <div className="flex flex-col gap-2">
           <Skeleton className="h-4 w-32" /> {/* Nome */}
@@ -32,7 +32,7 @@ const ChatLoading = () => {
       </main>
 
       {/* Footer Skeleton */}
-      <footer className="fixed bottom-0 left-0 w-full bg-black/20 backdrop-blur-xl">
+      <footer className="fixed bottom-0 left-0 w-full bg-black/95">
         <div className="mx-auto flex w-full max-w-3xl items-center gap-2 p-3">
           <Skeleton className="h-10 flex-1 rounded-full" />
           <Skeleton className="h-10 w-10 rounded-full" />

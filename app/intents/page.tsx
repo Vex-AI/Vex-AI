@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
+
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/vexDB";
 
@@ -12,7 +12,7 @@ import IntentItem from "@/components/intent-item";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import Header from "@/components/header";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -22,14 +22,15 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
+  AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
 
-import { Trash2, PlusCircle, ArrowLeft } from "lucide-react";
+import { Trash2, PlusCircle, Bot } from "lucide-react";
 import { IIntent } from "@/types";
 
 export default function IntentPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
 
   const [intentName, setIntentName] = useState("");
   const [initialPhrase, setInitialPhrase] = useState("");
@@ -53,12 +54,7 @@ export default function IntentPage() {
   // LiveQuery isolado do resto
   const intents = useLiveQuery(() => db.intents.toArray(), []);
 
-  const go = useCallback(
-    (path: string) => {
-      navigate(path, { replace: true });
-    },
-    [navigate]
-  );
+
 
   const pushToast = useCallback((msg: string, duration = 2000) => {
     setToast({ message: msg, duration });
@@ -210,106 +206,104 @@ export default function IntentPage() {
   const memoIntents = useMemo(() => intents ?? [], [intents]);
 
   return (
-    <main className="min-h-screen bg-neutral-950 text-white">
-      {/* TOP BAR */}
-      <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/20 border-b border-white/5">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
-          <button
-            onClick={() => go("/home")}
-            className="p-2 rounded-md hover:bg-white/10"
-          >
-            <ArrowLeft className="size-5" />
-          </button>
+    <main className="flex flex-col h-full bg-[#0d0d0d] text-white relative overflow-hidden">
+      <Header 
+        title={t("intent_page.title")}
+        description={t("intent_page.description")}
+      >
+        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" className="hidden sm:flex gap-2 rounded-xl border-red-500/20 bg-red-500/5 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all">
+              <Trash2 className="w-4 h-4" />
+              {t("intent_page.delete_all")}
+            </Button>
+          </AlertDialogTrigger>
 
-          <h1 className="text-base sm:text-lg font-semibold flex-1 truncate">
-            {t("intent_page.title")}
-          </h1>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" size="icon" className="sm:hidden rounded-xl border-red-500/20 bg-red-500/5 text-red-400 hover:bg-red-500/20">
+              <Trash2 className="w-5 h-5" />
+            </Button>
+          </AlertDialogTrigger>
 
-          <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="hidden sm:flex gap-2">
-                <Trash2 className="size-4" />
+          <AlertDialogContent className="bg-[#1a1a1a] border-white/10 text-white rounded-3xl">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-xl font-bold">
+                {t("intent_page.confirmation")}
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-sm text-neutral-400 mt-2">
+                {t("intent_page.are_you_sure_delete_all_intents")}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="mt-6 gap-3 sm:gap-0">
+              <AlertDialogCancel className="rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-white sm:w-auto h-12">
+                {t("cancel")}
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDeleteAll}
+                className="rounded-xl bg-red-500 hover:bg-red-600 text-white sm:w-auto h-12 border-none shadow-none"
+              >
                 {t("intent_page.delete_all")}
-              </Button>
-            </AlertDialogTrigger>
-
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" className="sm:hidden p-2">
-                <Trash2 className="size-5" />
-              </Button>
-            </AlertDialogTrigger>
-
-            <AlertDialogContent
-              className="bg-[#090b0c]"
-              aria-describedby={undefined}
-            >
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {t("intent_page.confirmation")}
-                </AlertDialogTitle>
-                <p className="text-sm text-neutral-400 mt-2">
-                  {t("intent_page.are_you_sure_delete_all_intents")}
-                </p>
-              </AlertDialogHeader>
-
-              <AlertDialogFooter>
-                <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                <AlertDialogAction
-                  className="bg-red-600"
-                  onClick={handleDeleteAll}
-                >
-                  {t("clear")}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </div>
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </Header>
 
       {/* CONTENT */}
-      <div className="max-w-3xl mx-auto px-4 pt-[72px] pb-20">
-        {/* ADD INTENT */}
-        <section className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5 mb-6 shadow-lg">
-          <h2 className="text-xl font-semibold mb-4">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 pt-8 pb-32 scrollbar-none">
+        <div className="max-w-4xl mx-auto w-full">
+          {/* ADD INTENT */}
+          <section className="relative bg-[#0a0a0a] border border-white/5 rounded-3xl p-6 md:p-8 mb-10 overflow-hidden group">
+          <h2 className="text-xl font-bold mb-6 text-white/90 relative z-10 flex items-center gap-3">
+            <div className="p-2 bg-indigo-500/20 rounded-xl">
+              <PlusCircle className="w-5 h-5 text-indigo-400" />
+            </div>
             {t("intent_page.add_new_intent_title")}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <Input
-              value={intentName}
-              onChange={(e) => setIntentName(e.target.value)}
-              placeholder={t("intent_page.intent_name_placeholder")}
-              className="bg-neutral-800 border-neutral-700 text-white"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+            <div className="space-y-2">
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">{t("intent_page.name_label")}</label>
+              <Input
+                value={intentName}
+                onChange={(e) => setIntentName(e.target.value)}
+                placeholder={t("intent_page.intent_name_placeholder")}
+                className="bg-[#131313] border border-white/5 text-white focus-visible:ring-0 focus-visible:border-white/10 rounded-xl h-12"
+              />
+            </div>
 
-            <Input
-              value={initialPhrase}
-              onChange={(e) => setInitialPhrase(e.target.value)}
-              placeholder={t("intent_page.initial_phrase_placeholder")}
-              className="bg-neutral-800 border-neutral-700 text-white"
-            />
+            <div className="space-y-2">
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">{t("intent_page.initial_phrase_label")}</label>
+              <Input
+                value={initialPhrase}
+                onChange={(e) => setInitialPhrase(e.target.value)}
+                placeholder={t("intent_page.initial_phrase_placeholder")}
+                className="bg-[#131313] border border-white/5 text-white focus-visible:ring-0 focus-visible:border-white/10 rounded-xl h-12"
+              />
+            </div>
 
-            <Input
-              value={initialResponse}
-              onChange={(e) => setInitialResponse(e.target.value)}
-              placeholder={t("intent_page.initial_response_placeholder")}
-              className="bg-neutral-800 border-neutral-700 text-white"
-            />
+            <div className="space-y-2">
+              <label className="text-xs uppercase tracking-wider font-semibold text-neutral-400 ml-1">{t("intent_page.initial_response_label")}</label>
+              <Input
+                value={initialResponse}
+                onChange={(e) => setInitialResponse(e.target.value)}
+                placeholder={t("intent_page.initial_response_placeholder")}
+                className="bg-[#131313] border border-white/5 text-white focus-visible:ring-0 focus-visible:border-white/10 rounded-xl h-12"
+              />
+            </div>
           </div>
 
           <Button
             onClick={handleAddIntent}
-            className="bg-purple-600 hover:bg-purple-700 mt-4"
+            className="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white mt-6 rounded-xl h-12 px-8 transition-colors relative z-10 shadow-none border-none"
           >
-            <PlusCircle className="size-4 mr-2" />
+            <PlusCircle className="w-4 h-4 mr-2" />
             {t("intent_page.add_intent")}
           </Button>
         </section>
 
-        <Separator />
-
         {/* INTENT LIST */}
-        <section className="mt-6 space-y-4">
+        <section className="space-y-6">
           {memoIntents.length ? (
             memoIntents.map((intent) => {
               const handlers = getHandlersForIntent(intent.id!);
@@ -318,11 +312,16 @@ export default function IntentPage() {
               );
             })
           ) : (
-            <div className="py-12 text-center text-neutral-400">
-              {t("intent_page.no_intents_found")}
+            <div className="py-20 text-center flex flex-col items-center">
+              <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                <Bot className="w-10 h-10 text-neutral-600" />
+              </div>
+              <p className="text-neutral-500 text-lg">{t("intent_page.no_intents_found")}</p>
+              <p className="text-neutral-600 text-sm mt-2 max-w-sm mx-auto">Adicione intents acima para ensinar novos comportamentos à Vex.</p>
             </div>
           )}
         </section>
+        </div>
       </div>
 
       {/* MODAIS */}
